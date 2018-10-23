@@ -50,14 +50,14 @@ public class CheminTest {
         instance.addTroncon(t);
         assertNull(instance.getFin());
         float expected = 1f/3.6f;
-        assertEquals(1.0f, instance.getLongueur(), 0.01f);
-        assertEquals(expected, instance.getDuree(), 0.01f);
+        assertEquals(1.0f, instance.getLongueur(), 0.02f);
+        assertEquals(expected, instance.getDuree(), 0.02f);
         
         instance.setFin(p2);
         assertSame(instance.getFin(), p2);
-        assertEquals(1.0f, instance.getLongueur(), 0.01f);
+        assertEquals(1.0f, instance.getLongueur(), 0.02f);
         expected = 1f/3.6f+0.6f;
-        assertEquals(expected, instance.getDuree(), 0.01f);
+        assertEquals(expected, instance.getDuree(), 0.02f);
     }
     
 }

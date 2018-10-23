@@ -8,18 +8,18 @@ package modele.outils;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author lohl
+ * @author Louis
  */
-public class TSP1Test {
+public class TSPSimpleTest {
     
     private List<List<Chemin>> adjacence;
     int[][] cout = {{0,29,20,21,16,31,100,12,4,31,18},
@@ -35,7 +35,7 @@ public class TSP1Test {
                     {18,12,13,25,22,37,84,13,18,38,0}};
     
     
-    public TSP1Test() {
+    public TSPSimpleTest() {
         adjacence = new ArrayList<List<Chemin>>();
         //https://stackoverflow.com/questions/11007355/data-for-simple-tsp
         List<Intersection> intersections = new ArrayList<Intersection>();
@@ -64,17 +64,17 @@ public class TSP1Test {
     
     @BeforeClass
     public static void setUpClass() {
-        System.out.println("JUNIT - TSP1 TEST ------------------------");
+        System.out.println("JUNIT - TSPSimple TEST ------------------------");
     }
     
     @AfterClass
     public static void tearDownClass() {
-        System.out.println("JUNIT - TSP1 TEST ----- FIN --------------");
+        System.out.println("JUNIT - TSPSimple TEST ----- FIN --------------");
     }
     
 
     /**
-     * Test of iterator method, of class TSP1.
+     * Test of iterator method, of class TSPSimple.
      */
     @Test
     public void testIterator() {
@@ -85,7 +85,7 @@ public class TSP1Test {
             nonVus.add(i);
         }
         for(int nbLivreur=1; nbLivreur<adjacence.size()/2;nbLivreur++){
-            TSP1 tsp = new TSP1(nbLivreur);
+            TSPSimple tsp = new TSPSimple(nbLivreur);
             Iterator<Integer> it = tsp.iterator(nombreVu, nonVus, cout);
             int premierElt = it.next();
             System.out.println("nbLivreur ("+nbLivreur+") size ("+cout.length+") nombreVu ("+ nombreVu+")");
@@ -95,14 +95,8 @@ public class TSP1Test {
                 assertEquals(0,premierElt);
                 assertFalse(it.hasNext());
             } else {
-                int meilleur=nombreVu+1;
-                for(int i=nombreVu+1; i<cout.length; i++){
-                    if (cout[nombreVu][i]<cout[nombreVu][meilleur]){
-                        meilleur=i;
-                    }
-                }
-                System.out.println("\tVers le meilleur "+meilleur);
-                assertEquals(meilleur, premierElt);
+                System.out.println("\tsequentiel");
+                assertEquals((int)nonVus.get(nonVus.size()-1), premierElt);
                 assertTrue(it.hasNext());
             }
             
@@ -110,27 +104,26 @@ public class TSP1Test {
     }
 
     /**
-     * Test of bound method, of class TSP1.
+     * Test of bound method, of class TSPSimple.
      */
     @Test
     public void testBound() {
         System.out.println("--methode bound");
-        TSP1 tsp = new TSP1(2);
+        TSPSimple tsp = new TSPSimple(2);
         ArrayList<Integer> nonVus = new ArrayList<Integer>();
         int depart=0;
         for(int i=depart+1; i<cout.length; i++){
             nonVus.add(i);
         }
-        
         int resultat=tsp.bound(depart, nonVus, cout);
-        assertEquals(199,resultat);
+        assertEquals(0,resultat);
     }
     
     @Test
     public void testTSP(){
         System.out.println("--methode chercheSolution");
-        TSP1 tsp = new TSP1(2);
-        int[] resultat = {0,8,4,3,5,9,0,7,2,6,1,10};
+        TSPSimple tsp = new TSPSimple(2);
+        int[] resultat = {0,10,1,6,2,7,0,9,5,3,4,8};
         tsp.chercheSolution(8000, cout.length,2, cout);
         assertFalse(tsp.getTempsLimiteAtteint());
         assertEquals(278, tsp.getCoutMeilleureSolution());
@@ -141,27 +134,5 @@ public class TSP1Test {
             assertEquals(resultat[i], (int)tsp.getMeilleureSolution(i));
         }
     }
-    
-    /*@Test
-    public void testBound2(){
-        TSP1 tsp = new TSP1(2);
-        int[] resultat = {0,8,4,3,5,9,0,7,2,6,1,10};
-        int somme=0;
-        ArrayList<Integer> nonVus = new ArrayList<Integer>();
-        for(int elt : resultat){
-            if (elt!=0){
-                nonVus.add(elt);
-            }
-        }
-        for(int i=0; i<resultat.length-1; i++){
-            int bound=tsp.bound(resultat[i], nonVus, cout);
-            System.out.println("from node : "+resultat[i]+"bound : "+bound+" somme : "+somme+", ok ? "+(bound+somme<=278));
-            somme+=cout[resultat[i]][resultat[i+1]];
-            if(resultat[i+1]!=0){
-                nonVus.remove(0);
-            }
-        }
-        
-    }*/
     
 }
