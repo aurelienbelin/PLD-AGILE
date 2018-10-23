@@ -33,11 +33,38 @@ public class ControleurTest {
     @Test
     public void testBoutonChargePlan() {
         System.out.println("boutonChargePlan");
-        String fichier = "";
         modele.GestionLivraison gestion = new modele.GestionLivraison();
         Controleur instance = new Controleur(gestion);
+        
+        String fichier = "fichier existant et bien formé";
         instance.boutonChargePlan(fichier);
+        assertEquals(Controleur.ETAT_PLAN_CHARGE, Controleur.etatCourant);
+        
+        String fichier2 = "fichier non existant ou mal formé";
+        instance.boutonChargePlan(fichier2);
         assertEquals(Controleur.ETAT_INIT, Controleur.etatCourant);
+    }
+
+    /**
+     * Test of boutonChargeLivraisons method, of class Controleur.
+     */
+    @Test
+    public void testBoutonChargeLivraisons() {
+        System.out.println("boutonChargeLivraison");
+        modele.GestionLivraison gestion = new modele.GestionLivraison();
+        Controleur instance = new Controleur(gestion);
+        
+        String fichierPlan = "fichier existant et bien formé";
+        instance.boutonChargePlan(fichierPlan);
+        assertEquals(Controleur.ETAT_PLAN_CHARGE, Controleur.etatCourant);
+        
+        String fichier = "fichier existant et bien formé";
+        instance.boutonChargeLivraisons(fichier);
+        assertEquals(Controleur.ETAT_LIVRAISONS_CHARGE, Controleur.etatCourant);
+        
+        String fichier2 = "fichier non existant ou mal formé";
+        instance.boutonChargeLivraisons(fichier2);
+        assertEquals(Controleur.ETAT_PLAN_CHARGE, Controleur.etatCourant);
     }
 
     

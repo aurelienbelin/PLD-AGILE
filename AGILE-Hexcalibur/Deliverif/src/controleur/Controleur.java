@@ -30,6 +30,10 @@ public class Controleur
     public void boutonChargePlan (String fichier){
         etatCourant.chargePlan(gestionLivraison, fichier);
     }
+    
+    public void boutonChargeLivraisons (String fichier){
+        etatCourant.chargeLivraisons(gestionLivraison, fichier);
+    }
 
 }
 

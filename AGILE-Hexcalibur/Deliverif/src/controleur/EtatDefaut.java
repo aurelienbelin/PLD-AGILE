@@ -23,4 +23,8 @@ public class EtatDefaut implements Etat
     public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier){
     }
     
+    @Override
+    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier){
+    }
+    
 }

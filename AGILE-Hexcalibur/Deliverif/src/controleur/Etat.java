@@ -13,4 +13,5 @@ package controleur;
 interface Etat
 {
     public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier);
+    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier);
 }
