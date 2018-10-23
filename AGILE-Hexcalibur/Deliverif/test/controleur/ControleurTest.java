@@ -67,6 +67,29 @@ public class ControleurTest {
         assertEquals(Controleur.ETAT_PLAN_CHARGE, Controleur.etatCourant);
     }
 
+    /**
+     * Test of boutonCalculerTournees method, of class Controleur.
+     */
+    @Test
+    public void testBoutonCalculerTournees() {
+        System.out.println("boutonCalculerTournees");
+        modele.GestionLivraison gestion = new modele.GestionLivraison();
+        Controleur instance = new Controleur(gestion);
+        
+        String fichierPlan = "fichier existant et bien formé";
+        instance.boutonChargePlan(fichierPlan);
+        assertEquals(Controleur.ETAT_PLAN_CHARGE, Controleur.etatCourant);
+        
+        String fichierLivraison = "fichier existant et bien formé";
+        instance.boutonChargeLivraisons(fichierLivraison);
+        assertEquals(Controleur.ETAT_LIVRAISONS_CHARGE, Controleur.etatCourant);
+        
+        int nbLivreurs=3;
+        instance.boutonCalculerTournees(nbLivreurs);
+        assertEquals(Controleur.ETAT_CALCUL_TOURNEES, Controleur.etatCourant);
+        
+    }
+
     
     
 }

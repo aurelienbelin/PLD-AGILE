@@ -1,19 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controleur;
 
-/**
+/** Etat dans lequel l'application se trouve à son ouverture
+ *  Possibilité de charger un plan
  *
- * @author malbinet
+ * @author Hex'Calibur
  */
 
 public class EtatInit extends EtatDefaut{
     
+    /**
+     * Constructeur EtatInit
+     */
     public EtatInit (){}
     
+    /**  Cette méthode délègue la chargement du plan au modèle
+      *  Si le chargement s'est bien passé on passe dans 
+      *  l'EtatPlanCharge 
+      *  @param gestionLivraison
+      *  @param fichier
+      *  @see modele.GestionLivraison
+      *  @see EtatPlanCharge
+     */
     @Override
     public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier){
         int cre = gestionLivraison.chargerVille(fichier);
