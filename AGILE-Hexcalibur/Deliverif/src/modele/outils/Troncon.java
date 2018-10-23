@@ -10,6 +10,9 @@ package modele.outils;
  * @author lohl
  */
 public class Troncon {
+    private int idXML;
     private String nom;
     private Intersection debut, fin;
+    
+    public Troncon(String nom)
 }
