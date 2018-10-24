@@ -38,7 +38,7 @@ public class TSPSimple extends TemplateTSP{
 
 
     @Override
-    protected int bound(Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
+    protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
         return 0;
     }
 }
