@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Une Intersection représente un carrefour dans notre plan de ville.
  * Elle fait le lien (jointure) entre plusieurs troncons.
- * 
  * @version 1.0 23/10/2018
  * @author Louis Ohl
  */
@@ -64,6 +63,11 @@ public class Intersection {
         }
     }
     
+    /**
+     * 
+     * @param i - La position du tronçon. 
+     * @return - le tronçon situé à la position i dans la liste de tronçon.
+     */
     public Troncon getTroncon(int i){
         try{
             return this.troncons.get(i);
@@ -73,25 +77,34 @@ public class Intersection {
         }
     }
     
+    /**
+     *
+     * @return - La liste des tronçons de l'intersection
+     */
     public List<Troncon> getTroncons(){
         return this.troncons;
     }
+
+    /**
+     *
+     * @return - Le nombre de tronçons ayant pour une de ses extrémité cette intersection
+     */
     public int qteTroncons(){ return this.troncons.size(); }
     
     /**
-     * @return l'id de l'intersection dans son fichier xml d'origine.
+     * @return - L'id de l'intersection dans son fichier xml d'origine.
      */
     public int getIdXML() { return this.idXML; }
     
     /**
-     * @return La latitude de l'intersection.
+     * @return - La latitude de l'intersection.
      */
     public float getLatitude() {
         return latitude;
     }
 
     /**
-     * @return La longitude de l'intersection.
+     * @return - La longitude de l'intersection.
      */
     public float getLongitude() {
         return longitude;
