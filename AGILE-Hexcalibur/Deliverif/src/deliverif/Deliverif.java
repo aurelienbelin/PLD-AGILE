@@ -5,6 +5,7 @@
  */
 package deliverif;
 
+import controleur.Controleur;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +56,7 @@ public class Deliverif extends Application {
     //private Controleur controleur;
     private GestionLivraison gestionLivraison;
     private EcouteurBoutons ecouteurBoutons;
+    private Controleur controleur;
     
     private VueTextuelle vueTextuelle;
     private VueGraphique vueGraphique;
@@ -79,9 +81,8 @@ public class Deliverif extends Application {
     public void init() throws Exception{
         super.init();
         gestionLivraison = new GestionLivraison();
-        ecouteurBoutons = new EcouteurBoutons(this);
-        
-        //new Controleur()s
+        controleur = new Controleur(gestionLivraison,this);
+        ecouteurBoutons = new EcouteurBoutons(this, controleur);
     }
     
     @Override
@@ -140,6 +141,7 @@ public class Deliverif extends Application {
         boutonChargerDL.setPrefSize(80,65);
         boutonChargerDL.setWrapText(true);
         boutonChargerDL.setTextAlignment(TextAlignment.CENTER);
+        boutonChargerDL.setDisable(true);
         boutonChargerDL.setOnAction(e -> {
             try {
                 ecouteurBoutons.chargerDemandeLivraisonAction(e);
@@ -229,27 +231,6 @@ public class Deliverif extends Application {
         return file;
     }
     
-    public void desactiverBoutonChargerPlan(boolean b){
-        if(b)
-            this.boutonChargerPlan.setDisable(true);
-        else
-            this.boutonChargerPlan.setDisable(false);
-    }
-    
-    public void desactiverBoutonChargerDL(boolean b){
-        if(b)
-            this.boutonChargerDL.setDisable(true);
-        else
-            this.boutonChargerDL.setDisable(false);
-    }
-    
-    public void desactiverBoutonCalculerTournees(boolean b){
-        if(b)
-            this.boutonCalculerTournees.setDisable(true);
-        else
-            this.boutonCalculerTournees.setDisable(false);
-    }
-    
     public void avertir(String message){
         this.createMessagePopup(message);
     }
@@ -257,6 +238,8 @@ public class Deliverif extends Application {
     private void createMessagePopup(String message) {
         Label mess = new Label(message);
         mess.setPadding(new Insets(15));
+        mess.setWrapText(true);
+        mess.setAlignment(Pos.CENTER);
         Button boutonRetour = new Button("Retour");
 
         VBox vbox = new VBox(mess, boutonRetour);
@@ -266,7 +249,7 @@ public class Deliverif extends Application {
         vbox.setStyle("-fx-background-color : FFFFFF;" + "-fx-background-radius : 5;" + "-fx-border-color : C0C0C0;"
                         + "-fx-border-width : 3;");
         
-        Scene secondeScene = new Scene(vbox, 230, 100);
+        Scene secondeScene = new Scene(vbox, 230, 130);
  
         // New window (Stage)
         Stage popUp = new Stage();
@@ -288,7 +271,7 @@ public class Deliverif extends Application {
 
         // Set position of second window, related to primary window.
         popUp.setX(stage.getX() + stage.getWidth()/2 - 115);
-        popUp.setY(stage.getY() + stage.getHeight()/2 - 50);
+        popUp.setY(stage.getY() + stage.getHeight()/2 - 65);
 
         popUp.show();
     }
@@ -298,6 +281,33 @@ public class Deliverif extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public void estPlanCharge(int cre) {
+        if(cre==1){
+            boutonChargerPlan.setDisable(true);
+            boutonChargerDL.setDisable(false);
+            avertir("Le plan de la ville a bien été chargé");
+        }else{
+            avertir("Le plan de la ville n'a pas pu être chargé");
+        }
+    }
+    
+    public void estDemandeLivraisonChargee(int cre){
+        if(cre==1){
+            boutonChargerDL.setDisable(true);
+            boutonCalculerTournees.setDisable(false);
+            avertir("La demande de livraison a bien été chargée");
+        }else{
+            avertir("La demande de livraison n'a pas pu être chargée");
+        }
+    }
+    
+    public void estTourneesCalculees(int cre){
+        if(cre==1)
+            avertir("Calcul des tournées terminé");
+        else
+            avertir("Le calcul des tournées n'a pas pu se terminer");
     }
 
 }
