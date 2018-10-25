@@ -29,6 +29,22 @@ public class PlanVille {
         this.intersections =i;
         this.troncons=t;
     }
+
+    public List<Intersection> getIntersections() {
+        return intersections;
+    }
+
+    public void setIntersections(List<Intersection> intersections) {
+        this.intersections = intersections;
+    }
+
+    public List<Troncon> getTroncons() {
+        return troncons;
+    }
+
+    public void setTroncons(List<Troncon> troncons) {
+        this.troncons = troncons;
+    }
     
     public Map<Intersection, Pair<Intersection, Float>> dijkstra(PointPassage p){
         

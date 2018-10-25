@@ -72,7 +72,6 @@ public class LecteurXML {
         try {
             documentXML = this.chargerXML(urlFichierXML);
             if (documentXML != null && documentXML.getDocumentElement().getNodeName().equals("reseau")){
-            PlanVille planVille = new PlanVille();
             
             //Intégration des intersections au planVille
             NodeList listeNoeudsXML = documentXML.getElementsByTagName("noeud");
@@ -93,7 +92,7 @@ public class LecteurXML {
             }
             
             //Intégration des tronçons au plan ville
-            NodeList listeTronconsXML = documentXML.getElementsByTagName("noeud");
+            NodeList listeTronconsXML = documentXML.getElementsByTagName("troncon");
             List<Troncon> listeTroncons = new ArrayList<>();
             for (int temp = 0; temp < listeTronconsXML.getLength(); temp++) {
                 Node noeud = listeTronconsXML.item(temp);
@@ -121,8 +120,7 @@ public class LecteurXML {
                            .collect(Collectors.toList()).get(0).addTroncon(troncon);
                 }
             }
-            //TODO : planVille.setIntersections(listeIntersections);
-            //TODO : planVille.setTroncons(listeTroncons);
+            PlanVille planVille = new PlanVille(listeIntersections, listeTroncons);
             return planVille;
 
         }
@@ -147,7 +145,7 @@ public class LecteurXML {
             documentXML = this.chargerXML(urlFichierXML);
             if(planVille == null) throw new Exception ("le plan de la ville n'est pas chargé !");
             if (documentXML != null && documentXML.getDocumentElement().getNodeName().equals("demandeDeLivraisons")){
-            DemandeLivraison demande = new DemandeLivraison();
+            DemandeLivraison demande = new DemandeLivraison(null, null);
             
             //Intégration de l'entrepot à l'instance demande de lobjet DemandeLivraison
             NodeList noeudEntrepotXML = documentXML.getElementsByTagName("entrepot");
@@ -155,11 +153,11 @@ public class LecteurXML {
             if (noeudEntrepot.getNodeType() == Node.ELEMENT_NODE) {
                 Element eNoeud = (Element) noeudEntrepot;
                 //TODO : corriger création de l'entrepôt
-                Intersection position = null/*planVille.getIntersections().stream()
+                Intersection position = planVille.getIntersections().stream()
                         .filter(a -> Objects.equals(a.getIdXML(), Integer.parseInt(eNoeud.getAttribute("adresse"))))
                         .collect(Collectors.toList()).get(0);
-                PointPassage entrepot = new PointPassage(true, position, 0)*/;
-                //TODO : DemandeLivraison.setEntrepot(entrepot);
+                PointPassage entrepot = new PointPassage(true, position, 0);
+                demande.setEntrepot(entrepot);
             } else throw new Exception("L'entrepot n'est pas défini !");
             
             //Intégration des livraisons à l'instance demande de lobjet DemandeLivraison
@@ -170,9 +168,9 @@ public class LecteurXML {
                 if (noeud.getNodeType() == Node.ELEMENT_NODE) {
                    Element eNoeud = (Element) noeud;
                    //création d'un object intersection
-                   Intersection position = null/*planVille.getIntersections().stream()
+                   Intersection position = planVille.getIntersections().stream()
                         .filter(a -> Objects.equals(a.getIdXML(), Integer.parseInt(eNoeud.getAttribute("adresse"))))
-                        .collect(Collectors.toList()).get(0)*/;
+                        .collect(Collectors.toList()).get(0);
                    int duree = Integer.parseInt(eNoeud.getAttribute("duree"));
                    PointPassage livraison = new PointPassage(false, position, duree);
                    
@@ -181,7 +179,7 @@ public class LecteurXML {
                 }
             }
             
-            //TODO : demande.setLivraisons(listeLivraisons);
+            demande.setLivraisons(listeLivraisons);
             return demande;
 
         }

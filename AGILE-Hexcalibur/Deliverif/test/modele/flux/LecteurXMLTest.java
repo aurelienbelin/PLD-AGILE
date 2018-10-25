@@ -7,6 +7,7 @@ package modele.flux;
 
 import modele.outils.DemandeLivraison;
 import modele.outils.PlanVille;
+import modele.outils.Troncon;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -49,44 +50,34 @@ public class LecteurXMLTest {
     @Test
     public void testCreerPlanVille() {
         System.out.println("creerPlanVille");
-        String urlFichierXML = "";
+        String urlFichierXML = "test/modele/flux/planVilleTest.xml";
         LecteurXML instance = new LecteurXML();
-        PlanVille expResult = null;
-        PlanVille result = instance.creerPlanVille(urlFichierXML);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String expResult1 = "Rue Danton";
+        String result1 = instance.creerPlanVille(urlFichierXML).getTroncons().get(0).getNom();
+        System.out.println(result1);
+        assertEquals(expResult1, result1);
+        int expResult2 = 25175791;
+        int result2 = instance.creerPlanVille(urlFichierXML).getIntersections().get(0).getIdXML();
+        System.out.println(result2);
+        assertEquals(expResult2, result2);
     }
-
+    
     /**
      * Test of creerDemandeLivraison method, of class LecteurXML.
      */
     @Test
     public void testCreerDemandeLivraison() {
         System.out.println("creerDemandeLivraison");
-        String urlFichierXML = "";
-        PlanVille planVille = null;
+        String urlFichierPlan = "test/modele/flux/planVilleTest.xml";
+        String urlFichierXML = "test/modele/flux/dl-moyen-12.xml";
         LecteurXML instance = new LecteurXML();
-        DemandeLivraison expResult = null;
-        DemandeLivraison result = instance.creerDemandeLivraison(urlFichierXML, planVille);
+        PlanVille planVille = instance.creerPlanVille(urlFichierPlan);
+        String expResult = "Rue Danton";
+        String result = instance.creerDemandeLivraison(urlFichierXML, planVille).getEntrepot().getPosition().getTroncon(0).getNom();
+        System.out.println(result);
+        String result2 = instance.creerDemandeLivraison(urlFichierXML, planVille).getLivraisons().get(0).getPosition().getTroncon(0).getNom();
+        System.out.println(result2);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult, result2);
     }
-
-    /**
-     * Test of creerPlanVille method, of class LecteurXML.
-     */
-    /*@Test
-    public void testCreerPlanVille() {
-        System.out.println("creerPlanVille");
-        String urlFichierXML = "./petitPlan.xml";
-        LecteurXML instance = new LecteurXML();
-        PlanVille expResult = null;
-        PlanVille result = instance.creerPlanVille(urlFichierXML);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }*/
-    
 }
