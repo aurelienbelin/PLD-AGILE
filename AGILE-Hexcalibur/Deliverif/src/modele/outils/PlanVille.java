@@ -98,4 +98,45 @@ public class PlanVille {
         }
         return tab;
     }
+    
+    public List<Chemin> dijkstraToutPoints(List<PointPassage> listePoints){
+        List<Chemin> graph = new ArrayList<Chemin>();
+        for(PointPassage depart : listePoints){
+            Map<Intersection, Pair<Intersection,Float>> tab = dijkstra(depart);
+            //identifier lesquels sont des points passages
+            for(Intersection i : tab.keySet()){
+                for(PointPassage arrivee : listePoints){ 
+                    if(arrivee!=depart){
+                        //pour chaque
+                        if(i.getLatitude()==arrivee.getPosition().getLatitude()&&i.getLongitude()==arrivee.getPosition().getLongitude()){
+                        //recréer la liste de chemin
+                            List<Troncon> trChemin = new ArrayList<Troncon>();
+                            //retrouver point précédent
+                            Intersection ptInter1 = tab.get(i).getKey();
+                            Intersection ptInter2=i;
+                            while(ptInter2!=depart.getPosition()){
+                                //retrouver troncon entre ces 2 points
+                                List<Troncon> trPossibles = ptInter1.getTroncons();
+                                ListIterator<Troncon> it = trPossibles.listIterator();
+                                while(it.hasNext()){
+                                    Troncon tr = it.next();
+                                    if(tr.getFin()==ptInter2){
+                                        //l'ajouter en tête de liste
+                                        trChemin.add(0,tr);
+                                        break;
+                                    }
+                                }
+                                //remonter d'un troncon
+                                ptInter2=ptInter1;
+                                ptInter1=tab.get(ptInter2).getKey();
+                            }
+                        //ajouter a la liste des chemins entre pts de passages
+                        graph.add(new Chemin(trChemin,depart,arrivee)); 
+                        }
+                    }
+                }
+            }
+        }
+        return graph;
+    }
 }
