@@ -12,16 +12,29 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * @version 1.0 23/10/2018
+ * @author Elise
+ */
 public class TSP1 extends TemplateTSP {
 
     private int nbLivreur;
     //Liste contenant les sommets que l'on visite apres l'entrepot
     //Sert a casser les symetries.
+
+    /**
+     *
+     */
     protected List<Integer> ordreDepart;//TODO : mettre en place
+
     
+    /**
+     *
+     * @param nbLivreur
+     */
     public TSP1(int nbLivreur){
         this.nbLivreur=nbLivreur;
-        this.ordreDepart = new ArrayList<Integer>();
+        this.nombreFictif=0;
     }
 
     @Override
@@ -31,7 +44,7 @@ public class TSP1 extends TemplateTSP {
         //les sommets non vus.
         int quantiteSommet = (cout.length-1)/this.nbLivreur;
         //-1 car on ne compte pas le sommet entrepot
-        if ((cout.length-1-nonVus.size())%quantiteSommet==0 && sommetCrt!=0){
+        if ((cout.length-1-nonVus.size())%quantiteSommet==0 && sommetCrt!=0 && this.nombreFictif!=this.nbLivreur-1){
             List<Integer> aVoir = new ArrayList<Integer>();
             aVoir.add(0);
             return new IteratorSeq(aVoir, sommetCrt);

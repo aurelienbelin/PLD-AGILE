@@ -1,3 +1,11 @@
+/*
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
+ */
 package controleur;
 
 /**En réaction aux actions de l'utilisateur, l'IHM envoie des notifications au 
@@ -12,9 +20,25 @@ public class Controleur {
     /** @see Etat
      */
     protected static final EtatInit ETAT_INIT = new EtatInit();
+
+    /**
+     *
+     */
     protected static final EtatPlanCharge ETAT_PLAN_CHARGE = new EtatPlanCharge();
+
+    /**
+     *
+     */
     protected static final EtatLivraisonsChargees ETAT_LIVRAISONS_CHARGEES = new EtatLivraisonsChargees();
+
+    /**
+     *
+     */
     protected static final EtatCalculTournees ETAT_CALCUL_TOURNEES = new EtatCalculTournees();
+
+    /**
+     *
+     */
     protected static final EtatTourneesCalculees ETAT_TOURNEES_CALCULEES = new EtatTourneesCalculees();
     
     /** etatCourant prendra successivement les états définis ci-dessus comme 
@@ -32,7 +56,8 @@ public class Controleur {
     
     
     
-    /**@param gestionLivraison
+    /** * @param gestionLivraison
+     * @param fenetre
      * @see modele.GestionLivraison
      * @version 1
      */

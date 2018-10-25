@@ -12,11 +12,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * @version 1.0 23/10/2018
+ * @author Louis Ohl
+ */
 public abstract class TemplateTSP implements TSP {
 	
 	private Integer[] meilleureSolution;
 	private int coutMeilleureSolution = 0;
 	private Boolean tempsLimiteAtteint;
+        protected int nombreFictif;
         
         
 	
@@ -32,6 +37,7 @@ public abstract class TemplateTSP implements TSP {
 		for (int i=1; i<nbSommets; i++) nonVus.add(i);
 		ArrayList<Integer> vus = new ArrayList<Integer>(nbSommets);
 		vus.add(0); // le premier sommet visite est 0
+                this.nombreFictif=0;
 		branchAndBound(0, nonVus, vus, 0, cout, System.currentTimeMillis(), tpsLimite);
 	}
 	
@@ -92,6 +98,9 @@ public abstract class TemplateTSP implements TSP {
                     Integer prochainSommet = it.next();
                     vus.add(prochainSommet);
                     nonVus.remove(prochainSommet);
+                    if (prochainSommet==0){
+                        this.nombreFictif++;
+                    }
                     branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet], cout, tpsDebut, tpsLimite);
                     if (prochainSommet!=0){
                         vus.remove(prochainSommet);
@@ -100,6 +109,7 @@ public abstract class TemplateTSP implements TSP {
                         //distinction obligee en raison de la methode remove des
                         //arraylist. On detecte donc les entrepots virtuels.
                         vus.remove(vus.size()-1);
+                        this.nombreFictif--;
                     }
                 }
 	    }

@@ -13,12 +13,16 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
+ * @version 1.0 23/10/2018
  * @author Louis
  */
 public class TSPSimple extends TemplateTSP{
     private int nbLivreur;
 
+    /**
+     *
+     * @param nbLivreur
+     */
     public TSPSimple(int nbLivreur){
         this.nbLivreur=nbLivreur;
     }
