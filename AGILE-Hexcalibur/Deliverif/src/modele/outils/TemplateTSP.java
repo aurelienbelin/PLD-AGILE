@@ -39,13 +39,14 @@ public abstract class TemplateTSP implements TSP {
 	
 	/**
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
+	 * @param vus la liste des sommets visites (y compris sommetCrt)
 	 * @param sommetCourant
 	 * @param nonVus : tableau des sommets restant a visiter
 	 * @param cout : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
 	 * @return une borne inferieure du cout des permutations commencant par sommetCourant, 
 	 * contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0
 	 */
-	protected abstract int bound(Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout);
+	protected abstract int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout);
 	
 	/**
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
@@ -77,7 +78,7 @@ public abstract class TemplateTSP implements TSP {
                     vus.toArray(meilleureSolution);
                     coutMeilleureSolution = coutVus;
                 }
-	    } else if (coutVus + bound(sommetCrt, nonVus, cout) < coutMeilleureSolution){
+	    } else if (coutVus + bound(vus, sommetCrt, nonVus, cout) < coutMeilleureSolution){
                 Iterator<Integer> it = iterator(sommetCrt, nonVus, cout);
                 while (it.hasNext()){
                     Integer prochainSommet = it.next();

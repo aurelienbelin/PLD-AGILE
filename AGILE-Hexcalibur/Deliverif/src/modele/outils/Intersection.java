@@ -73,6 +73,9 @@ public class Intersection {
         }
     }
     
+    public List<Troncon> getTroncons(){
+        return this.troncons;
+    }
     public int qteTroncons(){ return this.troncons.size(); }
     
     /**
@@ -92,5 +95,9 @@ public class Intersection {
      */
     public float getLongitude() {
         return longitude;
+    }
+    
+    public String toString(){
+        return "("+this.longitude+","+this.latitude+")";
     }
 }

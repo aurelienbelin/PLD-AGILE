@@ -8,6 +8,8 @@
  */
 package modele.outils;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -78,6 +80,15 @@ public class Tournee {
             return this.trajet.get(i).getDebut();
         }
         return null;
+    }
+    
+    public Iterator<String> getDescription(){
+        List<String> sousDescription = new ArrayList<String>();
+        for(Chemin c : this.trajet){
+            sousDescription.addAll(c.getDescription());
+        }
+        
+        return sousDescription.iterator();
     }
 
     

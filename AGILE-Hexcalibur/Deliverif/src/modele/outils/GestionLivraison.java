@@ -5,10 +5,35 @@
  */
 package modele.outils;
 
+import java.util.Observable;
+
 /**
  *
  * @author lohl
  */
-public class GestionLivraison {
+public class GestionLivraison extends Observable{
+    
+    private PlanVille plan;
+    private Tournee[] tournees;
+    private DemandeLivraison demande;
+    
+    public GestionLivraison(){
+        this.tournees=null;
+        this.plan=null;
+        this.demande=null;
+    }
+
+    public PlanVille getPlan() {
+        return plan;
+    }
+
+    public Tournee[] getTournees() {
+        return tournees;
+    }
+
+    public DemandeLivraison getDemande() {
+        return demande;
+    }
+    
     
 }
