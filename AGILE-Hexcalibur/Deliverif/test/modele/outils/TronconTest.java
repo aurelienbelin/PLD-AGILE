@@ -40,7 +40,7 @@ public class TronconTest {
         Intersection inter1 = new Intersection(0, 1.0f, 1.0f);
         Intersection inter2 = new Intersection(0, 1.0f, 1.0f);
         Intersection inter3 = new Intersection(0, 1.0f, 1.0f);
-        Troncon t = new Troncon(0, "rue", inter1, inter2, 1.0f);
+        Troncon t = new Troncon("rue", inter1, inter2, 1.0f);
         
         t.setDebut(inter3);
         assertNotSame(t.getDebut(), inter1);
@@ -61,7 +61,7 @@ public class TronconTest {
         Intersection inter1 = new Intersection(0, 1.0f, 1.0f);
         Intersection inter2 = new Intersection(0, 1.0f, 1.0f);
         Intersection inter3 = new Intersection(0, 1.0f, 1.0f);
-        Troncon t = new Troncon(0, "rue", inter1, inter2, 1.0f);
+        Troncon t = new Troncon("rue", inter1, inter2, 1.0f);
         
         t.setFin(inter3);
         assertNotSame(t.getFin(), inter2);

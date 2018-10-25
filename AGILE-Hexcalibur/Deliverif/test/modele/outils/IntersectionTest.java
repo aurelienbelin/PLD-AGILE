@@ -39,7 +39,7 @@ public class IntersectionTest {
         System.out.println("--methode addTroncon");
         Intersection inter = new Intersection(0, 1.0f, 1.0f);
         Intersection inter2 = new Intersection(0, 1.0f, 1.0f);
-        Troncon t = new Troncon(0, "rue quelconque", inter, inter2, 1.0f);
+        Troncon t = new Troncon("rue quelconque", inter, inter2, 1.0f);
         
         assertEquals(1, inter.qteTroncons());
         assertEquals(0, inter2.qteTroncons());
@@ -50,7 +50,7 @@ public class IntersectionTest {
         assertEquals(1, inter.qteTroncons());
         
         Intersection inter3 = new Intersection(0,1.0f, 1.0f);
-        Troncon t2 = new Troncon(0, "une autre rue", inter3, inter3, 1.0f);
+        Troncon t2 = new Troncon("une autre rue", inter3, inter3, 1.0f);
         assertEquals(1, inter3.qteTroncons());
         assertSame(t2.getDebut(), t2.getFin());
     }
@@ -64,7 +64,7 @@ public class IntersectionTest {
         
         Intersection inter = new Intersection(0, 1.0f, 1.0f);
         Intersection inter2 = new Intersection(0, 1.0f, 1.0f);
-        Troncon t = new Troncon(0, "rue quelconque", inter, inter2, 1.0f);
+        Troncon t = new Troncon("rue quelconque", inter, inter2, 1.0f);
         
         inter.removeTroncon(t);
         assertEquals(0, inter.qteTroncons());
