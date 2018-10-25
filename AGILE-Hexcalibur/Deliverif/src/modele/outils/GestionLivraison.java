@@ -46,6 +46,5 @@ public class GestionLivraison extends Observable{
     public int calculerTournees(int nbLivreurs) {
         return 0;
     }
-    
-    
+
 }
