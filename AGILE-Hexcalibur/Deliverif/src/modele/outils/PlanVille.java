@@ -84,6 +84,9 @@ public class PlanVille {
                             tab.put(arc.getFin(), predecesseur);
                         }
                     }else{
+                        System.out.println("------------");
+                        System.out.println(origine);
+                        System.out.println(tab.get(origine));
                         Pair<Intersection,Float> predecesseur = new Pair(origine,arc.getLongueur()+tab.get(origine).getValue());
                         tab.put(arc.getFin(), predecesseur);
                     }

@@ -40,7 +40,7 @@ public class CheminTest {
         Intersection inter2 = new Intersection(0, 1.0f, 1.0f);
         PointPassage p1 = new PointPassage(true, inter1, 2f);
         PointPassage p2 = new PointPassage(false, inter2, 0.6f);
-        Troncon t = new Troncon(0, "rue", inter1, inter2, 1.0f);
+        Troncon t = new Troncon("rue", inter1, inter2, 1.0f);
         Chemin instance = new Chemin(p1,p2);
         assertSame(instance.getDebut(),p1);
         assertSame(instance.getDebut().getPosition(), inter1);

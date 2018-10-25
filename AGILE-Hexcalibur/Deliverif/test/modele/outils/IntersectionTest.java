@@ -64,7 +64,7 @@ public class IntersectionTest {
         
         Intersection inter = new Intersection(0, 1.0f, 1.0f);
         Intersection inter2 = new Intersection(0, 1.0f, 1.0f);
-        Troncon t = new Troncon(0, "rue quelconque", inter, inter2, 1.0f);
+        Troncon t = new Troncon("rue quelconque", inter, inter2, 1.0f);
         
         inter.removeTroncon(t);
         assertEquals(0, inter.qteTroncons());
