@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package deliverif;
 
@@ -36,6 +39,10 @@ public class VueTextuelle extends VBox implements Observer {
     private ComboBox<String> choixTournee;
     private Label descriptionTournee;
     
+    /**
+     *
+     * @param gl
+     */
     public VueTextuelle(GestionLivraison gl){
         super();
         
@@ -71,6 +78,10 @@ public class VueTextuelle extends VBox implements Observer {
         
     }
 
+    /**
+     *
+     * @param ec
+     */
     public void ajouterEcouteur(EcouteurBoutons ec){
         choixTournee.setOnAction(e->{
             try {
@@ -81,6 +92,9 @@ public class VueTextuelle extends VBox implements Observer {
         });
     }
     
+    /**
+     *
+     */
     public void changerDescriptionAffichee(){
         String s = choixTournee.getSelectionModel().getSelectedItem();
 
