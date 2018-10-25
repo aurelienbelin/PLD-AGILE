@@ -16,25 +16,19 @@ package modele.outils;
  * @author Louis Ohl
  */
 public class Troncon {
-    /** L'idXML sert à maintenir une cohérence entre le troncon dans le fichier
-     * xml et l'instance de l'objet.*/
-    private int idXML;
-    
     private String nom;
     private Intersection debut, fin;
     private float longueur;
     
     /**
      * Créer un nouveau troncon
-     * @param idXML - l'identifiant du troncon dans le fichier xml.
      * @param nom - Le nom associé à ce troncon.
      * @param debut - L'intersection à la première extrémité du troncon.
      * @param fin - L'intersection à la seconde extrémité du troncon.
      * @param longueur - La longueur (en m) du troncon.
      */
-    public Troncon(int idXML, String nom, Intersection debut, Intersection fin,
+    public Troncon(String nom, Intersection debut, Intersection fin,
             float longueur){
-        this.idXML=idXML;
         this.nom=nom;
         this.debut=debut;
         debut.addTroncon(this);
@@ -79,4 +73,12 @@ public class Troncon {
     }
     
     public float getLongueur(){ return this.longueur; }
+
+    public String getNom() {
+        return nom;
+    }
+    
+    public String toString(){
+        return this.nom;
+    }
 }

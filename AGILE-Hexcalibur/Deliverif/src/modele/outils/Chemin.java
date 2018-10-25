@@ -77,12 +77,20 @@ public class Chemin {
     public float getDuree(){
         float longueur = this.getLongueur();
         float resultat = longueur/3.6f;
-        resultat+=this.debut.getDuree();
         if (this.fin!=null){
             resultat+=this.fin.getDuree();
         }
         return resultat;
     }
     
-    
+    public List<String> getDescription(){
+        List<String> etapes = new ArrayList<String>();
+        etapes.add("Depart : "+this.debut.getPosition());
+        for(Troncon c : this.troncons){
+            etapes.add("Traverser : "+c);
+        }
+        etapes.add("Arriver à : "+this.fin.getPosition());
+        
+        return etapes;
+    }
 }
