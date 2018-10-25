@@ -9,9 +9,13 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,6 +30,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import modele.outils.GestionLivraison;
 
@@ -200,6 +206,7 @@ public class Deliverif extends Application {
         sh.setLayoutX(640);
         
         vueTextuelle = new VueTextuelle(gestionLivraison);
+        vueTextuelle.ajouterEcouteur(ecouteurBoutons);
         
         panelDroit.getChildren().addAll(boxLivreurs, boutonCalculerTournees, sh, vueTextuelle);
         
@@ -209,9 +216,81 @@ public class Deliverif extends Application {
         return (Integer)this.nbLivreurs.getValue();
     }
     
+    public VueTextuelle getVueTextuelle(){
+        return this.vueTextuelle;
+    }
+    
+    public VueGraphique getVueGraphique(){
+        return this.vueGraphique;
+    }
+    
     public static File openFileChooser(FileChooser fileChooser) throws InterruptedException {
         File file = fileChooser.showOpenDialog(stage);
         return file;
+    }
+    
+    public void desactiverBoutonChargerPlan(boolean b){
+        if(b)
+            this.boutonChargerPlan.setDisable(true);
+        else
+            this.boutonChargerPlan.setDisable(false);
+    }
+    
+    public void desactiverBoutonChargerDL(boolean b){
+        if(b)
+            this.boutonChargerDL.setDisable(true);
+        else
+            this.boutonChargerDL.setDisable(false);
+    }
+    
+    public void desactiverBoutonCalculerTournees(boolean b){
+        if(b)
+            this.boutonCalculerTournees.setDisable(true);
+        else
+            this.boutonCalculerTournees.setDisable(false);
+    }
+    
+    public void avertir(String message){
+        this.createMessagePopup(message);
+    }
+    
+    private void createMessagePopup(String message) {
+        Label mess = new Label(message);
+        mess.setPadding(new Insets(15));
+        Button boutonRetour = new Button("Retour");
+
+        VBox vbox = new VBox(mess, boutonRetour);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(10));
+        vbox.setStyle("-fx-background-color : FFFFFF;" + "-fx-background-radius : 5;" + "-fx-border-color : C0C0C0;"
+                        + "-fx-border-width : 3;");
+        
+        Scene secondeScene = new Scene(vbox, 230, 100);
+ 
+        // New window (Stage)
+        Stage popUp = new Stage();
+        popUp.setTitle("Message");
+        popUp.setScene(secondeScene);
+        
+        boutonRetour.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent arg0) {
+                        popUp.close();
+                }
+        });
+
+        // Specifies the modality for new window.
+        popUp.initModality(Modality.WINDOW_MODAL);
+
+        // Specifies the owner Window (parent) for new window
+        popUp.initOwner(this.stage);
+
+        // Set position of second window, related to primary window.
+        popUp.setX(stage.getX() + stage.getWidth()/2 - 115);
+        popUp.setY(stage.getY() + stage.getHeight()/2 - 50);
+
+        popUp.show();
     }
 
     /**
@@ -221,6 +300,4 @@ public class Deliverif extends Application {
         launch(args);
     }
 
-    
-    
 }

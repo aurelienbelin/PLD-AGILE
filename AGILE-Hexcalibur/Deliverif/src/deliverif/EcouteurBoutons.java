@@ -57,5 +57,9 @@ public class EcouteurBoutons{
         System.out.println(fenetrePrincipale.getNbLivreurs());
     }
 
+    public void changerTourneeAffichee(ActionEvent e) throws InterruptedException{
+        this.fenetrePrincipale.getVueTextuelle().changerDescriptionAffichee();
+        //this.fenetrePrincipale.avertir("Description modifiée");
+    }
 
 }
