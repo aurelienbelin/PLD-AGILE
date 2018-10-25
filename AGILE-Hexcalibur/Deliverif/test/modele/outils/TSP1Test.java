@@ -49,7 +49,7 @@ public class TSP1Test {
             List<Chemin> noeud1 = new ArrayList<Chemin>();
             for(int j=0; j<cout[i].length; j++){
                 if (cout[i][j]!=0){
-                    Troncon t = new Troncon(0, i+"->"+j, intersections.get(i),
+                    Troncon t = new Troncon(i+"->"+j, intersections.get(i),
                             intersections.get(j), cout[i][j]);
                     Chemin c = new Chemin(passages.get(i), null);
                     c.addTroncon(t);
@@ -121,8 +121,9 @@ public class TSP1Test {
         for(int i=depart+1; i<cout.length; i++){
             nonVus.add(i);
         }
-        
-        int resultat=tsp.bound(depart, nonVus, cout);
+        ArrayList<Integer> vus= new ArrayList<>();
+        vus.add(depart);
+        int resultat=tsp.bound(vus, depart, nonVus, cout);
         assertEquals(199,resultat);
     }
     
@@ -130,7 +131,7 @@ public class TSP1Test {
     public void testTSP(){
         System.out.println("--methode chercheSolution");
         TSP1 tsp = new TSP1(2);
-        int[] resultat = {0,8,4,3,5,9,0,7,2,6,1,10};
+        int[] resultat = {0,8,4,3,5,9,0,10,1,6,2,7};
         tsp.chercheSolution(8000, cout.length,2, cout);
         assertFalse(tsp.getTempsLimiteAtteint());
         assertEquals(278, tsp.getCoutMeilleureSolution());

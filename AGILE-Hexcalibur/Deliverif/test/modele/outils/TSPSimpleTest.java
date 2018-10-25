@@ -49,7 +49,7 @@ public class TSPSimpleTest {
             List<Chemin> noeud1 = new ArrayList<Chemin>();
             for(int j=0; j<cout[i].length; j++){
                 if (cout[i][j]!=0){
-                    Troncon t = new Troncon(0, i+"->"+j, intersections.get(i),
+                    Troncon t = new Troncon(i+"->"+j, intersections.get(i),
                             intersections.get(j), cout[i][j]);
                     Chemin c = new Chemin(passages.get(i), null);
                     c.addTroncon(t);
@@ -115,7 +115,7 @@ public class TSPSimpleTest {
         for(int i=depart+1; i<cout.length; i++){
             nonVus.add(i);
         }
-        int resultat=tsp.bound(depart, nonVus, cout);
+        int resultat=tsp.bound(new ArrayList<Integer>(),depart, nonVus, cout);
         assertEquals(0,resultat);
     }
     

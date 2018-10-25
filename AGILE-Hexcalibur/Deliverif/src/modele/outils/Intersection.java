@@ -96,4 +96,8 @@ public class Intersection {
     public float getLongitude() {
         return longitude;
     }
+    
+    public String toString(){
+        return "("+this.longitude+","+this.latitude+")";
+    }
 }
