@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package deliverif;
 
@@ -46,11 +49,35 @@ public class Deliverif extends Application {
     private static Scene scene;
     
     //Commande
+
+    /**
+     *
+     */
     public final static String CHARGER_PLAN = "Charger un plan";
+
+    /**
+     *
+     */
     public final static String CHARGER_DL = "Charger une demande de livraison";
+
+    /**
+     *
+     */
     public final static String AJOUTER_LIVRAISON = "Ajouter une livraison";
+
+    /**
+     *
+     */
     public final static String SUPPRIMER_LIVRAISON = "Supprimer une livraison";
+
+    /**
+     *
+     */
     public final static String REORGANISER_TOURNEE = "Réorganiser tournée";
+
+    /**
+     *
+     */
     public final static String CALCULER_TOURNEES = "Calculer les tournées";
     
     //private Controleur controleur;
@@ -214,23 +241,45 @@ public class Deliverif extends Application {
         
     }
     
+    /**
+     *
+     * @return
+     */
     public int getNbLivreurs(){
         return (Integer)this.nbLivreurs.getValue();
     }
     
+    /**
+     *
+     * @return
+     */
     public VueTextuelle getVueTextuelle(){
         return this.vueTextuelle;
     }
     
+    /**
+     *
+     * @return
+     */
     public VueGraphique getVueGraphique(){
         return this.vueGraphique;
     }
     
+    /**
+     *
+     * @param fileChooser
+     * @return
+     * @throws InterruptedException
+     */
     public static File openFileChooser(FileChooser fileChooser) throws InterruptedException {
         File file = fileChooser.showOpenDialog(stage);
         return file;
     }
     
+    /**
+     *
+     * @param message
+     */
     public void avertir(String message){
         this.createMessagePopup(message);
     }
@@ -283,6 +332,10 @@ public class Deliverif extends Application {
         launch(args);
     }
 
+    /**
+     *
+     * @param cre
+     */
     public void estPlanCharge(int cre) {
         if(cre==1){
             boutonChargerPlan.setDisable(true);
@@ -293,6 +346,10 @@ public class Deliverif extends Application {
         }
     }
     
+    /**
+     *
+     * @param cre
+     */
     public void estDemandeLivraisonChargee(int cre){
         if(cre==1){
             boutonChargerDL.setDisable(true);
@@ -303,6 +360,10 @@ public class Deliverif extends Application {
         }
     }
     
+    /**
+     *
+     * @param cre
+     */
     public void estTourneesCalculees(int cre){
         if(cre==1)
             avertir("Calcul des tournées terminé");

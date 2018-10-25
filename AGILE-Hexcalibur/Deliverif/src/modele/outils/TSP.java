@@ -8,6 +8,10 @@
  */
 package modele.outils;
 
+/**
+ * @version 1.0 23/10/2018
+ * @author Elise
+ */
 public interface TSP {
 		
 	/**

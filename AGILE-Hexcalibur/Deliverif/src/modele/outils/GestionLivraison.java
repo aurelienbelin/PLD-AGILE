@@ -53,6 +53,11 @@ public class GestionLivraison extends Observable{
         return demande;
     }
     
+    /**
+     *
+     * @param fichier
+     * @return
+     */
     public int chargerVille(String fichier){
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.plan = Lecteur.creerPlanVille(fichier);
@@ -63,6 +68,11 @@ public class GestionLivraison extends Observable{
         }
     }
     
+    /**
+     *
+     * @param fichier
+     * @return
+     */
     public int chargerDemandeLivraison(String fichier) {
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
@@ -73,6 +83,11 @@ public class GestionLivraison extends Observable{
         }
     }
     
+    /**
+     *
+     * @param nbLivreurs
+     * @return
+     */
     public int calculerTournees(int nbLivreurs) {
         return 0;
     }

@@ -1,3 +1,11 @@
+/*
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
+ */
 package controleur;
 
 /** Classe mère de tous les états.
@@ -18,6 +26,7 @@ public class EtatDefaut implements Etat
     /**
      * @param gestionLivraison
      * @param fichier
+     * @param fenetre
      * @see modele.GestionLivraison
      * @version 1
      */
@@ -28,6 +37,7 @@ public class EtatDefaut implements Etat
     /**
      * @param gestionLivraison
      * @param fichier
+     * @param fenetre
      * @see modele.GestionLivraison
      * @version 1
      */
@@ -38,6 +48,7 @@ public class EtatDefaut implements Etat
     /**
      * @param gestionLivraison
      * @param nbLivreurs
+     * @param fenetre
      * @see modele.GestionLivraison
      * @version 1
      */

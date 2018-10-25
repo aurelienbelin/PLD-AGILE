@@ -21,35 +21,58 @@ import javafx.util.Pair;
  * @author Louis Ohl
  * @author Romain Fournier
  */
-
-
-
 public class PlanVille {
     
     private List<Intersection> intersections;
     private List<Troncon> troncons;
     
+    /**
+     *
+     * @param i
+     * @param t
+     */
     public PlanVille(List<Intersection> i, List<Troncon> t){
         this.intersections =i;
         this.troncons=t;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Intersection> getIntersections() {
         return intersections;
     }
 
+    /**
+     *
+     * @param intersections
+     */
     public void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Troncon> getTroncons() {
         return troncons;
     }
 
+    /**
+     *
+     * @param troncons
+     */
     public void setTroncons(List<Troncon> troncons) {
         this.troncons = troncons;
     }
     
+    /**
+     *
+     * @param p
+     * @return
+     */
     public Map<Intersection, Pair<Intersection, Float>> dijkstra(PointPassage p){
         
         List<Intersection> nonVus = new ArrayList(intersections);
@@ -122,6 +145,11 @@ public class PlanVille {
         return tab;
     }
     
+    /**
+     *
+     * @param listePoints
+     * @return
+     */
     public List<Chemin> dijkstraToutPoints(List<PointPassage> listePoints){
         List<Chemin> graph = new ArrayList<Chemin>();
         for(PointPassage depart : listePoints){
