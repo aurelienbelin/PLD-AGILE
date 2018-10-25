@@ -23,10 +23,11 @@ public class EtatPlanCharge extends EtatDefaut{
      *  @see EtatLivraisonsChargees
      */
     @Override
-    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier){
+    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
         int cre = gestionLivraison.chargerDemandeLivraison(fichier);
-        if(cre==0){
+        if(cre==1){
             Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
         }
+        fenetre.estDemandeLivraisonChargee(cre);
     }
 }

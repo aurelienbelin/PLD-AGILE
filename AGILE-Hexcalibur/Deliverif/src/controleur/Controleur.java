@@ -26,7 +26,9 @@ public class Controleur {
      *  C'est avec cette classe que le controleur communique pour intéragir 
      * avec les classes du modèle.
      */
-    private final modele.GestionLivraison gestionLivraison;
+    private final modele.outils.GestionLivraison gestionLivraison;
+    
+    private final deliverif.Deliverif fenetre;
     
     
     
@@ -34,9 +36,10 @@ public class Controleur {
      * @see modele.GestionLivraison
      * @version 1
      */
-    public Controleur (modele.GestionLivraison gestionLivraison){
+    public Controleur (modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre){
         this.gestionLivraison = gestionLivraison;
         Controleur.etatCourant = ETAT_INIT;
+        this.fenetre = fenetre;
     }
     
     /**@param fichier
@@ -44,7 +47,7 @@ public class Controleur {
      * @version 1
      */
     public void boutonChargePlan (String fichier){
-        etatCourant.chargePlan(gestionLivraison, fichier);
+        etatCourant.chargePlan(gestionLivraison, fichier, fenetre);
     }
     
     /**@param fichier
@@ -52,7 +55,7 @@ public class Controleur {
      * @version 1
      */
     public void boutonChargeLivraisons (String fichier){
-        etatCourant.chargeLivraisons(gestionLivraison, fichier);
+        etatCourant.chargeLivraisons(gestionLivraison, fichier, fenetre);
     }
     
     /**@param nbLivreurs
@@ -60,7 +63,7 @@ public class Controleur {
      * @version 1
      */
     public void boutonCalculerTournees (int nbLivreurs){
-        etatCourant.calculerTournees(gestionLivraison, nbLivreurs);
+        etatCourant.calculerTournees(gestionLivraison, nbLivreurs, fenetre);
     }
 
 }

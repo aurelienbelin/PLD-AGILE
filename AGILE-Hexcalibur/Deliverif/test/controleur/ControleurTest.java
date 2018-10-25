@@ -33,8 +33,9 @@ public class ControleurTest {
     @Test
     public void testBoutonChargePlan() {
         System.out.println("boutonChargePlan");
-        modele.GestionLivraison gestion = new modele.GestionLivraison();
-        Controleur instance = new Controleur(gestion);
+        modele.outils.GestionLivraison gestion = new modele.outils.GestionLivraison();
+        deliverif.Deliverif fenetre = new deliverif.Deliverif();
+        Controleur instance = new Controleur(gestion,fenetre);
         
         String fichier = "fichier existant et bien formé";
         instance.boutonChargePlan(fichier);
@@ -51,8 +52,10 @@ public class ControleurTest {
     @Test
     public void testBoutonChargeLivraisons() {
         System.out.println("boutonChargeLivraison");
-        modele.GestionLivraison gestion = new modele.GestionLivraison();
-        Controleur instance = new Controleur(gestion);
+        modele.outils.GestionLivraison gestion = new modele.outils.GestionLivraison();
+        
+        deliverif.Deliverif fenetre = new deliverif.Deliverif();
+        Controleur instance = new Controleur(gestion,fenetre);
         
         String fichierPlan = "fichier existant et bien formé";
         instance.boutonChargePlan(fichierPlan);
@@ -60,7 +63,7 @@ public class ControleurTest {
         
         String fichier = "fichier existant et bien formé";
         instance.boutonChargeLivraisons(fichier);
-        assertEquals(Controleur.ETAT_LIVRAISONS_CHARGE, Controleur.etatCourant);
+        assertEquals(Controleur.ETAT_LIVRAISONS_CHARGEES, Controleur.etatCourant);
         
         String fichier2 = "fichier non existant ou mal formé";
         instance.boutonChargeLivraisons(fichier2);
@@ -73,8 +76,10 @@ public class ControleurTest {
     @Test
     public void testBoutonCalculerTournees() {
         System.out.println("boutonCalculerTournees");
-        modele.GestionLivraison gestion = new modele.GestionLivraison();
-        Controleur instance = new Controleur(gestion);
+        modele.outils.GestionLivraison gestion = new modele.outils.GestionLivraison();
+        
+        deliverif.Deliverif fenetre = new deliverif.Deliverif();
+        Controleur instance = new Controleur(gestion, fenetre);
         
         String fichierPlan = "fichier existant et bien formé";
         instance.boutonChargePlan(fichierPlan);
@@ -82,7 +87,7 @@ public class ControleurTest {
         
         String fichierLivraison = "fichier existant et bien formé";
         instance.boutonChargeLivraisons(fichierLivraison);
-        assertEquals(Controleur.ETAT_LIVRAISONS_CHARGE, Controleur.etatCourant);
+        assertEquals(Controleur.ETAT_LIVRAISONS_CHARGEES, Controleur.etatCourant);
         
         int nbLivreurs=3;
         instance.boutonCalculerTournees(nbLivreurs);

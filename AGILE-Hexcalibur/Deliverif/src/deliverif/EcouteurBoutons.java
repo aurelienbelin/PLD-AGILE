@@ -5,6 +5,7 @@
  */
 package deliverif;
 
+import controleur.Controleur;
 import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -18,11 +19,11 @@ import javafx.stage.FileChooser;
 public class EcouteurBoutons{
     
     private Deliverif fenetrePrincipale;
-    //public Controleur controleur;
+    private Controleur controleur;
     
-    public EcouteurBoutons(Deliverif f){
+    public EcouteurBoutons(Deliverif f, Controleur c){
         this.fenetrePrincipale = f;
-        //this.controleur = controleur;
+        this.controleur = c;
     }
     
     public void chargerPlanAction(ActionEvent e) throws InterruptedException{
@@ -34,9 +35,12 @@ public class EcouteurBoutons{
         );
         File f = Deliverif.openFileChooser(fileChooser);
         if (f != null) {
+            System.out.println(controleur); //DEBUG
             //On appelle la méthode du controleur devant charger le plan
-            System.out.println(f); //DEBUG
-        }
+            controleur.boutonChargePlan(f.getAbsolutePath());
+            //System.out.println(f); //DEBUG
+        }else
+            fenetrePrincipale.avertir("Fichier non trouvé");
     }
     
     public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException{
@@ -49,12 +53,15 @@ public class EcouteurBoutons{
         File f = Deliverif.openFileChooser(fileChooser);
         if (f != null) {
             //On appelle la méthode du controleur devant charger la demande de livraison
-            System.out.println(f); //DEBUG
-        }
+            //System.out.println(f); //DEBUG
+            controleur.boutonChargeLivraisons(f.getAbsolutePath());
+        }else
+            fenetrePrincipale.avertir("Fichier non trouvé");
     }
     
     public void calculerTourneesAction(ActionEvent e) throws InterruptedException{
-        System.out.println(fenetrePrincipale.getNbLivreurs());
+        //System.out.println(fenetrePrincipale.getNbLivreurs());
+        controleur.boutonCalculerTournees(fenetrePrincipale.getNbLivreurs());
     }
 
     public void changerTourneeAffichee(ActionEvent e) throws InterruptedException{

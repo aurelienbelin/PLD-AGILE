@@ -16,12 +16,18 @@ public class EtatLivraisonsChargees extends EtatDefaut{
     /** 
       *  @param gestionLivraison
       *  @param nbLivreurs
+      * @param fenetre
       *  @see modele.GestionLivraison
       *  @see EtatCalculTournees
      */
     @Override
-    public void calculerTournees(modele.GestionLivraison gestionLivraison, int nbLivreurs){
-        gestionLivraison.calculerTournee(nbLivreurs);
-        Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
+    public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
+        int cre = gestionLivraison.calculerTournees(nbLivreurs);
+        if(cre==1){
+            Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
+        }else{
+            Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
+        }
+        fenetre.estTourneesCalculees(cre);
     }
 }

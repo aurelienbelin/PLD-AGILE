@@ -35,5 +35,17 @@ public class GestionLivraison extends Observable{
         return demande;
     }
     
+    public int chargerVille(String fichier){
+        return 0;
+    }
+    
+    public int chargerDemandeLivraison(String fichier) {
+        return 0;
+    }
+    
+    public int calculerTournees(int nbLivreurs) {
+        return 0;
+    }
+    
     
 }

@@ -22,7 +22,7 @@ public class EtatDefaut implements Etat
      * @version 1
      */
     @Override
-    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier){
+    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
     }
     
     /**
@@ -32,7 +32,7 @@ public class EtatDefaut implements Etat
      * @version 1
      */
     @Override
-    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier){
+    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
     }
     
     /**
@@ -42,6 +42,6 @@ public class EtatDefaut implements Etat
      * @version 1
      */
     @Override
-    public void calculerTournees(modele.GestionLivraison gestionLivraison, int nbLivreurs){
+    public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
     }
 }
