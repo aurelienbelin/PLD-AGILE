@@ -50,14 +50,15 @@ public class LecteurXMLTest {
     @Test
     public void testCreerPlanVille() {
         System.out.println("creerPlanVille");
-        String urlFichierXML = "test/modele/flux/planVilleTest.xml";
+        String urlFichierXML = "test/modele/flux/moyenPlan.xml";
         LecteurXML instance = new LecteurXML();
         String expResult1 = "Rue Danton";
-        String result1 = instance.creerPlanVille(urlFichierXML).getTroncons().get(0).getNom();
+        PlanVille pv = instance.creerPlanVille(urlFichierXML);
+        String result1 = pv.getTroncons().get(0).getNom();
         System.out.println(result1);
         assertEquals(expResult1, result1);
         int expResult2 = 25175791;
-        int result2 = instance.creerPlanVille(urlFichierXML).getIntersections().get(0).getIdXML();
+        long result2 = instance.creerPlanVille(urlFichierXML).getIntersections().get(0).getIdXML();
         System.out.println(result2);
         assertEquals(expResult2, result2);
     }
@@ -68,7 +69,7 @@ public class LecteurXMLTest {
     @Test
     public void testCreerDemandeLivraison() {
         System.out.println("creerDemandeLivraison");
-        String urlFichierPlan = "test/modele/flux/planVilleTest.xml";
+        String urlFichierPlan = "test/modele/flux/moyenPlan.xml";
         String urlFichierXML = "test/modele/flux/dl-moyen-12.xml";
         LecteurXML instance = new LecteurXML();
         PlanVille planVille = instance.creerPlanVille(urlFichierPlan);
