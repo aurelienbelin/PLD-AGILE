@@ -54,11 +54,23 @@ public class GestionLivraison extends Observable{
     }
     
     public int chargerVille(String fichier){
-        return 0;
+        modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
+        this.plan = Lecteur.creerPlanVille(fichier);
+        if(this.plan != null){
+            return 1;
+        } else{
+            return 0;
+        }
     }
     
     public int chargerDemandeLivraison(String fichier) {
-        return 0;
+        modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
+        this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
+        if(this.demande != null){
+            return 1;
+        } else{
+            return 0;
+        }
     }
     
     public int calculerTournees(int nbLivreurs) {
