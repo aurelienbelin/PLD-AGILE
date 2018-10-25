@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package modele.outils;
 
@@ -14,8 +17,9 @@ import javafx.util.Pair;
 
 /**
  *
- * @author lohl
- * @author rfournier
+ * @version 1.0 23/10/2018
+ * @author Louis Ohl
+ * @author Romain Fournier
  */
 
 
