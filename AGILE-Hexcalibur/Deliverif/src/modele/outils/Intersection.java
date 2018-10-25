@@ -24,7 +24,7 @@ public class Intersection {
     private float latitude;
     private float longitude;
     
-    private int idXML;
+    private long idXML;
     
     /**
      * Crée une nouvelle intersection.
@@ -32,7 +32,7 @@ public class Intersection {
      * @param latitude - La latitude de l'intersection.
      * @param longitude  -  La longitude de l'intersection.
      */
-    public Intersection(int idXML, float latitude, float longitude) {
+    public Intersection(long idXML, float latitude, float longitude) {
         this.latitude=latitude;
         this.longitude=longitude;
         this.idXML=idXML;
@@ -94,7 +94,7 @@ public class Intersection {
     /**
      * @return - L'id de l'intersection dans son fichier xml d'origine.
      */
-    public int getIdXML() { return this.idXML; }
+    public long getIdXML() { return this.idXML; }
     
     /**
      * @return - La latitude de l'intersection.
