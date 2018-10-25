@@ -79,4 +79,8 @@ public class Troncon {
     }
     
     public float getLongueur(){ return this.longueur; }
+    
+    public String toString(){
+        return this.nom;
+    }
 }

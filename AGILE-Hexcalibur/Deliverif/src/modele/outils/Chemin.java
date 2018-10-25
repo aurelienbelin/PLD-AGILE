@@ -83,5 +83,14 @@ public class Chemin {
         return resultat;
     }
     
-    
+    public List<String> getDescription(){
+        List<String> etapes = new ArrayList<String>();
+        etapes.add("Depart : "+this.debut.getPosition());
+        for(Troncon c : this.troncons){
+            etapes.add("Traverser : "+c);
+        }
+        etapes.add("Arriver à : "+this.fin.getPosition());
+        
+        return etapes;
+    }
 }
