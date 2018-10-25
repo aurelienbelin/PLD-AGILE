@@ -88,8 +88,8 @@ public class TSP1Test {
             TSP1 tsp = new TSP1(nbLivreur);
             Iterator<Integer> it = tsp.iterator(nombreVu, nonVus, cout);
             int premierElt = it.next();
+            System.out.println(premierElt);
             int quantiteSommet = (cout.length-1)/nbLivreur;
-            if ((cout.length-1)%quantiteSommet!=0) { quantiteSommet++; }
             if ((cout.length-1-nonVus.size())%quantiteSommet==0){
                 assertEquals(0,premierElt);
                 assertFalse(it.hasNext());

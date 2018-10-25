@@ -53,7 +53,7 @@ public class GestionLivraisonTest {
     public void testCalculerTournee() {
         String urlFichierPlan = "test/modele/flux/grandPlan.xml";
         String urlFichierDemande = "test/modele/flux/dl-grand-15.xml";
-        int nbLivreur=4;
+        int nbLivreur=7;
         LecteurXML lecteur = new LecteurXML();
         assertTrue(gestion.chargerVille(urlFichierPlan));
         //assertEquals(308, gestion.getPlan().getIntersections().size());

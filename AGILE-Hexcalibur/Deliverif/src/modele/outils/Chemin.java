@@ -86,8 +86,12 @@ public class Chemin {
     public List<String> getDescription(){
         List<String> etapes = new ArrayList<String>();
         etapes.add("Depart : "+this.debut.getPosition());
+        String dernierNom="";
         for(Troncon c : this.troncons){
-            etapes.add("Traverser : "+c);
+            if(!c.getNom().equals(dernierNom)){
+                etapes.add("Traverser : "+c);
+                dernierNom=c.getNom();
+            }
         }
         etapes.add("Arriver à : "+this.fin.getPosition());
         
