@@ -49,7 +49,7 @@ public class TSP1Test {
             List<Chemin> noeud1 = new ArrayList<Chemin>();
             for(int j=0; j<cout[i].length; j++){
                 if (cout[i][j]!=0){
-                    Troncon t = new Troncon(0, i+"->"+j, intersections.get(i),
+                    Troncon t = new Troncon(i+"->"+j, intersections.get(i),
                             intersections.get(j), cout[i][j]);
                     Chemin c = new Chemin(passages.get(i), null);
                     c.addTroncon(t);
@@ -88,10 +88,9 @@ public class TSP1Test {
             TSP1 tsp = new TSP1(nbLivreur);
             Iterator<Integer> it = tsp.iterator(nombreVu, nonVus, cout);
             int premierElt = it.next();
-            System.out.println("nbLivreur ("+nbLivreur+") size ("+cout.length+") nombreVu ("+ nombreVu+")");
             int quantiteSommet = (cout.length-1)/nbLivreur;
+            if ((cout.length-1)%quantiteSommet!=0) { quantiteSommet++; }
             if ((cout.length-1-nonVus.size())%quantiteSommet==0){
-                System.out.println("\tVers l'entrepot");
                 assertEquals(0,premierElt);
                 assertFalse(it.hasNext());
             } else {
@@ -101,7 +100,6 @@ public class TSP1Test {
                         meilleur=i;
                     }
                 }
-                System.out.println("\tVers le meilleur "+meilleur);
                 assertEquals(meilleur, premierElt);
                 assertTrue(it.hasNext());
             }
@@ -138,6 +136,7 @@ public class TSP1Test {
         for(int i=0; i<resultat.length; i++){
             System.out.print(tsp.getMeilleureSolution(i)+" ");
         }
+        System.out.println();
         for(int i=0; i<resultat.length; i++){
             assertEquals(resultat[i], (int)tsp.getMeilleureSolution(i));
         }

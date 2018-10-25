@@ -49,7 +49,7 @@ public class TSPSimpleTest {
             List<Chemin> noeud1 = new ArrayList<Chemin>();
             for(int j=0; j<cout[i].length; j++){
                 if (cout[i][j]!=0){
-                    Troncon t = new Troncon(0, i+"->"+j, intersections.get(i),
+                    Troncon t = new Troncon(i+"->"+j, intersections.get(i),
                             intersections.get(j), cout[i][j]);
                     Chemin c = new Chemin(passages.get(i), null);
                     c.addTroncon(t);
@@ -88,14 +88,11 @@ public class TSPSimpleTest {
             TSPSimple tsp = new TSPSimple(nbLivreur);
             Iterator<Integer> it = tsp.iterator(nombreVu, nonVus, cout);
             int premierElt = it.next();
-            System.out.println("nbLivreur ("+nbLivreur+") size ("+cout.length+") nombreVu ("+ nombreVu+")");
             int quantiteSommet = (cout.length-1)/nbLivreur;
             if ((cout.length-1-nonVus.size())%quantiteSommet==0){
-                System.out.println("\tVers l'entrepot");
                 assertEquals(0,premierElt);
                 assertFalse(it.hasNext());
             } else {
-                System.out.println("\tsequentiel");
                 assertEquals((int)nonVus.get(nonVus.size()-1), premierElt);
                 assertTrue(it.hasNext());
             }
