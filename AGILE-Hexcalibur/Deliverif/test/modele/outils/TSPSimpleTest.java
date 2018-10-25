@@ -88,14 +88,11 @@ public class TSPSimpleTest {
             TSPSimple tsp = new TSPSimple(nbLivreur);
             Iterator<Integer> it = tsp.iterator(nombreVu, nonVus, cout);
             int premierElt = it.next();
-            System.out.println("nbLivreur ("+nbLivreur+") size ("+cout.length+") nombreVu ("+ nombreVu+")");
             int quantiteSommet = (cout.length-1)/nbLivreur;
             if ((cout.length-1-nonVus.size())%quantiteSommet==0){
-                System.out.println("\tVers l'entrepot");
                 assertEquals(0,premierElt);
                 assertFalse(it.hasNext());
             } else {
-                System.out.println("\tsequentiel");
                 assertEquals((int)nonVus.get(nonVus.size()-1), premierElt);
                 assertTrue(it.hasNext());
             }
