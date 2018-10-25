@@ -78,7 +78,7 @@ public class TSP1Test {
      */
     @Test
     public void testIterator() {
-        System.out.println("-- methode iterator");
+            System.out.println("-- methode iterator");
         ArrayList<Integer> nonVus = new ArrayList<Integer>();
         int nombreVu=3;
         for(int i=nombreVu+1; i<cout.length; i++){//supposition d'avoir vu 3 noeuds
