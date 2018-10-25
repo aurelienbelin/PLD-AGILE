@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package modele.outils;
 
@@ -14,38 +17,62 @@ import javafx.util.Pair;
 
 /**
  *
- * @author lohl
- * @author rfournier
+ * @version 1.0 23/10/2018
+ * @author Louis Ohl
+ * @author Romain Fournier
  */
-
-
-
 public class PlanVille {
     
     private List<Intersection> intersections;
     private List<Troncon> troncons;
     
+    /**
+     *
+     * @param i
+     * @param t
+     */
     public PlanVille(List<Intersection> i, List<Troncon> t){
         this.intersections =i;
         this.troncons=t;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Intersection> getIntersections() {
         return intersections;
     }
 
+    /**
+     *
+     * @param intersections
+     */
     public void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Troncon> getTroncons() {
         return troncons;
     }
 
+    /**
+     *
+     * @param troncons
+     */
     public void setTroncons(List<Troncon> troncons) {
         this.troncons = troncons;
     }
     
+    /**
+     *
+     * @param p
+     * @return
+     */
     public Map<Intersection, Pair<Intersection, Float>> dijkstra(PointPassage p){
         
         List<Intersection> nonVus = new ArrayList();
@@ -113,6 +140,11 @@ public class PlanVille {
         return tab;
     }
     
+    /**
+     *
+     * @param listePoints
+     * @return
+     */
     public List<Chemin> dijkstraToutPoints(List<PointPassage> listePoints){
         List<Chemin> graph = new ArrayList<Chemin>();
         for(PointPassage depart : listePoints){

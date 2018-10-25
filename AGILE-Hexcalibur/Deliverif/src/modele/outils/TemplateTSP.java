@@ -1,9 +1,21 @@
+/*
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
+ */
 package modele.outils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * @version 1.0 23/10/2018
+ * @author Louis Ohl
+ */
 public abstract class TemplateTSP implements TSP {
 	
 	private Integer[] meilleureSolution;

@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package modele.outils;
 
@@ -10,12 +13,16 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- *
+ * @version 1.0 23/10/2018
  * @author Louis
  */
 public class TSPSimple extends TemplateTSP{
     private int nbLivreur;
 
+    /**
+     *
+     * @param nbLivreur
+     */
     public TSPSimple(int nbLivreur){
         this.nbLivreur=nbLivreur;
     }
