@@ -17,7 +17,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -102,29 +102,16 @@ public class PlanVilleTest {
      */
     @Test
     public void testDijkstra() {
-        Intersection C = new Intersection(1,3,0);
-        Intersection B = new Intersection(2,3,2);
-        Intersection F= new Intersection(3,2,1);
-        Intersection D = new Intersection(4,1,0);
-        Intersection E = new Intersection(5,0,1);
-        Intersection A = new Intersection(6,1,2);
         PlanVille pv = new PlanVille(intersections,troncons);
         System.out.println("-- methode dijkstra");
         Map<Intersection,Pair<Intersection,Float>> result = pv.dijkstra(p);
-        for(Intersection key : result.keySet()){
-            System.out.println("pt :"+ key.getIdXML() + " pred : "+result.get(key).getKey().getIdXML() + " cout "+result.get(key).getValue());
-            
-        }
-        assertTrue(result.containsKey(B));
-        assertEquals((float)8, (float)result.get(B).getValue());
+        assertEquals(8.0, result.get(B).getValue(),0.0);
         assertEquals(F, result.get(B).getKey());
-        assertEquals((float)5, (float)result.get(F).getValue());
+        assertEquals(5.0, result.get(F).getValue(), 0.0);
         assertEquals(D, result.get(F).getKey());
-        assertEquals((float)2, (float)result.get(D).getValue());
+        assertEquals(2.0, result.get(D).getValue(),0.0);
         assertEquals(C, result.get(D).getKey());
-        assertEquals((float)10, (float)result.get(A).getValue());
+        assertEquals(10.0, result.get(A).getValue(),0.0);
         assertEquals(B, result.get(A).getKey());
-        
-
     }
 }
