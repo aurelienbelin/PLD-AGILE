@@ -35,19 +35,19 @@ public class PlanVilleTest {
         Intersection D = new Intersection(4,1,0);
         Intersection E = new Intersection(5,0,1);
         Intersection A = new Intersection(6,1,2);
-        Troncon ED = new Troncon(7,"ED",E,D,4);
-        Troncon AE = new Troncon(8,"AE",A,E,4);
-        Troncon DC= new Troncon(9,"DC",D,C,2);
-        Troncon CD = new Troncon(10,"CD",C,D,2);
-        Troncon DA = new Troncon(11,"DA",D,A,9);
-        Troncon DF = new Troncon(12,"DF",D,F,3);
-        Troncon FA = new Troncon(19,"FA",F,A,6);
-        Troncon BA = new Troncon(13,"BA",B,A,2);
-        Troncon CB = new Troncon(14,"CB",C,B,9);
-        Troncon CF = new Troncon(15,"CF",C,F,6);
-        Troncon FC = new Troncon(16,"FC",F,C,6);
-        Troncon FB = new Troncon(17,"FB",F,B,3);
-        Troncon BF = new Troncon(18,"BF",B,F,3);
+        Troncon ED = new Troncon("ED",E,D,4);
+        Troncon AE = new Troncon("AE",A,E,4);
+        Troncon DC= new Troncon("DC",D,C,2);
+        Troncon CD = new Troncon("CD",C,D,2);
+        Troncon DA = new Troncon("DA",D,A,9);
+        Troncon DF = new Troncon("DF",D,F,3);
+        Troncon FA = new Troncon("FA",F,A,6);
+        Troncon BA = new Troncon("BA",B,A,2);
+        Troncon CB = new Troncon("CB",C,B,9);
+        Troncon CF = new Troncon("CF",C,F,6);
+        Troncon FC = new Troncon("FC",F,C,6);
+        Troncon FB = new Troncon("FB",F,B,3);
+        Troncon BF = new Troncon("BF",B,F,3);
     
     public PlanVilleTest(){
         
