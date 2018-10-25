@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * @version 1.0 23/10/2018
+ * @author Louis Ohl
+ */
 public abstract class TemplateTSP implements TSP {
 	
 	private Integer[] meilleureSolution;

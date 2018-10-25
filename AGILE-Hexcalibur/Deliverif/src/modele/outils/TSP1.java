@@ -12,13 +12,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * @version 1.0 23/10/2018
+ * @author Elise
+ */
 public class TSP1 extends TemplateTSP {
 
     private int nbLivreur;
     //Liste contenant les sommets que l'on visite apres l'entrepot
     //Sert a casser les symetries.
+
+    /**
+     *
+     */
     protected List<Integer> ordreDepart;//TODO : mettre en place
     
+    /**
+     *
+     * @param nbLivreur
+     */
     public TSP1(int nbLivreur){
         this.nbLivreur=nbLivreur;
         this.ordreDepart = new ArrayList<Integer>();

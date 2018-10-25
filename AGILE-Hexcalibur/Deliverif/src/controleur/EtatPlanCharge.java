@@ -1,3 +1,11 @@
+/*
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
+ */
 package controleur;
 
 /** Etat dans lequel se trouve l'application après le chargement du plan
@@ -19,6 +27,7 @@ public class EtatPlanCharge extends EtatDefaut{
      *   l'EtatLivraisonsChargees   
      *  @param gestionLivraison
      *  @param fichier
+     * @param fenetre
      *  @see modele.GestionLivraison
      *  @see EtatLivraisonsChargees
      */

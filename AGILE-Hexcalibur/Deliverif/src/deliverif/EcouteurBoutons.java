@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package deliverif;
 
@@ -21,11 +24,21 @@ public class EcouteurBoutons{
     private Deliverif fenetrePrincipale;
     private Controleur controleur;
     
+    /**
+     *
+     * @param f
+     * @param c
+     */
     public EcouteurBoutons(Deliverif f, Controleur c){
         this.fenetrePrincipale = f;
         this.controleur = c;
     }
     
+    /**
+     *
+     * @param e
+     * @throws InterruptedException
+     */
     public void chargerPlanAction(ActionEvent e) throws InterruptedException{
         System.out.println("Choisir un plan à charger"); //DEBUG
         FileChooser fileChooser = new FileChooser();
@@ -43,6 +56,11 @@ public class EcouteurBoutons{
             fenetrePrincipale.avertir("Fichier non trouvé");
     }
     
+    /**
+     *
+     * @param e
+     * @throws InterruptedException
+     */
     public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException{
         System.out.println("Choisir une demade de livraison à charger"); //DEBUG
         FileChooser fileChooser = new FileChooser();
@@ -59,11 +77,21 @@ public class EcouteurBoutons{
             fenetrePrincipale.avertir("Fichier non trouvé");
     }
     
+    /**
+     *
+     * @param e
+     * @throws InterruptedException
+     */
     public void calculerTourneesAction(ActionEvent e) throws InterruptedException{
         //System.out.println(fenetrePrincipale.getNbLivreurs());
         controleur.boutonCalculerTournees(fenetrePrincipale.getNbLivreurs());
     }
 
+    /**
+     *
+     * @param e
+     * @throws InterruptedException
+     */
     public void changerTourneeAffichee(ActionEvent e) throws InterruptedException{
         this.fenetrePrincipale.getVueTextuelle().changerDescriptionAffichee();
         //this.fenetrePrincipale.avertir("Description modifiée");
