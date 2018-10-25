@@ -34,17 +34,34 @@ public class TSP1 extends TemplateTSP {
 
 
     @Override
-    protected int bound(Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
+    protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
         /**
          * Dans un premier temps, est-ce qu'on verifie la condition suivante :
          * premier sommet de la tournee i > premier sommet des tournees i-1
          * Si ce n'est pas le cas :
+         * on renvoie une valeur trop elevee (coutMeilleureSolution)
+         * sinon :
          * On réalise dans un dfs pour obtenir une approximation
          * du parcours de noeud.
          * Nous avons la garantie que cette solution sera nécessairement inférieure
          * à la solution optimale puisqu'elle ne prend pas en compte les allers-retours
          * vers les entrepots fictifs.
          */
+        int premierSommet=0;
+        boolean apresZero=false;
+        for (Integer sommet : vus){
+            if (apresZero){
+                apresZero=false;
+                if (sommet<=premierSommet){
+                    return this.getCoutMeilleureSolution();
+                } else {
+                    premierSommet=sommet;
+                }
+            }
+            if (sommet==0){
+                apresZero=true;
+            }
+        }
         ArrayList<Integer> aVoir = new ArrayList<Integer>(nonVus);
         int resultat=0;
         while(!aVoir.isEmpty()){
