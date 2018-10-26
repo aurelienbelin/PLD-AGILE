@@ -32,7 +32,22 @@ public class GestionLivraison extends Observable{
         this.demande=null;
     }
     
-    public int calculerTournee(int nbLivreur){
+    /*public boolean chargerVille(String urlFichierXML){
+        LecteurXML lecteur = new LecteurXML();
+        this.plan=lecteur.creerPlanVille(urlFichierXML);
+        return this.plan!=null;
+    }*/
+    
+    /*public boolean chargerDemandeLivraison(String urlFichierXML){
+        LecteurXML lecteur = new LecteurXML();
+        if(this.plan==null){
+            return false;
+        }
+        this.demande=lecteur.creerDemandeLivraison(urlFichierXML, plan);
+        return this.demande!=null;
+    }*/
+    
+    public int calculerTournees(int nbLivreur){
         if(this.plan==null || this.demande==null){
             return 0;
         }
