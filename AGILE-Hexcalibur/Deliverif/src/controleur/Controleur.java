@@ -8,6 +8,9 @@
  */
 package controleur;
 
+import java.io.IOException;
+import org.xml.sax.SAXException;
+
 /**En réaction aux actions de l'utilisateur, l'IHM envoie des notifications au 
  * contrôleur qui utilise les méthodes ci-dessous pour faire passer 
  * l'application dans l'état approprié. 
@@ -71,7 +74,7 @@ public class Controleur {
      * @see Etat
      * @version 1
      */
-    public void boutonChargePlan (String fichier){
+    public void boutonChargePlan (String fichier) throws SAXException, IOException, Exception{
         etatCourant.chargePlan(gestionLivraison, fichier, fenetre);
     }
     
@@ -79,7 +82,7 @@ public class Controleur {
      * @see Etat
      * @version 1
      */
-    public void boutonChargeLivraisons (String fichier){
+    public void boutonChargeLivraisons (String fichier) throws SAXException, IOException, Exception{
         etatCourant.chargeLivraisons(gestionLivraison, fichier, fenetre);
     }
     
