@@ -55,16 +55,16 @@ public class GestionLivraisonTest {
         String urlFichierDemande = "test/modele/flux/dl-grand-15.xml";
         int nbLivreur=7;
         LecteurXML lecteur = new LecteurXML();
-        assertTrue(gestion.chargerVille(urlFichierPlan));
+        assertEquals(1,gestion.chargerVille(urlFichierPlan));
         //assertEquals(308, gestion.getPlan().getIntersections().size());
         //assertEquals(616, gestion.getPlan().getTroncons().size());
         for (Troncon t : gestion.getPlan().getTroncons()){
             assertTrue(gestion.getPlan().getIntersections().contains(t.getDebut()));
             assertTrue(gestion.getPlan().getIntersections().contains(t.getFin()));
         }
-        assertTrue(gestion.chargerDemandeLivraison(urlFichierDemande));
+        assertEquals(1,gestion.chargerDemandeLivraison(urlFichierDemande));
         assertEquals(15, gestion.getDemande().getLivraisons().size());
-        assertEquals(1,gestion.calculerTournee(nbLivreur));
+        assertEquals(1,gestion.calculerTournees(nbLivreur));
         assertNotNull(gestion.getTournees());
         assertEquals(nbLivreur,gestion.getTournees().length);
         for(Tournee t : gestion.getTournees()){
