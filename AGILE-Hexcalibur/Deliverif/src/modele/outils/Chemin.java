@@ -120,15 +120,19 @@ public class Chemin {
      */
     public List<String> getDescription(){
         List<String> etapes = new ArrayList<String>();
-        etapes.add("Depart : "+this.debut.getPosition());
+        etapes.add("Depart"+(this.debut.estEntrepot()? " de l'entrepot." : " du point de livraison"));
         String dernierNom="";
+        float longueur=0f;
         for(Troncon c : this.troncons){
+            longueur+=c.getLongueur();
             if(!c.getNom().equals(dernierNom)){
-                etapes.add("Traverser : "+c);
+                etapes.add("Traverser : "+dernierNom+" pendant "+longueur+" m.");
+                etapes.add("Tourner à : "+c.getNom());
                 dernierNom=c.getNom();
             }
         }
-        etapes.add("Arriver à : "+this.fin.getPosition());
+        etapes.add("Traverser : "+dernierNom+" pendant "+longueur+" m.");
+        etapes.add("Arriver "+(this.fin.estEntrepot()? "à l'entrepot." :" au point de livraison ("+this.fin.getDuree()+"min)."));
 
         return etapes;
     }
