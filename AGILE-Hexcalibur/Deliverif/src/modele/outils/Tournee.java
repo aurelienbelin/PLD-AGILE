@@ -32,14 +32,14 @@ public class Tournee {
     }
 
     /**
-     * @return La suite ordonné des trajets
+     * @return - La suite ordonné des trajets
      */
     public List<Chemin> getTrajet() {
         return trajet;
     }
     
     /**
-     * @return La durée totale que le livreur mettra entre son départ de l'entrepot
+     * @return - La durée totale que le livreur mettra entre son départ de l'entrepot
      * et son retour à l'entrepot.
      */
     public float getTempsTournee(){
@@ -51,7 +51,7 @@ public class Tournee {
     }
     
     /**
-     * @return La longueur de la tournée, c-à-d de l'entrepot à l'entrepot.
+     * @return - La longueur de la tournée, c-à-d de l'entrepot à l'entrepot.
      */
     public float getLongueur(){
         float longueur=0f;
@@ -61,6 +61,10 @@ public class Tournee {
         return longueur;
     }
     
+    /**
+     * 
+     * @return - Le point de départ de la tournée 
+     */
     public PointPassage getDepart(){
         if(this.trajet!=null){
             return this.trajet.get(0).getDebut();
@@ -68,6 +72,10 @@ public class Tournee {
         return null;
     }
     
+    /**
+     * 
+     * @return - Le point d'arrivée de la tournée 
+     */
     public PointPassage getArrivee(){
         if (this.trajet!=null){
             return this.trajet.get(this.trajet.size()-1).getFin();
@@ -75,6 +83,11 @@ public class Tournee {
         return null;
     }
     
+    /**
+     * 
+     * @param i
+     * @return - Le point de passage du trajet i 
+     */
     public PointPassage getPointPassage(int i){
         if (this.trajet!=null){
             return this.trajet.get(i).getDebut();
@@ -82,6 +95,10 @@ public class Tournee {
         return null;
     }
     
+    /**
+     * 
+     * @return - La description de la tournée 
+     */
     public Iterator<String> getDescription(){
         List<String> sousDescription = new ArrayList<String>();
         for(Chemin c : this.trajet){
