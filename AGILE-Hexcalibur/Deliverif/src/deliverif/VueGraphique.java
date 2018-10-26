@@ -20,14 +20,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import modele.outils.GestionLivraison;
 
-import static java.lang.Math.abs;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import javafx.scene.layout.HBox;
-import modele.outils.GestionLivraison;
-import javafx.scene.shape.Line;
-
 /**
  *
  * @author Aurelien Belin
