@@ -10,6 +10,7 @@ package deliverif;
 
 import controleur.Controleur;
 import java.io.File;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -39,7 +40,7 @@ public class EcouteurBoutons{
      * @param e
      * @throws InterruptedException
      */
-    public void chargerPlanAction(ActionEvent e) throws InterruptedException{
+    public void chargerPlanAction(ActionEvent e) throws InterruptedException, IOException, Exception{
         System.out.println("Choisir un plan à charger"); //DEBUG
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir le plan à charger");
@@ -61,7 +62,7 @@ public class EcouteurBoutons{
      * @param e
      * @throws InterruptedException
      */
-    public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException{
+    public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException, IOException, Exception{
         System.out.println("Choisir une demade de livraison à charger"); //DEBUG
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir la demande de livraison à charger");

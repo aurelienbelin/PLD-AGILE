@@ -38,7 +38,7 @@ public class EtatInit extends EtatDefaut{
         try{
             gestionLivraison.chargerVille(fichier);
             Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
-            fenetre.estPlanCharge("Le plan a été chargé");
+            fenetre.estPlanCharge("SUCCESS");
         } catch (SAXException e) {
             fenetre.estPlanCharge(e.getMessage());
             
