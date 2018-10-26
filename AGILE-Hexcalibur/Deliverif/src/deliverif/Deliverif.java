@@ -289,6 +289,8 @@ public class Deliverif extends Application {
     }
     
     private void createMessagePopup(String message) {
+        System.out.println("Xx : "+this.boutons.getWidth()+" ; Yy : "+this.boutons.getHeight()); //DEBUG
+        
         Label mess = new Label(message);
         mess.setPadding(new Insets(15));
         mess.setWrapText(true);
