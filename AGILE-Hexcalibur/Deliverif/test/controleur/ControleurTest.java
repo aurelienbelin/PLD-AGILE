@@ -31,7 +31,7 @@ public class ControleurTest {
      * Test of boutonChargePlan method, of class Controleur.
      */
     @Test
-    public void testBoutonChargePlan() {
+    public void testBoutonChargePlan() throws Exception {
         System.out.println("boutonChargePlan");
         modele.outils.GestionLivraison gestion = new modele.outils.GestionLivraison();
         deliverif.Deliverif fenetre = new deliverif.Deliverif();
@@ -50,7 +50,7 @@ public class ControleurTest {
      * Test of boutonChargeLivraisons method, of class Controleur.
      */
     @Test
-    public void testBoutonChargeLivraisons() {
+    public void testBoutonChargeLivraisons() throws Exception {
         System.out.println("boutonChargeLivraison");
         modele.outils.GestionLivraison gestion = new modele.outils.GestionLivraison();
         
@@ -74,7 +74,7 @@ public class ControleurTest {
      * Test of boutonCalculerTournees method, of class Controleur.
      */
     @Test
-    public void testBoutonCalculerTournees() {
+    public void testBoutonCalculerTournees() throws Exception {
         System.out.println("boutonCalculerTournees");
         modele.outils.GestionLivraison gestion = new modele.outils.GestionLivraison();
         
@@ -93,8 +93,5 @@ public class ControleurTest {
         instance.boutonCalculerTournees(nbLivreurs);
         assertEquals(Controleur.ETAT_CALCUL_TOURNEES, Controleur.etatCourant);
         
-    }
-
-    
-    
+    }    
 }

@@ -48,7 +48,7 @@ public class LecteurXMLTest {
      * Test of creerPlanVille method, of class LecteurXML.
      */
     @Test
-    public void testCreerPlanVille() {
+    public void testCreerPlanVille() throws Exception {
         System.out.println("creerPlanVille");
         String urlFichierXML = "test/modele/flux/moyenPlan.xml";
         LecteurXML instance = new LecteurXML();
@@ -67,7 +67,7 @@ public class LecteurXMLTest {
      * Test of creerDemandeLivraison method, of class LecteurXML.
      */
     @Test
-    public void testCreerDemandeLivraison() {
+    public void testCreerDemandeLivraison() throws Exception {
         System.out.println("creerDemandeLivraison");
         String urlFichierPlan = "test/modele/flux/moyenPlan.xml";
         String urlFichierXML = "test/modele/flux/dl-moyen-12.xml";
