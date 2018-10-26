@@ -41,7 +41,7 @@ public class PointPassage {
      *
      * @return
      */
-    public boolean isEntrepot() {
+    public boolean estEntrepot() {
         return entrepot;
     }
 
