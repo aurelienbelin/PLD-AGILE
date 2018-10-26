@@ -122,7 +122,7 @@ public class Deliverif extends Application {
         bord = new BorderPane();
         
         boutons = new HBox();
-        boutons.setPadding(new Insets(25, 25, 25, 25));
+        boutons.setPadding(new Insets(15, 15, 15, 15));
         boutons.setSpacing(5);
         
         creerBoutonsChargement();
@@ -136,12 +136,16 @@ public class Deliverif extends Application {
         
         creerPanelDroit();   
         //Il faudra ajouter la vue graphique
+        vueGraphique = new VueGraphique(this.gestionLivraison);
+        vueGraphique.setLayoutX(0);
+        vueGraphique.setLayoutY(115);
         
         bord.setTop(boutons);
         
         root.getChildren().add(bord);
         root.getChildren().add(sv);
         root.getChildren().add(panelDroit);
+        root.getChildren().add(vueGraphique);
         
         stage.setTitle("Deliver'IF");
         stage.setResizable(false);
@@ -153,7 +157,7 @@ public class Deliverif extends Application {
     private void creerBoutonsChargement(){
         //A factoriser
         boutonChargerPlan = new Button(CHARGER_PLAN);
-        boutonChargerPlan.setPrefSize(80,65);
+        boutonChargerPlan.setPrefSize(100,65);
         boutonChargerPlan.setWrapText(true);
         boutonChargerPlan.setTextAlignment(TextAlignment.CENTER);
         boutonChargerPlan.setOnAction(e->{
@@ -165,7 +169,7 @@ public class Deliverif extends Application {
         });
         
         boutonChargerDL = new Button(CHARGER_DL);
-        boutonChargerDL.setPrefSize(80,65);
+        boutonChargerDL.setPrefSize(100,65);
         boutonChargerDL.setWrapText(true);
         boutonChargerDL.setTextAlignment(TextAlignment.CENTER);
         boutonChargerDL.setDisable(true);
@@ -178,19 +182,19 @@ public class Deliverif extends Application {
         });
         
         boutonAjouterLivraison = new Button(AJOUTER_LIVRAISON);
-        boutonAjouterLivraison.setPrefSize(80,65);
+        boutonAjouterLivraison.setPrefSize(100,65);
         boutonAjouterLivraison.setWrapText(true);
         boutonAjouterLivraison.setDisable(true);
         boutonAjouterLivraison.setTextAlignment(TextAlignment.CENTER);
         
         boutonSupprimerLivraison = new Button(SUPPRIMER_LIVRAISON);
-        boutonSupprimerLivraison.setPrefSize(80,65);
+        boutonSupprimerLivraison.setPrefSize(100,65);
         boutonSupprimerLivraison.setWrapText(true);
         boutonSupprimerLivraison.setDisable(true);
         boutonSupprimerLivraison.setTextAlignment(TextAlignment.CENTER);
         
         boutonReorganiserTournee = new Button(REORGANISER_TOURNEE);
-        boutonReorganiserTournee.setPrefSize(80,65);
+        boutonReorganiserTournee.setPrefSize(100,65);
         boutonReorganiserTournee.setWrapText(true);
         boutonReorganiserTournee.setDisable(true);
         boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
@@ -288,8 +292,9 @@ public class Deliverif extends Application {
         Label mess = new Label(message);
         mess.setPadding(new Insets(15));
         mess.setWrapText(true);
+        mess.setTextAlignment(TextAlignment.CENTER);
         mess.setAlignment(Pos.CENTER);
-        Button boutonRetour = new Button("Retour");
+        Button boutonRetour = new Button("Ok");
 
         VBox vbox = new VBox(mess, boutonRetour);
         vbox.setAlignment(Pos.CENTER);

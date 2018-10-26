@@ -89,7 +89,7 @@ public class LecteurXML {
                 if (noeud.getNodeType() == Node.ELEMENT_NODE) {
                    Element eNoeud = (Element) noeud;
                    //création d'un object intersection
-                   int idXML = Integer.parseInt(eNoeud.getAttribute("id"));
+                   long idXML = Long.parseLong(eNoeud.getAttribute("id"));
                    float latitude = Float.parseFloat(eNoeud.getAttribute("latitude"));
                    float longitude = Float.parseFloat(eNoeud.getAttribute("longitude"));
                    Intersection intersection = new Intersection(idXML, latitude, longitude);
@@ -109,11 +109,11 @@ public class LecteurXML {
                    
                    //création d'un object troncon
                    String nomRue = eNoeud.getAttribute("nomRue");
-                   int origine = Integer.parseInt(eNoeud.getAttribute("origine"));
+                   long origine = Long.parseLong(eNoeud.getAttribute("origine"));
                    Intersection debut =listeIntersections.stream()
                            .filter(a -> Objects.equals(a.getIdXML(), origine))
                            .collect(Collectors.toList()).get(0);
-                   int destination = Integer.parseInt(eNoeud.getAttribute("destination"));
+                   long destination = Long.parseLong(eNoeud.getAttribute("destination"));
                    Intersection fin =listeIntersections.stream()
                            .filter(a -> Objects.equals(a.getIdXML(), destination))
                            .collect(Collectors.toList()).get(0);
@@ -162,7 +162,7 @@ public class LecteurXML {
                 Element eNoeud = (Element) noeudEntrepot;
                 //TODO : corriger création de l'entrepôt
                 Intersection position = planVille.getIntersections().stream()
-                        .filter(a -> Objects.equals(a.getIdXML(), Integer.parseInt(eNoeud.getAttribute("adresse"))))
+                        .filter(a -> Objects.equals(a.getIdXML(), Long.parseLong(eNoeud.getAttribute("adresse"))))
                         .collect(Collectors.toList()).get(0);
                 PointPassage entrepot = new PointPassage(true, position, 0);
                 demande.setEntrepot(entrepot);
@@ -177,7 +177,7 @@ public class LecteurXML {
                    Element eNoeud = (Element) noeud;
                    //création d'un object intersection
                    Intersection position = planVille.getIntersections().stream()
-                        .filter(a -> Objects.equals(a.getIdXML(), Integer.parseInt(eNoeud.getAttribute("adresse"))))
+                        .filter(a -> Objects.equals(a.getIdXML(), Long.parseLong(eNoeud.getAttribute("adresse"))))
                         .collect(Collectors.toList()).get(0);
                    int duree = Integer.parseInt(eNoeud.getAttribute("duree"));
                    PointPassage livraison = new PointPassage(false, position, duree);
