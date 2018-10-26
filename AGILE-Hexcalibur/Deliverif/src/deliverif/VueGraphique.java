@@ -138,7 +138,7 @@ public class VueGraphique extends Canvas implements Observer {
             
             //Dessin marqueur
             gc.setFill(Color.BLUE);
-            gc.fillOval(abscissePtLivraison-8, ordonneePtLivraison-8, 8, 8);
+            gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
    
         }
         
@@ -146,7 +146,7 @@ public class VueGraphique extends Canvas implements Observer {
         double ordonneePtLivraison = intersections.get(gestionLivraison.getDemande().getEntrepot().getPosition().getIdXML()).getValue();
         gc.setFill(Color.GREEN);
         
-        gc.fillOval(abscissePtLivraison-8, ordonneePtLivraison-8, 8, 8);
+        gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
         
     }
     

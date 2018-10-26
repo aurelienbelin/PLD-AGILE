@@ -165,6 +165,8 @@ public class Deliverif extends Application {
                 ecouteurBoutons.chargerPlanAction(e);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         
@@ -177,6 +179,8 @@ public class Deliverif extends Application {
             try {
                 ecouteurBoutons.chargerDemandeLivraisonAction(e);
             } catch (InterruptedException ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
                 Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -343,13 +347,13 @@ public class Deliverif extends Application {
      *
      * @param cre
      */
-    public void estPlanCharge(int cre) {
-        if(cre==1){
+    public void estPlanCharge(String cre) {
+        if(cre.equals("SUCCESS")){
             boutonChargerPlan.setDisable(true);
             boutonChargerDL.setDisable(false);
             avertir("Le plan de la ville a bien été chargé");
         }else{
-            avertir("Le plan de la ville n'a pas pu être chargé");
+            avertir(cre);
         }
     }
     
@@ -357,13 +361,13 @@ public class Deliverif extends Application {
      *
      * @param cre
      */
-    public void estDemandeLivraisonChargee(int cre){
-        if(cre==1){
+    public void estDemandeLivraisonChargee(String cre){
+        if(cre.equals("SUCCESS")){
             boutonChargerDL.setDisable(true);
             boutonCalculerTournees.setDisable(false);
             avertir("La demande de livraison a bien été chargée");
         }else{
-            avertir("La demande de livraison n'a pas pu être chargée");
+            avertir(cre);
         }
     }
     
