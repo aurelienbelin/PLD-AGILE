@@ -1,5 +1,17 @@
+/*
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
+ */
 package modele.outils;
 
+/**
+ * @version 1.0 23/10/2018
+ * @author Elise
+ */
 public interface TSP {
 		
 	/**

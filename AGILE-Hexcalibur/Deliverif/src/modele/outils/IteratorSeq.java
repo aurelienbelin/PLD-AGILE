@@ -1,8 +1,22 @@
+/*
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
+ */
 package modele.outils;
 
 import java.util.Collection;
 import java.util.Iterator;
 
+/**
+ * Un IteratorSeq représente un itérateur permettant d'itérer sur l'ensemble des sommets non vus.
+ * 
+ * @version 1.0 23/10/2018
+ * @author Louis Ohl
+ */
 public class IteratorSeq implements Iterator<Integer> {
 
 	private Integer[] candidats;
@@ -21,16 +35,27 @@ public class IteratorSeq implements Iterator<Integer> {
 		}
 	}
 	
+        /**
+         * 
+         * @return - True si le nombre de candidats est positif. 
+         */
 	@Override
 	public boolean hasNext() {
 		return nbCandidats > 0;
 	}
 
+        /**
+         * 
+         * @return - Le candidat suivant 
+         */
 	@Override
 	public Integer next() {
 		return candidats[--nbCandidats];
 	}
 
+        /**
+         * Non implémentée
+         */
 	@Override
 	public void remove() {}
 

@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package modele.outils;
 
@@ -14,52 +17,73 @@ import javafx.util.Pair;
 
 /**
  *
- * @author lohl
- * @author rfournier
+ * @version 1.0 23/10/2018
+ * @author Louis Ohl
+ * @author Romain Fournier
  */
-
-
-
 public class PlanVille {
     
     private List<Intersection> intersections;
     private List<Troncon> troncons;
     
+    /**
+     *
+     * @param i
+     * @param t
+     */
     public PlanVille(List<Intersection> i, List<Troncon> t){
         this.intersections =i;
         this.troncons=t;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Intersection> getIntersections() {
         return intersections;
     }
 
+    /**
+     *
+     * @param intersections
+     */
     public void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Troncon> getTroncons() {
         return troncons;
     }
 
+    /**
+     *
+     * @param troncons
+     */
     public void setTroncons(List<Troncon> troncons) {
         this.troncons = troncons;
     }
     
+    /**
+     *
+     * @param p
+     * @return
+     */
     public Map<Intersection, Pair<Intersection, Float>> dijkstra(PointPassage p){
         
-        List<Intersection> nonVus = new ArrayList(intersections);
+        List<Intersection> nonVus = new ArrayList();
         
         List<List<Troncon>> resultat = new ArrayList<List<Troncon>>();
-        ListIterator<Intersection> interIt = nonVus.listIterator();
         ListIterator<Troncon> troncIt;
-        
+        int sommetVus=0;
         Intersection origine = p.getPosition();
         Map<Intersection, Pair<Intersection,Float>> tab = new HashMap<Intersection, Pair<Intersection,Float>>();
-        Intersection sommetVisite;
         //retrait de l'origine de la liste des sommets non vus
-        while(interIt.hasNext()){
-            sommetVisite=interIt.next();
+        for(Intersection sommetVisite : this.intersections){
             if(sommetVisite.getLongitude()==origine.getLongitude()&&sommetVisite.getLatitude()==origine.getLatitude()){
                 //permutation
                 origine = sommetVisite;
@@ -68,32 +92,30 @@ public class PlanVille {
         }
         //ajout de l'origine avec un cout nul dans le tableau
         tab.put(origine, new Pair(origine,(float)0));
+        nonVus.add(origine);
         
-        interIt = nonVus.listIterator();
+        ListIterator<Intersection> interIt = nonVus.listIterator();
         while(interIt.hasNext()){
             //parcours des voisins du point actuellement visité
             troncIt = origine.getTroncons().listIterator();
             while(troncIt.hasNext()){
                 Troncon arc=troncIt.next();
-                if(nonVus.contains(arc.getFin())){
-                    //s'il y a deja une valeur dans le tableau de précédence :
-                    if(tab.containsKey(arc.getFin())){
-                        //on regarde s'il est plus avanageux de changer de point
-                        if(tab.get(arc.getFin()).getValue()>(arc.getLongueur()+tab.get(origine).getValue())){
-                            Pair<Intersection,Float> predecesseur = new Pair(origine,arc.getLongueur()+tab.get(origine).getValue());
-                            tab.put(arc.getFin(), predecesseur);
-                        }
-                    }else{
-                        System.out.println("------------");
-                        System.out.println(origine);
-                        System.out.println(tab.get(origine));
+                //s'il y a deja une valeur dans le tableau de précédence :
+                if(tab.containsKey(arc.getFin())){
+                    //on regarde s'il est plus avanageux de changer de point
+                    if(tab.get(arc.getFin()).getValue()>(arc.getLongueur()+tab.get(origine).getValue())){
                         Pair<Intersection,Float> predecesseur = new Pair(origine,arc.getLongueur()+tab.get(origine).getValue());
                         tab.put(arc.getFin(), predecesseur);
                     }
+                }else{
+                    Pair<Intersection,Float> predecesseur = new Pair(origine,arc.getLongueur()+tab.get(origine).getValue());
+                    tab.put(arc.getFin(), predecesseur);
+                    nonVus.add(arc.getFin());
                 }
             }
             //retrait de la liste des nonVus
             nonVus.remove(origine);
+            sommetVus++;
             // raz iterateur : 
             interIt = nonVus.listIterator();
             //choix du prochain sommet à visiter : recherche du sommet non visité avec le plus faible cout
@@ -111,13 +133,18 @@ public class PlanVille {
                         }
                     }
                 }
-                // raz iterateur : 
-                interIt = nonVus.listIterator();
             }
+            // raz iterateur : 
+            interIt = nonVus.listIterator();
         }
         return tab;
     }
     
+    /**
+     *
+     * @param listePoints
+     * @return
+     */
     public List<Chemin> dijkstraToutPoints(List<PointPassage> listePoints){
         List<Chemin> graph = new ArrayList<Chemin>();
         for(PointPassage depart : listePoints){
