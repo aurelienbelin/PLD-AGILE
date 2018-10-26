@@ -8,6 +8,9 @@
  */
 package controleur;
 
+import java.io.IOException;
+import org.xml.sax.SAXException;
+
 /** Etat dans lequel se trouve l'application après le chargement du plan
  *  La seule action possible depuis cet état est le chargement d'une demande de 
  *  livraisons ou le chargement d'un autre plan
@@ -32,11 +35,17 @@ public class EtatPlanCharge extends EtatDefaut{
      *  @see EtatLivraisonsChargees
      */
     @Override
-    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
-        int cre = gestionLivraison.chargerDemandeLivraison(fichier);
-        if(cre==1){
+    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception{
+        try{
+            gestionLivraison.chargerDemandeLivraison(fichier);
             Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
+            fenetre.estDemandeLivraisonChargee("Les livraisons ont été chargées");
+        } catch (SAXException e){
+            fenetre.estDemandeLivraisonChargee(e.getMessage());
+        } catch (IOException e) {
+            fenetre.estDemandeLivraisonChargee(e.getMessage());
+        } catch (Exception e) {
+            fenetre.estDemandeLivraisonChargee(e.getMessage());
         }
-        fenetre.estDemandeLivraisonChargee(cre);
     }
 }

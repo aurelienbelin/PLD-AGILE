@@ -8,10 +8,12 @@
  */
 package modele.outils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import modele.flux.LecteurXML;
+import org.xml.sax.SAXException;
 
 /** 
  * @version 1.0 23/10/2018
@@ -93,16 +95,11 @@ public class GestionLivraison extends Observable{
      * @param fichier
      * @return
      */
-    public int chargerVille(String fichier){
+    public void chargerVille(String fichier) throws SAXException, IOException, Exception{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.plan = Lecteur.creerPlanVille(fichier);
-        if(this.plan != null){
-            setChanged();
-            this.notifyObservers(); //?
-            return 1;
-        } else{
-            return 0;
-        }
+        setChanged();
+        this.notifyObservers(); //?
     }
     
     /**
@@ -110,16 +107,11 @@ public class GestionLivraison extends Observable{
      * @param fichier
      * @return
      */
-    public int chargerDemandeLivraison(String fichier) {
+    public void chargerDemandeLivraison(String fichier) throws SAXException, IOException, Exception{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
-        if(this.demande != null){
-            setChanged();
-            this.notifyObservers(); //?
-            return 1;
-        } else{
-            return 0;
-        }
+        setChanged();
+        this.notifyObservers(); //?
     }
     
     /**

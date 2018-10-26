@@ -8,6 +8,9 @@
  */
 package controleur;
 
+import java.io.IOException;
+import org.xml.sax.SAXException;
+
 /** Par ses actions, l'utilisateur fait passer l'application d'une situation 
  * à une autre. Suivant la situation, la réponses aux demandes de l'utilisateur 
  * ne sera pas la même. Cette interface représente le comportement d'une 
@@ -23,14 +26,14 @@ interface Etat
       *  @param fichier
       *  @see modele.GestionLivraison
      */
-    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre);
+    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception;
     
     /** 
       *  @param gestionLivraison
       *  @param fichier
       *  @see modele.GestionLivraison
      */
-    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre);
+    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception;
     
     /** 
       *  @param gestionLivraison
