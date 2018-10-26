@@ -32,22 +32,22 @@ public class GestionLivraison extends Observable{
         this.demande=null;
     }
     
-    public boolean chargerVille(String urlFichierXML){
+    /*public boolean chargerVille(String urlFichierXML){
         LecteurXML lecteur = new LecteurXML();
         this.plan=lecteur.creerPlanVille(urlFichierXML);
         return this.plan!=null;
-    }
+    }*/
     
-    public boolean chargerDemandeLivraison(String urlFichierXML){
+    /*public boolean chargerDemandeLivraison(String urlFichierXML){
         LecteurXML lecteur = new LecteurXML();
         if(this.plan==null){
             return false;
         }
         this.demande=lecteur.creerDemandeLivraison(urlFichierXML, plan);
         return this.demande!=null;
-    }
+    }*/
     
-    public int calculerTournee(int nbLivreur){
+    public int calculerTournees(int nbLivreur){
         if(this.plan==null || this.demande==null){
             return 0;
         }
@@ -97,6 +97,8 @@ public class GestionLivraison extends Observable{
         if(this.tournees==null){
             return 0;
         } else {
+            setChanged();
+            this.notifyObservers(); //?
             return 1;
         }
     }
@@ -134,6 +136,8 @@ public class GestionLivraison extends Observable{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.plan = Lecteur.creerPlanVille(fichier);
         if(this.plan != null){
+            setChanged();
+            this.notifyObservers(); //?
             return 1;
         } else{
             return 0;
@@ -149,6 +153,8 @@ public class GestionLivraison extends Observable{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
         if(this.demande != null){
+            setChanged();
+            this.notifyObservers(); //?
             return 1;
         } else{
             return 0;
@@ -160,9 +166,8 @@ public class GestionLivraison extends Observable{
      * @param nbLivreurs
      * @return
      */
-    public int calculerTournees(int nbLivreurs) {
+    /*public int calculerTournees(int nbLivreurs) {
         return 0;
-    }
-    
-    
+    }*/
+
 }
