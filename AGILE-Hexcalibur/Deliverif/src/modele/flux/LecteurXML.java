@@ -75,7 +75,7 @@ public class LecteurXML {
      * @param urlFichierXML 
      * @return plan de la ville chargée
      */
-    public PlanVille creerPlanVille (String urlFichierXML){
+    public PlanVille creerPlanVille (String urlFichierXML) throws SAXException, IOException, Exception{
         Document documentXML;
         try {
             documentXML = this.chargerXML(urlFichierXML);
@@ -134,10 +134,13 @@ public class LecteurXML {
         }
         } catch (SAXException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         } catch (IOException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         } catch (Exception ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
         return null;
     }
@@ -147,7 +150,7 @@ public class LecteurXML {
      * @param urlFichierXML
      * @return la demande de livraison
      */
-    public DemandeLivraison creerDemandeLivraison (String urlFichierXML, PlanVille planVille){
+    public DemandeLivraison creerDemandeLivraison (String urlFichierXML, PlanVille planVille) throws SAXException, IOException, Exception{
         Document documentXML;
         try {
             documentXML = this.chargerXML(urlFichierXML);
@@ -193,10 +196,13 @@ public class LecteurXML {
         }
         } catch (SAXException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         } catch (IOException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         } catch (Exception ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
         return null;
     }
