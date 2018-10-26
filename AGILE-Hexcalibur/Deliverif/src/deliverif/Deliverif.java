@@ -58,7 +58,7 @@ public class Deliverif extends Application {
     /**
      *
      */
-    public final static String CHARGER_DL = "Charger une demande de livraison";
+    public final static String CHARGER_DL = "Charger une demande de livraisons";
 
     /**
      *
