@@ -6,12 +6,12 @@
 package deliverif;
 
 import static java.lang.Math.abs;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.scene.layout.HBox;
 import modele.outils.GestionLivraison;
+import javafx.scene.shape.Line;
 
 /**
  *
@@ -25,6 +25,7 @@ public class VueGraphique extends HBox implements Observer {
     private float origineLongitude;
     
     //Etats
+    boolean init;
     boolean planCharge;
     boolean dlCharge;
     boolean calculRealise;
@@ -36,15 +37,23 @@ public class VueGraphique extends HBox implements Observer {
         
         this.gestionLivraison = gl;
         gestionLivraison.addObserver(this);
+        
+        init = true;
                 
     }
     
     
     @Override
     public void update(Observable o, Object arg) {
-        if(planCharge==false) {
+        if(init==true) {
             calculEchelle(gestionLivraison.getPlan().getIntersections());
             dessinerPlan();
+            planCharge = true;
+            init =false;
+        }else if(planCharge==true) {
+            dessinerPtLivraison();
+            dlCharge = true;
+            planCharge = false;
         }
     }
     
@@ -86,6 +95,18 @@ public class VueGraphique extends HBox implements Observer {
             float ordFinTroncon = (troncon.getFin().getLatitude() - origineLongitude) / echelle;
             
             //Dessin des traits
+            Line route = new Line(0, 0, 400, 0);
+        }
+    }
+    
+    public void dessinerPtLivraison(){
+        List <modele.outils.PointPassage> livraisons = gestionLivraison.getDemande().getLivraisons();
+        
+        for(modele.outils.PointPassage livraison : livraisons){
+            float abscissePtLivraison = (livraison.getPosition().getLongitude() - origineLongitude) / echelle;
+            float ordonneePtLivraison = (livraison.getPosition().getLatitude() - origineLatitude) / echelle;
+            
+            //Dessin marqueur
         }
     }
     
