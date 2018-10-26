@@ -104,7 +104,7 @@ public class Tournee {
         for(Chemin c : this.trajet){
             sousDescription.addAll(c.getDescription());
         }
-        
+        sousDescription.add("Fin de la tournée");
         return sousDescription.iterator();
     }
 
