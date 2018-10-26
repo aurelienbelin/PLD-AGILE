@@ -27,9 +27,12 @@ import modele.outils.GestionLivraison;
 public class VueGraphique extends Canvas implements Observer {
     
     private GestionLivraison gestionLivraison;
-    private double echelle;
+    private double echelleLat;
+    private double echelleLong;
     private double origineLatitude;
     private double origineLongitude;
+    private double origineX;
+    private double origineY;
     
     //Etats
     boolean init;
@@ -68,6 +71,7 @@ public class VueGraphique extends Canvas implements Observer {
     }
     
     public void calculEchelle (List <modele.outils.Intersection> intersections) {
+        //final int R = 6371; //Rayon de la Terre
         float maxLatitude = -90;
         float minLatitude = 90;
         float maxLongitude = -180;
@@ -86,47 +90,60 @@ public class VueGraphique extends Canvas implements Observer {
             }
         }
         
-        double echelleLatitude = (abs(maxLatitude-minLatitude)) / 640; //hauteur fenetre
-        double echelleLongitude = (abs(maxLongitude-minLongitude)) / 640; //longueur fenetre
+        //Conversion de polaire en cartésien + mise à l'échelle
+        /*double maxX = R*Math.cos(maxLatitude)*Math.cos(maxLongitude);
+        double minX = R*Math.cos(minLatitude)*Math.cos(minLongitude);
+        double maxY = R*Math.cos(maxLatitude)*Math.sin(maxLongitude);
+        double minY = R*Math.cos(minLatitude)*Math.sin(minLongitude);*/
+        
+        echelleLat = 640/(maxLatitude-minLatitude);
+        echelleLong = 640/(maxLongitude-minLongitude); //longueur fenetre
+        
+        System.out.println("Echelle : "+echelleLat+" ; "+echelleLong);
+        
+        /*origineX = R*Math.cos(minLatitude)*Math.cos(minLongitude);
+        origineY = R*Math.cos(minLatitude)*Math.sin(minLongitude);*/
         
         origineLatitude = minLatitude;
         origineLongitude = minLongitude;
-        
-        echelle = Double.max(echelleLatitude, echelleLongitude);
-        System.out.println("Echelle : "+echelle);
     }
     
     public void dessinerPlan(){
+        //final int R = 6371; //Rayon de la Terre
         GraphicsContext gc = this.getGraphicsContext2D();
-        /*List <modele.outils.Troncon> troncons = gestionLivraison.getPlan().getTroncons();
-        System.out.println("Chargement du plan : "+troncons.size()); //DEBUG
+        List <modele.outils.Troncon> troncons = gestionLivraison.getPlan().getTroncons();
+        //System.out.println("Chargement du plan : "+troncons.size()); //DEBUG
                 
         for(modele.outils.Troncon troncon : troncons){
-            double absDebutTroncon = (troncon.getDebut().getLongitude() - origineLongitude) / echelle; 
-            double ordDebutTroncon = (this.getHeight() - troncon.getDebut().getLatitude() - origineLongitude) / echelle; 
-            double absFinTroncon = (troncon.getFin().getLongitude() - origineLongitude) / echelle; 
-            double ordFinTroncon = (this.getHeight() - troncon.getFin().getLatitude() - origineLatitude) / echelle;
-            System.out.println(absDebutTroncon+" : "+troncon.getDebut().getLongitude()+" ; "+ordDebutTroncon+" : "+troncon.getDebut().getLatitude()); //DEBUG
+            /*double absDebutTroncon = (R*Math.cos(troncon.getDebut().getLatitude())*Math.cos(troncon.getDebut().getLongitude()) - origineX) * echelleX; 
+            double ordDebutTroncon = (R*Math.cos(troncon.getDebut().getLatitude())*Math.sin(troncon.getDebut().getLongitude()) - origineY) * echelleY; 
+            double absFinTroncon = (R*Math.cos(troncon.getFin().getLatitude())*Math.cos(troncon.getFin().getLongitude()) - origineX) * echelleX; 
+            double ordFinTroncon = (R*Math.cos(troncon.getDebut().getLatitude())*Math.sin(troncon.getDebut().getLongitude()) - origineY) * echelleY;*/
+            double absDebutTroncon = (troncon.getDebut().getLongitude() - origineLongitude) * echelleLong; 
+            double ordDebutTroncon = this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat; 
+            double absFinTroncon = (troncon.getFin().getLongitude() - origineLongitude) * echelleLong; 
+            double ordFinTroncon = this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat;
+            ///System.out.println(absDebutTroncon+" ; "+ordDebutTroncon); //DEBUG
             
             //Dessin des traits
-            //Line ligne = new Line(absDebutTroncon, ordDebutTroncon, absFinTroncon, ordFinTroncon);
-            //this.troncons.add(ligne);
             gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
-        }*/
-        //gc.strokeLine(100,100,200,200); //DEBUG=> fontionne, donc c'est bien un problème de conversion
+        }
     }
     
     public void dessinerPtLivraison(){
-        /*List <modele.outils.PointPassage> livraisons = gestionLivraison.getDemande().getLivraisons();
+        GraphicsContext gc = this.getGraphicsContext2D();
+        List <modele.outils.PointPassage> livraisons = gestionLivraison.getDemande().getLivraisons();
         
         for(modele.outils.PointPassage livraison : livraisons){
-            double abscissePtLivraison = (livraison.getPosition().getLongitude() - origineLongitude) / echelle;
-            double ordonneePtLivraison = (this.getHeight() - livraison.getPosition().getLatitude() - origineLatitude) / echelle;
+            double abscissePtLivraison = (livraison.getPosition().getLongitude() - origineLongitude) * echelleLong;
+            double ordonneePtLivraison = this.getHeight() - ( livraison.getPosition().getLatitude() - origineLatitude) * echelleLat;
+            //System.out.println(abscissePtLivraison+" : "+ordonneePtLivraison); //DEBUG
             
             //Dessin marqueur
-            Circle cercle = new Circle(abscissePtLivraison,ordonneePtLivraison,2);
-            this.pointsPassage.add(cercle);
-        }*/
+            /*Circle cercle = new Circle(abscissePtLivraison,ordonneePtLivraison,2);
+            this.pointsPassage.add(cercle);*/
+            gc.fillOval(abscissePtLivraison-10, ordonneePtLivraison-10, 10, 10);
+        }
     }
     
 }
