@@ -10,14 +10,17 @@ package deliverif;
 
 import static java.lang.Math.abs;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.util.Pair;
 import modele.outils.GestionLivraison;
 
 /**
@@ -29,6 +32,7 @@ public class VueGraphique extends Canvas implements Observer {
     private GestionLivraison gestionLivraison;
     private double echelleLat;
     private double echelleLong;
+    private double echelle;
     private double origineLatitude;
     private double origineLongitude;
     private double origineX;
@@ -41,16 +45,14 @@ public class VueGraphique extends Canvas implements Observer {
     boolean calculRealise;
     
     //Composants
-    private ArrayList<Line> troncons;
-    private ArrayList<Circle> pointsPassage;
+    HashMap<Long, Pair<Double,Double>> intersections;
     
     public VueGraphique(GestionLivraison gl){
-        super(640,640);
+        super(550,640-95);
         
         this.gestionLivraison = gl;
         gestionLivraison.addObserver(this);
-        this.troncons = new ArrayList();
-        this.pointsPassage = new ArrayList();
+        this.intersections = new HashMap<>();
         
         init = true;     
     }
@@ -90,43 +92,36 @@ public class VueGraphique extends Canvas implements Observer {
             }
         }
         
-        //Conversion de polaire en cartésien + mise à l'échelle
-        /*double maxX = R*Math.cos(maxLatitude)*Math.cos(maxLongitude);
-        double minX = R*Math.cos(minLatitude)*Math.cos(minLongitude);
-        double maxY = R*Math.cos(maxLatitude)*Math.sin(maxLongitude);
-        double minY = R*Math.cos(minLatitude)*Math.sin(minLongitude);*/
+        echelleLat = (640-95)/(maxLatitude-minLatitude);
+        echelleLong = (550)/(maxLongitude-minLongitude); //longueur fenetre
         
-        echelleLat = 640/(maxLatitude-minLatitude);
-        echelleLong = 640/(maxLongitude-minLongitude); //longueur fenetre
+        echelle = Math.min(echelleLat, echelleLong);
         
-        System.out.println("Echelle : "+echelleLat+" ; "+echelleLong);
-        
-        /*origineX = R*Math.cos(minLatitude)*Math.cos(minLongitude);
-        origineY = R*Math.cos(minLatitude)*Math.sin(minLongitude);*/
+        //System.out.println("Echelle : "+echelleLat+" ; "+echelleLong); //DEBUG
         
         origineLatitude = minLatitude;
         origineLongitude = minLongitude;
     }
     
     public void dessinerPlan(){
-        //final int R = 6371; //Rayon de la Terre
         GraphicsContext gc = this.getGraphicsContext2D();
         List <modele.outils.Troncon> troncons = gestionLivraison.getPlan().getTroncons();
         //System.out.println("Chargement du plan : "+troncons.size()); //DEBUG
                 
         for(modele.outils.Troncon troncon : troncons){
-            /*double absDebutTroncon = (R*Math.cos(troncon.getDebut().getLatitude())*Math.cos(troncon.getDebut().getLongitude()) - origineX) * echelleX; 
-            double ordDebutTroncon = (R*Math.cos(troncon.getDebut().getLatitude())*Math.sin(troncon.getDebut().getLongitude()) - origineY) * echelleY; 
-            double absFinTroncon = (R*Math.cos(troncon.getFin().getLatitude())*Math.cos(troncon.getFin().getLongitude()) - origineX) * echelleX; 
-            double ordFinTroncon = (R*Math.cos(troncon.getDebut().getLatitude())*Math.sin(troncon.getDebut().getLongitude()) - origineY) * echelleY;*/
             double absDebutTroncon = (troncon.getDebut().getLongitude() - origineLongitude) * echelleLong; 
             double ordDebutTroncon = this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat; 
             double absFinTroncon = (troncon.getFin().getLongitude() - origineLongitude) * echelleLong; 
             double ordFinTroncon = this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat;
+            
+            intersections.put(troncon.getDebut().getIdXML(), new Pair<>(absDebutTroncon, ordDebutTroncon));
+            intersections.put(troncon.getFin().getIdXML(), new Pair<>(absFinTroncon, ordFinTroncon));
             ///System.out.println(absDebutTroncon+" ; "+ordDebutTroncon); //DEBUG
             
             //Dessin des traits
             gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
+            /*gc.fillOval(absDebutTroncon-3,ordDebutTroncon-3,3,3);
+            gc.fillOval(absFinTroncon-3,ordFinTroncon-3,3,3);*/
         }
     }
     
@@ -135,15 +130,24 @@ public class VueGraphique extends Canvas implements Observer {
         List <modele.outils.PointPassage> livraisons = gestionLivraison.getDemande().getLivraisons();
         
         for(modele.outils.PointPassage livraison : livraisons){
-            double abscissePtLivraison = (livraison.getPosition().getLongitude() - origineLongitude) * echelleLong;
-            double ordonneePtLivraison = this.getHeight() - ( livraison.getPosition().getLatitude() - origineLatitude) * echelleLat;
+            /*double abscissePtLivraison = (livraison.getPosition().getLongitude() - origineLongitude) * echelle;
+            double ordonneePtLivraison = this.getHeight() - ( livraison.getPosition().getLatitude() - origineLatitude) * echelle;*/
             //System.out.println(abscissePtLivraison+" : "+ordonneePtLivraison); //DEBUG
+            double abscissePtLivraison = intersections.get(livraison.getPosition().getIdXML()).getKey();
+            double ordonneePtLivraison = intersections.get(livraison.getPosition().getIdXML()).getValue();
             
             //Dessin marqueur
-            /*Circle cercle = new Circle(abscissePtLivraison,ordonneePtLivraison,2);
-            this.pointsPassage.add(cercle);*/
-            gc.fillOval(abscissePtLivraison-10, ordonneePtLivraison-10, 10, 10);
+            gc.setFill(Color.BLUE);
+            gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
+   
         }
+        
+        double abscissePtLivraison = intersections.get(gestionLivraison.getDemande().getEntrepot().getPosition().getIdXML()).getKey();
+        double ordonneePtLivraison = intersections.get(gestionLivraison.getDemande().getEntrepot().getPosition().getIdXML()).getValue();
+        gc.setFill(Color.GREEN);
+        
+        gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
+        
     }
     
 }

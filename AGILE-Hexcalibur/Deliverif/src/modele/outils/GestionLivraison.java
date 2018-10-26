@@ -93,7 +93,6 @@ public class GestionLivraison extends Observable{
     /**
      *
      * @param fichier
-     * @return
      */
     public void chargerVille(String fichier) throws SAXException, IOException, Exception{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
