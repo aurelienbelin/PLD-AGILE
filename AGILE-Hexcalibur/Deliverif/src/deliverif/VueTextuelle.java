@@ -49,6 +49,7 @@ public class VueTextuelle extends VBox implements Observer {
         this.gestionLivraison = gl;
         this.gestionLivraison.addObserver(this);
         this.descriptions = new ArrayList<>();
+        this.contenu = FXCollections.observableArrayList();
         
         this.setSpacing(10);
         this.setPrefSize(285,420);
@@ -114,21 +115,27 @@ public class VueTextuelle extends VBox implements Observer {
         descriptions.clear();
         //Le Label a-t-il été vidé ?
         
-        ArrayList<Tournee> tournees = new ArrayList<>(Arrays.asList(this.gestionLivraison.getTournees()));
-        String des;
-        if(tournees != null){
-            des="<html><ul>";
-            int i = 1;
-            for(Tournee t : tournees){
-                Iterator<String> it = t.getDescription();
-                contenu.add("Tournée "+i);
-                do{
-                    des+="<li>"+it+"</li>";
-                }while(it.hasNext());
-                des+="</ul></html>";
-                descriptions.add(des);
-                i++;
-            }
+        if(this.gestionLivraison.getTournees()!=null){
+            ArrayList<Tournee> tournees = new ArrayList<>(Arrays.asList(this.gestionLivraison.getTournees()));
+            String des;
+            if(!tournees.isEmpty()){
+                des="<html>\n\t<ul>";
+                int i = 1;
+                for(Tournee t : tournees){
+                    Iterator<String> it = t.getDescription();
+                    contenu.add("Tournée "+i);
+                    while(it.hasNext()){
+                        String s = it.next();
+                        des+="\n\t\t<li>"+s+"</li>";
+                    }
+                    des+="\n\t</ul>\n</html>";
+                    System.out.println("Test 3 : "+des); //DEBUG
+                    descriptions.add(des);
+                    i++;
+                }
+            }            
+            System.out.println(contenu.size()); //DEBUG
+            choixTournee.setItems(contenu);
         }
         
     }
