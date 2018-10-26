@@ -37,14 +37,26 @@ public class PointPassage {
         this.duree = duree;
     }
     
-    public boolean isEntrepot() {
+    /**
+     *
+     * @return
+     */
+    public boolean estEntrepot() {
         return entrepot;
     }
 
+    /**
+     *
+     * @return
+     */
     public Intersection getPosition() {
         return position;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getDuree() {
         return duree;
     }

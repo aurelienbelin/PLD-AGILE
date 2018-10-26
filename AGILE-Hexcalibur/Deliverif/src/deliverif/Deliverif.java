@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package deliverif;
 
@@ -46,11 +49,35 @@ public class Deliverif extends Application {
     private static Scene scene;
     
     //Commande
+
+    /**
+     *
+     */
     public final static String CHARGER_PLAN = "Charger un plan";
+
+    /**
+     *
+     */
     public final static String CHARGER_DL = "Charger une demande de livraison";
+
+    /**
+     *
+     */
     public final static String AJOUTER_LIVRAISON = "Ajouter une livraison";
+
+    /**
+     *
+     */
     public final static String SUPPRIMER_LIVRAISON = "Supprimer une livraison";
+
+    /**
+     *
+     */
     public final static String REORGANISER_TOURNEE = "Réorganiser tournée";
+
+    /**
+     *
+     */
     public final static String CALCULER_TOURNEES = "Calculer les tournées";
     
     //private Controleur controleur;
@@ -95,7 +122,7 @@ public class Deliverif extends Application {
         bord = new BorderPane();
         
         boutons = new HBox();
-        boutons.setPadding(new Insets(25, 25, 25, 25));
+        boutons.setPadding(new Insets(15, 15, 15, 15));
         boutons.setSpacing(5);
         
         creerBoutonsChargement();
@@ -109,12 +136,16 @@ public class Deliverif extends Application {
         
         creerPanelDroit();   
         //Il faudra ajouter la vue graphique
+        vueGraphique = new VueGraphique(this.gestionLivraison);
+        vueGraphique.setLayoutX(0);
+        vueGraphique.setLayoutY(115);
         
         bord.setTop(boutons);
         
         root.getChildren().add(bord);
         root.getChildren().add(sv);
         root.getChildren().add(panelDroit);
+        root.getChildren().add(vueGraphique);
         
         stage.setTitle("Deliver'IF");
         stage.setResizable(false);
@@ -126,7 +157,7 @@ public class Deliverif extends Application {
     private void creerBoutonsChargement(){
         //A factoriser
         boutonChargerPlan = new Button(CHARGER_PLAN);
-        boutonChargerPlan.setPrefSize(80,65);
+        boutonChargerPlan.setPrefSize(100,65);
         boutonChargerPlan.setWrapText(true);
         boutonChargerPlan.setTextAlignment(TextAlignment.CENTER);
         boutonChargerPlan.setOnAction(e->{
@@ -138,7 +169,7 @@ public class Deliverif extends Application {
         });
         
         boutonChargerDL = new Button(CHARGER_DL);
-        boutonChargerDL.setPrefSize(80,65);
+        boutonChargerDL.setPrefSize(100,65);
         boutonChargerDL.setWrapText(true);
         boutonChargerDL.setTextAlignment(TextAlignment.CENTER);
         boutonChargerDL.setDisable(true);
@@ -151,19 +182,19 @@ public class Deliverif extends Application {
         });
         
         boutonAjouterLivraison = new Button(AJOUTER_LIVRAISON);
-        boutonAjouterLivraison.setPrefSize(80,65);
+        boutonAjouterLivraison.setPrefSize(100,65);
         boutonAjouterLivraison.setWrapText(true);
         boutonAjouterLivraison.setDisable(true);
         boutonAjouterLivraison.setTextAlignment(TextAlignment.CENTER);
         
         boutonSupprimerLivraison = new Button(SUPPRIMER_LIVRAISON);
-        boutonSupprimerLivraison.setPrefSize(80,65);
+        boutonSupprimerLivraison.setPrefSize(100,65);
         boutonSupprimerLivraison.setWrapText(true);
         boutonSupprimerLivraison.setDisable(true);
         boutonSupprimerLivraison.setTextAlignment(TextAlignment.CENTER);
         
         boutonReorganiserTournee = new Button(REORGANISER_TOURNEE);
-        boutonReorganiserTournee.setPrefSize(80,65);
+        boutonReorganiserTournee.setPrefSize(100,65);
         boutonReorganiserTournee.setWrapText(true);
         boutonReorganiserTournee.setDisable(true);
         boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
@@ -214,23 +245,45 @@ public class Deliverif extends Application {
         
     }
     
+    /**
+     *
+     * @return
+     */
     public int getNbLivreurs(){
         return (Integer)this.nbLivreurs.getValue();
     }
     
+    /**
+     *
+     * @return
+     */
     public VueTextuelle getVueTextuelle(){
         return this.vueTextuelle;
     }
     
+    /**
+     *
+     * @return
+     */
     public VueGraphique getVueGraphique(){
         return this.vueGraphique;
     }
     
+    /**
+     *
+     * @param fileChooser
+     * @return
+     * @throws InterruptedException
+     */
     public static File openFileChooser(FileChooser fileChooser) throws InterruptedException {
         File file = fileChooser.showOpenDialog(stage);
         return file;
     }
     
+    /**
+     *
+     * @param message
+     */
     public void avertir(String message){
         this.createMessagePopup(message);
     }
@@ -239,8 +292,9 @@ public class Deliverif extends Application {
         Label mess = new Label(message);
         mess.setPadding(new Insets(15));
         mess.setWrapText(true);
+        mess.setTextAlignment(TextAlignment.CENTER);
         mess.setAlignment(Pos.CENTER);
-        Button boutonRetour = new Button("Retour");
+        Button boutonRetour = new Button("Ok");
 
         VBox vbox = new VBox(mess, boutonRetour);
         vbox.setAlignment(Pos.CENTER);
@@ -283,6 +337,10 @@ public class Deliverif extends Application {
         launch(args);
     }
 
+    /**
+     *
+     * @param cre
+     */
     public void estPlanCharge(int cre) {
         if(cre==1){
             boutonChargerPlan.setDisable(true);
@@ -293,6 +351,10 @@ public class Deliverif extends Application {
         }
     }
     
+    /**
+     *
+     * @param cre
+     */
     public void estDemandeLivraisonChargee(int cre){
         if(cre==1){
             boutonChargerDL.setDisable(true);
@@ -303,6 +365,10 @@ public class Deliverif extends Application {
         }
     }
     
+    /**
+     *
+     * @param cre
+     */
     public void estTourneesCalculees(int cre){
         if(cre==1)
             avertir("Calcul des tournées terminé");

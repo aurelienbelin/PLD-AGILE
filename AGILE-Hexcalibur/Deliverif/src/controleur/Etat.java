@@ -1,3 +1,11 @@
+/*
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
+ */
 package controleur;
 
 /** Par ses actions, l'utilisateur fait passer l'application d'une situation 

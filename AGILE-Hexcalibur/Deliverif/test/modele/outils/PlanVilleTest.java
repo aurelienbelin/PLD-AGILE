@@ -65,6 +65,7 @@ public class PlanVilleTest {
         troncons.add(FC);
         troncons.add(FB);
         troncons.add(BF);
+        /*Creer un troncon l'ajoute automatique a l'intersection dont il part
         C.addTroncon(CD);
         C.addTroncon(CB);
         C.addTroncon(CF);
@@ -77,7 +78,7 @@ public class PlanVilleTest {
         D.addTroncon(DA);
         D.addTroncon(DF);
         E.addTroncon(ED);
-        A.addTroncon(AE);
+        A.addTroncon(AE);*/
         intersections = new ArrayList<Intersection>();
         intersections.add(A);
         intersections.add(B);
