@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package deliverif;
 
@@ -36,12 +39,17 @@ public class VueTextuelle extends VBox implements Observer {
     private ComboBox<String> choixTournee;
     private Label descriptionTournee;
     
+    /**
+     *
+     * @param gl
+     */
     public VueTextuelle(GestionLivraison gl){
         super();
         
         this.gestionLivraison = gl;
         this.gestionLivraison.addObserver(this);
         this.descriptions = new ArrayList<>();
+        this.contenu = FXCollections.observableArrayList();
         
         this.setSpacing(10);
         this.setPrefSize(285,420);
@@ -71,6 +79,10 @@ public class VueTextuelle extends VBox implements Observer {
         
     }
 
+    /**
+     *
+     * @param ec
+     */
     public void ajouterEcouteur(EcouteurBoutons ec){
         choixTournee.setOnAction(e->{
             try {
@@ -81,6 +93,9 @@ public class VueTextuelle extends VBox implements Observer {
         });
     }
     
+    /**
+     *
+     */
     public void changerDescriptionAffichee(){
         String s = choixTournee.getSelectionModel().getSelectedItem();
 
@@ -100,21 +115,27 @@ public class VueTextuelle extends VBox implements Observer {
         descriptions.clear();
         //Le Label a-t-il été vidé ?
         
-        ArrayList<Tournee> tournees = new ArrayList<>(Arrays.asList(this.gestionLivraison.getTournees()));
-        String des;
-        if(tournees != null){
-            des="<html><ul>";
-            int i = 1;
-            for(Tournee t : tournees){
-                Iterator<String> it = t.getDescription();
-                contenu.add("Tournée "+i);
-                do{
-                    des+="<li>"+it+"</li>";
-                }while(it.hasNext());
-                des+="</ul></html>";
-                descriptions.add(des);
-                i++;
-            }
+        if(this.gestionLivraison.getTournees()!=null){
+            ArrayList<Tournee> tournees = new ArrayList<>(Arrays.asList(this.gestionLivraison.getTournees()));
+            String des;
+            if(!tournees.isEmpty()){
+                des="<html>\n\t<ul>";
+                int i = 1;
+                for(Tournee t : tournees){
+                    Iterator<String> it = t.getDescription();
+                    contenu.add("Tournée "+i);
+                    while(it.hasNext()){
+                        String s = it.next();
+                        des+="\n\t\t<li>"+s+"</li>";
+                    }
+                    des+="\n\t</ul>\n</html>";
+                    System.out.println("Test 3 : "+des); //DEBUG
+                    descriptions.add(des);
+                    i++;
+                }
+            }            
+            System.out.println(contenu.size()); //DEBUG
+            choixTournee.setItems(contenu);
         }
         
     }

@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package modele.outils;
 
@@ -9,8 +12,10 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- *
- * @author lohl
+ * Un IteratorMin représente un itérateur permettant d'itérer sur l'ensemble des sommets non vus.
+ * 
+ * @version 1.0 23/10/2018
+ * @author Louis Ohl
  */
 public class IteratorMin implements Iterator<Integer>{
     
@@ -33,6 +38,12 @@ public class IteratorMin implements Iterator<Integer>{
         this.quicksort(0, this.candidats.length-1, cout[sommetCrt]);
     }
     
+    /**
+    * 
+    * @param debut -  
+    * @param fin - 
+    * @param cout - Le tableau des cout 
+    */
     private void quicksort(int debut, int fin, int[] cout){
         if (debut<fin){
             int pivot = (fin-debut)/2+debut;
@@ -42,6 +53,13 @@ public class IteratorMin implements Iterator<Integer>{
         }
     }
     
+    /**
+    * 
+    * @param debut -
+    * @param fin -
+    * @param pivot -
+    * @param cout - Le tableau des cout
+    */
     private int arrange(int debut, int fin, int pivot, int[] cout){
         int j=debut;
         this.permute(pivot, fin);
@@ -52,7 +70,6 @@ public class IteratorMin implements Iterator<Integer>{
             }
         }
         this.permute(j,fin);
-        
         return j;
     }
     
@@ -68,16 +85,27 @@ public class IteratorMin implements Iterator<Integer>{
         this.candidats[j]=dummy;
     }
 
+    /**
+     * 
+     * @return - True si le nombre de candidats est positif 
+     */
     @Override
     public boolean hasNext() {
         return nbCandidats > 0;
     }
 
+    /**
+     * 
+     * @return - Le candidat suivant 
+     */
     @Override
     public Integer next() {
         return candidats[--nbCandidats];
     }
 
+    /**
+     * Non implémentée
+     */
     @Override
     public void remove() {}
 }

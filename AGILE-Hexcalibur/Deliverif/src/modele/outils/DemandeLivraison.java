@@ -54,13 +54,10 @@ public class DemandeLivraison {
     }
 
     /**
-     * @param entrepot - Le nouvelle entrepot duquel partiront les livreurs
+     * @param entrepot - Le nouvel entrepot duquel partiront les livreurs
      * pour cette demande.
      */
     public void setEntrepot(PointPassage entrepot) {
         this.entrepot = entrepot;
     }
-    
-    
-    
 }
