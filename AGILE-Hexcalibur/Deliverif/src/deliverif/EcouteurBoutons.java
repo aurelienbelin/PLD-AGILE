@@ -40,7 +40,7 @@ public class EcouteurBoutons{
      * @throws InterruptedException
      */
     public void chargerPlanAction(ActionEvent e) throws InterruptedException{
-        System.out.println("Choisir un plan à charger"); //DEBUG
+        //System.out.println("Choisir un plan à charger"); //DEBUG
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir le plan à charger");
         fileChooser.getExtensionFilters().addAll(
@@ -48,12 +48,11 @@ public class EcouteurBoutons{
         );
         File f = Deliverif.openFileChooser(fileChooser);
         if (f != null) {
-            System.out.println(controleur); //DEBUG
+            //System.out.println(controleur); //DEBUG
             //On appelle la méthode du controleur devant charger le plan
             controleur.boutonChargePlan(f.getAbsolutePath());
             //System.out.println(f); //DEBUG
-        }else
-            fenetrePrincipale.avertir("Fichier non trouvé");
+        }
     }
     
     /**
