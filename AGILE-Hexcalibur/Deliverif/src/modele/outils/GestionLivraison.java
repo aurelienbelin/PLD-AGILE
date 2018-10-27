@@ -34,21 +34,6 @@ public class GestionLivraison extends Observable{
         this.demande=null;
     }
     
-    /*public boolean chargerVille(String urlFichierXML){
-        LecteurXML lecteur = new LecteurXML();
-        this.plan=lecteur.creerPlanVille(urlFichierXML);
-        return this.plan!=null;
-    }*/
-    
-    /*public boolean chargerDemandeLivraison(String urlFichierXML){
-        LecteurXML lecteur = new LecteurXML();
-        if(this.plan==null){
-            return false;
-        }
-        this.demande=lecteur.creerDemandeLivraison(urlFichierXML, plan);
-        return this.demande!=null;
-    }*/
-    
     public int calculerTournees(int nbLivreur){
         if(this.plan==null || this.demande==null){
             return 0;
@@ -104,30 +89,6 @@ public class GestionLivraison extends Observable{
             return 1;
         }
     }
-
-    /**
-     *
-     * @return - Le plan de la Ville
-     */
-    public PlanVille getPlan() {
-        return plan;
-    }
-
-    /**
-     *
-     * @return - Les tournées calculées précédemment
-     */
-    public Tournee[] getTournees() {
-        return tournees;
-    }
-
-    /**
-     *
-     * @return - La demande de livraison
-     */
-    public DemandeLivraison getDemande() {
-        return demande;
-    }
     
     /**
      *
@@ -154,11 +115,25 @@ public class GestionLivraison extends Observable{
     
     /**
      *
-     * @param nbLivreurs
-     * @return
+     * @return - Le plan de la Ville
      */
-    /*public int calculerTournees(int nbLivreurs) {
-        return 0;
-    }*/
+    public PlanVille getPlan() {
+        return plan;
+    }
 
+    /**
+     *
+     * @return - Les tournées calculées précédemment
+     */
+    public Tournee[] getTournees() {
+        return tournees;
+    }
+
+    /**
+     *
+     * @return - La demande de livraison
+     */
+    public DemandeLivraison getDemande() {
+        return demande;
+    }
 }
