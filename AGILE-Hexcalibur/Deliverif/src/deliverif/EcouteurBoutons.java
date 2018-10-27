@@ -41,12 +41,12 @@ public class EcouteurBoutons{
      * @throws InterruptedException
      */
 
-    public void chargerPlanAction(ActionEvent e) throws InterruptedException{
+    public void chargerPlanAction(ActionEvent e) throws InterruptedException, IOException, Exception{
         //System.out.println("Choisir un plan à charger"); //DEBUG
         String nomFichier = choisirFichier("Choisir le plan à charger");
         if(nomFichier != null)
         {
-            controleur.boutonChargeLivraisons(nomFichier);
+            controleur.boutonChargePlan(nomFichier);
         }
     }
     
@@ -56,7 +56,7 @@ public class EcouteurBoutons{
      * @throws InterruptedException
      */
 
-    public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException{
+    public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException, IOException, Exception{
         //System.out.println("Choisir une demande de livraison à charger"); //DEBUG
         String nomFichier = choisirFichier("Choisir la demande de livraison à charger");
         if(nomFichier != null)

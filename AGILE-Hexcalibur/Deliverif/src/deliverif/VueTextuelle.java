@@ -120,10 +120,6 @@ public class VueTextuelle extends VBox implements Observer {
         if(this.gestionLivraison.getTournees()!=null){
             Tournee[] tournees = this.gestionLivraison.getTournees();
             
-            for(Tournee t : tournees){
-                
-            }
-            
             String des;
             if(tournees.length!=0){ //!tournees.isEmpty()){
                 //des="<html>\n\t<ul>";
@@ -139,7 +135,6 @@ public class VueTextuelle extends VBox implements Observer {
                     }
                     //des+="\n\t</ul>\n</html>";
 
-                    System.out.println("Test 3 : "+des); //DEBUG
                     descriptions.add(des);
                     i++;
                 }
