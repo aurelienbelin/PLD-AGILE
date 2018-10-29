@@ -35,11 +35,11 @@ public class EtatPlanCharge extends EtatDefaut{
      *  @see EtatLivraisonsChargees
      */
     @Override
-    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception{
+    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
             gestionLivraison.chargerDemandeLivraison(fichier);
             Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
-            fenetre.estDemandeLivraisonChargee("Les livraisons ont été chargées");
+            fenetre.estDemandeLivraisonChargee("SUCCESS");
         } catch (SAXException e){
             fenetre.estDemandeLivraisonChargee(e.getMessage());
         } catch (IOException e) {

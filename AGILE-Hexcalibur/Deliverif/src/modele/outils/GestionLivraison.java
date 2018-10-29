@@ -34,21 +34,6 @@ public class GestionLivraison extends Observable{
         this.demande=null;
     }
     
-    /*public boolean chargerVille(String urlFichierXML){
-        LecteurXML lecteur = new LecteurXML();
-        this.plan=lecteur.creerPlanVille(urlFichierXML);
-        return this.plan!=null;
-    }*/
-    
-    /*public boolean chargerDemandeLivraison(String urlFichierXML){
-        LecteurXML lecteur = new LecteurXML();
-        if(this.plan==null){
-            return false;
-        }
-        this.demande=lecteur.creerDemandeLivraison(urlFichierXML, plan);
-        return this.demande!=null;
-    }*/
-    
     public int calculerTournees(int nbLivreur){
         if(this.plan==null || this.demande==null){
             return 0;
@@ -104,7 +89,30 @@ public class GestionLivraison extends Observable{
             return 1;
         }
     }
-
+    
+    /**
+     *
+     * @param fichier
+     */
+    public void chargerVille(String fichier) throws SAXException, IOException, Exception{
+        modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
+        this.plan = Lecteur.creerPlanVille(fichier);
+        setChanged();
+        this.notifyObservers(); //?
+    }
+    
+    /**
+     *
+     * @param fichier
+     * @return
+     */
+    public void chargerDemandeLivraison(String fichier) throws SAXException, IOException, Exception{
+        modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
+        this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
+        setChanged();
+        this.notifyObservers(); //?
+    }
+    
     /**
      *
      * @return - Le plan de la Ville
@@ -128,38 +136,4 @@ public class GestionLivraison extends Observable{
     public DemandeLivraison getDemande() {
         return demande;
     }
-    
-    /**
-     *
-     * @param fichier
-     * @return
-     */
-    public void chargerVille(String fichier) throws SAXException, IOException, Exception{
-        modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
-        this.plan = Lecteur.creerPlanVille(fichier);
-        setChanged();
-        this.notifyObservers(); //?
-    }
-    
-    /**
-     *
-     * @param fichier
-     * @return
-     */
-    public void chargerDemandeLivraison(String fichier) throws SAXException, IOException, Exception{
-        modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
-        this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
-        setChanged();
-        this.notifyObservers(); //?
-    }
-    
-    /**
-     *
-     * @param nbLivreurs
-     * @return
-     */
-    /*public int calculerTournees(int nbLivreurs) {
-        return 0;
-    }*/
-
 }
