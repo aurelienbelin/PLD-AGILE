@@ -29,7 +29,7 @@ public class EtatInit extends EtatDefaut{
       *  l'EtatPlanCharge 
       *  @param gestionLivraison
       *  @param fichier
-     * @param fenetre
+      *  @param fenetre
       *  @see modele.GestionLivraison
       *  @see EtatPlanCharge
      */
