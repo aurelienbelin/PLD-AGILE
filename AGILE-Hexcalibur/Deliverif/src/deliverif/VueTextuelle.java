@@ -118,9 +118,10 @@ public class VueTextuelle extends VBox implements Observer {
         //Le Label a-t-il été vidé ?
         
         if(this.gestionLivraison.getTournees()!=null){
-            ArrayList<Tournee> tournees = new ArrayList<>(Arrays.asList(this.gestionLivraison.getTournees()));
+            Tournee[] tournees = this.gestionLivraison.getTournees();
+            
             String des;
-            if(!tournees.isEmpty()){
+            if(tournees.length!=0){ //!tournees.isEmpty()){
                 //des="<html>\n\t<ul>";
                 des=new String("");
                 int i = 1;
@@ -134,12 +135,11 @@ public class VueTextuelle extends VBox implements Observer {
                     }
                     //des+="\n\t</ul>\n</html>";
 
-                    System.out.println("Test 3 : "+des); //DEBUG
                     descriptions.add(des);
                     i++;
                 }
-            }            
-            System.out.println(contenu.size()); //DEBUG
+            }
+            
             choixTournee.setItems(contenu);
         }
         

@@ -8,6 +8,7 @@
  */
 package modele.outils;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -21,15 +22,17 @@ public class DemandeLivraison {
     
     private List<PointPassage> livraisons;
     private PointPassage entrepot;
+    private Calendar heureDepart;
 
     /**
      * Crée une nouvelle demande de livraison.
      * @param livraisons - L'ensemble des points de passages à livrer.
      * @param entrepot - Le point de passage de l'entrepot.
      */
-    public DemandeLivraison(List<PointPassage> livraisons, PointPassage entrepot) {
+    public DemandeLivraison(List<PointPassage> livraisons, PointPassage entrepot, Calendar heureDepart) {
         this.livraisons = livraisons;
         this.entrepot = entrepot;
+        this.heureDepart=heureDepart;
     }
 
     /**
@@ -59,5 +62,20 @@ public class DemandeLivraison {
      */
     public void setEntrepot(PointPassage entrepot) {
         this.entrepot = entrepot;
+    }
+    
+    /**
+     * @param heureDepart - L'heure a laquelle doit débuter l'ensemble
+     * des tournees.
+     */
+    public void setHeureDepart(Calendar heureDepart){
+        this.heureDepart=heureDepart;
+    }
+    
+    /**
+     * @return L'heure de départ pour l'ensemble des tournées.
+     */
+    protected Calendar getHeureDepart(){
+        return this.heureDepart;
     }
 }

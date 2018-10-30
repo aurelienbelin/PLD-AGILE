@@ -41,7 +41,7 @@ public class PointPassage {
      *
      * @return
      */
-    public boolean estEntrepot() {
+    protected boolean estEntrepot() {
         return entrepot;
     }
 
@@ -57,7 +57,7 @@ public class PointPassage {
      *
      * @return
      */
-    public float getDuree() {
+    protected float getDuree() {
         return duree;
     }
     

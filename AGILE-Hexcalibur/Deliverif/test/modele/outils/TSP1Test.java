@@ -85,7 +85,7 @@ public class TSP1Test {
             nonVus.add(i);
         }
         for(int nbLivreur=1; nbLivreur<adjacence.size()/2;nbLivreur++){
-            TSP1 tsp = new TSP1(nbLivreur);
+            TSPGlouton tsp = new TSPGlouton(nbLivreur);
             Iterator<Integer> it = tsp.iterator(nombreVu, nonVus, cout);
             int premierElt = it.next();
             System.out.println(premierElt);
@@ -113,7 +113,7 @@ public class TSP1Test {
     @Test
     public void testBound() {
         System.out.println("--methode bound");
-        TSP1 tsp = new TSP1(2);
+        TSPGlouton tsp = new TSPGlouton(2);
         ArrayList<Integer> nonVus = new ArrayList<Integer>();
         int depart=0;
         for(int i=depart+1; i<cout.length; i++){
@@ -128,7 +128,7 @@ public class TSP1Test {
     @Test
     public void testTSP(){
         System.out.println("--methode chercheSolution");
-        TSP1 tsp = new TSP1(2);
+        TSPGlouton tsp = new TSPGlouton(2);
         int[] resultat = {0,8,4,3,5,9,0,10,1,6,2,7};
         tsp.chercheSolution(8000, cout.length,2, cout);
         assertFalse(tsp.getTempsLimiteAtteint());

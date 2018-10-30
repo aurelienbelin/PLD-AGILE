@@ -11,7 +11,10 @@ package modele.flux;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -156,7 +159,7 @@ public class LecteurXML {
             documentXML = this.chargerXML(urlFichierXML);
             if(planVille == null) throw new Exception ("le plan de la ville n'est pas chargé !");
             if (documentXML != null && documentXML.getDocumentElement().getNodeName().equals("demandeDeLivraisons")){
-            DemandeLivraison demande = new DemandeLivraison(null, null);
+            DemandeLivraison demande = new DemandeLivraison(null, null, null);
             
             //Intégration de l'entrepot à l'instance demande de lobjet DemandeLivraison
             NodeList noeudEntrepotXML = documentXML.getElementsByTagName("entrepot");
@@ -167,8 +170,13 @@ public class LecteurXML {
                 Intersection position = planVille.getIntersections().stream()
                         .filter(a -> Objects.equals(a.getIdXML(), Long.parseLong(eNoeud.getAttribute("adresse"))))
                         .collect(Collectors.toList()).get(0);
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                Date date = sdf.parse(eNoeud.getAttribute("heureDepart"));
+                Calendar temps = Calendar.getInstance();
+                temps.setTime(date);
                 PointPassage entrepot = new PointPassage(true, position, 0);
                 demande.setEntrepot(entrepot);
+                demande.setHeureDepart(temps);
             } else throw new Exception("L'entrepot n'est pas défini !");
             
             //Intégration des livraisons à l'instance demande de lobjet DemandeLivraison
