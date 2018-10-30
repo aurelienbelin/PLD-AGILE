@@ -81,7 +81,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @param tpsDebut : moment ou la resolution a commence
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */	
-        void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, int coutVus, int[][] cout, long tpsDebut, int tpsLimite){
+        protected void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, int coutVus, int[][] cout, long tpsDebut, int tpsLimite){
             if (System.currentTimeMillis() - tpsDebut > tpsLimite){
                     tempsLimiteAtteint = true;
                     return;

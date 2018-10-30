@@ -89,7 +89,7 @@ public class Intersection {
      *
      * @return - Le nombre de tronçons ayant pour une de ses extrémité cette intersection
      */
-    public int qteTroncons(){ return this.troncons.size(); }
+    protected int qteTroncons(){ return this.troncons.size(); }
     
     /**
      * @return - L'id de l'intersection dans son fichier xml d'origine.
@@ -110,7 +110,17 @@ public class Intersection {
         return longitude;
     }
     
+    @Override
     public String toString(){
         return "("+this.longitude+","+this.latitude+")";
+    }
+    
+    @Override
+    public boolean equals(Object o){
+        if (o instanceof Intersection){
+            Intersection i =(Intersection)o;
+            return i.getLatitude()==this.latitude && i.getLongitude()==this.longitude;
+        }
+        return false;
     }
 }

@@ -36,7 +36,7 @@ public class EtatInit extends EtatDefaut{
     @Override
     public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
         try{
-            gestionLivraison.chargerVille(fichier);
+            gestionLivraison.chargerPlan(fichier);
             Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
             fenetre.estPlanCharge("SUCCESS");
         } catch (SAXException e) {
