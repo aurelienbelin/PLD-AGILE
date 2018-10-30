@@ -163,11 +163,9 @@ public class Deliverif extends Application {
         boutonChargerPlan.setOnAction(e->{
             try {
                 ecouteurBoutons.chargerPlanAction(e);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
                 Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } 
         });
         
         boutonChargerDL = new Button(CHARGER_DL);
@@ -178,8 +176,6 @@ public class Deliverif extends Application {
         boutonChargerDL.setOnAction(e -> {
             try {
                 ecouteurBoutons.chargerDemandeLivraisonAction(e);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
                 Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             }
