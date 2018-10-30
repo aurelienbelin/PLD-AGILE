@@ -36,6 +36,6 @@ public class EtatLivraisonsChargees extends EtatDefaut{
         }else{
             Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
         }
-        fenetre.estTourneesCalculees(cre);
+        fenetre.estTourneesCalculees("SUCCESS");
     }
 }

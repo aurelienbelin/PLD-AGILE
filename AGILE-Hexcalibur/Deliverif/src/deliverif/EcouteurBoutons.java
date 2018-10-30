@@ -12,8 +12,6 @@ import controleur.Controleur;
 import java.io.File;
 import java.io.IOException;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.stage.FileChooser;
 
 /**
@@ -22,8 +20,8 @@ import javafx.stage.FileChooser;
  */
 public class EcouteurBoutons{
     
-    private Deliverif fenetrePrincipale;
-    private Controleur controleur;
+    private final Deliverif fenetrePrincipale;
+    private final Controleur controleur;
     
     /**
      *
@@ -39,6 +37,7 @@ public class EcouteurBoutons{
      *
      * @param e
      * @throws InterruptedException
+     * @throws java.io.IOException
      */
 
     public void chargerPlanAction(ActionEvent e) throws InterruptedException, IOException, Exception{
@@ -54,6 +53,7 @@ public class EcouteurBoutons{
      *
      * @param e
      * @throws InterruptedException
+     * @throws java.io.IOException
      */
 
     public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException, IOException, Exception{
@@ -101,7 +101,6 @@ public class EcouteurBoutons{
         File f = Deliverif.openFileChooser(fileChooser);
         if (f != null) {
             //On appelle la méthode du controleur devant charger la demande de livraison
-            //System.out.println(f); //DEBUG
             return f.getAbsolutePath();
         }else{
             return null;
