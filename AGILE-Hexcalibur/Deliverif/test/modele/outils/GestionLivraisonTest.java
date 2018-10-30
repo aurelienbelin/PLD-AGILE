@@ -59,7 +59,7 @@ public class GestionLivraisonTest {
         LecteurXML lecteur = new LecteurXML();
         
         try{
-            gestion.chargerVille(urlFichierPlan);
+            gestion.chargerPlan(urlFichierPlan);
         }catch(Exception e){
             fail(e.getStackTrace().toString());
         }

@@ -11,8 +11,11 @@ package modele.outils;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.PriorityQueue;
 import javafx.util.Pair;
 
 /**
@@ -48,12 +51,11 @@ public class PlanVille {
      *
      * @param intersections
      */
-    public void setIntersections(List<Intersection> intersections) {
+    protected void setIntersections(List<Intersection> intersections) {
         this.intersections = intersections;
     }
 
     /**
-     *
      * @return
      */
     public List<Troncon> getTroncons() {
@@ -69,22 +71,34 @@ public class PlanVille {
     }
     
     /**
-     *
      * @param p
      * @return
      */
-    public Map<Intersection, Pair<Intersection, Float>> dijkstra(PointPassage p){
+    protected Map<Intersection, Pair<Intersection, Float>> dijkstra(PointPassage p){
         
-        List<Intersection> nonVus = new ArrayList();
+        //List<Intersection> nonVus = new ArrayList();
+        
         
         List<List<Troncon>> resultat = new ArrayList<List<Troncon>>();
         ListIterator<Troncon> troncIt;
         int sommetVus=0;
         Intersection origine = p.getPosition();
         Map<Intersection, Pair<Intersection,Float>> tab = new HashMap<Intersection, Pair<Intersection,Float>>();
-        //retrait de l'origine de la liste des sommets non vus
+        PriorityQueue<Intersection> nonVus = new PriorityQueue<Intersection>(this.intersections.size(),
+        new Comparator<Intersection>(){
+            @Override
+            public int compare(Intersection i1, Intersection i2){
+                if (tab.get(i1).getValue()<tab.get(i2).getValue()){
+                    return -1;
+                } else if(tab.get(i1).getValue()>tab.get(i2).getValue()){
+                    return 1;
+                }
+                return 0;
+            }
+        });
+        //Identifier l'intersection de depart
         for(Intersection sommetVisite : this.intersections){
-            if(sommetVisite.getLongitude()==origine.getLongitude()&&sommetVisite.getLatitude()==origine.getLatitude()){
+            if(sommetVisite.equals(origine)){
                 //permutation
                 origine = sommetVisite;
                 break;
@@ -94,8 +108,8 @@ public class PlanVille {
         tab.put(origine, new Pair(origine,(float)0));
         nonVus.add(origine);
         
-        ListIterator<Intersection> interIt = nonVus.listIterator();
-        while(interIt.hasNext()){
+        while(!nonVus.isEmpty()){
+            origine=nonVus.poll();
             //parcours des voisins du point actuellement visité
             troncIt = origine.getTroncons().listIterator();
             while(troncIt.hasNext()){
@@ -116,26 +130,6 @@ public class PlanVille {
             //retrait de la liste des nonVus
             nonVus.remove(origine);
             sommetVus++;
-            // raz iterateur : 
-            interIt = nonVus.listIterator();
-            //choix du prochain sommet à visiter : recherche du sommet non visité avec le plus faible cout
-            if(interIt.hasNext()){
-                origine=interIt.next();
-                Intersection candidat;
-                while(interIt.hasNext()){
-                    
-                    candidat=interIt.next();
-                    if(!tab.containsKey(origine)){
-                        origine=candidat;
-                    }else if(tab.containsKey(candidat)){
-                        if(tab.get(candidat).getValue()<tab.get(origine).getValue()){
-                            origine=candidat;
-                        }
-                    }
-                }
-            }
-            // raz iterateur : 
-            interIt = nonVus.listIterator();
         }
         return tab;
     }
@@ -145,7 +139,7 @@ public class PlanVille {
      * @param listePoints
      * @return
      */
-    public List<Chemin> dijkstraToutPoints(List<PointPassage> listePoints){
+    protected List<Chemin> dijkstraTousPoints(List<PointPassage> listePoints){
         List<Chemin> graph = new ArrayList<Chemin>();
         for(PointPassage depart : listePoints){
             Map<Intersection, Pair<Intersection,Float>> tab = dijkstra(depart);
