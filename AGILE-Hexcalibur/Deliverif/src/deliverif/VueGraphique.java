@@ -8,49 +8,69 @@
  */
 package deliverif;
 
-import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.HBox;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import modele.outils.Chemin;
 import modele.outils.GestionLivraison;
+import modele.outils.Tournee;
+import modele.outils.Troncon;
 
 /**
  *
  * @author Aurelien Belin
  */
-public class VueGraphique extends Canvas implements Observer {
+public class VueGraphique extends StackPane implements Observer {
     
-    private GestionLivraison gestionLivraison;
+    private final GestionLivraison gestionLivraison;
     private double echelleLat;
     private double echelleLong;
     private double origineLatitude;
     private double origineLongitude;
-    private double origineX;
-    private double origineY;
     
     //Etats
-    boolean init;
-    boolean planCharge;
-    boolean dlCharge;
-    boolean calculRealise;
+    private boolean init;
+    private boolean planCharge;
+    private boolean dlCharge;
+    private boolean calculRealise;
     
     //Composants
-    private ArrayList<Line> troncons;
-    private ArrayList<Circle> pointsPassage;
+    private Canvas plan;
+    private Canvas dl;
+    private ArrayList<Canvas> tournees;
+    
+    //Test
+    private Button bouton;
     
     public VueGraphique(GestionLivraison gl){
-        super(640,640);
+        super();
+        
+        this.setPrefSize(640,640-95);
         
         this.gestionLivraison = gl;
         gestionLivraison.addObserver(this);
-        this.troncons = new ArrayList();
-        this.pointsPassage = new ArrayList();
+        
+        plan = new Canvas(640,640-95);
+        dl = new Canvas(640,640-95);
+        tournees = new ArrayList<>();
+        
+        this.getChildren().addAll(plan,dl);
+        
+        /*//Test
+        bouton = new Button("Test");
+        bouton.setPrefSize(50,50);
+        bouton.setLayoutX(0);
+        bouton.setLayoutY(0);
+        thi.getChildren().add(bouton)*/
         
         init = true;     
     }
@@ -67,11 +87,12 @@ public class VueGraphique extends Canvas implements Observer {
             dessinerPtLivraison();
             dlCharge = true;
             planCharge = false;
+        }else if(dlCharge==true){
+            dessinerTournees();
         }
     }
     
     public void calculEchelle (List <modele.outils.Intersection> intersections) {
-        //final int R = 6371; //Rayon de la Terre
         float maxLatitude = -90;
         float minLatitude = 90;
         float maxLongitude = -180;
@@ -90,40 +111,23 @@ public class VueGraphique extends Canvas implements Observer {
             }
         }
         
-        //Conversion de polaire en cartésien + mise à l'échelle
-        /*double maxX = R*Math.cos(maxLatitude)*Math.cos(maxLongitude);
-        double minX = R*Math.cos(minLatitude)*Math.cos(minLongitude);
-        double maxY = R*Math.cos(maxLatitude)*Math.sin(maxLongitude);
-        double minY = R*Math.cos(minLatitude)*Math.sin(minLongitude);*/
-        
-        echelleLat = 640/(maxLatitude-minLatitude);
-        echelleLong = 640/(maxLongitude-minLongitude); //longueur fenetre
-        
-        System.out.println("Echelle : "+echelleLat+" ; "+echelleLong);
-        
-        /*origineX = R*Math.cos(minLatitude)*Math.cos(minLongitude);
-        origineY = R*Math.cos(minLatitude)*Math.sin(minLongitude);*/
+        echelleLat = (640-95)/(maxLatitude-minLatitude);
+        echelleLong = (640)/(maxLongitude-minLongitude); //longueur fenetre
         
         origineLatitude = minLatitude;
         origineLongitude = minLongitude;
     }
     
     public void dessinerPlan(){
-        //final int R = 6371; //Rayon de la Terre
-        GraphicsContext gc = this.getGraphicsContext2D();
+        GraphicsContext gc = this.plan.getGraphicsContext2D();
+        gc.setStroke(Color.SLATEGREY);
         List <modele.outils.Troncon> troncons = gestionLivraison.getPlan().getTroncons();
-        //System.out.println("Chargement du plan : "+troncons.size()); //DEBUG
                 
         for(modele.outils.Troncon troncon : troncons){
-            /*double absDebutTroncon = (R*Math.cos(troncon.getDebut().getLatitude())*Math.cos(troncon.getDebut().getLongitude()) - origineX) * echelleX; 
-            double ordDebutTroncon = (R*Math.cos(troncon.getDebut().getLatitude())*Math.sin(troncon.getDebut().getLongitude()) - origineY) * echelleY; 
-            double absFinTroncon = (R*Math.cos(troncon.getFin().getLatitude())*Math.cos(troncon.getFin().getLongitude()) - origineX) * echelleX; 
-            double ordFinTroncon = (R*Math.cos(troncon.getDebut().getLatitude())*Math.sin(troncon.getDebut().getLongitude()) - origineY) * echelleY;*/
-            double absDebutTroncon = (troncon.getDebut().getLongitude() - origineLongitude) * echelleLong; 
-            double ordDebutTroncon = this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat; 
-            double absFinTroncon = (troncon.getFin().getLongitude() - origineLongitude) * echelleLong; 
-            double ordFinTroncon = this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat;
-            ///System.out.println(absDebutTroncon+" ; "+ordDebutTroncon); //DEBUG
+            int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
+            int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
+            int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
+            int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
             
             //Dessin des traits
             gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
@@ -131,19 +135,85 @@ public class VueGraphique extends Canvas implements Observer {
     }
     
     public void dessinerPtLivraison(){
-        GraphicsContext gc = this.getGraphicsContext2D();
+        GraphicsContext gc = this.dl.getGraphicsContext2D();
         List <modele.outils.PointPassage> livraisons = gestionLivraison.getDemande().getLivraisons();
         
         for(modele.outils.PointPassage livraison : livraisons){
-            double abscissePtLivraison = (livraison.getPosition().getLongitude() - origineLongitude) * echelleLong;
-            double ordonneePtLivraison = this.getHeight() - ( livraison.getPosition().getLatitude() - origineLatitude) * echelleLat;
-            //System.out.println(abscissePtLivraison+" : "+ordonneePtLivraison); //DEBUG
+            int abscissePtLivraison = (int)((livraison.getPosition().getLongitude() - origineLongitude) * echelleLong);
+            int ordonneePtLivraison = (int)(this.getHeight() - ( livraison.getPosition().getLatitude() - origineLatitude) * echelleLat);
             
             //Dessin marqueur
-            /*Circle cercle = new Circle(abscissePtLivraison,ordonneePtLivraison,2);
-            this.pointsPassage.add(cercle);*/
-            gc.fillOval(abscissePtLivraison-10, ordonneePtLivraison-10, 10, 10);
+            gc.setFill(Color.BLUE);
+            gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
+   
         }
+        
+        int abscissePtLivraison =(int) ((gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude() - origineLongitude) * echelleLong);
+        int ordonneePtLivraison =(int) (this.getHeight() - ( gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude() - origineLatitude) * echelleLat);
+        gc.setFill(Color.RED);
+        
+        gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
+        
+    }
+    
+    //Début : 30min + 14h15-
+    public void dessinerTournees(){
+        this.tournees.clear();
+        
+        for(Node n : this.getChildren()){
+            if(!n.equals(this.bouton) && !n.equals(this.dl) && !n.equals(this.plan))
+                this.getChildren().remove(n);
+        }
+        
+        Tournee[] listeTournees = this.gestionLivraison.getTournees();
+        
+        Canvas canvasTemp;
+        
+        for(Tournee tournee : listeTournees){  
+            //On créée un nouveau Canvas par tournée
+            canvasTemp = new Canvas(this.getWidth(),this.getHeight());
+            GraphicsContext gc = canvasTemp.getGraphicsContext2D();
+            
+            List<Chemin> chemins = tournee.getTrajet();
+            
+            //Changer de couleur
+            int couleur = (int)(Math.random()*0xFFFFFF);
+            String couleur_hex = Integer.toHexString(couleur);
+            gc.setLineWidth(2);
+            gc.setStroke(Color.web("#"+couleur_hex.substring(2,couleur_hex.length())));
+            
+            for(Chemin chemin : chemins){
+                List<Troncon> troncons = chemin.getTroncons();
+                
+                for(Troncon troncon : troncons){
+                    int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
+                    int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
+                    int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
+                    int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+                    
+                    gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
+                }
+            }
+            
+            this.tournees.add(canvasTemp);
+        }
+        
+        this.getChildren().addAll(this.tournees);
+        this.getChildren().get(0).toBack();
+        this.getChildren().get(1).toFront();
+        
+    }
+    
+    //Test
+    private void activerBouton(){
+        bouton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Test");
+                tournees.get(1).getGraphicsContext2D().clearRect(0, 0, getWidth(), getHeight());
+            }
+        });
     }
     
 }

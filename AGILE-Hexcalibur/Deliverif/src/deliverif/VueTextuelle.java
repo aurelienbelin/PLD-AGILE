@@ -102,6 +102,7 @@ public class VueTextuelle extends VBox implements Observer {
         if(s!=null || s.equals("")){
             for(int i=0;i<contenu.size();i++){
                 if(contenu.get(i).equals(s)){
+                    this.descriptionTournee.setText("");
                     this.descriptionTournee.setText(this.descriptions.get(i));
                 }
             }
@@ -113,35 +114,34 @@ public class VueTextuelle extends VBox implements Observer {
         //choixTournee.getItems().clear();
         contenu.clear();
         descriptions.clear();
+        this.descriptionTournee.setText("");
         //Le Label a-t-il été vidé ?
         
         if(this.gestionLivraison.getTournees()!=null){
-            ArrayList<Tournee> tournees = new ArrayList<>(Arrays.asList(this.gestionLivraison.getTournees()));
+            Tournee[] tournees = this.gestionLivraison.getTournees();
+            
             String des;
-            if(!tournees.isEmpty()){
-                des="<html>\n\t<ul>";
+            if(tournees.length!=0){ //!tournees.isEmpty()){
+                //des="<html>\n\t<ul>";
+                des=new String("");
                 int i = 1;
                 for(Tournee t : tournees){
                     Iterator<String> it = t.getDescription();
                     contenu.add("Tournée "+i);
                     while(it.hasNext()){
                         String s = it.next();
-                        des+="\n\t\t<li>"+s+"</li>";
+                        //des+="\n\t\t<li>"+s+"</li>";
+                        des+="\n\t"+s;
                     }
-                    des+="\n\t</ul>\n</html>";
-                    System.out.println("Test 3 : "+des); //DEBUG
+                    //des+="\n\t</ul>\n</html>";
+
                     descriptions.add(des);
                     i++;
                 }
-            }            
-            System.out.println(contenu.size()); //DEBUG
+            }
+            
             choixTournee.setItems(contenu);
         }
         
     }
-
-    /*public String getSizeDescription() {
-        return (""+this.descriptions.size()+" ; "+this.contenu.size());
-    }*/
-    
 }

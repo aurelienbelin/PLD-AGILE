@@ -8,6 +8,9 @@
  */
 package controleur;
 
+import java.io.IOException;
+import org.xml.sax.SAXException;
+
 /** Etat dans lequel l'application se trouve à son ouverture
  *  Possibilité de charger un plan
  *
@@ -26,16 +29,25 @@ public class EtatInit extends EtatDefaut{
       *  l'EtatPlanCharge 
       *  @param gestionLivraison
       *  @param fichier
-     * @param fenetre
+      *  @param fenetre
       *  @see modele.GestionLivraison
       *  @see EtatPlanCharge
      */
     @Override
-    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
-        int cre = gestionLivraison.chargerVille(fichier);
-        if(cre==1){
+    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+        try{
+            gestionLivraison.chargerPlan(fichier);
             Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
+            fenetre.estPlanCharge("SUCCESS");
+        } catch (SAXException e) {
+            fenetre.estPlanCharge(e.getMessage());
+            
+        } catch (IOException e) {
+            fenetre.estPlanCharge(e.getMessage());
+            
+        } catch (Exception e) {
+            fenetre.estPlanCharge(e.getMessage());
+            
         }
-        fenetre.estPlanCharge(cre);
     }
 }

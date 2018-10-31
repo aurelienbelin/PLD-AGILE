@@ -9,6 +9,7 @@
 package modele.outils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,19 +23,21 @@ import java.util.List;
 public class Tournee {
     
     private List<Chemin> trajet;
+    private Calendar heureDepart;
 
     /**
      * Crée une nouvelle Tournee.
      * @param trajet - L'ensemble de chemins ordonné à parcourir pour le livreur
      */
-    public Tournee(List<Chemin> trajet) {
+    public Tournee(List<Chemin> trajet, Calendar heureDepart) {
         this.trajet = trajet;
+        this.heureDepart=heureDepart;
     }
 
     /**
      * @return - La suite ordonné des trajets
      */
-    public List<Chemin> getTrajet() {
+    protected List<Chemin> getTrajet() {
         return trajet;
     }
     
@@ -42,7 +45,7 @@ public class Tournee {
      * @return - La durée totale que le livreur mettra entre son départ de l'entrepot
      * et son retour à l'entrepot.
      */
-    public float getTempsTournee(){
+    protected float getTempsTournee(){
         float duree=0f;
         for(Chemin chemin : trajet){
             duree+=chemin.getDuree();
@@ -65,7 +68,7 @@ public class Tournee {
      * 
      * @return - Le point de départ de la tournée 
      */
-    public PointPassage getDepart(){
+    protected PointPassage getDepart(){
         if(this.trajet!=null){
             return this.trajet.get(0).getDebut();
         }
@@ -76,7 +79,7 @@ public class Tournee {
      * 
      * @return - Le point d'arrivée de la tournée 
      */
-    public PointPassage getArrivee(){
+    protected PointPassage getArrivee(){
         if (this.trajet!=null){
             return this.trajet.get(this.trajet.size()-1).getFin();
         }
@@ -88,7 +91,7 @@ public class Tournee {
      * @param i
      * @return - Le point de passage du trajet i 
      */
-    public PointPassage getPointPassage(int i){
+    protected PointPassage getPointPassage(int i){
         if (this.trajet!=null){
             return this.trajet.get(i).getDebut();
         }
@@ -102,9 +105,10 @@ public class Tournee {
     public Iterator<String> getDescription(){
         List<String> sousDescription = new ArrayList<String>();
         for(Chemin c : this.trajet){
-            sousDescription.addAll(c.getDescription());
+            sousDescription.addAll(c.getDescription(this.heureDepart));
         }
-        
+        sousDescription.add("Fin de la tournée");
+        this.heureDepart.add(Calendar.SECOND, (int)this.getTempsTournee());//retablir l'objet partagé heureDepart
         return sousDescription.iterator();
     }
 

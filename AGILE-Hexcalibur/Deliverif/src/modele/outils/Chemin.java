@@ -9,6 +9,8 @@
 package modele.outils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /** Un chemin représente une liste de tronçons, il est caractérisé par son début et sa fin.
@@ -49,7 +51,7 @@ public class Chemin {
      * ATTENTION : supprime la fin actuelle du chemin
      * @param troncon - Le troncon à ajouter à la fin du chemin
      */
-    public void addTroncon(Troncon troncon){
+    protected void addTroncon(Troncon troncon){
         if (troncon==null){
             return;
         } else if (troncons.size()!=0 && this.troncons.get(this.troncons.size()-1).getFin()!=troncon.getDebut()){
@@ -65,7 +67,7 @@ public class Chemin {
      *
      * @return - Le point de passage par lequel débute le chemin
      */
-    public PointPassage getDebut(){
+    protected PointPassage getDebut(){
         return this.debut;
     }
 
@@ -73,7 +75,7 @@ public class Chemin {
      * Affecte le param fin à l'attribut fin du chemin
      * @param fin
      */
-    public void setFin(PointPassage fin){
+    protected void setFin(PointPassage fin){
         if (troncons.size()!=0){
             if (this.troncons.get(this.troncons.size()-1).getFin()==fin.getPosition()){
                 this.fin=fin;
@@ -85,7 +87,7 @@ public class Chemin {
      *
      * @return - Le point de passage par lequel se termine le chemin
      */
-    public PointPassage getFin(){
+    protected PointPassage getFin(){
         return this.fin;
     }
 
@@ -93,7 +95,7 @@ public class Chemin {
      *
      * @return - La longueur du chemin, i.e la somme des longueurs des tronçons composant le chemin
      */
-    public float getLongueur(){
+    protected float getLongueur(){
         float longueur=0.0f;
         for(Troncon t : this.troncons){
             longueur+=t.getLongueur();
@@ -105,7 +107,7 @@ public class Chemin {
      *
      * @return - La durée du chemin, i.e la somme des durées des tronçons et de la livraison
      */
-    public float getDuree(){
+    protected float getDuree(){
         float longueur = this.getLongueur();
         float resultat = longueur/3.6f;
         if (this.fin!=null){
@@ -118,18 +120,31 @@ public class Chemin {
      *
      * @return - La description tectuelle du chemin
      */
-    public List<String> getDescription(){
+    protected List<String> getDescription(Calendar heureDepart){
         List<String> etapes = new ArrayList<String>();
-        etapes.add("Depart : "+this.debut.getPosition());
+        etapes.add("("+heureDepart.get(Calendar.HOUR_OF_DAY)+"h"+
+                heureDepart.get(Calendar.MINUTE)+") Depart"+
+                (this.debut.estEntrepot()? " de l'entrepot." : " du point de livraison"));
         String dernierNom="";
+        float longueur=0f;
         for(Troncon c : this.troncons){
+            longueur+=c.getLongueur();
             if(!c.getNom().equals(dernierNom)){
-                etapes.add("Traverser : "+c);
+                etapes.add("Traverser : "+dernierNom+" pendant "+longueur+" m.");
+                etapes.add("Tourner à : "+c.getNom());
                 dernierNom=c.getNom();
             }
         }
-        etapes.add("Arriver à : "+this.fin.getPosition());
+        etapes.add("Traverser : "+dernierNom+" pendant "+longueur+" m.");
+        heureDepart.add(Calendar.SECOND, (int)this.getDuree());
+        etapes.add("Arriver "+(this.fin.estEntrepot()? "à l'entrepot." :" au point de livraison")+"("+
+                heureDepart.get(Calendar.HOUR_OF_DAY)+"h"+heureDepart.get(Calendar.MINUTE)+
+                ").");
 
         return etapes;
+    }
+    
+    public List<Troncon> getTroncons(){
+        return this.troncons;
     }
 }

@@ -8,10 +8,12 @@
  */
 package modele.outils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import modele.flux.LecteurXML;
+import org.xml.sax.SAXException;
 
 /** 
  * @version 1.0 23/10/2018
@@ -32,21 +34,6 @@ public class GestionLivraison extends Observable{
         this.demande=null;
     }
     
-    /*public boolean chargerVille(String urlFichierXML){
-        LecteurXML lecteur = new LecteurXML();
-        this.plan=lecteur.creerPlanVille(urlFichierXML);
-        return this.plan!=null;
-    }*/
-    
-    /*public boolean chargerDemandeLivraison(String urlFichierXML){
-        LecteurXML lecteur = new LecteurXML();
-        if(this.plan==null){
-            return false;
-        }
-        this.demande=lecteur.creerDemandeLivraison(urlFichierXML, plan);
-        return this.demande!=null;
-    }*/
-    
     public int calculerTournees(int nbLivreur){
         if(this.plan==null || this.demande==null){
             return 0;
@@ -54,14 +41,14 @@ public class GestionLivraison extends Observable{
         List<PointPassage> listePoints = new ArrayList<>();
         listePoints.add(this.demande.getEntrepot());
         listePoints.addAll(this.demande.getLivraisons());
-        List<Chemin> graphe = this.plan.dijkstraToutPoints(listePoints);//Nous sommes déjà sûrs que l'entrepot est à l'indice 0
+        List<Chemin> graphe = this.plan.dijkstraTousPoints(listePoints);//Nous sommes déjà sûrs que l'entrepot est à l'indice 0
         int[][] cout = new int[listePoints.size()][listePoints.size()];
         for(Chemin c : graphe){
             int i = listePoints.indexOf(c.getDebut());
             int j = listePoints.indexOf(c.getFin());
             cout[i][j]=(int)c.getDuree();
         }
-        TSP1 tsp = new TSP1(nbLivreur);
+        TSPGlouton tsp = new TSPGlouton(nbLivreur);
         tsp.chercheSolution(Integer.MAX_VALUE, listePoints.size(), nbLivreur, cout);
         List<Tournee> listeTournee = new ArrayList<Tournee>(nbLivreur);
         this.tournees = new Tournee[nbLivreur];
@@ -80,7 +67,7 @@ public class GestionLivraison extends Observable{
                 }
             }
             if (fin==0){
-                listeTournee.add(new Tournee(trajets));
+                listeTournee.add(new Tournee(trajets, demande.getHeureDepart()));
                 trajets = new ArrayList<Chemin>();
             }
         }
@@ -91,18 +78,40 @@ public class GestionLivraison extends Observable{
                 break;
             }
         }
-        listeTournee.add(new Tournee(trajets));
+        listeTournee.add(new Tournee(trajets, demande.getHeureDepart()));
         listeTournee.toArray(this.tournees);
         
         if(this.tournees==null){
             return 0;
         } else {
             setChanged();
-            this.notifyObservers(); //?
+            this.notifyObservers();
             return 1;
         }
     }
-
+    
+    /**
+     *
+     * @param fichier - L'url du fichier xml décrivant le plan d'une ville.
+     */
+    public void chargerPlan(String fichier) throws SAXException, IOException, Exception{
+        modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
+        this.plan = Lecteur.creerPlanVille(fichier);
+        setChanged();
+        this.notifyObservers(); //?
+    }
+    
+    /**
+     *
+     * @param fichier - l'url du fichier xml contenant une demande de livraison.
+     */
+    public void chargerDemandeLivraison(String fichier) throws SAXException, IOException, Exception{
+        modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
+        this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
+        setChanged();
+        this.notifyObservers(); //?
+    }
+    
     /**
      *
      * @return - Le plan de la Ville
@@ -126,48 +135,4 @@ public class GestionLivraison extends Observable{
     public DemandeLivraison getDemande() {
         return demande;
     }
-    
-    /**
-     *
-     * @param fichier
-     * @return
-     */
-    public int chargerVille(String fichier){
-        modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
-        this.plan = Lecteur.creerPlanVille(fichier);
-        if(this.plan != null){
-            setChanged();
-            this.notifyObservers(); //?
-            return 1;
-        } else{
-            return 0;
-        }
-    }
-    
-    /**
-     *
-     * @param fichier
-     * @return
-     */
-    public int chargerDemandeLivraison(String fichier) {
-        modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
-        this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
-        if(this.demande != null){
-            setChanged();
-            this.notifyObservers(); //?
-            return 1;
-        } else{
-            return 0;
-        }
-    }
-    
-    /**
-     *
-     * @param nbLivreurs
-     * @return
-     */
-    /*public int calculerTournees(int nbLivreurs) {
-        return 0;
-    }*/
-
 }
