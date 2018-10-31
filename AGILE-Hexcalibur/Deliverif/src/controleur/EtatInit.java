@@ -24,7 +24,7 @@ public class EtatInit extends EtatDefaut{
      */
     public EtatInit (){}
     
-    /**  Cette méthode délègue la chargement du plan au modèle
+    /**  Cette méthode délègue le chargement du plan au modèle
       *  Si le chargement s'est bien passé on passe dans 
       *  l'EtatPlanCharge 
       *  @param gestionLivraison
