@@ -42,9 +42,11 @@ public class EcouteurBoutons{
 
     public void chargerPlanAction(ActionEvent e) throws InterruptedException, IOException, Exception{
         //System.out.println("Choisir un plan à charger"); //DEBUG
+        this.fenetrePrincipale.informationEnCours("Chargement du plan...");
         String nomFichier = choisirFichier("Choisir le plan à charger");
         if(nomFichier != null)
         {
+            this.fenetrePrincipale.informationEnCours("Chargement du plan...");
             controleur.boutonChargePlan(nomFichier);
         }
     }
@@ -58,6 +60,7 @@ public class EcouteurBoutons{
 
     public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException, IOException, Exception{
         //System.out.println("Choisir une demande de livraison à charger"); //DEBUG
+        this.fenetrePrincipale.informationEnCours("Chargement de la demande de livraison...");
         String nomFichier = choisirFichier("Choisir la demande de livraison à charger");
         if(nomFichier != null)
         {
@@ -71,7 +74,8 @@ public class EcouteurBoutons{
      * @throws InterruptedException
      */
     public void calculerTourneesAction(ActionEvent e) throws InterruptedException{
-        //System.out.println(fenetrePrincipale.getNbLivreurs());
+        //System.out.println(fenetrePrincipale.getNbLivreurs()); //DEBUG
+        //this.fenetrePrincipale.informationEnCours("Calcul des tournées...");
         controleur.boutonCalculerTournees(fenetrePrincipale.getNbLivreurs());
     }
 

@@ -53,6 +53,7 @@ public class VueTextuelle extends VBox implements Observer {
         
         this.setSpacing(10);
         this.setPrefSize(285,420);
+        this.setMinHeight(420);
         
         this.choixTournee = new ComboBox();
         this.choixTournee.setPrefWidth(375);

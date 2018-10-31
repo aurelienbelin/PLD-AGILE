@@ -31,6 +31,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
@@ -103,6 +104,7 @@ public class Deliverif extends Application {
     private Spinner nbLivreurs;
     private Label descriptionTextuelle;
     private ComboBox choixTournee;
+    private Label information;
     
     @Override
     public void init() throws Exception{
@@ -136,7 +138,7 @@ public class Deliverif extends Application {
         
         creerPanelDroit();   
         //Il faudra ajouter la vue graphique
-        vueGraphique = new VueGraphique(this.gestionLivraison);
+        vueGraphique = new VueGraphique(this.gestionLivraison, this);
         vueGraphique.setLayoutX(0);
         vueGraphique.setLayoutY(115);
         
@@ -222,6 +224,7 @@ public class Deliverif extends Application {
         
         boutonCalculerTournees = new Button(CALCULER_TOURNEES);
         boutonCalculerTournees.setPrefSize(300,50);
+        boutonCalculerTournees.setMinHeight(50);
         boutonCalculerTournees.setWrapText(true);
         boutonCalculerTournees.setDisable(true);
         boutonCalculerTournees.setTextAlignment(TextAlignment.CENTER);
@@ -231,18 +234,32 @@ public class Deliverif extends Application {
             } catch (InterruptedException ex) {
                 Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });
+        });        
         
         Separator sh = new Separator();
         sh.setOrientation(Orientation.HORIZONTAL);
         sh.setPrefWidth(panelDroit.getWidth());
+        sh.setMaxWidth(1024-640-50);
         sh.setLayoutX(640);
         
         vueTextuelle = new VueTextuelle(gestionLivraison);
         vueTextuelle.ajouterEcouteur(ecouteurBoutons);
+        vueTextuelle.setMaxWidth(1024-640-50);
         
-        panelDroit.getChildren().addAll(boxLivreurs, boutonCalculerTournees, sh, vueTextuelle);
+        this.information = new Label();
+        this.information.setPrefSize(1024-640,30);
+        this.information.setMinWidth(1024-640-25);
+        this.information.setMaxHeight(30);
+        this.information.setAlignment(Pos.CENTER_RIGHT);
+        this.information.setFont(new Font("Arial", 10));
+        this.information.setText("Test");
+        //this.information.setStyle("-fx-background-color:red;");
         
+        panelDroit.getChildren().addAll(boxLivreurs, boutonCalculerTournees, sh, vueTextuelle, information);
+    }
+    
+    protected void informationEnCours(String message){
+        this.information.setText(message);
     }
     
     /**
@@ -349,8 +366,10 @@ public class Deliverif extends Application {
             boutonChargerDL.setDisable(false);
             //avertir("Le plan de la ville a bien été chargé");
         }else if(cre!=null){
+            this.informationEnCours("");
             avertir(cre);
         }else{
+            this.informationEnCours("");
             avertir("Le plan n'a pas pu être chargé");
         }
     }
@@ -365,8 +384,10 @@ public class Deliverif extends Application {
             boutonCalculerTournees.setDisable(false);
             //avertir("La demande de livraison a bien été chargée");
         }else if(cre!=null){
+            this.informationEnCours("");
             avertir(cre);
         }else{
+            this.informationEnCours("");
             avertir("La demande de livraison n'a pas pu être chargée");
         }
     }
@@ -380,6 +401,7 @@ public class Deliverif extends Application {
             //this.vueGraphique.dessinerTournees();
             //avertir("Calcul des tournées terminé");
         }else{
+            this.informationEnCours("");
             avertir("Le calcul des tournées n'a pas pu se terminer");
     
         }

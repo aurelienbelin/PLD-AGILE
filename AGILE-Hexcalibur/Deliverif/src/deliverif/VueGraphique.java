@@ -32,6 +32,7 @@ import modele.outils.Troncon;
 public class VueGraphique extends StackPane implements Observer {
     
     private final GestionLivraison gestionLivraison;
+    private Deliverif fenetre;
     private double echelleLat;
     private double echelleLong;
     private double origineLatitude;
@@ -51,10 +52,12 @@ public class VueGraphique extends StackPane implements Observer {
     //Test
     private Button bouton;
     
-    public VueGraphique(GestionLivraison gl){
+    public VueGraphique(GestionLivraison gl, Deliverif f){
         super();
         
         this.setPrefSize(640,640-95);
+        
+        this.fenetre = f;
         
         this.gestionLivraison = gl;
         gestionLivraison.addObserver(this);
@@ -118,7 +121,7 @@ public class VueGraphique extends StackPane implements Observer {
         origineLongitude = minLongitude;
     }
     
-    public void dessinerPlan(){
+    public void dessinerPlan(){        
         GraphicsContext gc = this.plan.getGraphicsContext2D();
         gc.setStroke(Color.SLATEGREY);
         List <modele.outils.Troncon> troncons = gestionLivraison.getPlan().getTroncons();
@@ -132,6 +135,8 @@ public class VueGraphique extends StackPane implements Observer {
             //Dessin des traits
             gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
         }
+        
+        fenetre.informationEnCours("");
     }
     
     public void dessinerPtLivraison(){
@@ -154,9 +159,10 @@ public class VueGraphique extends StackPane implements Observer {
         
         gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
         
+        fenetre.informationEnCours("");
     }
     
-    //Début : 30min + 14h15-
+    //Début : 30min + 1h
     public void dessinerTournees(){
         this.tournees.clear();
         
@@ -179,7 +185,7 @@ public class VueGraphique extends StackPane implements Observer {
             //Changer de couleur
             int couleur = (int)(Math.random()*0xFFFFFF);
             String couleur_hex = Integer.toHexString(couleur);
-            gc.setLineWidth(2);
+            gc.setLineWidth(3);
             gc.setStroke(Color.web("#"+couleur_hex.substring(2,couleur_hex.length())));
             
             for(Chemin chemin : chemins){
@@ -202,6 +208,7 @@ public class VueGraphique extends StackPane implements Observer {
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();
         
+        fenetre.informationEnCours("");
     }
     
     //Test
