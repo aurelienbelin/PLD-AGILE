@@ -22,6 +22,7 @@ public class EcouteurBoutons{
     
     private final Deliverif fenetrePrincipale;
     private final Controleur controleur;
+    private File file;
     
     /**
      *
@@ -94,14 +95,19 @@ public class EcouteurBoutons{
     private String choisirFichier(String docACharger) throws InterruptedException
     {
         FileChooser fileChooser = new FileChooser();
+        //Ouvre fileChooser au dernier dossier
+        if(file != null){
+            File existDirectory = file.getParentFile();
+            fileChooser.setInitialDirectory(existDirectory);
+        }
         fileChooser.setTitle(docACharger);
         fileChooser.getExtensionFilters().addAll(
                         new FileChooser.ExtensionFilter("XML File", "*.xml")
         );
-        File f = Deliverif.openFileChooser(fileChooser);
-        if (f != null) {
+        file = Deliverif.openFileChooser(fileChooser);
+        if (file != null) {
             //On appelle la méthode du controleur devant charger la demande de livraison
-            return f.getAbsolutePath();
+            return file.getAbsolutePath();
         }else{
             return null;
         }
