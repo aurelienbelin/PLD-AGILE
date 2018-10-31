@@ -85,7 +85,7 @@ public class GestionLivraison extends Observable{
             return 0;
         } else {
             setChanged();
-            this.notifyObservers();
+            this.notifyObservers(tournees);
             return 1;
         }
     }
@@ -98,7 +98,7 @@ public class GestionLivraison extends Observable{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.plan = Lecteur.creerPlanVille(fichier);
         setChanged();
-        this.notifyObservers(); //?
+        this.notifyObservers(plan); //?
     }
     
     /**
@@ -109,7 +109,7 @@ public class GestionLivraison extends Observable{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
         setChanged();
-        this.notifyObservers(); //?
+        this.notifyObservers(demande); //?
     }
     
     /**
