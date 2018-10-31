@@ -74,13 +74,13 @@ public class Troncon {
     
     /**
      *
-     * @return
+     * @return La longueur du troncon (en m)
      */
     public float getLongueur(){ return this.longueur; }
 
     /**
      *
-     * @return
+     * @return Le nom du troncon (ex : "Rue Rivoli")
      */
     public String getNom() {
         return nom;

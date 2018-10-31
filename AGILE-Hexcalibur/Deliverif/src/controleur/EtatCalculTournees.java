@@ -8,7 +8,9 @@
  */
 package controleur;
 
-/**
+/** Etat dans lequel se trouve l'application pendant le calcul des tournées
+ *  Permet l'affichage des solutions au fur et à mesure du calcul et l'arrêt du 
+ *  calcul si la solution convient.
  *
  * @author Hex'Calibur
  */

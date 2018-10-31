@@ -362,8 +362,12 @@ public class Deliverif extends Application {
      */
     public void estPlanCharge(String cre) {
         if(("SUCCESS").equals(cre)){
-            boutonChargerPlan.setDisable(true);
+            boutonChargerPlan.setDisable(false);
             boutonChargerDL.setDisable(false);
+            boutonCalculerTournees.setDisable(true);
+            boutonAjouterLivraison.setDisable(true);
+            boutonSupprimerLivraison.setDisable(true);
+            boutonReorganiserTournee.setDisable(true);
             //avertir("Le plan de la ville a bien été chargé");
         }else if(cre!=null){
             this.informationEnCours("");
@@ -380,8 +384,12 @@ public class Deliverif extends Application {
      */
     public void estDemandeLivraisonChargee(String cre){
         if(("SUCCESS").equals(cre)){
-            boutonChargerDL.setDisable(true);
+            boutonChargerPlan.setDisable(false);
+            boutonChargerDL.setDisable(false);
             boutonCalculerTournees.setDisable(false);
+            boutonAjouterLivraison.setDisable(true);
+            boutonSupprimerLivraison.setDisable(true);
+            boutonReorganiserTournee.setDisable(true);
             //avertir("La demande de livraison a bien été chargée");
         }else if(cre!=null){
             this.informationEnCours("");
@@ -398,6 +406,12 @@ public class Deliverif extends Application {
      */
     public void estTourneesCalculees(String cre){
         if(("SUCCESS").equals(cre)){
+            boutonChargerPlan.setDisable(false);
+            boutonChargerDL.setDisable(false);
+            boutonCalculerTournees.setDisable(false);
+            boutonAjouterLivraison.setDisable(false);
+            boutonSupprimerLivraison.setDisable(false);
+            boutonReorganiserTournee.setDisable(true);
             //this.vueGraphique.dessinerTournees();
             //avertir("Calcul des tournées terminé");
         }else{

@@ -9,6 +9,7 @@
 package deliverif;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -37,12 +38,6 @@ public class VueGraphique extends StackPane implements Observer {
     private double echelleLong;
     private double origineLatitude;
     private double origineLongitude;
-    
-    //Etats
-    private boolean init;
-    private boolean planCharge;
-    private boolean dlCharge;
-    private boolean calculRealise;
     
     //Composants
     private Canvas plan;
@@ -74,23 +69,18 @@ public class VueGraphique extends StackPane implements Observer {
         bouton.setLayoutX(0);
         bouton.setLayoutY(0);
         thi.getChildren().add(bouton)*/
-        
-        init = true;     
+            
     }
     
     
     @Override
     public void update(Observable o, Object arg) {
-        if(init==true) {
+        if(arg instanceof modele.outils.PlanVille){
             calculEchelle(gestionLivraison.getPlan().getIntersections());
             dessinerPlan();
-            planCharge = true;
-            init =false;
-        }else if(planCharge==true) {
+        } else if (arg instanceof modele.outils.DemandeLivraison){
             dessinerPtLivraison();
-            dlCharge = true;
-            planCharge = false;
-        }else if(dlCharge==true){
+        } else if (arg instanceof modele.outils.Tournee[]){
             dessinerTournees();
         }
     }
@@ -123,6 +113,21 @@ public class VueGraphique extends StackPane implements Observer {
     
     public void dessinerPlan(){        
         GraphicsContext gc = this.plan.getGraphicsContext2D();
+        gc.clearRect(0, 0, plan.getWidth(), plan.getHeight());
+            
+        GraphicsContext gc1 = this.dl.getGraphicsContext2D();
+        gc1.clearRect(0, 0, dl.getWidth(), dl.getHeight());
+        
+        this.tournees.clear();
+        
+        Iterator<Node> iter = this.getChildren().iterator();
+        while(iter.hasNext()) {
+            Node n = iter.next();
+            if( !n.equals(dl) && !n.equals(plan)){
+                iter.remove();
+            }
+        }
+            
         gc.setStroke(Color.SLATEGREY);
         List <modele.outils.Troncon> troncons = gestionLivraison.getPlan().getTroncons();
                 
@@ -141,6 +146,18 @@ public class VueGraphique extends StackPane implements Observer {
     
     public void dessinerPtLivraison(){
         GraphicsContext gc = this.dl.getGraphicsContext2D();
+        gc.clearRect(0, 0, dl.getWidth(), dl.getHeight());
+        
+        this.tournees.clear();
+        
+        Iterator<Node> iter = this.getChildren().iterator();
+        while(iter.hasNext()) {
+            Node n = iter.next();
+            if( !n.equals(dl) && !n.equals(plan)){
+                iter.remove();
+            }
+        }
+        
         List <modele.outils.PointPassage> livraisons = gestionLivraison.getDemande().getLivraisons();
         
         for(modele.outils.PointPassage livraison : livraisons){
@@ -164,11 +181,15 @@ public class VueGraphique extends StackPane implements Observer {
     
     //Début : 30min + 1h
     public void dessinerTournees(){
+        
         this.tournees.clear();
         
-        for(Node n : this.getChildren()){
-            if(!n.equals(this.bouton) && !n.equals(this.dl) && !n.equals(this.plan))
-                this.getChildren().remove(n);
+        Iterator<Node> iter = this.getChildren().iterator();
+        while(iter.hasNext()) {
+            Node n = iter.next();
+            if( !n.equals(dl) && !n.equals(plan)){
+                iter.remove();
+            }
         }
         
         Tournee[] listeTournees = this.gestionLivraison.getTournees();
