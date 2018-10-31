@@ -88,7 +88,13 @@ public class EcouteurBoutons{
      * @throws InterruptedException
      */
     public void changerTourneeAffichee(ActionEvent e) throws InterruptedException{
-        this.fenetrePrincipale.getVueTextuelle().changerDescriptionAffichee();
+        int i = this.fenetrePrincipale.getVueTextuelle().changerDescriptionAffichee();
+        
+        System.out.println("Tournee n°"+i); //DEBUG
+        
+        if(i!=-1)
+            this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
+        
         //this.fenetrePrincipale.avertir("Description modifiée");
     }
     

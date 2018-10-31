@@ -1,10 +1,10 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome nÂ° 41
  *
- * Projet développé dans le cadre du cours "Conception Orientée Objet
- * et développement logiciel AGILE".
+ * Projet dÃ©veloppÃ© dans le cadre du cours "Conception OrientÃ©e Objet
+ * et dÃ©veloppement logiciel AGILE".
  */
 package deliverif;
 
@@ -98,7 +98,7 @@ public class VueTextuelle extends VBox implements Observer {
     /**
      *
      */
-    public void changerDescriptionAffichee(){
+    public int changerDescriptionAffichee(){
         String s = choixTournee.getSelectionModel().getSelectedItem();
 
         if(s!=null || s.equals("")){
@@ -106,9 +106,12 @@ public class VueTextuelle extends VBox implements Observer {
                 if(contenu.get(i).equals(s)){
                     this.descriptionTournee.setText("");
                     this.descriptionTournee.setText(this.descriptions.get(i));
+                    return i;
                 }
             }
         }
+        
+        return -1;
     }
     
     @Override
@@ -117,7 +120,6 @@ public class VueTextuelle extends VBox implements Observer {
         contenu.clear();
         descriptions.clear();
         this.descriptionTournee.setText("");
-        //Le Label a-t-il été vidé ?
         
         if(this.gestionLivraison.getDemande()!=null){
             DemandeLivraison demande = this.gestionLivraison.getDemande();
@@ -128,10 +130,8 @@ public class VueTextuelle extends VBox implements Observer {
             contenu.add("Demande de livraison");
             while(it.hasNext()){
                 String s = it.next();
-                //des+="\n\t\t<li>"+s+"</li>";
                 des+="\n\t"+s;
             }
-            //des+="\n\t</ul>\n</html>";
 
             descriptions.add(des);
             
@@ -142,8 +142,7 @@ public class VueTextuelle extends VBox implements Observer {
             Tournee[] tournees = this.gestionLivraison.getTournees();
             
             String des;
-            if(tournees.length!=0){ //!tournees.isEmpty()){
-                //des="<html>\n\t<ul>";
+            if(tournees.length!=0){
                 int i = 1;
                 for(Tournee t : tournees){
                     des="";
@@ -151,10 +150,8 @@ public class VueTextuelle extends VBox implements Observer {
                     contenu.add("Tournée "+i);
                     while(it.hasNext()){
                         String s = it.next();
-                        //des+="\n\t\t<li>"+s+"</li>";
                         des+="\n\t"+s;
                     }
-                    //des+="\n\t</ul>\n</html>";
 
                     descriptions.add(des);
                     i++;

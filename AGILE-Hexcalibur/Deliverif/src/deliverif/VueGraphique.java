@@ -232,6 +232,14 @@ public class VueGraphique extends StackPane implements Observer {
         fenetre.informationEnCours("");
     }
     
+    public void changerTourneeAffichee(int numTournee){
+        for(int i=0;i<this.tournees.size();i++){
+            this.tournees.get(i).setVisible(true);
+            if(numTournee!=0 && i!=numTournee-1)
+                this.tournees.get(i).setVisible(false);
+        }
+    }
+    
     //Test
     private void activerBouton(){
         bouton.setOnAction(new EventHandler<ActionEvent>() {
