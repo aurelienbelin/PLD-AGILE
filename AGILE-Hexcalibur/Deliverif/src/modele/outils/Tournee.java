@@ -37,7 +37,7 @@ public class Tournee {
     /**
      * @return - La suite ordonné des trajets
      */
-    protected List<Chemin> getTrajet() {
+    public List<Chemin> getTrajet() {
         return trajet;
     }
     
