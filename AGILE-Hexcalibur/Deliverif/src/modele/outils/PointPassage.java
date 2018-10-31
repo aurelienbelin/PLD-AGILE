@@ -39,7 +39,7 @@ public class PointPassage {
     
     /**
      *
-     * @return
+     * @return true si ce point de passage est l'entrepot, false si point de livraison.
      */
     protected boolean estEntrepot() {
         return entrepot;
@@ -47,7 +47,7 @@ public class PointPassage {
 
     /**
      *
-     * @return
+     * @return L'intersection localisant le point de passage.
      */
     public Intersection getPosition() {
         return position;
@@ -55,7 +55,7 @@ public class PointPassage {
 
     /**
      *
-     * @return
+     * @return La durée que l'on doit passer sur ce point de passage.
      */
     protected float getDuree() {
         return duree;

@@ -8,10 +8,11 @@
  */
 package modele.outils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /** Un chemin représente une liste de tronçons, il est caractérisé par son début et sa fin.
  * @version 1.0 23/10/2018
@@ -122,28 +123,33 @@ public class Chemin {
      */
     protected List<String> getDescription(Calendar heureDepart){
         List<String> etapes = new ArrayList<String>();
-        etapes.add("("+heureDepart.get(Calendar.HOUR_OF_DAY)+"h"+
-                heureDepart.get(Calendar.MINUTE)+") Depart"+
+        String heure = new SimpleDateFormat("HH:mm").format(heureDepart.getTime());
+        etapes.add("("+heure+") Depart"+
                 (this.debut.estEntrepot()? " de l'entrepot." : " du point de livraison"));
         String dernierNom="";
         float longueur=0f;
         for(Troncon c : this.troncons){
             longueur+=c.getLongueur();
             if(!c.getNom().equals(dernierNom)){
-                etapes.add("Traverser : "+dernierNom+" pendant "+longueur+" m.");
-                etapes.add("Tourner à : "+c.getNom());
+                etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue anonyme" : dernierNom)+" pendant "+(10*(int)(longueur/10))+" m.");
+                etapes.add("Tourner à : "+(c.getNom().equals("") ? "Rue anonyme" : c.getNom()));
                 dernierNom=c.getNom();
             }
         }
-        etapes.add("Traverser : "+dernierNom+" pendant "+longueur+" m.");
+        etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue anonyme" : dernierNom)+" pendant "+(10*(int)(longueur/10))+" m.");
         heureDepart.add(Calendar.SECOND, (int)this.getDuree());
+        
+        heure = new SimpleDateFormat("HH:mm").format(heureDepart.getTime());
         etapes.add("Arriver "+(this.fin.estEntrepot()? "à l'entrepot." :" au point de livraison")+"("+
-                heureDepart.get(Calendar.HOUR_OF_DAY)+"h"+heureDepart.get(Calendar.MINUTE)+
+                heure+
                 ").");
 
         return etapes;
     }
     
+    /**
+     * @return L'ensemble des troncons (routes/rues) composant ce chemin.
+     */
     public List<Troncon> getTroncons(){
         return this.troncons;
     }

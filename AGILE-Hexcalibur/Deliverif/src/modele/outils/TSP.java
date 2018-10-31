@@ -38,4 +38,10 @@ public interface TSP {
 	 * @return la duree de la solution calculee par chercheSolution
 	 */
 	public int getCoutMeilleureSolution();
+        
+        /**
+         * Cette methode doit etre implementee pour interrompre le calcul
+         * branchAndBound a n'importe quel instant !
+         */
+        public void arreterCalcul();
 }
