@@ -16,6 +16,8 @@ import modele.flux.LecteurXML;
 import org.xml.sax.SAXException;
 
 /** 
+ * Point d'entrée du contrôleur. Permet à l'application d'accéder de manière
+ * sécurisée aux objets composant le modèle.
  * @version 1.0 23/10/2018
  * @author Louis Ohl
  */
@@ -24,6 +26,7 @@ public class GestionLivraison extends Observable{
     private PlanVille plan;
     private Tournee[] tournees;
     private DemandeLivraison demande;
+    private TSP tsp;
     
     /**
      * Créer une nouvelle GestionLivraison
@@ -48,7 +51,7 @@ public class GestionLivraison extends Observable{
             int j = listePoints.indexOf(c.getFin());
             cout[i][j]=(int)c.getDuree();
         }
-        TSPGlouton tsp = new TSPGlouton(nbLivreur);
+        tsp = new TSPGlouton(nbLivreur);
         tsp.chercheSolution(Integer.MAX_VALUE, listePoints.size(), nbLivreur, cout);
         List<Tournee> listeTournee = new ArrayList<Tournee>(nbLivreur);
         this.tournees = new Tournee[nbLivreur];
@@ -82,12 +85,20 @@ public class GestionLivraison extends Observable{
         listeTournee.toArray(this.tournees);
         
         if(this.tournees==null){
+            System.out.println("ALERTE GOGOL");
             return 0;
         } else {
             setChanged();
             this.notifyObservers();
             return 1;
         }
+    }
+    
+    /**
+     * Interrompt le calcul en cours du TSP.
+     */
+    public void arreterCalculTournee(){
+        tsp.arreterCalcul();
     }
     
     /**
@@ -98,7 +109,7 @@ public class GestionLivraison extends Observable{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.plan = Lecteur.creerPlanVille(fichier);
         setChanged();
-        this.notifyObservers(); //?
+        this.notifyObservers();
     }
     
     /**
@@ -109,7 +120,7 @@ public class GestionLivraison extends Observable{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
         setChanged();
-        this.notifyObservers(); //?
+        this.notifyObservers();
     }
     
     /**

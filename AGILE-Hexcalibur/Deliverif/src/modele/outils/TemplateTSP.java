@@ -22,6 +22,7 @@ public abstract class TemplateTSP implements TSP {
 	private int coutMeilleureSolution = 0;
 	private Boolean tempsLimiteAtteint;
         protected int nombreFictif;
+        private Boolean arretCalcul;
         
         
 	
@@ -38,6 +39,7 @@ public abstract class TemplateTSP implements TSP {
 		ArrayList<Integer> vus = new ArrayList<Integer>(nbSommets);
 		vus.add(0); // le premier sommet visite est 0
                 this.nombreFictif=0;
+                this.arretCalcul=false;
 		branchAndBound(0, nonVus, vus, 0, cout, System.currentTimeMillis(), tpsLimite);
 	}
 	
@@ -82,7 +84,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */	
         protected void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, int coutVus, int[][] cout, long tpsDebut, int tpsLimite){
-            if (System.currentTimeMillis() - tpsDebut > tpsLimite){
+            if (System.currentTimeMillis() - tpsDebut > tpsLimite || arretCalcul){
                     tempsLimiteAtteint = true;
                     return;
             }
@@ -114,6 +116,10 @@ public abstract class TemplateTSP implements TSP {
                 }
 	    }
 	}
+        
+        public void arreterCalcul(){
+            this.arretCalcul=true;
+        }
          
 }
 
