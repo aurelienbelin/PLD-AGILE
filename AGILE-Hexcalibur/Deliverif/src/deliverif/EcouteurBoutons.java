@@ -46,8 +46,9 @@ public class EcouteurBoutons{
         String nomFichier = choisirFichier("Choisir le plan à charger");
         if(nomFichier != null)
         {
-            this.fenetrePrincipale.informationEnCours("Chargement du plan...");
             controleur.boutonChargePlan(nomFichier);
+        }else{
+            this.fenetrePrincipale.informationEnCours("");
         }
     }
     
@@ -65,6 +66,8 @@ public class EcouteurBoutons{
         if(nomFichier != null)
         {
             controleur.boutonChargeLivraisons(nomFichier);
+        }else{
+            this.fenetrePrincipale.informationEnCours("");
         }
     }
 

@@ -124,9 +124,9 @@ public class VueTextuelle extends VBox implements Observer {
             String des;
             if(tournees.length!=0){ //!tournees.isEmpty()){
                 //des="<html>\n\t<ul>";
-                des=new String("");
                 int i = 1;
                 for(Tournee t : tournees){
+                    des="";
                     Iterator<String> it = t.getDescription();
                     contenu.add("Tournée "+i);
                     while(it.hasNext()){
