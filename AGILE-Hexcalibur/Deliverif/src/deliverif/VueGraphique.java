@@ -40,6 +40,7 @@ public class VueGraphique extends StackPane implements Observer {
     private double origineLongitude;
     
     //Composants
+    private final Color[] couleurs = {Color.BLUEVIOLET, Color.BROWN, Color.CHARTREUSE,Color.CORAL,Color.CRIMSON,Color.DARKBLUE, Color.DARKGREEN, Color.DEEPPINK, Color.GOLD, Color.LIGHTSALMON};
     private Canvas plan;
     private Canvas dl;
     private ArrayList<Canvas> tournees;
@@ -195,8 +196,9 @@ public class VueGraphique extends StackPane implements Observer {
         Tournee[] listeTournees = this.gestionLivraison.getTournees();
         
         Canvas canvasTemp;
+        int nCouleur=0;
         
-        for(Tournee tournee : listeTournees){  
+        for(Tournee tournee : listeTournees){
             //On créée un nouveau Canvas par tournée
             canvasTemp = new Canvas(this.getWidth(),this.getHeight());
             GraphicsContext gc = canvasTemp.getGraphicsContext2D();
@@ -204,10 +206,12 @@ public class VueGraphique extends StackPane implements Observer {
             List<Chemin> chemins = tournee.getTrajet();
             
             //Changer de couleur
-            int couleur = (int)(Math.random()*0xFFFFFF);
+            /*int couleur = (int)(Math.random()*0xFFFFFF);
             String couleur_hex = Integer.toHexString(couleur);
             gc.setLineWidth(3);
-            gc.setStroke(Color.web("#"+couleur_hex.substring(2,couleur_hex.length())));
+            gc.setStroke(Color.web("#"+couleur_hex.substring(2,couleur_hex.length())));*/
+            gc.setLineWidth(3);
+            gc.setStroke(couleurs[nCouleur]);
             
             for(Chemin chemin : chemins){
                 List<Troncon> troncons = chemin.getTroncons();
@@ -223,6 +227,7 @@ public class VueGraphique extends StackPane implements Observer {
             }
             
             this.tournees.add(canvasTemp);
+            nCouleur++;
         }
         
         this.getChildren().addAll(this.tournees);
@@ -232,6 +237,10 @@ public class VueGraphique extends StackPane implements Observer {
         fenetre.informationEnCours("");
     }
     
+    /**
+     * 
+     * @param numTournee 
+     */
     public void changerTourneeAffichee(int numTournee){
         for(int i=0;i<this.tournees.size();i++){
             this.tournees.get(i).setVisible(true);

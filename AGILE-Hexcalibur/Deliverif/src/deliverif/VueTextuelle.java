@@ -101,7 +101,7 @@ public class VueTextuelle extends VBox implements Observer {
     public int changerDescriptionAffichee(){
         String s = choixTournee.getSelectionModel().getSelectedItem();
 
-        if(s!=null || s.equals("")){
+        if(s!=null || "".equals(s)){
             for(int i=0;i<contenu.size();i++){
                 if(contenu.get(i).equals(s)){
                     this.descriptionTournee.setText("");
@@ -109,11 +109,17 @@ public class VueTextuelle extends VBox implements Observer {
                     return i;
                 }
             }
-        }
+        }else
+            this.descriptionTournee.setText("");
         
         return -1;
     }
     
+    /**
+     * 
+     * @param o
+     * @param arg 
+     */
     @Override
     public void update(Observable o, Object arg) {
         //choixTournee.getItems().clear();
