@@ -70,7 +70,9 @@ public class Controleur {
         this.fenetre = fenetre;
     }
     
-    /**@param fichier
+    /** * @param fichier
+     * @throws org.xml.sax.SAXException
+     * @throws java.io.IOException
      * @see Etat
      * @version 1
      */
@@ -78,7 +80,9 @@ public class Controleur {
         etatCourant.chargePlan(gestionLivraison, fichier, fenetre);
     }
     
-    /**@param fichier
+    /** * @param fichier
+     * @throws org.xml.sax.SAXException
+     * @throws java.io.IOException
      * @see Etat
      * @version 1
      */
@@ -93,6 +97,7 @@ public class Controleur {
     public void boutonCalculerTournees (int nbLivreurs){
         etatCourant.calculerTournees(gestionLivraison, nbLivreurs, fenetre);
     }
+    
 
 }
 

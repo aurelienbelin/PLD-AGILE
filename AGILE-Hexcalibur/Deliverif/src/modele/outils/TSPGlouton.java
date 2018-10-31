@@ -13,19 +13,24 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Ceci est une première implémentation (partiellement fausse) du TSP.
+ * Elle s'appelle Glouton car elle utilise un pseudo-DFS en tant qu'heuristique,
+ * c'est-à-dire pas une réelle heuristique. En effet, la fonction bound
+ * peut renvoyer une valeur supérieure au chemin optimal.
+ * En résumé, la stratégie gloutonne consiste à visiter en priorité les plus
+ * proches voisins.
  * @version 1.0 23/10/2018
  * @author Louis Ohl
  */
 public class TSPGlouton extends TemplateTSP {
 
     private int nbLivreur;
-    //Liste contenant les sommets que l'on visite apres l'entrepot
-    //Sert a casser les symetries.
 
     
     /**
-     *
-     * @param nbLivreur
+     * Construit une nouvelle instance pour résoudre un TSP.
+     * @param nbLivreur - Le nombre de livreur qui se partageront les points
+     * de livraisons.
      */
     public TSPGlouton(int nbLivreur){
         this.nbLivreur=nbLivreur;
@@ -57,7 +62,7 @@ public class TSPGlouton extends TemplateTSP {
          * Si ce n'est pas le cas :
          * on renvoie une valeur trop elevee (coutMeilleureSolution)
          * sinon :
-         * On réalise dans un dfs pour obtenir une approximation
+         * On réalise un pseudo-dfs pour obtenir une approximation
          * du parcours de noeud.
          * Nous avons la garantie que cette solution sera nécessairement inférieure
          * à la solution optimale puisqu'elle ne prend pas en compte les allers-retours

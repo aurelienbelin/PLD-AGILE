@@ -58,4 +58,5 @@ public class EtatDefaut implements Etat
     @Override
     public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
     }
+
 }

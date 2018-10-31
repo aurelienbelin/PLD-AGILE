@@ -37,7 +37,7 @@ public class Tournee {
     /**
      * @return - La suite ordonné des trajets
      */
-    protected List<Chemin> getTrajet() {
+    public List<Chemin> getTrajet() {
         return trajet;
     }
     
@@ -108,7 +108,7 @@ public class Tournee {
             sousDescription.addAll(c.getDescription(this.heureDepart));
         }
         sousDescription.add("Fin de la tournée");
-        this.heureDepart.add(Calendar.SECOND, (int)this.getTempsTournee());//retablir l'objet partagé heureDepart
+        this.heureDepart.add(Calendar.SECOND, -(int)this.getTempsTournee());//retablir l'objet partagé heureDepart
         return sousDescription.iterator();
     }
 

@@ -24,8 +24,8 @@ public class IteratorSeq implements Iterator<Integer> {
 
 	/**
 	 * Cree un iterateur pour iterer sur l'ensemble des sommets de nonVus
-	 * @param nonVus
-	 * @param sommetCrt
+	 * @param nonVus - L'ensemble des sommets nonVus.
+	 * @param sommetCrt - Le sommet ou nous nous trouvons actuellement.
 	 */
 	public IteratorSeq(Collection<Integer> nonVus, int sommetCrt){
 		this.candidats = new Integer[nonVus.size()];

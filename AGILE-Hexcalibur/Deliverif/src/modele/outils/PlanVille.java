@@ -71,12 +71,13 @@ public class PlanVille {
     }
     
     /**
-     * @param p
-     * @return
+     * Réalise l'algorithme de Dijkstra au départ d'un point donné.
+     * @param p - Le PointPassage duquel l'algorithme doit partir.
+     * @return Une HashMap réalisation le hashage suivant : Intersection i1 => (i2,v)
+     * où i2 est l'Intersection précédente et v un float représent le cout pour aller de
+     * p à i1.
      */
     protected Map<Intersection, Pair<Intersection, Float>> dijkstra(PointPassage p){
-        
-        //List<Intersection> nonVus = new ArrayList();
         
         
         List<List<Troncon>> resultat = new ArrayList<List<Troncon>>();
@@ -135,9 +136,13 @@ public class PlanVille {
     }
     
     /**
-     *
-     * @param listePoints
-     * @return
+     * Réalise l'algorithme de Dijkstra pour chaque points de passage, ce afin
+     * de construire un graphe fortement connexe.
+     * @param listePoints - L'ensemble des points de passage (livraison & entrepot)
+     * par où on doit passer.
+     * @return Une List de Chemin. Il est garanti que la liste sera de taille n² avec
+     * n le nombre de point de passage. Dans cette liste, il existe toujours un unique
+     * chemin menant de n_i à n_j, ce chemin étant le plus court possible dans la ville.
      */
     protected List<Chemin> dijkstraTousPoints(List<PointPassage> listePoints){
         List<Chemin> graph = new ArrayList<Chemin>();
