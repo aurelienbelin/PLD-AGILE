@@ -29,12 +29,12 @@ public class EtatInit extends EtatDefaut{
       *  l'EtatPlanCharge 
       *  @param gestionLivraison
       *  @param fichier
-     * @param fenetre
+      *  @param fenetre
       *  @see modele.GestionLivraison
       *  @see EtatPlanCharge
      */
     @Override
-    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
+    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
             gestionLivraison.chargerPlan(fichier);
             Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;

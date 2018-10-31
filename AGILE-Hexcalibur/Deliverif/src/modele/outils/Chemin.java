@@ -143,4 +143,8 @@ public class Chemin {
 
         return etapes;
     }
+    
+    public List<Troncon> getTroncons(){
+        return this.troncons;
+    }
 }
