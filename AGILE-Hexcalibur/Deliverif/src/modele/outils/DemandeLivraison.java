@@ -8,8 +8,12 @@
  */
 package modele.outils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Une DemandeLivraison liste l'ensemble des points que l'on aimerait livrer,
@@ -77,5 +81,34 @@ public class DemandeLivraison {
      */
     protected Calendar getHeureDepart(){
         return this.heureDepart;
+    }
+    
+    /**
+     * méthode d'ajout d'une nouvelle livraison
+     * @param nouvelleLivraison 
+     */
+    public void ajouterLivraison(PointPassage nouvelleLivraison){
+        this.livraisons.add(nouvelleLivraison);
+    }
+    
+    /**
+     * Annulation ou suppression d'une demande de la livraison
+     * @param livraisonAnnulee 
+     */
+    public void annulerLivraison(PointPassage livraisonAnnulee){
+        this.livraisons.remove(livraisonAnnulee);
+    }
+    
+    /**
+     * 
+     * @return La description de la livraison
+     */
+    public Iterator<String> getDescription(){
+        List<String> sousDescription = new ArrayList<String>();
+        for(PointPassage pp : this.livraisons){
+            sousDescription.add("Livraison à "+pp.getPosition().getTroncon(0).getNom() + " pour une durée de "+(int)(pp.getDuree()/60)+" minutes");
+        }
+        sousDescription.add("Fin de la demande");
+        return sousDescription.iterator();
     }
 }
