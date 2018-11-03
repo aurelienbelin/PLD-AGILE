@@ -9,8 +9,11 @@
 package modele.outils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
+import javafx.util.Pair;
 
 /**
  * Ce TSP implémente une heuristique assez simple, ainsi qu'un itérateur
@@ -29,27 +32,47 @@ public class TSPMinCFC extends TemplateTSP{
      */
     public TSPMinCFC(int nbLivreur){
         this.nbLivreur=nbLivreur;
-        this.nombreFictif=0;
     }
     
     @Override
     protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
+        
+        
         /*
         Pour faire simple, on sait que l'ensemble des nonVus formera toujours
         une CFC.
         Etant donné que nous devons parcourir l'ensemble des sommets nonVus
-        une fois chacun, une borne inférieur du chemin optimal est le cout
-        du plus petit arc multiplié par la taille de nonVus.
+        une fois chacun (n sommets), une borne inférieur du chemin optimal est
+        la somme des n-1 plus petits arc restants.
         */
-        int minimum=Integer.MAX_VALUE;
+        if (nonVus.size()<=1){
+            return 0;
+        }
+        PriorityQueue<Pair<Integer, Integer>> file = new PriorityQueue<Pair<Integer,Integer>>(nonVus.size()*nonVus.size(),
+            new Comparator<Pair<Integer, Integer>>(){
+                @Override
+                public int compare(Pair<Integer,Integer> p1, Pair<Integer,Integer> p2){
+                    if (cout[p1.getKey()][p1.getValue()]<cout[p2.getKey()][p2.getValue()]){
+                        return -1;
+                    } else if (cout[p1.getKey()][p1.getValue()]>cout[p2.getKey()][p2.getValue()]){
+                        return 1;
+                    }
+                    return 0;
+                }
+            });
         for(Integer depart : nonVus){
             for(Integer arrivee : nonVus){
-                if (arrivee!=depart && cout[depart][arrivee]<minimum){
-                    minimum=cout[depart][arrivee];
+                if (arrivee!=depart){
+                    file.add(new Pair<Integer,Integer>(depart, arrivee));
                 }
             }
         }
-        return minimum*nonVus.size();
+        int somme=0;
+        for(int i=0; i<nonVus.size()-1; i++){
+            Pair<Integer,Integer> p = file.poll();
+            somme+=cout[p.getKey()][p.getValue()];
+        }
+        return somme;
     }
 
     @Override
@@ -57,13 +80,25 @@ public class TSPMinCFC extends TemplateTSP{
         //Si on a parcouru total_sommet/livreur, alors on renvoie un itérateur
         //renvoyant à l'entrepot fictif, sinon on laisse un itérateur vers
         //les sommets non vus.
-        int quantiteSommet = (cout.length-1)/this.nbLivreur;
+        //Si on a parcouru total_sommet/livreur, alors on renvoie un itérateur
+        //renvoyant à l'entrepot fictif, sinon on laisse un itérateur vers
+        //les sommets non vus.
         //-1 car on ne compte pas le sommet entrepot
-        if ((cout.length-1-nonVus.size())%quantiteSommet==0 && sommetCrt!=0 && this.nombreFictif!=this.nbLivreur-1){
+        
+        int quantiteSommet = (cout.length-1)/this.nbLivreur;
+        if (this.quantiteTournee==quantiteSommet+1){
+            //Il est temps d'aller à l'entrepot virtuel
             List<Integer> aVoir = new ArrayList<Integer>();
             aVoir.add(0);
-            return new IteratorSeq(aVoir, sommetCrt);
+            return new IteratorSeq(aVoir, sommetCrt); 
+        } else if (this.quantiteTournee==quantiteSommet){
+            //On a vu le minimum de noeud possible par livreur, peut-être un de plus ?
+            List<Integer> aVoir = new ArrayList<Integer>();
+            aVoir.add(0);
+            aVoir.addAll(nonVus);
+            return new IteratorMin(aVoir, sommetCrt, cout);
         } else {
+            //Il n'est pas encore temps d'aller voir un entrepot virtuel
             return new IteratorMin(nonVus, sommetCrt, cout);
         }
     }
