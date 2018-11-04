@@ -34,7 +34,6 @@ public class TSPGlouton extends TemplateTSP {
      */
     public TSPGlouton(int nbLivreur){
         this.nbLivreur=nbLivreur;
-        this.nombreFictif=0;
     }
 
     @Override
@@ -42,13 +41,22 @@ public class TSPGlouton extends TemplateTSP {
         //Si on a parcouru total_sommet/livreur, alors on renvoie un itérateur
         //renvoyant à l'entrepot fictif, sinon on laisse un itérateur vers
         //les sommets non vus.
-        int quantiteSommet = (cout.length-1)/this.nbLivreur;
         //-1 car on ne compte pas le sommet entrepot
-        if ((cout.length-1-nonVus.size())%quantiteSommet==0 && sommetCrt!=0 && this.nombreFictif!=this.nbLivreur-1){
+        
+        int quantiteSommet = (cout.length-1)/this.nbLivreur;
+        if (this.quantiteTournee==quantiteSommet+1){
+            //Il est temps d'aller à l'entrepot virtuel
             List<Integer> aVoir = new ArrayList<Integer>();
             aVoir.add(0);
-            return new IteratorSeq(aVoir, sommetCrt);
+            return new IteratorSeq(aVoir, sommetCrt); 
+        } else if (this.quantiteTournee==quantiteSommet){
+            //On a vu le minimum de noeud possible par livreur, peut-être un de plus ?
+            List<Integer> aVoir = new ArrayList<Integer>();
+            aVoir.add(0);
+            aVoir.addAll(nonVus);
+            return new IteratorMin(aVoir, sommetCrt, cout);
         } else {
+            //Il n'est pas encore temps d'aller voir un entrepot virtuel
             return new IteratorMin(nonVus, sommetCrt, cout);
         }
     }
@@ -56,37 +64,18 @@ public class TSPGlouton extends TemplateTSP {
 
     @Override
     protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
-        /**
-         * Dans un premier temps, est-ce qu'on verifie la condition suivante :
-         * premier sommet de la tournee i > premier sommet des tournees i-1
-         * Si ce n'est pas le cas :
-         * on renvoie une valeur trop elevee (coutMeilleureSolution)
-         * sinon :
-         * On réalise un pseudo-dfs pour obtenir une approximation
+        
+        /* On réalise un pseudo-dfs pour obtenir une approximation
          * du parcours de noeud.
          * Nous avons la garantie que cette solution sera nécessairement inférieure
          * à la solution optimale puisqu'elle ne prend pas en compte les allers-retours
          * vers les entrepots fictifs.
          */
-        int premierSommet=0;
-        boolean apresZero=false;
-        for (Integer sommet : vus){
-            if (apresZero){
-                apresZero=false;
-                if (sommet<=premierSommet){
-                    return this.getCoutMeilleureSolution();
-                } else {
-                    premierSommet=sommet;
-                }
-            }
-            if (sommet==0){
-                apresZero=true;
-            }
-        }
+        
+        
         ArrayList<Integer> aVoir = new ArrayList<Integer>(nonVus);
         int resultat=0;
         while(!aVoir.isEmpty()){
-
             Integer suivant=aVoir.get(0);
             for(Integer elt : aVoir){
 
