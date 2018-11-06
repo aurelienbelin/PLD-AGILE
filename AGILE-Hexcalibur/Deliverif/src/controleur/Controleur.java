@@ -97,6 +97,11 @@ public class Controleur {
     public void boutonCalculerTournees (int nbLivreurs){
         etatCourant.calculerTournees(gestionLivraison, nbLivreurs, fenetre);
     }
+
+    //Test
+    public void afficherMarqueur(deliverif.DescriptifChemin point) {
+        etatCourant.trouverLocalisation(this.gestionLivraison, point, this.fenetre);
+    }
     
 
 }
