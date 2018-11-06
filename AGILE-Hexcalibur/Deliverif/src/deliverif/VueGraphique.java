@@ -219,26 +219,20 @@ public class VueGraphique extends StackPane implements Observer {
      * Dessine les tournées à effectuer pour desservir tous les points de livraison préalablement affichée sur le plan.
      */
     public void dessinerTournees(){
-        
-        this.tournees.clear();
-        
-        Iterator<Node> iter = this.getChildren().iterator();
-        while(iter.hasNext()) {
-            Node n = iter.next();
-            if( !n.equals(dl) && !n.equals(plan)){
-                iter.remove();
-            }
-        }
+        System.out.println("Je commence à dessiner les tournées !");
         
         Tournee[] listeTournees = this.gestionLivraison.getTournees();
         
-        Canvas canvasTemp;
+        //Canvas canvasTemp;
         int nCouleur=0;
+        int i=0;
         
         for(Tournee tournee : listeTournees){
             //On créée un nouveau Canvas par tournée
-            canvasTemp = new Canvas(this.getWidth(),this.getHeight());
-            GraphicsContext gc = canvasTemp.getGraphicsContext2D();
+            //canvasTemp = new Canvas(this.getWidth(),this.getHeight());
+            //GraphicsContext gc = canvasTemp.getGraphicsContext2D();
+            GraphicsContext gc = this.tournees.get(i).getGraphicsContext2D();
+            gc.clearRect(0, 0, this.getWidth(), this.getHeight());
             
             List<Chemin> chemins = tournee.getTrajet();
             
@@ -263,16 +257,40 @@ public class VueGraphique extends StackPane implements Observer {
                 }
             }
             
-            this.tournees.add(canvasTemp);
+            //this.tournees.add(canvasTemp);
+            i++;
             nCouleur++;
+        }
+        
+        /*this.getChildren().addAll(this.tournees);
+        this.getChildren().get(0).toBack();
+        this.getChildren().get(1).toFront();
+        this.getChildren().add(this.marker);*/
+        
+        fenetre.informationEnCours("");
+        System.out.println("J'ai fini les tournées !");
+    }
+    
+    public void creerCalques(int nb){
+        this.tournees.clear();
+        
+        Iterator<Node> iter = this.getChildren().iterator();
+        while(iter.hasNext()) {
+            Node n = iter.next();
+            if( !n.equals(dl) && !n.equals(plan)){
+                iter.remove();
+            }
+        }
+        
+        for(int i=0;i<nb;i++){
+            Canvas canvasTemp = new Canvas(this.getWidth(),this.getHeight());
+            this.tournees.add(canvasTemp);
         }
         
         this.getChildren().addAll(this.tournees);
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();
         this.getChildren().add(this.marker);
-        
-        fenetre.informationEnCours("");
     }
     
     /**
