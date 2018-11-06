@@ -15,8 +15,10 @@ import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
 
 /**
- *
+ * Ecouteur des évènements émis par l'IHM de l'application.
  * @author Aurelien Belin
+ * @see Deliverif
+ * @see Controleur
  */
 public class EcouteurBoutons{
     
@@ -25,9 +27,11 @@ public class EcouteurBoutons{
     private File file;
     
     /**
-     *
-     * @param f
-     * @param c
+     * Constructeur d'EcouteurBoutons
+     * @param f - fenetre principale de l'application
+     * @param c - Controleur de l'application
+     * @see Deliverif
+     * @see Controleur
      */
     public EcouteurBoutons(Deliverif f, Controleur c){
         this.fenetrePrincipale = f;
@@ -35,61 +39,89 @@ public class EcouteurBoutons{
     }
     
     /**
-     *
-     * @param e
+     * Appelle le chargement du plan dans le controleur.
+     * @param e - ActionEvent déclenché
      * @throws InterruptedException
-     * @throws java.io.IOException
+     * @throws IOException
+     * @throws Exception 
      */
-
     public void chargerPlanAction(ActionEvent e) throws InterruptedException, IOException, Exception{
-        //System.out.println("Choisir un plan à charger"); //DEBUG
+        this.fenetrePrincipale.informationEnCours("Chargement du plan...");
         String nomFichier = choisirFichier("Choisir le plan à charger");
         if(nomFichier != null)
         {
             controleur.boutonChargePlan(nomFichier);
+        }else{
+            this.fenetrePrincipale.informationEnCours("");
         }
     }
     
     /**
-     *
+     * Appelle le chargement de la demande de livraison dans le controleur.
      * @param e
      * @throws InterruptedException
-     * @throws java.io.IOException
+     * @throws IOException
+     * @throws Exception 
      */
-
     public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException, IOException, Exception{
         //System.out.println("Choisir une demande de livraison à charger"); //DEBUG
+        this.fenetrePrincipale.informationEnCours("Chargement de la demande de livraison...");
         String nomFichier = choisirFichier("Choisir la demande de livraison à charger");
         if(nomFichier != null)
         {
             controleur.boutonChargeLivraisons(nomFichier);
+        }else{
+            this.fenetrePrincipale.informationEnCours("");
         }
     }
 
     /**
-     *
+     * Appelle le calcule des tournées dans le controleur.
      * @param e
      * @throws InterruptedException
      */
     public void calculerTourneesAction(ActionEvent e) throws InterruptedException{
-        //System.out.println(fenetrePrincipale.getNbLivreurs());
+        //System.out.println(fenetrePrincipale.getNbLivreurs()); //DEBUG
+        //this.fenetrePrincipale.informationEnCours("Calcul des tournées...");
         controleur.boutonCalculerTournees(fenetrePrincipale.getNbLivreurs());
     }
 
     /**
-     *
+     * Modifie les tournées affichées dans les Vues de l'IHM.
      * @param e
      * @throws InterruptedException
      */
     public void changerTourneeAffichee(ActionEvent e) throws InterruptedException{
-        this.fenetrePrincipale.getVueTextuelle().changerDescriptionAffichee();
-        //this.fenetrePrincipale.avertir("Description modifiée");
+        //int i = this.fenetrePrincipale.getVueTextuelle().changerDescriptionAffichee();
+        
+        int i = this.fenetrePrincipale.getVueTextuelle().changerDescription_Bis();
+        
+        //System.out.println("Tournee n°"+i); //DEBUG
+        
+        if(i!=-1)
+            this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
     }
     
     /**
-     * 
+     * Envoie une requête au controleur pour connaitre la localisation du point de livraison associé au composant DescriptifChemin.
+     * @param dc 
+     */
+    public void localiserPointVueGraphique(DescriptifChemin dc){
+        controleur.afficherMarqueur(dc);
+    }
+    
+    /**
+     * Devellope les détails du DescriptifChemin passé en paramètre.
+     * @param dc 
+     */
+    public void obtenirDetailsVueTextuelle(DescriptifChemin dc){
+        dc.developperDetails();
+    }
+    
+    /**
+     * Crée un objet donnat accès au Gestionnaire de fichier pour choisir un fichier à charger.
      * @param docACharger
-     * @return
+     * @return URL du fichier choisi
      * @throws InterruptedException 
      */
     private String choisirFichier(String docACharger) throws InterruptedException

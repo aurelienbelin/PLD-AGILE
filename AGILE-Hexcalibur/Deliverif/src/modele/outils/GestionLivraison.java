@@ -124,6 +124,16 @@ public class GestionLivraison extends Observable{
         this.notifyObservers(demande); //?
     }
     
+    //Test
+    public Intersection identifierPointPassage(String point){
+        String[] identifiants = point.split("_");
+        
+        int numTournee = Integer.parseInt(identifiants[0]);
+        int numLivraison = Integer.parseInt(identifiants[1]);
+        
+        return this.tournees[numTournee-1].getPointPassage(numLivraison-1).getPosition();        
+    }
+    
     /**
      *
      * @return - Le plan de la Ville
