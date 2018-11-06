@@ -52,7 +52,7 @@ public class TSPSimple extends TemplateTSP{
 
 
     @Override
-    protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
+    protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout, int nombreEntrepot) {
         
         return 0;
     }
