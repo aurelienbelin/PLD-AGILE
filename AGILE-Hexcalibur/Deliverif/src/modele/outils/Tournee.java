@@ -8,6 +8,7 @@
  */
 package modele.outils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -111,6 +112,27 @@ public class Tournee {
         this.heureDepart.add(Calendar.SECOND, -(int)this.getTempsTournee());//retablir l'objet partagé heureDepart
         return sousDescription.iterator();
     }
+    
+    //Test
+    public Iterator<List<String>> getDescription_Bis(){
+        List<List<String>> sousDescription = new ArrayList<>();
+        
+        for(Chemin c : this.trajet){
+            sousDescription.add(c.getDescription_Bis(this.heureDepart));
+        }
+        
+        List<String> s = new ArrayList<>();
+        s.add(new SimpleDateFormat("HH:mm").format(heureDepart.getTime()));
+        s.add(""+0);
+        s.add("Entrepôt");
+        
+        sousDescription.add(s);
+        
+        this.heureDepart.add(Calendar.SECOND, -(int)this.getTempsTournee());//retablir l'objet partagé heureDepart
+        
+        return sousDescription.iterator();
+    }
 
+    
     
 }

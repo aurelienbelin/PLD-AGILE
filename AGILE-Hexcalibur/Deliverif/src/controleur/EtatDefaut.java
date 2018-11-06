@@ -58,5 +58,14 @@ public class EtatDefaut implements Etat
     @Override
     public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
     }
+    
+    //Test
+    @Override
+    public void trouverLocalisation(modele.outils.GestionLivraison gestionLivraison, deliverif.DescriptifChemin point, deliverif.Deliverif fenetre){
+        modele.outils.Intersection intersection = gestionLivraison.identifierPointPassage(point.getPoint());
+        
+        fenetre.getVueGraphique().ajouterMarker(point, intersection.getLatitude(), intersection.getLongitude());
+        fenetre.getVueTextuelle().majVueTextuelle(point);
+    }
 
 }

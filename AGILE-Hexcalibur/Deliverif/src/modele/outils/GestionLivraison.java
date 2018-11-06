@@ -51,7 +51,7 @@ public class GestionLivraison extends Observable{
             int j = listePoints.indexOf(c.getFin());
             cout[i][j]=(int)c.getDuree();
         }
-        tsp = new TSPGlouton(nbLivreur);
+        tsp = new TSPMinCFC(nbLivreur);
         tsp.chercheSolution(Integer.MAX_VALUE, listePoints.size(), nbLivreur, cout);
         List<Tournee> listeTournee = new ArrayList<Tournee>(nbLivreur);
         this.tournees = new Tournee[nbLivreur];
@@ -122,6 +122,16 @@ public class GestionLivraison extends Observable{
         this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
         setChanged();
         this.notifyObservers(demande); //?
+    }
+    
+    //Test
+    public Intersection identifierPointPassage(String point){
+        String[] identifiants = point.split("_");
+        
+        int numTournee = Integer.parseInt(identifiants[0]);
+        int numLivraison = Integer.parseInt(identifiants[1]);
+        
+        return this.tournees[numTournee-1].getPointPassage(numLivraison-1).getPosition();        
     }
     
     /**
