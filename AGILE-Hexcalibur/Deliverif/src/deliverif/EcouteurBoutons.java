@@ -9,6 +9,7 @@
 package deliverif;
 
 import controleur.Controleur;
+import javafx.scene.input.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -84,6 +85,13 @@ public class EcouteurBoutons{
     public void changerTourneeAffichee(ActionEvent e) throws InterruptedException{
         this.fenetrePrincipale.getVueTextuelle().changerDescriptionAffichee();
         //this.fenetrePrincipale.avertir("Description modifiée");
+    }
+
+    public double[] recupererCoordonneesSouris(MouseEvent e) throws InterruptedException{
+        double[] point = new double[2];
+        point[0] = e.getX();;
+        point[1] = e.getY();
+        return point;
     }
     
     /**
