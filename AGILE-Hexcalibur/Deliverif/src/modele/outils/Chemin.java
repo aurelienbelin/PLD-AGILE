@@ -161,20 +161,20 @@ public class Chemin {
         
         etapes.add(heure);
         etapes.add(""+(int)(this.fin.getDuree()/60.0));
-        etapes.add(this.fin.estEntrepot()?"Entrepot":"Livraison à "+this.fin.getPosition().getTroncon(0).getNom());
+        etapes.add(this.fin.estEntrepot()?"Entrepot":"Livraison à "+(this.fin.getPosition().getTroncon(0).getNom().equals("") ? "Rue sans nom" : this.fin.getPosition().getTroncon(0).getNom()));
         
         String dernierNom="";
         float longueur=0f;
         for(Troncon c : this.troncons){
             longueur+=c.getLongueur();
             if(!c.getNom().equals(dernierNom)){
-                etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue anonyme" : dernierNom)+" ("+(10*(int)(longueur/10))+" m)");
-                etapes.add("Tourner à : "+(c.getNom().equals("") ? "Rue anonyme" : c.getNom()));
+                etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue sans nom" : dernierNom)+" ("+(10*(int)(longueur/10))+" m)");
+                etapes.add("Tourner à : "+(c.getNom().equals("") ? "Rue sans nom" : c.getNom()));
                 dernierNom=c.getNom();
             }
         }
-        etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue anonyme" : dernierNom)+" ("+(10*(int)(longueur/10))+" m)");
-        etapes.add("Arriver à : "+(this.fin.getPosition().getTroncon(0).getNom().equals("") ? "Rue anonyme" : this.fin.getPosition().getTroncon(0).getNom()));
+        etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue sans nom" : dernierNom)+" ("+(10*(int)(longueur/10))+" m)");
+        etapes.add("Arriver à : "+(this.fin.getPosition().getTroncon(0).getNom().equals("") ? "Rue sans nom" : this.fin.getPosition().getTroncon(0).getNom()));
         
         //heure = new SimpleDateFormat("HH:mm").format(heureDepart.getTime());
         //etapes.add(heure);
