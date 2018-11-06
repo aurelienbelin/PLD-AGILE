@@ -139,7 +139,7 @@ public class Deliverif extends Application {
         
         creerPanelDroit();   
         //Il faudra ajouter la vue graphique
-        vueGraphique = new VueGraphique(this.gestionLivraison, this.ecouteurBoutons);
+        vueGraphique = new VueGraphique(this.gestionLivraison, this.ecouteurBoutons, this);
         vueGraphique.setLayoutX(0);
         vueGraphique.setLayoutY(115);
         
