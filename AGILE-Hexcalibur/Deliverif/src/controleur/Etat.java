@@ -41,5 +41,8 @@ interface Etat
       *  @see modele.GestionLivraison
      */
     public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre);
+    
+    //Test
+    public void trouverLocalisation(modele.outils.GestionLivraison gestionLivraison, deliverif.DescriptifChemin point, deliverif.Deliverif fenetre);
 
 }

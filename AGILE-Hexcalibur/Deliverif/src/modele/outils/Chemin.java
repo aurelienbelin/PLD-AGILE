@@ -147,6 +147,36 @@ public class Chemin {
         return etapes;
     }
     
+    //Test
+    protected List<String> getDescription_Bis(Calendar heureDepart){
+        List<String> etapes = new ArrayList<String>();
+        
+        String heure = new SimpleDateFormat("HH:mm").format(heureDepart.getTime());
+        
+        etapes.add(heure);
+        etapes.add(""+(int)(this.debut.getDuree()/60.0));
+        etapes.add(this.debut.estEntrepot()?"Entrepot":"Livraison");
+        
+        String dernierNom="";
+        float longueur=0f;
+        for(Troncon c : this.troncons){
+            longueur+=c.getLongueur();
+            if(!c.getNom().equals(dernierNom)){
+                etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue anonyme" : dernierNom)+" pendant "+(10*(int)(longueur/10))+" m.");
+                etapes.add("Tourner à : "+(c.getNom().equals("") ? "Rue anonyme" : c.getNom()));
+                dernierNom=c.getNom();
+            }
+        }
+        etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue anonyme" : dernierNom)+" pendant "+(10*(int)(longueur/10))+" m.");
+        heureDepart.add(Calendar.SECOND, (int)this.getDuree());
+        heureDepart.add(Calendar.SECOND, (int)this.debut.getDuree());
+        
+        heure = new SimpleDateFormat("HH:mm").format(heureDepart.getTime());
+        //etapes.add(heure);
+
+        return etapes;
+    }
+    
     /**
      * @return L'ensemble des troncons (routes/rues) composant ce chemin.
      */
