@@ -30,6 +30,7 @@ public class GestionLivraison extends Observable{
     private TemplateTSP tsp;
     private Thread threadTSP;
     
+    
     /**
      * Créer une nouvelle GestionLivraison
      */

@@ -150,7 +150,7 @@ public class VueTextuelle extends VBox implements Observer {
             this.tournees.add(box);
         }
         
-        if(this.gestionLivraison.getTournees()!=null){
+        if(this.gestionLivraison.getTournees()!=null && !this.gestionLivraison.calculTSPEnCours()){
             Tournee[] tournees = this.gestionLivraison.getTournees();
             String nom ="";
             
