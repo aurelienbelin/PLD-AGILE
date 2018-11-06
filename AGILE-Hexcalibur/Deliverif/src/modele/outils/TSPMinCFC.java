@@ -9,13 +9,17 @@
 package modele.outils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
+import javafx.util.Pair;
 
 /**
  * Ce TSP implémente une heuristique assez simple, ainsi qu'un itérateur
  * identique aux autres versions.
  * @version 1.0 31/10/2018
+ * @version 1.1 05/11/2018
  * @author Louis Ohl
  */
 public class TSPMinCFC extends TemplateTSP{
@@ -29,27 +33,48 @@ public class TSPMinCFC extends TemplateTSP{
      */
     public TSPMinCFC(int nbLivreur){
         this.nbLivreur=nbLivreur;
-        this.nombreFictif=0;
     }
     
     @Override
     protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
+        
+        
         /*
         Pour faire simple, on sait que l'ensemble des nonVus formera toujours
         une CFC.
         Etant donné que nous devons parcourir l'ensemble des sommets nonVus
-        une fois chacun, une borne inférieur du chemin optimal est le cout
-        du plus petit arc multiplié par la taille de nonVus.
+        une fois chacun (n sommets), une borne inférieure du chemin optimal est
+        la somme des plus petits arc partant de chaque noeuds.
+        On ajoute ensuite le nombre de tournée restant * le plus petit aller
+        vers l'entrepot.
         */
-        int minimum=Integer.MAX_VALUE;
+        if (nonVus.size()<=1){
+            return 0;
+        }
+        
+        //Compter le nombre d'entrepot passés
+        int nbreEntrepot=0;
+        for(Integer sommet : vus){
+            if(sommet==0){
+                nbreEntrepot++;
+            }
+        }
+        int sommeMin=0;
+        int minEntrepot=Integer.MAX_VALUE;
         for(Integer depart : nonVus){
+            int minimum=Integer.MAX_VALUE;
             for(Integer arrivee : nonVus){
-                if (arrivee!=depart && cout[depart][arrivee]<minimum){
+                if (cout[depart][arrivee]<minimum && depart!=arrivee){
                     minimum=cout[depart][arrivee];
                 }
             }
+            if (cout[depart][0]<minEntrepot){
+                minEntrepot=cout[depart][0];
+            }
+            sommeMin+=minimum;
         }
-        return minimum*nonVus.size();
+        
+        return sommeMin+(this.nbLivreur-nbreEntrepot)*minEntrepot;
     }
 
     @Override
@@ -57,14 +82,26 @@ public class TSPMinCFC extends TemplateTSP{
         //Si on a parcouru total_sommet/livreur, alors on renvoie un itérateur
         //renvoyant à l'entrepot fictif, sinon on laisse un itérateur vers
         //les sommets non vus.
-        int quantiteSommet = (cout.length-1)/this.nbLivreur;
+        //Si on a parcouru total_sommet/livreur, alors on renvoie un itérateur
+        //renvoyant à l'entrepot fictif, sinon on laisse un itérateur vers
+        //les sommets non vus.
         //-1 car on ne compte pas le sommet entrepot
-        if ((cout.length-1-nonVus.size())%quantiteSommet==0 && sommetCrt!=0 && this.nombreFictif!=this.nbLivreur-1){
+        
+        int quantiteSommet = (cout.length-1)/this.nbLivreur;
+        if (this.quantiteTournee==quantiteSommet+1){
+            //Il est temps d'aller à l'entrepot virtuel
             List<Integer> aVoir = new ArrayList<Integer>();
             aVoir.add(0);
-            return new IteratorSeq(aVoir, sommetCrt);
+            return new IteratorSeq(aVoir, sommetCrt); 
+        } else if (this.quantiteTournee==quantiteSommet){
+            //On a vu le minimum de noeud possible par livreur, peut-être un de plus ?
+            List<Integer> aVoir = new ArrayList<Integer>();
+            aVoir.add(0);
+            aVoir.addAll(nonVus);
+            return new IteratorMin(aVoir, cout[sommetCrt]);
         } else {
-            return new IteratorMin(nonVus, sommetCrt, cout);
+            //Il n'est pas encore temps d'aller voir un entrepot virtuel
+            return new IteratorMin(nonVus, cout[sommetCrt]);
         }
     }
     

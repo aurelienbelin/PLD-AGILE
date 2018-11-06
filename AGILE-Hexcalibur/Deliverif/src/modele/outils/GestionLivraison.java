@@ -51,7 +51,7 @@ public class GestionLivraison extends Observable{
             int j = listePoints.indexOf(c.getFin());
             cout[i][j]=(int)c.getDuree();
         }
-        tsp = new TSPGlouton(nbLivreur);
+        tsp = new TSPMinCFC(nbLivreur);
         tsp.chercheSolution(Integer.MAX_VALUE, listePoints.size(), nbLivreur, cout);
         List<Tournee> listeTournee = new ArrayList<Tournee>(nbLivreur);
         this.tournees = new Tournee[nbLivreur];
