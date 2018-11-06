@@ -144,6 +144,9 @@ public class Chemin {
                 heure+
                 ").");
 
+        etapes.add("("+heure+") Depart"+
+                (this.debut.estEntrepot()? " de l'entrepot." : " du point de livraison"));
+        
         return etapes;
     }
     
@@ -151,27 +154,29 @@ public class Chemin {
     protected List<String> getDescription_Bis(Calendar heureDepart){
         List<String> etapes = new ArrayList<String>();
         
+        heureDepart.add(Calendar.SECOND, (int)this.getDuree());
+        heureDepart.add(Calendar.SECOND, (int)this.debut.getDuree());
+        
         String heure = new SimpleDateFormat("HH:mm").format(heureDepart.getTime());
         
         etapes.add(heure);
-        etapes.add(""+(int)(this.debut.getDuree()/60.0));
-        etapes.add(this.debut.estEntrepot()?"Entrepot":"Livraison");
+        etapes.add(""+(int)(this.fin.getDuree()/60.0));
+        etapes.add(this.fin.estEntrepot()?"Entrepot":"Livraison à "+this.fin.getPosition().getTroncon(0).getNom());
         
         String dernierNom="";
         float longueur=0f;
         for(Troncon c : this.troncons){
             longueur+=c.getLongueur();
             if(!c.getNom().equals(dernierNom)){
-                etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue anonyme" : dernierNom)+" pendant "+(10*(int)(longueur/10))+" m.");
+                etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue anonyme" : dernierNom)+" ("+(10*(int)(longueur/10))+" m)");
                 etapes.add("Tourner à : "+(c.getNom().equals("") ? "Rue anonyme" : c.getNom()));
                 dernierNom=c.getNom();
             }
         }
-        etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue anonyme" : dernierNom)+" pendant "+(10*(int)(longueur/10))+" m.");
-        heureDepart.add(Calendar.SECOND, (int)this.getDuree());
-        heureDepart.add(Calendar.SECOND, (int)this.debut.getDuree());
+        etapes.add("Traverser : "+(dernierNom.equals("") ? "Rue anonyme" : dernierNom)+" ("+(10*(int)(longueur/10))+" m)");
+        etapes.add("Arriver à : "+(this.fin.getPosition().getTroncon(0).getNom().equals("") ? "Rue anonyme" : this.fin.getPosition().getTroncon(0).getNom()));
         
-        heure = new SimpleDateFormat("HH:mm").format(heureDepart.getTime());
+        //heure = new SimpleDateFormat("HH:mm").format(heureDepart.getTime());
         //etapes.add(heure);
 
         return etapes;
