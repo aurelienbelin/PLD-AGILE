@@ -162,7 +162,7 @@ public class VueTextuelle extends VBox implements Observer {
                     int j = 1;
                     VBox box = new VBox();
                     box.setMinWidth(this.panel.getViewportBounds().getWidth());
-                    contenu.add("Tournée "+i);
+                    contenu.add("Livreur "+i);
                     Iterator<List<String>> it = t.getDescription_Bis();
                     
                     while(it.hasNext()){
