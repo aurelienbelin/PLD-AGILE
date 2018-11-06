@@ -323,20 +323,24 @@ public class VueGraphique extends StackPane implements Observer {
     }
     
     //Test
-    public void ajouterMarker(DescriptifChemin dc, double lat, double lon){
+    public void ajouterMarker(double lat, double lon){
+        int x = (int)((lon - origineLongitude)*echelleLong);
+        int y = (int)(this.getHeight() - (lat - origineLatitude)*echelleLat);
+
+        /*System.out.println("Entrepot : "+gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude()+" ; "+gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude());
+        System.out.println("Je suis dans la vue graphique : "+lon+" ; "+lat); //DEBUG
+        System.out.println("Je suis dans la vue graphique : "+this.imageMarker.getWidth()+" ; "+this.imageMarker.getHeight()); //DEBUG
+        System.out.println("Je suis dans la vue graphique : "+x+" ; "+y); //DEBUG*/
+
+        GraphicsContext gc = this.marker.getGraphicsContext2D();
+        gc.drawImage(imageMarker, x - this.imageMarker.getWidth()/2.0, y - this.imageMarker.getHeight());
+    }
+    
+    public void identifierPtPassage(DescriptifChemin dc, double lat, double lon){
         this.effacerMarker();
         
         if(!dc.estLocalise()){
-            int x = (int)((lon - origineLongitude)*echelleLong);
-            int y = (int)(this.getHeight() - (lat - origineLatitude)*echelleLat);
-
-            System.out.println("Entrepot : "+gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude()+" ; "+gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude());
-            System.out.println("Je suis dans la vue graphique : "+lon+" ; "+lat); //DEBUG
-            System.out.println("Je suis dans la vue graphique : "+this.imageMarker.getWidth()+" ; "+this.imageMarker.getHeight()); //DEBUG
-            System.out.println("Je suis dans la vue graphique : "+x+" ; "+y); //DEBUG
-
-            GraphicsContext gc = this.marker.getGraphicsContext2D();
-            gc.drawImage(imageMarker, x - this.imageMarker.getWidth()/2.0, y - this.imageMarker.getHeight());
+            this.ajouterMarker(lat,lon);
         }
     }
     
