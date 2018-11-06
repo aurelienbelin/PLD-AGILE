@@ -67,5 +67,11 @@ public class EtatDefaut implements Etat
         fenetre.getVueGraphique().identifierPtPassage(point, intersection.getLatitude(), intersection.getLongitude());
         fenetre.getVueTextuelle().majVueTextuelle(point);
     }
+    
+    @Override
+    public void ajouterLivraison(deliverif.Deliverif fenetre) {}
+    
+    @Override
+    public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, float latitude, float longitude) {}
 
 }

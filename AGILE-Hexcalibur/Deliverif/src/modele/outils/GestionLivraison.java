@@ -165,6 +165,25 @@ public class GestionLivraison extends Observable{
     }
     
     /**
+     * 
+     */
+    public Intersection intersectionPlusProche(float latitude, float longitude) {
+        
+        Intersection resultat = this.plan.getIntersections().get(0);
+        double minDistance = Math.sqrt(Math.pow((resultat.getLatitude()-latitude), 2) + Math.pow((resultat.getLongitude()-longitude),2));
+        
+        for(Intersection i: this.plan.getIntersections()){
+            double distance = Math.sqrt(Math.pow((i.getLatitude()-latitude), 2) + Math.pow((i.getLongitude()-longitude),2));
+            if(distance <minDistance) {
+                resultat = i;
+                minDistance = distance;
+            }
+        }
+        
+        return resultat;
+    }
+    
+    /**
      *
      * @return - Le plan de la Ville
      */

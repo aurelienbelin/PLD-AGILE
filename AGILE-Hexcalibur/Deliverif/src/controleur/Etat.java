@@ -44,5 +44,9 @@ interface Etat
     
     //Test
     public void trouverLocalisation(modele.outils.GestionLivraison gestionLivraison, deliverif.DescriptifChemin point, deliverif.Deliverif fenetre);
+    
+    public void ajouterLivraison(deliverif.Deliverif fenetre);
+    
+    public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, float latitude, float longitude);
 
 }

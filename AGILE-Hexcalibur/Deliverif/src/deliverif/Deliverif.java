@@ -192,6 +192,13 @@ public class Deliverif extends Application {
         boutonAjouterLivraison.setWrapText(true);
         boutonAjouterLivraison.setDisable(true);
         boutonAjouterLivraison.setTextAlignment(TextAlignment.CENTER);
+        boutonAjouterLivraison.setOnAction(e -> {
+            try {
+                ecouteurBoutons.ajouterLivraison(e);
+            } catch (Exception ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         boutonSupprimerLivraison = new Button(SUPPRIMER_LIVRAISON);
         boutonSupprimerLivraison.setPrefSize(100,65);

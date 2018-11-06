@@ -44,6 +44,16 @@ public class Controleur {
      */
     protected static final EtatTourneesCalculees ETAT_TOURNEES_CALCULEES = new EtatTourneesCalculees();
     
+    /**
+     * 
+     */
+    protected static final EtatPlanCliquable ETAT_PLAN_CLIQUABLE = new EtatPlanCliquable();
+    
+    /**
+     * 
+     */
+    protected static final EtatIntersectionSelectionnee ETAT_INTERSECTION_SELECTIONNEE = new EtatIntersectionSelectionnee();
+    
     /** etatCourant prendra successivement les états définis ci-dessus comme 
      * valeurs
      */
@@ -101,6 +111,23 @@ public class Controleur {
     //Test
     public void afficherMarqueur(deliverif.DescriptifChemin point) {
         etatCourant.trouverLocalisation(this.gestionLivraison, point, this.fenetre);
+    }
+    
+    /**@see Etat
+     * @version 2.1
+     */
+    public void boutonAjouterLivraison() {
+        etatCourant.ajouterLivraison(this.fenetre);
+    }
+    
+    /**@param latitude
+     * @param longitude
+     * @param
+     * @see Etat
+     * @version 2.1
+     */
+    public void clicGauche(float latitude, float longitude) {
+        etatCourant.intersectionPlusProche(this.gestionLivraison, this.fenetre, latitude, longitude);
     }
     
 

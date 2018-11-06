@@ -153,4 +153,8 @@ public class EcouteurBoutons{
             return null;
         }
     }
+    
+    public void ajouterLivraison (ActionEvent e) {
+        controleur.boutonAjouterLivraison();
+    }
 }

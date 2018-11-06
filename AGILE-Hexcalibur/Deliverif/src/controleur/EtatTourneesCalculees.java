@@ -93,4 +93,9 @@ public class EtatTourneesCalculees extends EtatDefaut{
             e.printStackTrace();
         }
     }
+    
+    @Override
+    public void ajouterLivraison (deliverif.Deliverif fenetre) {
+        Controleur.etatCourant = Controleur.ETAT_PLAN_CLIQUABLE;
+    }
 }
