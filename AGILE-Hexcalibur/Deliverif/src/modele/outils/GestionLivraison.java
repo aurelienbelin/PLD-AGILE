@@ -12,7 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-import modele.flux.LecteurXML;
+import java.util.Observer;
+import javafx.concurrent.Task;
 import org.xml.sax.SAXException;
 
 /** 
@@ -26,7 +27,8 @@ public class GestionLivraison extends Observable{
     private PlanVille plan;
     private Tournee[] tournees;
     private DemandeLivraison demande;
-    private TSP tsp;
+    private TemplateTSP tsp;
+    private Thread threadTSP;
     
     /**
      * Créer une nouvelle GestionLivraison
@@ -37,9 +39,9 @@ public class GestionLivraison extends Observable{
         this.demande=null;
     }
     
-    public int calculerTournees(int nbLivreur){
-        if(this.plan==null || this.demande==null){
-            return 0;
+    public void calculerTournees(int nbLivreur) throws Exception{
+        if(this.plan==null || this.demande==null || (this.tsp!=null && this.tsp.calculEnCours())){
+            return;
         }
         List<PointPassage> listePoints = new ArrayList<>();
         listePoints.add(this.demande.getEntrepot());
@@ -52,7 +54,22 @@ public class GestionLivraison extends Observable{
             cout[i][j]=(int)c.getDuree();
         }
         tsp = new TSPMinCFC(nbLivreur);
-        tsp.chercheSolution(Integer.MAX_VALUE, listePoints.size(), nbLivreur, cout);
+        ObservateurTSP observateur = new ObservateurTSP(graphe, listePoints, nbLivreur);
+        //tsp.addObserver(observateur);
+        threadTSP = new Thread(new Runnable(){
+            @Override
+            public void run(){
+                tsp.chercheSolution(Integer.MAX_VALUE, listePoints.size(), nbLivreur, cout);
+                genererTournee(graphe, listePoints, nbLivreur);
+            }
+        });
+        threadTSP.start();
+            
+        
+        
+    }
+    
+    private synchronized void genererTournee(List<Chemin> graphe, List<PointPassage>  listePoints, int nbLivreur){
         List<Tournee> listeTournee = new ArrayList<Tournee>(nbLivreur);
         this.tournees = new Tournee[nbLivreur];
         List<Chemin> trajets = new ArrayList<Chemin>();
@@ -83,14 +100,11 @@ public class GestionLivraison extends Observable{
         }
         listeTournee.add(new Tournee(trajets, demande.getHeureDepart()));
         listeTournee.toArray(this.tournees);
-        
-        if(this.tournees==null){
-            System.out.println("ALERTE GOGOL");
-            return 0;
-        } else {
+        if(this.tournees!=null){
             setChanged();
             this.notifyObservers(tournees);
-            return 1;
+        } else {
+            System.out.println("C'est la merde, yo !");
         }
     }
     
@@ -98,7 +112,22 @@ public class GestionLivraison extends Observable{
      * Interrompt le calcul en cours du TSP.
      */
     public void arreterCalculTournee(){
-        tsp.arreterCalcul();
+        if (tsp!=null && tsp.calculEnCours()){
+            tsp.arreterCalcul();
+        }
+        if (threadTSP.isAlive()){
+            threadTSP.interrupt();
+        }
+    }
+    
+    /**
+     * 
+     */
+    public boolean calculTSPEnCours(){
+        if (tsp!=null){
+            return tsp.calculEnCours();
+        } 
+        return false;
     }
     
     /**
@@ -156,5 +185,31 @@ public class GestionLivraison extends Observable{
      */
     public DemandeLivraison getDemande() {
         return demande;
+    }
+    
+    private class ObservateurTSP implements Observer{
+        
+        private List<Chemin> graphe;
+        private List<PointPassage> listePoints;
+        private int nbLivreur;
+        private long dernierAffichage;
+        
+        public ObservateurTSP(List<Chemin> graphe, List<PointPassage> listePoints, int nbLivreur){
+            this.graphe=graphe;
+            this.listePoints=listePoints;
+            this.nbLivreur=nbLivreur;
+            dernierAffichage=0;
+        }
+        
+        @Override
+        public void update(Observable o, Object arg){
+            //System.out.println("Nouvelle solution, j'appelle la génération de tournée !");
+            //long tempsActuel = System.currentTimeMillis();
+            //if (tempsActuel-dernierAffichage>200 || dernierAffichage==0){//Toutes les secondes
+                genererTournee(graphe, listePoints, nbLivreur);
+                //dernierAffichage=tempsActuel;
+                System.out.println("Nouvel affichage !");
+            //}
+        }
     }
 }
