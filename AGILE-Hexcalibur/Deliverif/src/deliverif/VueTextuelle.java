@@ -189,7 +189,6 @@ public class VueTextuelle extends VBox implements Observer {
                 n.setStyle("-fx-border-color:black; -fx-border-width:2px;");
             }
         }
-        
     }
     
     /**
