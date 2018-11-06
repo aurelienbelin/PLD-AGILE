@@ -15,8 +15,10 @@ import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
 
 /**
- *
+ * Ecouteur des évènements émis par l'IHM de l'application.
  * @author Aurelien Belin
+ * @see Deliverif
+ * @see Controleur
  */
 public class EcouteurBoutons{
     
@@ -24,9 +26,11 @@ public class EcouteurBoutons{
     private final Controleur controleur;
     
     /**
-     *
-     * @param f
-     * @param c
+     * Constructeur d'EcouteurBoutons
+     * @param f - fenetre principale de l'application
+     * @param c - Controleur de l'application
+     * @see Deliverif
+     * @see Controleur
      */
     public EcouteurBoutons(Deliverif f, Controleur c){
         this.fenetrePrincipale = f;
@@ -34,14 +38,13 @@ public class EcouteurBoutons{
     }
     
     /**
-     *
-     * @param e
+     * Appelle le chargement du plan dans le controleur.
+     * @param e - ActionEvent déclenché
      * @throws InterruptedException
-     * @throws java.io.IOException
+     * @throws IOException
+     * @throws Exception 
      */
-
     public void chargerPlanAction(ActionEvent e) throws InterruptedException, IOException, Exception{
-        //System.out.println("Choisir un plan à charger"); //DEBUG
         this.fenetrePrincipale.informationEnCours("Chargement du plan...");
         String nomFichier = choisirFichier("Choisir le plan à charger");
         if(nomFichier != null)
@@ -53,12 +56,12 @@ public class EcouteurBoutons{
     }
     
     /**
-     *
+     * Appelle le chargement de la demande de livraison dans le controleur.
      * @param e
      * @throws InterruptedException
-     * @throws java.io.IOException
+     * @throws IOException
+     * @throws Exception 
      */
-
     public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException, IOException, Exception{
         //System.out.println("Choisir une demande de livraison à charger"); //DEBUG
         this.fenetrePrincipale.informationEnCours("Chargement de la demande de livraison...");
@@ -72,7 +75,7 @@ public class EcouteurBoutons{
     }
 
     /**
-     *
+     * Appelle le calcule des tournées dans le controleur.
      * @param e
      * @throws InterruptedException
      */
@@ -83,25 +86,41 @@ public class EcouteurBoutons{
     }
 
     /**
-     *
+     * Modifie les tournées affichées dans les Vues de l'IHM.
      * @param e
      * @throws InterruptedException
      */
     public void changerTourneeAffichee(ActionEvent e) throws InterruptedException{
-        int i = this.fenetrePrincipale.getVueTextuelle().changerDescriptionAffichee();
+        //int i = this.fenetrePrincipale.getVueTextuelle().changerDescriptionAffichee();
         
-        System.out.println("Tournee n°"+i); //DEBUG
+        int i = this.fenetrePrincipale.getVueTextuelle().changerDescription_Bis();
+        
+        //System.out.println("Tournee n°"+i); //DEBUG
         
         if(i!=-1)
             this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
-        
-        //this.fenetrePrincipale.avertir("Description modifiée");
     }
     
     /**
-     * 
+     * Envoie une requête au controleur pour connaitre la localisation du point de livraison associé au composant DescriptifChemin.
+     * @param dc 
+     */
+    public void localiserPointVueGraphique(DescriptifChemin dc){
+        controleur.afficherMarqueur(dc);
+    }
+    
+    /**
+     * Devellope les détails du DescriptifChemin passé en paramètre.
+     * @param dc 
+     */
+    public void obtenirDetailsVueTextuelle(DescriptifChemin dc){
+        dc.developperDetails();
+    }
+    
+    /**
+     * Crée un objet donnat accès au Gestionnaire de fichier pour choisir un fichier à charger.
      * @param docACharger
-     * @return
+     * @return URL du fichier choisi
      * @throws InterruptedException 
      */
     private String choisirFichier(String docACharger) throws InterruptedException

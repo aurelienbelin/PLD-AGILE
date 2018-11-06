@@ -41,8 +41,9 @@ import javafx.stage.Stage;
 import modele.outils.GestionLivraison;
 
 /**
- *
+ * Classe principale/point d'entrée de l'application. Il s'agit de la fenetre principale de l'application.
  * @author romain
+ * @see Application
  */
 public class Deliverif extends Application {
     
@@ -156,6 +157,9 @@ public class Deliverif extends Application {
         stage.show();
     }
     
+    /**
+     * Création des boutons de la fenetre
+     */
     private void creerBoutonsChargement(){
         //A factoriser
         boutonChargerPlan = new Button(CHARGER_PLAN);
@@ -202,6 +206,9 @@ public class Deliverif extends Application {
         boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
     }
     
+    /**
+     * Création du panel droit de la fenetre principal.
+     */
     private void creerPanelDroit() {
         panelDroit = new VBox();
         panelDroit.setPrefSize(1024-640,640);
@@ -242,8 +249,7 @@ public class Deliverif extends Application {
         sh.setMaxWidth(1024-640-50);
         sh.setLayoutX(640);
         
-        vueTextuelle = new VueTextuelle(gestionLivraison);
-        vueTextuelle.ajouterEcouteur(ecouteurBoutons);
+        vueTextuelle = new VueTextuelle(gestionLivraison, ecouteurBoutons);
         vueTextuelle.setMaxWidth(1024-640-50);
         
         this.information = new Label();
@@ -258,38 +264,42 @@ public class Deliverif extends Application {
         panelDroit.getChildren().addAll(boxLivreurs, boutonCalculerTournees, sh, vueTextuelle, information);
     }
     
+    /**
+     * Affiche en bas à droite l'action en cours dans l'application.
+     * @param message - message à afficher (état courant de l'application)
+     */
     protected void informationEnCours(String message){
         this.information.setText(message);
     }
     
     /**
-     *
-     * @return
+     * Renvoie le nombre de livreurs.
+     * @return le nombre de livreurs
      */
     public int getNbLivreurs(){
         return (Integer)this.nbLivreurs.getValue();
     }
     
     /**
-     *
-     * @return
+     * Renvoie la VueTextuelle associée à cette fenetre principale.
+     * @return la Vuetextuelle
      */
     public VueTextuelle getVueTextuelle(){
         return this.vueTextuelle;
     }
     
     /**
-     *
-     * @return
+     * Renvoie la VueGraphiqueassociée à cette fenetre principale.
+     * @return la VueGraphique
      */
     public VueGraphique getVueGraphique(){
         return this.vueGraphique;
     }
     
     /**
-     *
-     * @param fileChooser
-     * @return
+     * Ouvre la fenetre du gestionnaire de fichier pour choix de fichier à ouvrir.
+     * @param fileChooser - l'objet gestionnaire de fichier à ouvrir
+     * @return le fichier à ouvrir
      * @throws InterruptedException
      */
     public static File openFileChooser(FileChooser fileChooser) throws InterruptedException {
@@ -298,13 +308,17 @@ public class Deliverif extends Application {
     }
     
     /**
-     *
-     * @param message
+     * Créer un Pop-Up pour avertir l'utilisateur.
+     * @param message - message à afficher dans le pop-up
      */
     public void avertir(String message){
         this.createMessagePopup(message);
     }
     
+    /**
+     * Construit une fenetre de pop-up.
+     * @param message - message à afficher dans le pop-up
+     */
     private void createMessagePopup(String message) {
         System.out.println("Xx : "+this.boutons.getWidth()+" ; Yy : "+this.boutons.getHeight()); //DEBUG
         
@@ -357,8 +371,8 @@ public class Deliverif extends Application {
     }
 
     /**
-     *
-     * @param cre
+     * Passe l'IHM dans l'état suivant une fois le plan chargé.
+     * @param cre - compte rendu d'execution des opérations sur le modèle
      */
     public void estPlanCharge(String cre) {
         if(("SUCCESS").equals(cre)){
@@ -379,8 +393,8 @@ public class Deliverif extends Application {
     }
     
     /**
-     *
-     * @param cre
+     * Passe l'IHM dans l'état suivant une fois la demande de livraison chargée.
+     * @param cre - compte rendu d'execution des opérations sur le modèle
      */
     public void estDemandeLivraisonChargee(String cre){
         if(("SUCCESS").equals(cre)){
@@ -401,8 +415,8 @@ public class Deliverif extends Application {
     }
     
     /**
-     *
-     * @param cre
+     * Passe l'IHM dans l'état suivant une fois les tournées calculées.
+     * @param cre - compte rendu d'execution des opérations sur le modèle
      */
     public void estTourneesCalculees(String cre){
         if(("SUCCESS").equals(cre)){

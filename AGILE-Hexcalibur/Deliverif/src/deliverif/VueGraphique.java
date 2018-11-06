@@ -19,6 +19,9 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import modele.outils.Chemin;
@@ -27,8 +30,12 @@ import modele.outils.Tournee;
 import modele.outils.Troncon;
 
 /**
- *
+ * Classe implémentant le composant de Vue Graphique de l'IHM du projet ainsi que son comportement.
+ * La Vue Graphique représente la description graphique des tournées de livraison à effectuer par les livreurs, ainsi que du plande la ville.
  * @author Aurelien Belin
+ * @see StackPane
+ * @see Deliverif
+ * @see Observer
  */
 public class VueGraphique extends StackPane implements Observer {
     
@@ -44,10 +51,19 @@ public class VueGraphique extends StackPane implements Observer {
     private Canvas plan;
     private Canvas dl;
     private ArrayList<Canvas> tournees;
+    private Canvas marker;
+    private Image imageMarker;
     
     //Test
     private Button bouton;
     
+    /**
+     * Constructeur de VueGraphique.
+     * @param gl - point d'entrée du modèle observé
+     * @param f - IHM principale dans laquelle est affichée la Vue Graphique
+     * @see GestionLivraison
+     * @see Deliverif
+     */
     public VueGraphique(GestionLivraison gl, Deliverif f){
         super();
         
@@ -64,6 +80,9 @@ public class VueGraphique extends StackPane implements Observer {
         
         this.getChildren().addAll(plan,dl);
         
+        imageMarker = new Image("/deliverif/Marker_1.png",true);
+        this.marker = new Canvas(640,640-95);
+        
         /*//Test
         bouton = new Button("Test");
         bouton.setPrefSize(50,50);
@@ -73,7 +92,11 @@ public class VueGraphique extends StackPane implements Observer {
             
     }
     
-    
+    /**
+     * Met à jour la VueGraphique en fonction des données du modèle et de ses mises à jour.
+     * @param o - Objet à observer, ici une instance de GestionLivraison
+     * @param arg - contenu de la mise à jour 
+     */
     @Override
     public void update(Observable o, Object arg) {
         if(arg instanceof modele.outils.PlanVille){
@@ -86,6 +109,10 @@ public class VueGraphique extends StackPane implements Observer {
         }
     }
     
+    /**
+     * Calcule l'échelle d'affichage du plan de la ville à afficher.
+     * @param intersections - liste des intersections contenues dans le plan à afficher.
+     */
     public void calculEchelle (List <modele.outils.Intersection> intersections) {
         float maxLatitude = -90;
         float minLatitude = 90;
@@ -112,6 +139,9 @@ public class VueGraphique extends StackPane implements Observer {
         origineLongitude = minLongitude;
     }
     
+    /**
+     * Dessine le plan à l'échelle dans la VueGraphique.
+     */
     public void dessinerPlan(){        
         GraphicsContext gc = this.plan.getGraphicsContext2D();
         gc.clearRect(0, 0, plan.getWidth(), plan.getHeight());
@@ -145,6 +175,9 @@ public class VueGraphique extends StackPane implements Observer {
         fenetre.informationEnCours("");
     }
     
+    /**
+     * Dessine les points de livraison à desservir sur le plan préalablement dessiné.
+     */
     public void dessinerPtLivraison(){
         GraphicsContext gc = this.dl.getGraphicsContext2D();
         gc.clearRect(0, 0, dl.getWidth(), dl.getHeight());
@@ -175,12 +208,16 @@ public class VueGraphique extends StackPane implements Observer {
         int ordonneePtLivraison =(int) (this.getHeight() - ( gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude() - origineLatitude) * echelleLat);
         gc.setFill(Color.RED);
         
+        System.out.println("Entrepot : "+abscissePtLivraison+" ; "+ordonneePtLivraison); //DEBUG
+        
         gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
         
         fenetre.informationEnCours("");
     }
     
-    //Début : 30min + 1h
+    /**
+     * Dessine les tournées à effectuer pour desservir tous les points de livraison préalablement affichée sur le plan.
+     */
     public void dessinerTournees(){
         
         this.tournees.clear();
@@ -233,13 +270,14 @@ public class VueGraphique extends StackPane implements Observer {
         this.getChildren().addAll(this.tournees);
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();
+        this.getChildren().add(this.marker);
         
         fenetre.informationEnCours("");
     }
     
     /**
-     * 
-     * @param numTournee 
+     * Change la tournée affichée pour la tournée dont l'indice est passée en paramètre.
+     * @param numTournee - indice de la tournée à afficher
      */
     public void changerTourneeAffichee(int numTournee){
         for(int i=0;i<this.tournees.size();i++){
@@ -259,6 +297,29 @@ public class VueGraphique extends StackPane implements Observer {
                 tournees.get(1).getGraphicsContext2D().clearRect(0, 0, getWidth(), getHeight());
             }
         });
+    }
+
+    //Test
+    public void effacerMarker() {
+        this.marker.getGraphicsContext2D().clearRect(0,0,this.marker.getWidth(), this.marker.getHeight());
+    }
+    
+    //Test
+    public void ajouterMarker(DescriptifChemin dc, double lat, double lon){
+        this.effacerMarker();
+        
+        if(!dc.estLocalise()){
+            int x = (int)((lon - origineLongitude)*echelleLong);
+            int y = (int)(this.getHeight() - (lat - origineLatitude)*echelleLat);
+
+            System.out.println("Entrepot : "+gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude()+" ; "+gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude());
+            System.out.println("Je suis dans la vue graphique : "+lon+" ; "+lat); //DEBUG
+            System.out.println("Je suis dans la vue graphique : "+this.imageMarker.getWidth()+" ; "+this.imageMarker.getHeight()); //DEBUG
+            System.out.println("Je suis dans la vue graphique : "+x+" ; "+y); //DEBUG
+
+            GraphicsContext gc = this.marker.getGraphicsContext2D();
+            gc.drawImage(imageMarker, x - this.imageMarker.getWidth()/2.0, y - this.imageMarker.getHeight());
+        }
     }
     
 }
