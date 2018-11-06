@@ -8,6 +8,9 @@
  */
 package controleur;
 
+import java.io.IOException;
+import org.xml.sax.SAXException;
+
 /** Classe mère de tous les états.
  * Améliore la visibilité du code, dans les classes filles on implémente 
  * seulement les méthodes ayant un traitement particulier. 
@@ -31,7 +34,7 @@ public class EtatDefaut implements Etat
      * @version 1
      */
     @Override
-    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
+    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception{
     }
     
     /**
@@ -42,7 +45,7 @@ public class EtatDefaut implements Etat
      * @version 1
      */
     @Override
-    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
+    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception{
     }
     
     /**
@@ -55,4 +58,5 @@ public class EtatDefaut implements Etat
     @Override
     public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
     }
+
 }

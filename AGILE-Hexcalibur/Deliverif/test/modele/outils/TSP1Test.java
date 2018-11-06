@@ -6,11 +6,12 @@
 package modele.outils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -76,16 +77,16 @@ public class TSP1Test {
     /**
      * Test of iterator method, of class TSP1.
      */
-    @Test
+    /*@Test
     public void testIterator() {
-            System.out.println("-- methode iterator");
+        System.out.println("-- methode iterator");
         ArrayList<Integer> nonVus = new ArrayList<Integer>();
         int nombreVu=3;
         for(int i=nombreVu+1; i<cout.length; i++){//supposition d'avoir vu 3 noeuds
             nonVus.add(i);
         }
-        for(int nbLivreur=1; nbLivreur<adjacence.size()/2;nbLivreur++){
-            TSP1 tsp = new TSP1(nbLivreur);
+        for(int nbLivreur=1; nbLivreur<cout.length/2;nbLivreur++){
+            TSPGlouton tsp = new TSPGlouton(nbLivreur);
             Iterator<Integer> it = tsp.iterator(nombreVu, nonVus, cout);
             int premierElt = it.next();
             System.out.println(premierElt);
@@ -105,15 +106,15 @@ public class TSP1Test {
             }
             
         }
-    }
+    }*/
 
     /**
      * Test of bound method, of class TSP1.
      */
-    @Test
+    /*@Test
     public void testBound() {
         System.out.println("--methode bound");
-        TSP1 tsp = new TSP1(2);
+        TSPGlouton tsp = new TSPGlouton(2);
         ArrayList<Integer> nonVus = new ArrayList<Integer>();
         int depart=0;
         for(int i=depart+1; i<cout.length; i++){
@@ -123,14 +124,14 @@ public class TSP1Test {
         vus.add(depart);
         int resultat=tsp.bound(vus, depart, nonVus, cout);
         assertEquals(199,resultat);
-    }
+    }*/
     
     @Test
     public void testTSP(){
         System.out.println("--methode chercheSolution");
-        TSP1 tsp = new TSP1(2);
+        TemplateTSP tsp = new TSPMinCFC(2);
         int[] resultat = {0,8,4,3,5,9,0,10,1,6,2,7};
-        tsp.chercheSolution(8000, cout.length,2, cout);
+        tsp.chercheSolution(Integer.MAX_VALUE, cout.length,2, cout);
         assertFalse(tsp.getTempsLimiteAtteint());
         assertEquals(278, tsp.getCoutMeilleureSolution());
         for(int i=0; i<resultat.length; i++){
@@ -142,26 +143,46 @@ public class TSP1Test {
         }
     }
     
-    /*@Test
-    public void testBound2(){
-        TSP1 tsp = new TSP1(2);
-        int[] resultat = {0,8,4,3,5,9,0,7,2,6,1,10};
-        int somme=0;
-        ArrayList<Integer> nonVus = new ArrayList<Integer>();
-        for(int elt : resultat){
-            if (elt!=0){
-                nonVus.add(elt);
-            }
-        }
-        for(int i=0; i<resultat.length-1; i++){
-            int bound=tsp.bound(resultat[i], nonVus, cout);
-            System.out.println("from node : "+resultat[i]+"bound : "+bound+" somme : "+somme+", ok ? "+(bound+somme<=278));
-            somme+=cout[resultat[i]][resultat[i+1]];
-            if(resultat[i+1]!=0){
-                nonVus.remove(0);
-            }
-        }
+    @Test
+    public void testTSP2(){
+        System.out.println("-- Test du tsp");
         
-    }*/
+        for(int nbLivreur=1; nbLivreur<cout.length; nbLivreur++){
+            System.out.println("\n livreurs : "+nbLivreur);
+            TemplateTSP tsp = new TSPSimple(nbLivreur);
+            tsp.chercheSolution(5000, cout.length, nbLivreur, cout);
+            assertFalse(tsp.getTempsLimiteAtteint());
+            for(int i=0; i<cout.length+nbLivreur-1;i++){
+                assertNotNull(tsp.getMeilleureSolution(i));
+                System.out.print(tsp.getMeilleureSolution(i)+" ");
+                if (i==cout.length+nbLivreur-2){
+                    assertNotEquals(0, (int)tsp.getMeilleureSolution(i));
+                }
+            }
+        }
+        System.out.println();
+    }
+    
+    @Test
+    public void testConvenable(){
+        System.out.println("-- methode solutionConvenable");
+        int[] ordre= {0,8,0,7,4,0,10,1,0,2,0,3,0,9,0,5,6,0};
+        TemplateTSP tsp = new TSPMinCFC(9);
+        tsp.chercheSolution(1000, cout.length, 9, cout);
+        ArrayList<Integer> vus = new ArrayList<Integer>();
+        ArrayList<Integer> nonVus = new ArrayList<Integer>();
+        for(int o : ordre){
+            nonVus.add(o);
+        }
+        for(int i=0; i<ordre.length; i++){
+            vus.add(ordre[i]);
+            nonVus.remove((Integer)ordre[i]);
+            if(i>2){
+                assertFalse(tsp.solutionConvenable(vus, nonVus, cout));
+            } else {
+                assertTrue(tsp.solutionConvenable(vus, nonVus, cout));
+            }
+        }
+    }
     
 }

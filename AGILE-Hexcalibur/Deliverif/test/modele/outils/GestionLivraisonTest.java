@@ -15,6 +15,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.*;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -49,29 +51,42 @@ public class GestionLivraisonTest {
     /**
      * Test of calculerTournee method, of class GestionLivraison.
      */
-    @Test
+    @Test(timeout = 30*60*1000)
     public void testCalculerTournee() {
         String urlFichierPlan = "test/modele/flux/grandPlan.xml";
-        String urlFichierDemande = "test/modele/flux/dl-grand-15.xml";
-        int nbLivreur=7;
+        String urlFichierDemande = "test/modele/flux/dl-grand-12.xml";
+        int nbLivreur=8;
         LecteurXML lecteur = new LecteurXML();
-        assertEquals(1,gestion.chargerVille(urlFichierPlan));
+        
+        try{
+            gestion.chargerPlan(urlFichierPlan);
+        }catch(Exception e){
+            fail(e.getStackTrace().toString());
+        }
+        
         //assertEquals(308, gestion.getPlan().getIntersections().size());
         //assertEquals(616, gestion.getPlan().getTroncons().size());
         for (Troncon t : gestion.getPlan().getTroncons()){
             assertTrue(gestion.getPlan().getIntersections().contains(t.getDebut()));
             assertTrue(gestion.getPlan().getIntersections().contains(t.getFin()));
         }
-        assertEquals(1,gestion.chargerDemandeLivraison(urlFichierDemande));
-        assertEquals(15, gestion.getDemande().getLivraisons().size());
+       
+        try{
+            gestion.chargerDemandeLivraison(urlFichierDemande);
+        }catch(Exception e){
+            fail(e.getStackTrace().toString());
+        }
+        
+        //assertEquals(15, gestion.getDemande().getLivraisons().size());
         assertEquals(1,gestion.calculerTournees(nbLivreur));
         assertNotNull(gestion.getTournees());
         assertEquals(nbLivreur,gestion.getTournees().length);
         for(Tournee t : gestion.getTournees()){
-            Iterator<String> it = t.getDescription();
+            /*Iterator<String> it = t.getDescription();
             while(it.hasNext()){
                 System.out.println(it.next());
-            }
+            }*/
+            System.out.println(t.getTrajet().size());
         }
     }
     

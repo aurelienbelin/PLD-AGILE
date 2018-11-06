@@ -8,7 +8,12 @@
  */
 package modele.outils;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Une DemandeLivraison liste l'ensemble des points que l'on aimerait livrer,
@@ -21,15 +26,17 @@ public class DemandeLivraison {
     
     private List<PointPassage> livraisons;
     private PointPassage entrepot;
+    private Calendar heureDepart;
 
     /**
      * Crée une nouvelle demande de livraison.
      * @param livraisons - L'ensemble des points de passages à livrer.
      * @param entrepot - Le point de passage de l'entrepot.
      */
-    public DemandeLivraison(List<PointPassage> livraisons, PointPassage entrepot) {
+    public DemandeLivraison(List<PointPassage> livraisons, PointPassage entrepot, Calendar heureDepart) {
         this.livraisons = livraisons;
         this.entrepot = entrepot;
+        this.heureDepart=heureDepart;
     }
 
     /**
@@ -59,5 +66,49 @@ public class DemandeLivraison {
      */
     public void setEntrepot(PointPassage entrepot) {
         this.entrepot = entrepot;
+    }
+    
+    /**
+     * @param heureDepart - L'heure a laquelle doit débuter l'ensemble
+     * des tournees.
+     */
+    public void setHeureDepart(Calendar heureDepart){
+        this.heureDepart=heureDepart;
+    }
+    
+    /**
+     * @return L'heure de départ pour l'ensemble des tournées.
+     */
+    protected Calendar getHeureDepart(){
+        return this.heureDepart;
+    }
+    
+    /**
+     * méthode d'ajout d'une nouvelle livraison
+     * @param nouvelleLivraison 
+     */
+    public void ajouterLivraison(PointPassage nouvelleLivraison){
+        this.livraisons.add(nouvelleLivraison);
+    }
+    
+    /**
+     * Annulation ou suppression d'une demande de la livraison
+     * @param livraisonAnnulee 
+     */
+    public void annulerLivraison(PointPassage livraisonAnnulee){
+        this.livraisons.remove(livraisonAnnulee);
+    }
+    
+    /**
+     * 
+     * @return La description de la livraison
+     */
+    public Iterator<String> getDescription(){
+        List<String> sousDescription = new ArrayList<String>();
+        for(PointPassage pp : this.livraisons){
+            sousDescription.add("Livraison à "+pp.getPosition().getTroncon(0).getNom() + " pour une durée de "+(int)(pp.getDuree()/60)+" minutes");
+        }
+        sousDescription.add("Fin de la demande");
+        return sousDescription.iterator();
     }
 }
