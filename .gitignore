@@ -5,6 +5,5 @@
 **/nbdist/
 **/nb-gradle/
 **/lib/hamcrest-all-1.3.jar
-**/lib/hidden_hamcrest-all-1.3.jar
 **/project.properties
 **/lib/nblibraries.properties
