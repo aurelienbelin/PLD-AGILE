@@ -58,7 +58,7 @@ public class Deliverif extends Application {
     /**
      *
      */
-    public final static String CHARGER_DL = "Charger une demande de livraison";
+    public final static String CHARGER_DL = "Charger une demande de livraisons";
 
     /**
      *
@@ -344,12 +344,18 @@ public class Deliverif extends Application {
      * @param cre
      */
     public void estPlanCharge(String cre) {
-        if(cre.equals("SUCCESS")){
-            boutonChargerPlan.setDisable(true);
+        if(("SUCCESS").equals(cre)){
+            boutonChargerPlan.setDisable(false);
             boutonChargerDL.setDisable(false);
-            avertir("Le plan de la ville a bien été chargé");
-        }else{
+            boutonCalculerTournees.setDisable(true);
+            boutonAjouterLivraison.setDisable(true);
+            boutonSupprimerLivraison.setDisable(true);
+            boutonReorganiserTournee.setDisable(true);
+            //avertir("Le plan de la ville a bien été chargé");
+        }else if(cre!=null){
             avertir(cre);
+        }else{
+            avertir("Le plan n'a pas pu être chargé");
         }
     }
     
@@ -358,12 +364,18 @@ public class Deliverif extends Application {
      * @param cre
      */
     public void estDemandeLivraisonChargee(String cre){
-        if(cre.equals("SUCCESS")){
-            boutonChargerDL.setDisable(true);
+        if(("SUCCESS").equals(cre)){
+            boutonChargerPlan.setDisable(false);
+            boutonChargerDL.setDisable(false);
             boutonCalculerTournees.setDisable(false);
-            avertir("La demande de livraison a bien été chargée");
-        }else{
+            boutonAjouterLivraison.setDisable(true);
+            boutonSupprimerLivraison.setDisable(true);
+            boutonReorganiserTournee.setDisable(true);
+            //avertir("La demande de livraison a bien été chargée");
+        }else if(cre!=null){
             avertir(cre);
+        }else{
+            avertir("La demande de livraison n'a pas pu être chargée");
         }
     }
     
@@ -371,11 +383,19 @@ public class Deliverif extends Application {
      *
      * @param cre
      */
-    public void estTourneesCalculees(int cre){
-        if(cre==1)
-            avertir("Calcul des tournées terminé");
-        else
+    public void estTourneesCalculees(String cre){
+        if(("SUCCESS").equals(cre)){
+            boutonChargerPlan.setDisable(false);
+            boutonChargerDL.setDisable(false);
+            boutonCalculerTournees.setDisable(false);
+            boutonAjouterLivraison.setDisable(false);
+            boutonSupprimerLivraison.setDisable(false);
+            boutonReorganiserTournee.setDisable(true);
+            //this.vueGraphique.dessinerTournees();
+            //avertir("Calcul des tournées terminé");
+        }else{
             avertir("Le calcul des tournées n'a pas pu se terminer");
+    
+        }
     }
-
 }

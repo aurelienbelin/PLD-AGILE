@@ -25,23 +25,22 @@ public class IteratorMin implements Iterator<Integer>{
     /**
     * Cree un iterateur pour iterer sur l'ensemble des sommets de nonVus
     * @param nonVus - L'ensemble des sommets non vus.
-    * @param sommetCrt - Le sommet sur lequel nous sommes couramment.
-    * @param cout - Le tableau des cout t.q. cout[i][j]= le cout pour aller du
-    * sommet i au sommet j.
+    * @param cout - Le tableau des cout t.q. cout[i]= le cout pour aller du
+    * sommet i.
     */
-    public IteratorMin(Collection<Integer> nonVus, int sommetCrt, int[][] cout){
+    public IteratorMin(Collection<Integer> nonVus, int[] cout){
         this.candidats = new Integer[nonVus.size()];
         nbCandidats = 0;
         for (Integer s : nonVus){
             candidats[nbCandidats++] = s;
         }
-        this.quicksort(0, this.candidats.length-1, cout[sommetCrt]);
+        this.quicksort(0, this.candidats.length-1, cout);
     }
     
     /**
     * 
-    * @param debut -  
-    * @param fin - 
+    * @param debut -  L'indice du debut du tableau a trier
+    * @param fin - L'indice de fin du tableau a trier
     * @param cout - Le tableau des cout 
     */
     private void quicksort(int debut, int fin, int[] cout){
@@ -55,9 +54,9 @@ public class IteratorMin implements Iterator<Integer>{
     
     /**
     * 
-    * @param debut -
-    * @param fin -
-    * @param pivot -
+    * @param debut - L'indice de debut du tableau a trier
+    * @param fin - L'indice de fin du tableau a trier
+    * @param pivot - L'indice du pivot
     * @param cout - Le tableau des cout
     */
     private int arrange(int debut, int fin, int pivot, int[] cout){

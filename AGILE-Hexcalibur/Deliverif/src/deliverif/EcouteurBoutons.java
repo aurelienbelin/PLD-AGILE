@@ -10,9 +10,8 @@ package deliverif;
 
 import controleur.Controleur;
 import java.io.File;
+import java.io.IOException;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.stage.FileChooser;
 
 /**
@@ -21,8 +20,9 @@ import javafx.stage.FileChooser;
  */
 public class EcouteurBoutons{
     
-    private Deliverif fenetrePrincipale;
-    private Controleur controleur;
+    private final Deliverif fenetrePrincipale;
+    private final Controleur controleur;
+    private File file;
     
     /**
      *
@@ -38,13 +38,15 @@ public class EcouteurBoutons{
      *
      * @param e
      * @throws InterruptedException
+     * @throws java.io.IOException
      */
-    public void chargerPlanAction(ActionEvent e) throws Exception{
+
+    public void chargerPlanAction(ActionEvent e) throws InterruptedException, IOException, Exception{
         //System.out.println("Choisir un plan à charger"); //DEBUG
         String nomFichier = choisirFichier("Choisir le plan à charger");
         if(nomFichier != null)
         {
-            controleur.boutonChargeLivraisons(nomFichier);
+            controleur.boutonChargePlan(nomFichier);
         }
     }
     
@@ -52,8 +54,10 @@ public class EcouteurBoutons{
      *
      * @param e
      * @throws InterruptedException
+     * @throws java.io.IOException
      */
-    public void chargerDemandeLivraisonAction(ActionEvent e) throws Exception{
+
+    public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException, IOException, Exception{
         //System.out.println("Choisir une demande de livraison à charger"); //DEBUG
         String nomFichier = choisirFichier("Choisir la demande de livraison à charger");
         if(nomFichier != null)
@@ -91,18 +95,21 @@ public class EcouteurBoutons{
     private String choisirFichier(String docACharger) throws InterruptedException
     {
         FileChooser fileChooser = new FileChooser();
+        //Ouvre fileChooser au dernier dossier
+        if(file != null){
+            File existDirectory = file.getParentFile();
+            fileChooser.setInitialDirectory(existDirectory);
+        }
         fileChooser.setTitle(docACharger);
         fileChooser.getExtensionFilters().addAll(
                         new FileChooser.ExtensionFilter("XML File", "*.xml")
         );
-        File f = Deliverif.openFileChooser(fileChooser);
-        if (f != null) {
+        file = Deliverif.openFileChooser(fileChooser);
+        if (file != null) {
             //On appelle la méthode du controleur devant charger la demande de livraison
-            //System.out.println(f); //DEBUG
-            return f.getAbsolutePath();
+            return file.getAbsolutePath();
         }else{
             return null;
         }
     }
 }
-

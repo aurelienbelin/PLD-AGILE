@@ -51,15 +51,15 @@ public class GestionLivraisonTest {
     /**
      * Test of calculerTournee method, of class GestionLivraison.
      */
-    @Test
+    @Test(timeout = 30*60*1000)
     public void testCalculerTournee() {
         String urlFichierPlan = "test/modele/flux/grandPlan.xml";
-        String urlFichierDemande = "test/modele/flux/dl-grand-15.xml";
-        int nbLivreur=7;
+        String urlFichierDemande = "test/modele/flux/dl-grand-12.xml";
+        int nbLivreur=8;
         LecteurXML lecteur = new LecteurXML();
         
         try{
-            gestion.chargerVille(urlFichierPlan);
+            gestion.chargerPlan(urlFichierPlan);
         }catch(Exception e){
             fail(e.getStackTrace().toString());
         }
@@ -77,15 +77,16 @@ public class GestionLivraisonTest {
             fail(e.getStackTrace().toString());
         }
         
-        assertEquals(15, gestion.getDemande().getLivraisons().size());
+        //assertEquals(15, gestion.getDemande().getLivraisons().size());
         assertEquals(1,gestion.calculerTournees(nbLivreur));
         assertNotNull(gestion.getTournees());
         assertEquals(nbLivreur,gestion.getTournees().length);
         for(Tournee t : gestion.getTournees()){
-            Iterator<String> it = t.getDescription();
+            /*Iterator<String> it = t.getDescription();
             while(it.hasNext()){
                 System.out.println(it.next());
-            }
+            }*/
+            System.out.println(t.getTrajet().size());
         }
     }
     

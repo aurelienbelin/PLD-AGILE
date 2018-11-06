@@ -24,19 +24,19 @@ public class EtatInit extends EtatDefaut{
      */
     public EtatInit (){}
     
-    /**  Cette méthode délègue la chargement du plan au modèle
+    /**  Cette méthode délègue le chargement du plan au modèle
       *  Si le chargement s'est bien passé on passe dans 
       *  l'EtatPlanCharge 
       *  @param gestionLivraison
       *  @param fichier
-     * @param fenetre
+      *  @param fenetre
       *  @see modele.GestionLivraison
       *  @see EtatPlanCharge
      */
     @Override
     public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
-            gestionLivraison.chargerVille(fichier);
+            gestionLivraison.chargerPlan(fichier);
             Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
             fenetre.estPlanCharge("SUCCESS");
         } catch (SAXException e) {

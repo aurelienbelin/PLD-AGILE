@@ -22,6 +22,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import modele.outils.DemandeLivraison;
 import modele.outils.GestionLivraison;
 import modele.outils.Tournee;
 
@@ -117,14 +118,34 @@ public class VueTextuelle extends VBox implements Observer {
         this.descriptionTournee.setText("");
         //Le Label a-t-il été vidé ?
         
-        if(this.gestionLivraison.getTournees()!=null){
-            ArrayList<Tournee> tournees = new ArrayList<>(Arrays.asList(this.gestionLivraison.getTournees()));
+        if(this.gestionLivraison.getDemande()!=null){
+            DemandeLivraison demande = this.gestionLivraison.getDemande();
+            
             String des;
-            if(!tournees.isEmpty()){
+            des=new String("");
+            Iterator<String> it = demande.getDescription();
+            contenu.add("Demande de livraison");
+            while(it.hasNext()){
+                String s = it.next();
+                //des+="\n\t\t<li>"+s+"</li>";
+                des+="\n\t"+s;
+            }
+            //des+="\n\t</ul>\n</html>";
+
+            descriptions.add(des);
+            
+            choixTournee.setItems(contenu);
+        }
+        
+        if(this.gestionLivraison.getTournees()!=null){
+            Tournee[] tournees = this.gestionLivraison.getTournees();
+            
+            String des;
+            if(tournees.length!=0){ //!tournees.isEmpty()){
                 //des="<html>\n\t<ul>";
-                des=new String("");
                 int i = 1;
                 for(Tournee t : tournees){
+                    des=new String("");
                     Iterator<String> it = t.getDescription();
                     contenu.add("Tournée "+i);
                     while(it.hasNext()){
@@ -134,12 +155,11 @@ public class VueTextuelle extends VBox implements Observer {
                     }
                     //des+="\n\t</ul>\n</html>";
 
-                    System.out.println("Test 3 : "+des); //DEBUG
                     descriptions.add(des);
                     i++;
                 }
-            }            
-            System.out.println(contenu.size()); //DEBUG
+            }
+            
             choixTournee.setItems(contenu);
         }
         
