@@ -1,8 +1,9 @@
-**/nbproject/private/
-**/build/
-**/nbbuild/
-**/dist
+AGILE-Hexcalibur/Deliverif/nbproject/private/
+AGILE-Hexcalibur/Deliverif/build/
+AGILE-Hexcalibur/Deliverif/nbbuild/
+AGILE-Hexcalibur/Deliverif/dist
 **/nbdist/
 **/nb-gradle/
-**/lib/hamcrest-all-1.3.jar
-**/project.properties
+AGILE-Hexcalibur/Deliverif/lib/hamcrest-all-1.3.jar
+AGILE-Hexcalibur/lib/nblibraries.properties
+
