@@ -54,10 +54,10 @@ public class TSPGlouton extends TemplateTSP {
             List<Integer> aVoir = new ArrayList<Integer>();
             aVoir.add(0);
             aVoir.addAll(nonVus);
-            return new IteratorMin(aVoir, sommetCrt, cout);
+            return new IteratorMin(aVoir, cout[sommetCrt]);
         } else {
             //Il n'est pas encore temps d'aller voir un entrepot virtuel
-            return new IteratorMin(nonVus, sommetCrt, cout);
+            return new IteratorMin(nonVus, cout[sommetCrt]);
         }
     }
 

@@ -24,7 +24,7 @@ public abstract class TemplateTSP implements TSP {
         private Boolean arretCalcul;
         
         protected int quantiteTournee;//compte le nombre de sommet visite au cours d'une tournee
-        
+        public long appelsFaits;
 	
 	public Boolean getTempsLimiteAtteint(){
             return tempsLimiteAtteint;
@@ -40,7 +40,9 @@ public abstract class TemplateTSP implements TSP {
 		vus.add(0); // le premier sommet visite est 0
                 this.quantiteTournee=0;
                 this.arretCalcul=false;
+                appelsFaits=0;
 		branchAndBound(0, nonVus, vus, 0, cout, System.currentTimeMillis(), tpsLimite);
+                System.out.println("Appels réalisés : "+appelsFaits);
 	}
 	
 	public Integer getMeilleureSolution(int i){
@@ -99,6 +101,7 @@ public abstract class TemplateTSP implements TSP {
                 return;
             }
             else if (coutVus + bound(vus, sommetCrt, nonVus, cout) < coutMeilleureSolution){
+                appelsFaits++;
                 //Eviter les erreurs d'overflow
                 //quand coutMeilleureSolution vaut encore Integer.MAX_VALUE au début
                 //car bound peut renvoyer coutMeilleureSolution.
