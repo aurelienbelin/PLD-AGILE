@@ -107,6 +107,7 @@ public class EcouteurBoutons{
      * @param dc 
      */
     public void localiserPointVueGraphique(DescriptifChemin dc){
+        System.out.println(dc.getPoint()); //DEBUG
         controleur.afficherMarqueur(dc);
     }
     
