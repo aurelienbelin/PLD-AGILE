@@ -33,12 +33,19 @@ public class TSPSimple extends TemplateTSP{
         //renvoyant à l'entrepot fictif, sinon on laisse un itérateur vers
         //les sommets non vus.
         int quantiteSommet = (cout.length-1)/this.nbLivreur;
-        //-1 car on ne compte pas le sommet entrepot
-        if ((cout.length-1-nonVus.size())%quantiteSommet==0 && sommetCrt!=0){
+        if (this.quantiteTournee==quantiteSommet+1){
+            //Il est temps d'aller à l'entrepot virtuel
             List<Integer> aVoir = new ArrayList<Integer>();
             aVoir.add(0);
+            return new IteratorSeq(aVoir, sommetCrt); 
+        } else if (this.quantiteTournee==quantiteSommet){
+            //On a vu le minimum de noeud possible par livreur, peut-être un de plus ?
+            List<Integer> aVoir = new ArrayList<Integer>();
+            aVoir.add(0);
+            aVoir.addAll(nonVus);
             return new IteratorSeq(aVoir, sommetCrt);
         } else {
+            //Il n'est pas encore temps d'aller voir un entrepot virtuel
             return new IteratorSeq(nonVus, sommetCrt);
         }
     }
@@ -46,6 +53,7 @@ public class TSPSimple extends TemplateTSP{
 
     @Override
     protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
+        
         return 0;
     }
 }

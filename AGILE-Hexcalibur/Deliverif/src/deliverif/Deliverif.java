@@ -31,6 +31,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
@@ -40,8 +41,9 @@ import javafx.stage.Stage;
 import modele.outils.GestionLivraison;
 
 /**
- *
+ * Classe principale/point d'entrée de l'application. Il s'agit de la fenetre principale de l'application.
  * @author romain
+ * @see Application
  */
 public class Deliverif extends Application {
     
@@ -103,6 +105,7 @@ public class Deliverif extends Application {
     private Spinner nbLivreurs;
     private Label descriptionTextuelle;
     private ComboBox choixTournee;
+    private Label information;
     
     @Override
     public void init() throws Exception{
@@ -136,7 +139,7 @@ public class Deliverif extends Application {
         
         creerPanelDroit();   
         //Il faudra ajouter la vue graphique
-        vueGraphique = new VueGraphique(this.gestionLivraison);
+        vueGraphique = new VueGraphique(this.gestionLivraison, this);
         vueGraphique.setLayoutX(0);
         vueGraphique.setLayoutY(115);
         
@@ -154,6 +157,9 @@ public class Deliverif extends Application {
         stage.show();
     }
     
+    /**
+     * Création des boutons de la fenetre
+     */
     private void creerBoutonsChargement(){
         //A factoriser
         boutonChargerPlan = new Button(CHARGER_PLAN);
@@ -200,6 +206,9 @@ public class Deliverif extends Application {
         boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
     }
     
+    /**
+     * Création du panel droit de la fenetre principal.
+     */
     private void creerPanelDroit() {
         panelDroit = new VBox();
         panelDroit.setPrefSize(1024-640,640);
@@ -214,7 +223,7 @@ public class Deliverif extends Application {
         livreurs.setFont(new Font("System",20));
         
         nbLivreurs = new Spinner();
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, 1);
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1);
         nbLivreurs.setValueFactory(valueFactory);
         nbLivreurs.setPrefSize(60,25);
         
@@ -222,6 +231,7 @@ public class Deliverif extends Application {
         
         boutonCalculerTournees = new Button(CALCULER_TOURNEES);
         boutonCalculerTournees.setPrefSize(300,50);
+        boutonCalculerTournees.setMinHeight(50);
         boutonCalculerTournees.setWrapText(true);
         boutonCalculerTournees.setDisable(true);
         boutonCalculerTournees.setTextAlignment(TextAlignment.CENTER);
@@ -231,48 +241,65 @@ public class Deliverif extends Application {
             } catch (InterruptedException ex) {
                 Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });
+        });        
         
         Separator sh = new Separator();
         sh.setOrientation(Orientation.HORIZONTAL);
         sh.setPrefWidth(panelDroit.getWidth());
+        sh.setMaxWidth(1024-640-50);
         sh.setLayoutX(640);
         
-        vueTextuelle = new VueTextuelle(gestionLivraison);
-        vueTextuelle.ajouterEcouteur(ecouteurBoutons);
+        vueTextuelle = new VueTextuelle(gestionLivraison, ecouteurBoutons);
+        vueTextuelle.setMaxWidth(1024-640-50);
         
-        panelDroit.getChildren().addAll(boxLivreurs, boutonCalculerTournees, sh, vueTextuelle);
+        this.information = new Label();
+        this.information.setPrefSize(1024-640,30);
+        this.information.setMinWidth(1024-640-25);
+        this.information.setMaxHeight(30);
+        this.information.setAlignment(Pos.CENTER_RIGHT);
+        this.information.setFont(new Font("Arial", 10));
+        this.information.setText("Test");
+        //this.information.setStyle("-fx-background-color:red;");
         
+        panelDroit.getChildren().addAll(boxLivreurs, boutonCalculerTournees, sh, vueTextuelle, information);
     }
     
     /**
-     *
-     * @return
+     * Affiche en bas à droite l'action en cours dans l'application.
+     * @param message - message à afficher (état courant de l'application)
+     */
+    protected void informationEnCours(String message){
+        this.information.setText(message);
+    }
+    
+    /**
+     * Renvoie le nombre de livreurs.
+     * @return le nombre de livreurs
      */
     public int getNbLivreurs(){
         return (Integer)this.nbLivreurs.getValue();
     }
     
     /**
-     *
-     * @return
+     * Renvoie la VueTextuelle associée à cette fenetre principale.
+     * @return la Vuetextuelle
      */
     public VueTextuelle getVueTextuelle(){
         return this.vueTextuelle;
     }
     
     /**
-     *
-     * @return
+     * Renvoie la VueGraphiqueassociée à cette fenetre principale.
+     * @return la VueGraphique
      */
     public VueGraphique getVueGraphique(){
         return this.vueGraphique;
     }
     
     /**
-     *
-     * @param fileChooser
-     * @return
+     * Ouvre la fenetre du gestionnaire de fichier pour choix de fichier à ouvrir.
+     * @param fileChooser - l'objet gestionnaire de fichier à ouvrir
+     * @return le fichier à ouvrir
      * @throws InterruptedException
      */
     public static File openFileChooser(FileChooser fileChooser) throws InterruptedException {
@@ -281,13 +308,17 @@ public class Deliverif extends Application {
     }
     
     /**
-     *
-     * @param message
+     * Créer un Pop-Up pour avertir l'utilisateur.
+     * @param message - message à afficher dans le pop-up
      */
     public void avertir(String message){
         this.createMessagePopup(message);
     }
     
+    /**
+     * Construit une fenetre de pop-up.
+     * @param message - message à afficher dans le pop-up
+     */
     private void createMessagePopup(String message) {
         System.out.println("Xx : "+this.boutons.getWidth()+" ; Yy : "+this.boutons.getHeight()); //DEBUG
         
@@ -340,8 +371,8 @@ public class Deliverif extends Application {
     }
 
     /**
-     *
-     * @param cre
+     * Passe l'IHM dans l'état suivant une fois le plan chargé.
+     * @param cre - compte rendu d'execution des opérations sur le modèle
      */
     public void estPlanCharge(String cre) {
         if(("SUCCESS").equals(cre)){
@@ -353,15 +384,17 @@ public class Deliverif extends Application {
             boutonReorganiserTournee.setDisable(true);
             //avertir("Le plan de la ville a bien été chargé");
         }else if(cre!=null){
+            this.informationEnCours("");
             avertir(cre);
         }else{
+            this.informationEnCours("");
             avertir("Le plan n'a pas pu être chargé");
         }
     }
     
     /**
-     *
-     * @param cre
+     * Passe l'IHM dans l'état suivant une fois la demande de livraison chargée.
+     * @param cre - compte rendu d'execution des opérations sur le modèle
      */
     public void estDemandeLivraisonChargee(String cre){
         if(("SUCCESS").equals(cre)){
@@ -373,15 +406,17 @@ public class Deliverif extends Application {
             boutonReorganiserTournee.setDisable(true);
             //avertir("La demande de livraison a bien été chargée");
         }else if(cre!=null){
+            this.informationEnCours("");
             avertir(cre);
         }else{
+            this.informationEnCours("");
             avertir("La demande de livraison n'a pas pu être chargée");
         }
     }
     
     /**
-     *
-     * @param cre
+     * Passe l'IHM dans l'état suivant une fois les tournées calculées.
+     * @param cre - compte rendu d'execution des opérations sur le modèle
      */
     public void estTourneesCalculees(String cre){
         if(("SUCCESS").equals(cre)){
@@ -394,6 +429,7 @@ public class Deliverif extends Application {
             //this.vueGraphique.dessinerTournees();
             //avertir("Calcul des tournées terminé");
         }else{
+            this.informationEnCours("");
             avertir("Le calcul des tournées n'a pas pu se terminer");
     
         }

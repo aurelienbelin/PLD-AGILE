@@ -16,6 +16,8 @@ import modele.flux.LecteurXML;
 import org.xml.sax.SAXException;
 
 /** 
+ * Point d'entrée du contrôleur. Permet à l'application d'accéder de manière
+ * sécurisée aux objets composant le modèle.
  * @version 1.0 23/10/2018
  * @author Louis Ohl
  */
@@ -24,6 +26,7 @@ public class GestionLivraison extends Observable{
     private PlanVille plan;
     private Tournee[] tournees;
     private DemandeLivraison demande;
+    private TSP tsp;
     
     /**
      * Créer une nouvelle GestionLivraison
@@ -48,7 +51,7 @@ public class GestionLivraison extends Observable{
             int j = listePoints.indexOf(c.getFin());
             cout[i][j]=(int)c.getDuree();
         }
-        TSPGlouton tsp = new TSPGlouton(nbLivreur);
+        tsp = new TSPMinCFC(nbLivreur);
         tsp.chercheSolution(Integer.MAX_VALUE, listePoints.size(), nbLivreur, cout);
         List<Tournee> listeTournee = new ArrayList<Tournee>(nbLivreur);
         this.tournees = new Tournee[nbLivreur];
@@ -82,12 +85,20 @@ public class GestionLivraison extends Observable{
         listeTournee.toArray(this.tournees);
         
         if(this.tournees==null){
+            System.out.println("ALERTE GOGOL");
             return 0;
         } else {
             setChanged();
             this.notifyObservers(tournees);
             return 1;
         }
+    }
+    
+    /**
+     * Interrompt le calcul en cours du TSP.
+     */
+    public void arreterCalculTournee(){
+        tsp.arreterCalcul();
     }
     
     /**
@@ -99,6 +110,7 @@ public class GestionLivraison extends Observable{
         this.plan = Lecteur.creerPlanVille(fichier);
         setChanged();
         this.notifyObservers(plan); //?
+
     }
     
     /**
@@ -110,6 +122,16 @@ public class GestionLivraison extends Observable{
         this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
         setChanged();
         this.notifyObservers(demande); //?
+    }
+    
+    //Test
+    public Intersection identifierPointPassage(String point){
+        String[] identifiants = point.split("_");
+        
+        int numTournee = Integer.parseInt(identifiants[0]);
+        int numLivraison = Integer.parseInt(identifiants[1]);
+        
+        return this.tournees[numTournee-1].getPointPassage(numLivraison-1).getPosition();        
     }
     
     /**

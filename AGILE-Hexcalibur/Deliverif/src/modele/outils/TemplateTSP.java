@@ -21,9 +21,10 @@ public abstract class TemplateTSP implements TSP {
 	private Integer[] meilleureSolution;
 	private int coutMeilleureSolution = 0;
 	private Boolean tempsLimiteAtteint;
-        protected int nombreFictif;
+        private Boolean arretCalcul;
         
-        
+        protected int quantiteTournee;//compte le nombre de sommet visite au cours d'une tournee
+        public long appelsFaits;
 	
 	public Boolean getTempsLimiteAtteint(){
             return tempsLimiteAtteint;
@@ -37,8 +38,11 @@ public abstract class TemplateTSP implements TSP {
 		for (int i=1; i<nbSommets; i++) nonVus.add(i);
 		ArrayList<Integer> vus = new ArrayList<Integer>(nbSommets);
 		vus.add(0); // le premier sommet visite est 0
-                this.nombreFictif=0;
+                this.quantiteTournee=0;
+                this.arretCalcul=false;
+                appelsFaits=0;
 		branchAndBound(0, nonVus, vus, 0, cout, System.currentTimeMillis(), tpsLimite);
+                System.out.println("Appels réalisés : "+appelsFaits);
 	}
 	
 	public Integer getMeilleureSolution(int i){
@@ -82,38 +86,109 @@ public abstract class TemplateTSP implements TSP {
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */	
         protected void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, int coutVus, int[][] cout, long tpsDebut, int tpsLimite){
-            if (System.currentTimeMillis() - tpsDebut > tpsLimite){
+            if (System.currentTimeMillis() - tpsDebut > tpsLimite || arretCalcul){
                     tempsLimiteAtteint = true;
                     return;
             }
-	    if (nonVus.size() == 0){ // tous les sommets ont ete visites
+	    if (nonVus.isEmpty() && vus.size()==meilleureSolution.length){ // tous les sommets ont ete visites
 	    	coutVus += cout[sommetCrt][0];
 	    	if (coutVus < coutMeilleureSolution){ // on a trouve une solution meilleure que meilleureSolution
                     vus.toArray(meilleureSolution);
                     coutMeilleureSolution = coutVus;
                 }
-	    } else if (coutVus + bound(vus, sommetCrt, nonVus, cout) < coutMeilleureSolution){
+	    }
+            if (!solutionConvenable(vus, nonVus, cout)){
+                return;
+            }
+            else if (coutVus + bound(vus, sommetCrt, nonVus, cout) < coutMeilleureSolution){
+                appelsFaits++;
+                //Eviter les erreurs d'overflow
+                //quand coutMeilleureSolution vaut encore Integer.MAX_VALUE au début
+                //car bound peut renvoyer coutMeilleureSolution.
+                if (bound(vus, sommetCrt, nonVus, cout)==coutMeilleureSolution){
+                    System.out.println("Alerte GOGOL !! Détail "+bound(vus, sommetCrt, nonVus, cout));
+                }
                 Iterator<Integer> it = iterator(sommetCrt, nonVus, cout);
                 while (it.hasNext()){
                     Integer prochainSommet = it.next();
                     vus.add(prochainSommet);
                     nonVus.remove(prochainSommet);
-                    if (prochainSommet==0){
-                        this.nombreFictif++;
+                    if (prochainSommet!=0){
+                        this.quantiteTournee++;
+                    } else {
+                        this.quantiteTournee=0;//reset, nouvelle tournee !
                     }
                     branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet], cout, tpsDebut, tpsLimite);
                     if (prochainSommet!=0){
                         vus.remove(prochainSommet);
                         nonVus.add(prochainSommet);
+                        this.quantiteTournee--;
                     } else {
-                        //distinction obligee en raison de la methode remove des
-                        //arraylist. On detecte donc les entrepots virtuels.
+                        //Il faut retrouver le nombre de noeud depuis le dernier
+                        //entrepot virtuel
                         vus.remove(vus.size()-1);
-                        this.nombreFictif--;
+                        this.quantiteTournee=0;
+                        for(int i=vus.size()-1; vus.get(i)!=0;i--){
+                            this.quantiteTournee++;
+                        }
                     }
                 }
 	    }
 	}
+        
+        /**
+         * Analyse si la solution partielle est encore valide, i.e. si les symétries
+         * sont cassées et si chaque tournée laisse encore assez de sommet à voir
+         * pour les livreurs restant.
+	 * @param vus la liste des sommets visites (y compris sommetCrt)
+	 * @param nonVus la liste des sommets qui n'ont pas encore ete visites
+         * @return true si la solution est considérée comme convenable. false sinon (i.e. arrêter le branch and bound, remonter
+         * à l'étape précédente.
+         */
+        protected boolean solutionConvenable(ArrayList<Integer> vus, ArrayList<Integer> nonVus, int[][] cout){
+            /**
+            * Dans un premier temps, est-ce qu'on verifie la condition suivante :
+            * premier sommet de la tournee i > premier sommet des tournees i-1
+            * Si ce n'est pas le cas :
+            * On vérifie qu'il reste assez de sommet nonVus pour les livreurs
+            * sans tournee. 
+            */
+            int premierSommet=0;
+            boolean apresZero=false;
+            int nombreEntrepotVirtuel=0;
+            for (Integer sommet : vus){
+                if (apresZero){
+                    apresZero=false;
+                    if (sommet<=premierSommet){
+                        return false;
+                    } else {
+                        premierSommet=sommet;
+                    }
+                }
+                if (sommet==0){
+                    apresZero=true;
+                    nombreEntrepotVirtuel++;
+                }
+            }
+            int nbLivreur = meilleureSolution.length-cout.length+1;
+            int quantiteSommet = (cout.length-1)/nbLivreur;
+            if (quantiteSommet*(nbLivreur-nombreEntrepotVirtuel)>nonVus.size() && !nonVus.isEmpty()){
+                //Il ne reste pas assez de sommet pour que cela soit réparti équitablement
+                //entre les livreurs restant et le livreur courant
+                return false;
+            }
+            if (nonVus.size()<quantiteSommet && nombreEntrepotVirtuel!=nbLivreur){
+                //Stop, l'un des pénultièmes est en train de tout rafler
+                //car les autres ont été trop gourmands !
+                //Le dernier n'aura rien !
+                return false;
+            }
+            return true;
+        }
+        
+        public void arreterCalcul(){
+            this.arretCalcul=true;
+        }
          
 }
 
