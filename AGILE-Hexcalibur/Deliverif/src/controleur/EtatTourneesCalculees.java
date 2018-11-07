@@ -34,9 +34,11 @@ public class EtatTourneesCalculees extends EtatDefaut{
     @Override
     public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
-        int cre = gestionLivraison.calculerTournees(nbLivreurs);
-        if(cre==1){
+        try{
+            gestionLivraison.calculerTournees(nbLivreurs);
             fenetre.estTourneesCalculees("SUCCESS");
+        } catch(Exception e){
+            
         }
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
     }
