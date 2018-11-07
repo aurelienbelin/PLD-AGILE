@@ -8,17 +8,21 @@
  */
 package deliverif;
 
+import javafx.scene.input.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,6 +49,7 @@ public class VueGraphique extends StackPane implements Observer {
     private double echelleLong;
     private double origineLatitude;
     private double origineLongitude;
+    private EcouteurBoutons ecouteur;
     
     //Composants
     private final Color[] couleurs = {Color.BLUEVIOLET, Color.BROWN, Color.CHARTREUSE,Color.CORAL,Color.CRIMSON,Color.DARKBLUE, Color.DARKGREEN, Color.DEEPPINK, Color.GOLD, Color.LIGHTSALMON};
@@ -57,6 +62,8 @@ public class VueGraphique extends StackPane implements Observer {
     //Test
     private Button bouton;
     
+    
+
     /**
      * Constructeur de VueGraphique.
      * @param gl - point d'entrée du modèle observé
@@ -64,7 +71,8 @@ public class VueGraphique extends StackPane implements Observer {
      * @see GestionLivraison
      * @see Deliverif
      */
-    public VueGraphique(GestionLivraison gl, Deliverif f){
+
+    public VueGraphique(GestionLivraison gl, EcouteurBoutons eb, Deliverif f){
         super();
         
         this.setPrefSize(640,640-95);
@@ -72,6 +80,7 @@ public class VueGraphique extends StackPane implements Observer {
         this.fenetre = f;
         
         this.gestionLivraison = gl;
+        this.ecouteur = eb;
         gestionLivraison.addObserver(this);
         
         plan = new Canvas(640,640-95);
@@ -171,6 +180,18 @@ public class VueGraphique extends StackPane implements Observer {
             //Dessin des traits
             gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
         }
+        this.setOnMouseClicked(m->{
+            try {
+                if(m.getButton().equals(MouseButton.PRIMARY))
+                {
+                    double[] pointAMAJ = ecouteur.recupererCoordonneesSouris((MouseEvent) m);
+                    double[] pointAJour = this.mettreCoordonneesALechelle(pointAMAJ, true);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
         
         fenetre.informationEnCours("");
     }
@@ -195,22 +216,26 @@ public class VueGraphique extends StackPane implements Observer {
         List <modele.outils.PointPassage> livraisons = gestionLivraison.getDemande().getLivraisons();
         
         for(modele.outils.PointPassage livraison : livraisons){
-            int abscissePtLivraison = (int)((livraison.getPosition().getLongitude() - origineLongitude) * echelleLong);
-            int ordonneePtLivraison = (int)(this.getHeight() - ( livraison.getPosition().getLatitude() - origineLatitude) * echelleLat);
-            
+            double[] ptLivraison = { 
+                                    livraison.getPosition().getLongitude(),
+                                    livraison.getPosition().getLatitude()
+            };
+            ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
+
             //Dessin marqueur
             gc.setFill(Color.BLUE);
-            gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
+            gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
    
         }
-        
-        int abscissePtLivraison =(int) ((gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude() - origineLongitude) * echelleLong);
-        int ordonneePtLivraison =(int) (this.getHeight() - ( gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude() - origineLatitude) * echelleLat);
+        double[] ptLivraison = { 
+                                    gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude(),
+                                    gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude()
+            };
+            ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
         gc.setFill(Color.RED);
         
-        System.out.println("Entrepot : "+abscissePtLivraison+" ; "+ordonneePtLivraison); //DEBUG
-        
-        gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
+        gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
+
         
         fenetre.informationEnCours("");
     }
@@ -303,6 +328,21 @@ public class VueGraphique extends StackPane implements Observer {
             if(numTournee!=0 && i!=numTournee-1)
                 this.tournees.get(i).setVisible(false);
         }
+    }
+    
+    private double[] mettreCoordonneesALechelle(double[] pointAMAJ, boolean estCoordonneesVueGraphique)
+    {
+        double[] pointAJour = new double[2];
+        if(estCoordonneesVueGraphique){
+            pointAJour[0] = pointAMAJ[0] / echelleLong + origineLongitude;
+            pointAJour[1] = (pointAMAJ[1] - this.getHeight()) / (-echelleLat) + origineLatitude;
+        }
+        else
+        {
+            pointAJour[0] = (pointAMAJ[0] - origineLongitude) * echelleLong;
+            pointAJour[1] = this.getHeight() - (pointAMAJ[1] - origineLatitude) * echelleLat;
+        }
+        return pointAJour;
     }
     
     //Test
