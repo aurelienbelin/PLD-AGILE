@@ -97,5 +97,6 @@ public class EtatTourneesCalculees extends EtatDefaut{
     @Override
     public void ajouterLivraison (deliverif.Deliverif fenetre) {
         Controleur.etatCourant = Controleur.ETAT_PLAN_CLIQUABLE;
+        fenetre.estPlanCliquable();
     }
 }

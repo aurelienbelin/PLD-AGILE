@@ -47,6 +47,8 @@ interface Etat
     
     public void ajouterLivraison(deliverif.Deliverif fenetre);
     
-    public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, float latitude, float longitude);
+    public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
+    
+    public void annuler(deliverif.Deliverif fenetre);
 
 }

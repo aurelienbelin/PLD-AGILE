@@ -126,8 +126,12 @@ public class Controleur {
      * @see Etat
      * @version 2.1
      */
-    public void clicGauche(float latitude, float longitude) {
+    public void clicGauche(double latitude, double longitude) {
         etatCourant.intersectionPlusProche(this.gestionLivraison, this.fenetre, latitude, longitude);
+    }
+    
+    public void boutonAnnuler() {
+        etatCourant.annuler(this.fenetre);
     }
     
 

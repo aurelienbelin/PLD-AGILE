@@ -167,7 +167,7 @@ public class GestionLivraison extends Observable{
     /**
      * 
      */
-    public Intersection intersectionPlusProche(float latitude, float longitude) {
+    public Intersection intersectionPlusProche(double latitude, double longitude) {
         
         Intersection resultat = this.plan.getIntersections().get(0);
         double minDistance = Math.sqrt(Math.pow((resultat.getLatitude()-latitude), 2) + Math.pow((resultat.getLongitude()-longitude),2));
