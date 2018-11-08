@@ -1,13 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 41
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package controleur;
 
 /**
  *
- * @author ahirusan
+ * @author Hex'calibur
  */
 public class EtatIntersectionSelectionnee extends EtatDefaut{
 
@@ -25,5 +28,11 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
         fenetre.estTourneesCalculees("SUCCESS");
         fenetre.getVueGraphique().effacerMarker();
         fenetre.estAjoutLivraisonFini();
+    }
+    
+    @Override
+    public void validerSelection(deliverif.Deliverif fenetre){
+        Controleur.etatCourant = Controleur.ETAT_INTERSECTION_VALIDEE;
+        fenetre.estIntersectionValidee();
     }
 }

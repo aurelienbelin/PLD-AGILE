@@ -110,6 +110,7 @@ public class Deliverif extends Application {
     private Button boutonAnnuler;
     private Button boutonValiderSelection;
     private Button boutonValiderAjout;
+    private Button boutonRetourSelection;
     private Spinner nbLivreurs;
     private Spinner choixDuree;
     private Label descriptionTextuelle;
@@ -146,7 +147,7 @@ public class Deliverif extends Application {
         boutonsAjoutLivraison.setPadding(new Insets(15, 15, 15, 15));
         boutonsAjoutLivraison.setSpacing(5);
         
-        boutonsAjoutLivraison.getChildren().addAll(boutonAnnuler, boutonValiderSelection);
+        boutonsAjoutLivraison.getChildren().addAll(boutonAnnuler, boutonValiderSelection, boutonRetourSelection);
         
         Separator sv = new Separator();
         sv.setOrientation(Orientation.VERTICAL);
@@ -246,6 +247,13 @@ public class Deliverif extends Application {
         boutonValiderSelection.setDisable(true);
         boutonValiderSelection.setTextAlignment(TextAlignment.CENTER);
         boutonValiderSelection.setTranslateX(400);
+        boutonValiderSelection.setOnAction(e -> {
+            try {
+                ecouteurBoutons.boutonValiderSelection(e);
+            } catch (Exception ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }); 
         
         boutonAnnuler = new Button("Retour au menu");
         boutonAnnuler.setPrefSize(100,65);
@@ -255,6 +263,21 @@ public class Deliverif extends Application {
         boutonAnnuler.setOnAction(e -> {
             try {
                 ecouteurBoutons.boutonAnnuler(e);
+            } catch (Exception ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }); 
+        
+        boutonRetourSelection = new Button("Retour à la sélection");
+        boutonRetourSelection.setPrefSize(100,65);
+        boutonRetourSelection.setWrapText(true);
+        boutonRetourSelection.setDisable(false);
+        boutonRetourSelection.setTextAlignment(TextAlignment.CENTER);
+        boutonRetourSelection.setTranslateX(295);
+        boutonRetourSelection.setVisible(false);
+        boutonRetourSelection.setOnAction(e -> {
+            try {
+                ecouteurBoutons.boutonRetour(e);
             } catch (Exception ex) {
                 Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -349,7 +372,7 @@ public class Deliverif extends Application {
         boutonValiderAjout.setTextAlignment(TextAlignment.CENTER);
         /*boutonValiderAjout.setOnAction(e -> {
             try {
-                ecouteurBoutons.calculerTourneesAction(e);
+                ecouteurBoutons.boutonValider(e);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -529,9 +552,11 @@ public class Deliverif extends Application {
     }
     
     public void estPlanCliquable(){
+        boutonValiderSelection.setVisible(true);
+        boutonRetourSelection.setVisible(false);
         bord.setTop(boutonsAjoutLivraison);
         boutonAnnuler.setDisable(false);
-        boutonValiderSelection.setDisable(false);
+        boutonValiderSelection.setDisable(true);
         panelDroit.getChildren().remove(boxCalculTournees);
         panelDroit.getChildren().add(0, boxAjoutLivraison);
         boxAjoutLivraison.setDisable(true);
@@ -540,5 +565,18 @@ public class Deliverif extends Application {
     public void estAjoutLivraisonFini(){
         panelDroit.getChildren().remove(boxAjoutLivraison);
         panelDroit.getChildren().add(0, boxCalculTournees);
+    }
+    
+    public void estIntersectionSelectionnee(){
+        boutonValiderSelection.setVisible(true);
+        boutonRetourSelection.setVisible(false);
+        boutonValiderSelection.setDisable(false);
+        boxAjoutLivraison.setDisable(true);
+    }
+    
+    public void estIntersectionValidee(){
+        boxAjoutLivraison.setDisable(false);
+        boutonValiderSelection.setVisible(false);
+        boutonRetourSelection.setVisible(true);
     }
 }

@@ -54,6 +54,11 @@ public class Controleur {
      */
     protected static final EtatIntersectionSelectionnee ETAT_INTERSECTION_SELECTIONNEE = new EtatIntersectionSelectionnee();
     
+    /**
+     * 
+     */
+    protected static final EtatIntersectionValidee ETAT_INTERSECTION_VALIDEE = new EtatIntersectionValidee();
+    
     /** etatCourant prendra successivement les états définis ci-dessus comme 
      * valeurs
      */
@@ -132,6 +137,14 @@ public class Controleur {
     
     public void boutonAnnuler() {
         etatCourant.annuler(this.fenetre);
+    }
+    
+    public void boutonValiderSelection() {
+        etatCourant.validerSelection(this.fenetre);
+    }
+    
+    public void boutonRetour(){
+        etatCourant.retourSelection(this.fenetre);
     }
     
 

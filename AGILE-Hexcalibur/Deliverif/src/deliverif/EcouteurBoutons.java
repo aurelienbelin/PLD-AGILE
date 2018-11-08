@@ -163,5 +163,13 @@ public class EcouteurBoutons{
         controleur.boutonAnnuler();
     }
     
+    public void boutonValiderSelection(ActionEvent e) {
+        controleur.boutonValiderSelection();
+    }
+    
+    public void boutonRetour(ActionEvent e){
+        controleur.boutonRetour();
+    }
+    
     
 }

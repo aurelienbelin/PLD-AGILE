@@ -10,7 +10,7 @@ package controleur;
 
 /**
  *
- * @author ahirusan
+ * @author Hex'calibur
  */
 public class EtatPlanCliquable extends EtatDefaut{
     
@@ -22,13 +22,20 @@ public class EtatPlanCliquable extends EtatDefaut{
     
     /**
      * 
+     * @param gestionLivraison
+     * @param fenetre
+     * @param latitude
+     * @param longitude
      */
+    @Override
     public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
         modele.outils.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
         fenetre.getVueGraphique().ajouterMarker(pointClique.getLatitude(), pointClique.getLongitude());
+        fenetre.estIntersectionSelectionnee();
         Controleur.etatCourant = Controleur.ETAT_INTERSECTION_SELECTIONNEE;
     }
     
+    @Override
     public void annuler(deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
         fenetre.estTourneesCalculees("SUCCESS");

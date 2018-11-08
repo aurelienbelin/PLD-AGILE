@@ -50,5 +50,9 @@ interface Etat
     public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
     
     public void annuler(deliverif.Deliverif fenetre);
+    
+    public void validerSelection(deliverif.Deliverif fenetre);
+    
+    public void retourSelection(deliverif.Deliverif fenetre);
 
 }
