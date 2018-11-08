@@ -19,9 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import modele.outils.Chemin;
@@ -257,15 +255,9 @@ public class VueGraphique extends StackPane implements Observer {
                 }
             }
             
-            //this.tournees.add(canvasTemp);
             i++;
             nCouleur++;
         }
-        
-        /*this.getChildren().addAll(this.tournees);
-        this.getChildren().get(0).toBack();
-        this.getChildren().get(1).toFront();
-        this.getChildren().add(this.marker);*/
         
         fenetre.informationEnCours("");
         System.out.println("J'ai fini les tournées !");

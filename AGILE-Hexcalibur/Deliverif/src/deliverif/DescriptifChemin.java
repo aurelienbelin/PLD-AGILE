@@ -53,7 +53,7 @@ public class DescriptifChemin extends VBox{
     public DescriptifChemin(int largeur, int numTournee, int numLivraison, String horaire, String duree, String nomLivraison, List<String> description, EcouteurBoutons ecouteurBoutons){
         super();
         
-        System.out.println(largeur);
+        //System.out.println(largeur);
         
         this.identifiantPoint = numTournee+"_"+numLivraison;
         

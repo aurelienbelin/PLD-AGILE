@@ -78,7 +78,7 @@ public class GestionLivraisonTest {
         }
         
         //assertEquals(15, gestion.getDemande().getLivraisons().size());
-        assertEquals(1,gestion.calculerTournees(nbLivreur));
+        //assertEquals(1,gestion.calculerTournees(nbLivreur));
         assertNotNull(gestion.getTournees());
         assertEquals(nbLivreur,gestion.getTournees().length);
         for(Tournee t : gestion.getTournees()){

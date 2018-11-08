@@ -39,7 +39,12 @@ import modele.outils.Tournee;
 public class VueTextuelle extends VBox implements Observer {
     
     private GestionLivraison gestionLivraison;
+    
+    /**
+     * @deprecated
+     */
     private ArrayList<String> descriptions;
+    
     private ObservableList<String> contenu;
     private EcouteurBoutons ecouteurBoutons;
     
@@ -96,7 +101,8 @@ public class VueTextuelle extends VBox implements Observer {
     
     /**
      * Change la description affichée en fonction de l'option choisie dans le ComboBox (attribut choixTournee).
-     * @return l'indice de la description affichée 
+     * @return l'indice de la description affichée
+     * @deprecated
      */
     public int changerDescriptionAffichee(){
         String s = choixTournee.getSelectionModel().getSelectedItem();
@@ -123,7 +129,7 @@ public class VueTextuelle extends VBox implements Observer {
     @Override
     public void update(Observable o, Object arg){
         contenu.clear();
-        descriptions.clear();
+        tournees.clear();
         this.descriptionTournee.setText("");
         
         if(this.gestionLivraison.getDemande()!=null){
@@ -151,16 +157,17 @@ public class VueTextuelle extends VBox implements Observer {
         }
         
         if(this.gestionLivraison.getTournees()!=null && !this.gestionLivraison.calculTSPEnCours()){
-            Tournee[] tournees = this.gestionLivraison.getTournees();
+            Tournee[] listeTournees = this.gestionLivraison.getTournees();
             String nom ="";
             
-            if(tournees.length!=0){
+            if(listeTournees.length!=0){
                 int i = 1;
                 
-                for(Tournee t : tournees){
+                for(Tournee t : listeTournees){
+                    
                     int j = 1;
-                    VBox box = new VBox();
-                    box.setMinWidth(this.panel.getViewportBounds().getWidth());
+                    VBox vbox = new VBox();
+                    vbox.setMinWidth(this.panel.getViewportBounds().getWidth());
                     contenu.add("Livreur "+i);
                     Iterator<List<String>> it = t.getDescription_Bis();
                     
@@ -172,11 +179,11 @@ public class VueTextuelle extends VBox implements Observer {
                         }
                         
                         DescriptifChemin dc = new DescriptifChemin((int)(this.panel.getViewportBounds().getWidth()),i,j,s.get(0), s.get(1), s.get(2), s.size()>3?s.subList(4,s.size()):null,this.ecouteurBoutons);
-                        box.getChildren().add(dc);
+                        vbox.getChildren().add(dc);
                     }
                     i++;
                     
-                    this.tournees.add(box);
+                    this.tournees.add(vbox);
                 }
             }
             
@@ -196,11 +203,13 @@ public class VueTextuelle extends VBox implements Observer {
      */
     public int changerDescription_Bis(){
         String s = choixTournee.getSelectionModel().getSelectedItem();
-
+        
         if(s!=null || "".equals(s)){
+            
             for(int i=0;i<contenu.size();i++){
+
                 if(contenu.get(i).equals(s)){
-                    this.panel.setContent(this.tournees.get(i+1));
+                    this.panel.setContent(this.tournees.get(i));
                     return i;
                 }
             }

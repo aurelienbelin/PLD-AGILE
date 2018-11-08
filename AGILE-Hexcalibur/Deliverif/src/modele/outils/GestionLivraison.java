@@ -56,7 +56,7 @@ public class GestionLivraison extends Observable{
         }
         tsp = new TSPMinCFC(nbLivreur);
         ObservateurTSP observateur = new ObservateurTSP(graphe, listePoints, nbLivreur);
-        //tsp.addObserver(observateur);
+        tsp.addObserver(observateur);
         threadTSP = new Thread(new Runnable(){
             @Override
             public void run(){

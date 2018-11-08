@@ -117,6 +117,7 @@ public class Tournee {
     public Iterator<List<String>> getDescription_Bis(){
         List<List<String>> sousDescription = new ArrayList<>();
         List<String> s = new ArrayList<>();
+        
         s.add(new SimpleDateFormat("HH:mm").format(heureDepart.getTime()));
         s.add(""+0);
         s.add("Entrepôt");
