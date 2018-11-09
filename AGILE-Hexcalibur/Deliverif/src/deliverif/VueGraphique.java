@@ -49,6 +49,7 @@ public class VueGraphique extends StackPane implements Observer {
     private double echelleLong;
     private double origineLatitude;
     private double origineLongitude;
+    private Deliverif fenetre;
     
     //Composants
     private final Color[] couleurs = {Color.BLUEVIOLET, Color.BROWN, Color.CHARTREUSE,Color.CORAL,Color.CRIMSON,Color.DARKBLUE, Color.DARKGREEN, Color.DEEPPINK, Color.GOLD, Color.LIGHTSALMON};
@@ -74,6 +75,7 @@ public class VueGraphique extends StackPane implements Observer {
         
         this.gestionLivraison = gl;
         gestionLivraison.addObserver(this);
+        this.fenetre = f;
         
         plan = new Canvas(640,640-95);
         dl = new Canvas(640,640-95);
