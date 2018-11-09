@@ -35,12 +35,12 @@ public class EtatTourneesCalculees extends EtatDefaut{
     public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
         try{
-            gestionLivraison.calculerTournees(nbLivreurs);
+            gestionLivraison.calculerTournees(nbLivreurs, Integer.MAX_VALUE);
+            fenetre.activerBoutonArreterCalcul(false);
             fenetre.estTourneesCalculees("SUCCESS");
         } catch(Exception e){
             
         }
-        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
     }
     
     /**  Cette méthode délègue la chargement des livraisons au modèle
@@ -99,6 +99,12 @@ public class EtatTourneesCalculees extends EtatDefaut{
         Controleur.etatCourant = Controleur.ETAT_PLAN_CLIQUABLE;
         fenetre.estPlanCliquable();
     }
+    
+    @Override
+    public void selectionnerPoint (deliverif.Deliverif fenetre) {
+        Controleur.etatCourant = Controleur.ETAT_POINT_SELECTIONNE;
+    }
+    
     @Override
     public void zoomPlus(deliverif.Deliverif fenetre){
         fenetre.getVueGraphique().zoomPlus();
@@ -114,4 +120,5 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.getVueGraphique().dessinerPtLivraison();
         fenetre.getVueGraphique().dessinerTournees();
     }
+
 }
