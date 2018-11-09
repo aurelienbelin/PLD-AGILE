@@ -28,6 +28,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -93,7 +95,10 @@ public class Deliverif extends Application {
     //Conteneurs
     private BorderPane bord;
     private HBox boutons;
+    private VBox boxCalculTournees;
+    private VBox boxAjoutLivraison;
     private VBox panelDroit;
+    private HBox boutonsAjoutLivraison;
     
     //Composants de controle
     private Button boutonChargerPlan;
@@ -102,7 +107,12 @@ public class Deliverif extends Application {
     private Button boutonSupprimerLivraison;
     private Button boutonReorganiserTournee;
     private Button boutonCalculerTournees;
+    private Button boutonAnnuler;
+    private Button boutonValiderSelection;
+    private Button boutonValiderAjout;
+    private Button boutonRetourSelection;
     private Spinner nbLivreurs;
+    private Spinner choixDuree;
     private Label descriptionTextuelle;
     private ComboBox choixTournee;
     private Label information;
@@ -112,7 +122,8 @@ public class Deliverif extends Application {
         super.init();
         gestionLivraison = new GestionLivraison();
         controleur = new Controleur(gestionLivraison,this);
-        ecouteurBoutons = new EcouteurBoutons(this, controleur);
+        vueGraphique = new VueGraphique(this.gestionLivraison, this);
+        ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
     }
     
     @Override
@@ -132,6 +143,12 @@ public class Deliverif extends Application {
         
         boutons.getChildren().addAll(boutonChargerPlan, boutonChargerDL, boutonAjouterLivraison,boutonSupprimerLivraison, boutonReorganiserTournee);
         
+        boutonsAjoutLivraison = new HBox();
+        boutonsAjoutLivraison.setPadding(new Insets(15, 15, 15, 15));
+        boutonsAjoutLivraison.setSpacing(5);
+        
+        boutonsAjoutLivraison.getChildren().addAll(boutonAnnuler, boutonValiderSelection, boutonRetourSelection);
+        
         Separator sv = new Separator();
         sv.setOrientation(Orientation.VERTICAL);
         sv.setPrefHeight(scene.getHeight());
@@ -139,9 +156,19 @@ public class Deliverif extends Application {
         
         creerPanelDroit();   
         //Il faudra ajouter la vue graphique
-        vueGraphique = new VueGraphique(this.gestionLivraison, this);
         vueGraphique.setLayoutX(0);
         vueGraphique.setLayoutY(115);
+        
+        vueGraphique.setOnMouseClicked(m->{
+            try {
+                if(m.getButton().equals(MouseButton.PRIMARY))
+                {
+                    ecouteurBoutons.recupererCoordonneesSouris((MouseEvent) m);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         bord.setTop(boutons);
         
@@ -155,6 +182,8 @@ public class Deliverif extends Application {
         stage.setScene(scene);
         this.stage = stage;
         stage.show();
+        
+        creerBoxAjoutLivraison();
     }
     
     /**
@@ -192,6 +221,13 @@ public class Deliverif extends Application {
         boutonAjouterLivraison.setWrapText(true);
         boutonAjouterLivraison.setDisable(true);
         boutonAjouterLivraison.setTextAlignment(TextAlignment.CENTER);
+        boutonAjouterLivraison.setOnAction(e -> {
+            try {
+                ecouteurBoutons.ajouterLivraison(e);
+            } catch (Exception ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         boutonSupprimerLivraison = new Button(SUPPRIMER_LIVRAISON);
         boutonSupprimerLivraison.setPrefSize(100,65);
@@ -204,6 +240,48 @@ public class Deliverif extends Application {
         boutonReorganiserTournee.setWrapText(true);
         boutonReorganiserTournee.setDisable(true);
         boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
+        
+        boutonValiderSelection = new Button("Valider la sélection");
+        boutonValiderSelection.setPrefSize(100,65);
+        boutonValiderSelection.setWrapText(true);
+        boutonValiderSelection.setDisable(true);
+        boutonValiderSelection.setTextAlignment(TextAlignment.CENTER);
+        boutonValiderSelection.setTranslateX(400);
+        boutonValiderSelection.setOnAction(e -> {
+            try {
+                ecouteurBoutons.boutonValiderSelection(e);
+            } catch (Exception ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }); 
+        
+        boutonAnnuler = new Button("Retour au menu");
+        boutonAnnuler.setPrefSize(100,65);
+        boutonAnnuler.setWrapText(true);
+        boutonAnnuler.setDisable(true);
+        boutonAnnuler.setTextAlignment(TextAlignment.CENTER);
+        boutonAnnuler.setOnAction(e -> {
+            try {
+                ecouteurBoutons.boutonAnnuler(e);
+            } catch (Exception ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }); 
+        
+        boutonRetourSelection = new Button("Retour à la sélection");
+        boutonRetourSelection.setPrefSize(100,65);
+        boutonRetourSelection.setWrapText(true);
+        boutonRetourSelection.setDisable(false);
+        boutonRetourSelection.setTextAlignment(TextAlignment.CENTER);
+        boutonRetourSelection.setTranslateX(295);
+        boutonRetourSelection.setVisible(false);
+        boutonRetourSelection.setOnAction(e -> {
+            try {
+                ecouteurBoutons.boutonRetour(e);
+            } catch (Exception ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }); 
     }
     
     /**
@@ -215,6 +293,9 @@ public class Deliverif extends Application {
         panelDroit.setLayoutX(640);
         panelDroit.setPadding(new Insets(25, 25, 25, 25));
         panelDroit.setSpacing(25);
+        
+        boxCalculTournees = new VBox();
+        boxCalculTournees.setSpacing(15);
         
         HBox boxLivreurs = new HBox();
         boxLivreurs.setSpacing(25);
@@ -241,7 +322,9 @@ public class Deliverif extends Application {
             } catch (InterruptedException ex) {
                 Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });        
+        }); 
+        
+        boxCalculTournees.getChildren().addAll(boxLivreurs, boutonCalculerTournees);
         
         Separator sh = new Separator();
         sh.setOrientation(Orientation.HORIZONTAL);
@@ -261,7 +344,41 @@ public class Deliverif extends Application {
         this.information.setText("Test");
         //this.information.setStyle("-fx-background-color:red;");
         
-        panelDroit.getChildren().addAll(boxLivreurs, boutonCalculerTournees, sh, vueTextuelle, information);
+        panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
+    }
+    
+    protected void creerBoxAjoutLivraison(){
+        boxAjoutLivraison = new VBox();
+        boxAjoutLivraison.setSpacing(15);
+        
+        HBox boxDuree = new HBox();
+        boxDuree.setSpacing(25);
+        
+        Label duree = new Label("Durée : ");
+        duree.setFont(new Font("System",20));
+        
+        choixDuree = new Spinner();
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1);
+        choixDuree.setValueFactory(valueFactory);
+        choixDuree.setPrefSize(60,25);
+        
+        boxDuree.getChildren().addAll(duree, choixDuree);
+        
+        boutonValiderAjout = new Button("Ajouter la livraison");
+        boutonValiderAjout.setPrefSize(300,50);
+        boutonValiderAjout.setMinHeight(50);
+        boutonValiderAjout.setWrapText(true);
+        boutonValiderAjout.setDisable(true);
+        boutonValiderAjout.setTextAlignment(TextAlignment.CENTER);
+        /*boutonValiderAjout.setOnAction(e -> {
+            try {
+                ecouteurBoutons.boutonValider(e);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }); */
+        
+        boxAjoutLivraison.getChildren().addAll(boxDuree, boutonValiderAjout);
     }
     
     /**
@@ -375,6 +492,7 @@ public class Deliverif extends Application {
      * @param cre - compte rendu d'execution des opérations sur le modèle
      */
     public void estPlanCharge(String cre) {
+        informationEnCours("");
         if(("SUCCESS").equals(cre)){
             boutonChargerPlan.setDisable(false);
             boutonChargerDL.setDisable(false);
@@ -384,10 +502,8 @@ public class Deliverif extends Application {
             boutonReorganiserTournee.setDisable(true);
             //avertir("Le plan de la ville a bien été chargé");
         }else if(cre!=null){
-            this.informationEnCours("");
             avertir(cre);
         }else{
-            this.informationEnCours("");
             avertir("Le plan n'a pas pu être chargé");
         }
     }
@@ -397,6 +513,7 @@ public class Deliverif extends Application {
      * @param cre - compte rendu d'execution des opérations sur le modèle
      */
     public void estDemandeLivraisonChargee(String cre){
+        this.informationEnCours("");
         if(("SUCCESS").equals(cre)){
             boutonChargerPlan.setDisable(false);
             boutonChargerDL.setDisable(false);
@@ -406,10 +523,8 @@ public class Deliverif extends Application {
             boutonReorganiserTournee.setDisable(true);
             //avertir("La demande de livraison a bien été chargée");
         }else if(cre!=null){
-            this.informationEnCours("");
             avertir(cre);
         }else{
-            this.informationEnCours("");
             avertir("La demande de livraison n'a pas pu être chargée");
         }
     }
@@ -419,6 +534,8 @@ public class Deliverif extends Application {
      * @param cre - compte rendu d'execution des opérations sur le modèle
      */
     public void estTourneesCalculees(String cre){
+        bord.setTop(boutons);
+        informationEnCours("");
         if(("SUCCESS").equals(cre)){
             boutonChargerPlan.setDisable(false);
             boutonChargerDL.setDisable(false);
@@ -429,9 +546,37 @@ public class Deliverif extends Application {
             //this.vueGraphique.dessinerTournees();
             //avertir("Calcul des tournées terminé");
         }else{
-            this.informationEnCours("");
             avertir("Le calcul des tournées n'a pas pu se terminer");
     
         }
+    }
+    
+    public void estPlanCliquable(){
+        boutonValiderSelection.setVisible(true);
+        boutonRetourSelection.setVisible(false);
+        bord.setTop(boutonsAjoutLivraison);
+        boutonAnnuler.setDisable(false);
+        boutonValiderSelection.setDisable(true);
+        panelDroit.getChildren().remove(boxCalculTournees);
+        panelDroit.getChildren().add(0, boxAjoutLivraison);
+        boxAjoutLivraison.setDisable(true);
+    }
+    
+    public void estAjoutLivraisonFini(){
+        panelDroit.getChildren().remove(boxAjoutLivraison);
+        panelDroit.getChildren().add(0, boxCalculTournees);
+    }
+    
+    public void estIntersectionSelectionnee(){
+        boutonValiderSelection.setVisible(true);
+        boutonRetourSelection.setVisible(false);
+        boutonValiderSelection.setDisable(false);
+        boxAjoutLivraison.setDisable(true);
+    }
+    
+    public void estIntersectionValidee(){
+        boxAjoutLivraison.setDisable(false);
+        boutonValiderSelection.setVisible(false);
+        boutonRetourSelection.setVisible(true);
     }
 }

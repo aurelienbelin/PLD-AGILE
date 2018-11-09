@@ -8,17 +8,21 @@
  */
 package deliverif;
 
+import javafx.scene.input.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,7 +44,6 @@ import modele.outils.Troncon;
 public class VueGraphique extends StackPane implements Observer {
     
     private final GestionLivraison gestionLivraison;
-    private Deliverif fenetre;
     private double echelleLat;
     private double echelleLong;
     private double origineLatitude;
@@ -54,9 +57,7 @@ public class VueGraphique extends StackPane implements Observer {
     private Canvas marker;
     private Image imageMarker;
     
-    //Test
-    private Button bouton;
-    
+
     /**
      * Constructeur de VueGraphique.
      * @param gl - point d'entrée du modèle observé
@@ -64,12 +65,11 @@ public class VueGraphique extends StackPane implements Observer {
      * @see GestionLivraison
      * @see Deliverif
      */
+
     public VueGraphique(GestionLivraison gl, Deliverif f){
         super();
         
         this.setPrefSize(640,640-95);
-        
-        this.fenetre = f;
         
         this.gestionLivraison = gl;
         gestionLivraison.addObserver(this);
@@ -82,14 +82,7 @@ public class VueGraphique extends StackPane implements Observer {
         
         imageMarker = new Image("/deliverif/Marker_1.png",true);
         this.marker = new Canvas(640,640-95);
-        
-        /*//Test
-        bouton = new Button("Test");
-        bouton.setPrefSize(50,50);
-        bouton.setLayoutX(0);
-        bouton.setLayoutY(0);
-        thi.getChildren().add(bouton)*/
-            
+   
     }
     
     /**
@@ -172,7 +165,6 @@ public class VueGraphique extends StackPane implements Observer {
             gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
         }
         
-        fenetre.informationEnCours("");
     }
     
     /**
@@ -195,50 +187,47 @@ public class VueGraphique extends StackPane implements Observer {
         List <modele.outils.PointPassage> livraisons = gestionLivraison.getDemande().getLivraisons();
         
         for(modele.outils.PointPassage livraison : livraisons){
-            int abscissePtLivraison = (int)((livraison.getPosition().getLongitude() - origineLongitude) * echelleLong);
-            int ordonneePtLivraison = (int)(this.getHeight() - ( livraison.getPosition().getLatitude() - origineLatitude) * echelleLat);
-            
+            double[] ptLivraison = { 
+                                    livraison.getPosition().getLongitude(),
+                                    livraison.getPosition().getLatitude()
+            };
+            ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
+
             //Dessin marqueur
             gc.setFill(Color.BLUE);
-            gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
+            gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
    
         }
-        
-        int abscissePtLivraison =(int) ((gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude() - origineLongitude) * echelleLong);
-        int ordonneePtLivraison =(int) (this.getHeight() - ( gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude() - origineLatitude) * echelleLat);
+        double[] ptLivraison = { 
+                                    gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude(),
+                                    gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude()
+            };
+            ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
         gc.setFill(Color.RED);
         
-        System.out.println("Entrepot : "+abscissePtLivraison+" ; "+ordonneePtLivraison); //DEBUG
+        gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
+
         
-        gc.fillOval(abscissePtLivraison-4, ordonneePtLivraison-4, 8, 8);
-        
-        fenetre.informationEnCours("");
     }
     
     /**
      * Dessine les tournées à effectuer pour desservir tous les points de livraison préalablement affichée sur le plan.
      */
     public void dessinerTournees(){
-        
-        this.tournees.clear();
-        
-        Iterator<Node> iter = this.getChildren().iterator();
-        while(iter.hasNext()) {
-            Node n = iter.next();
-            if( !n.equals(dl) && !n.equals(plan)){
-                iter.remove();
-            }
-        }
+        System.out.println("Je commence à dessiner les tournées !");
         
         Tournee[] listeTournees = this.gestionLivraison.getTournees();
         
-        Canvas canvasTemp;
+        //Canvas canvasTemp;
         int nCouleur=0;
+        int i=0;
         
         for(Tournee tournee : listeTournees){
             //On créée un nouveau Canvas par tournée
-            canvasTemp = new Canvas(this.getWidth(),this.getHeight());
-            GraphicsContext gc = canvasTemp.getGraphicsContext2D();
+            //canvasTemp = new Canvas(this.getWidth(),this.getHeight());
+            //GraphicsContext gc = canvasTemp.getGraphicsContext2D();
+            GraphicsContext gc = this.tournees.get(i).getGraphicsContext2D();
+            gc.clearRect(0, 0, this.getWidth(), this.getHeight());
             
             List<Chemin> chemins = tournee.getTrajet();
             
@@ -263,16 +252,43 @@ public class VueGraphique extends StackPane implements Observer {
                 }
             }
             
-            this.tournees.add(canvasTemp);
+            //this.tournees.add(canvasTemp);
+            i++;
             nCouleur++;
+        }
+        
+        /*this.getChildren().addAll(this.tournees);
+        this.getChildren().get(0).toBack();
+        this.getChildren().get(1).toFront();
+        this.getChildren().add(this.marker);*/
+        
+        System.out.println("J'ai fini les tournées !");
+    }
+    
+    /**
+     * 
+     * @param nb 
+     */
+    public void creerCalques(int nb){
+        this.tournees.clear();
+        
+        Iterator<Node> iter = this.getChildren().iterator();
+        while(iter.hasNext()) {
+            Node n = iter.next();
+            if( !n.equals(dl) && !n.equals(plan)){
+                iter.remove();
+            }
+        }
+        
+        for(int i=0;i<nb;i++){
+            Canvas canvasTemp = new Canvas(this.getWidth(),this.getHeight());
+            this.tournees.add(canvasTemp);
         }
         
         this.getChildren().addAll(this.tournees);
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();
         this.getChildren().add(this.marker);
-        
-        fenetre.informationEnCours("");
     }
     
     /**
@@ -287,38 +303,45 @@ public class VueGraphique extends StackPane implements Observer {
         }
     }
     
-    //Test
-    private void activerBouton(){
-        bouton.setOnAction(new EventHandler<ActionEvent>() {
- 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Test");
-                tournees.get(1).getGraphicsContext2D().clearRect(0, 0, getWidth(), getHeight());
-            }
-        });
+    public double[] mettreCoordonneesALechelle(double[] pointAMAJ, boolean estCoordonneesVueGraphique)
+    {
+        double[] pointAJour = new double[2];
+        if(estCoordonneesVueGraphique){
+            pointAJour[0] = pointAMAJ[0] / echelleLong + origineLongitude;
+            pointAJour[1] = (pointAMAJ[1] - this.getHeight()) / (-echelleLat) + origineLatitude;
+        }
+        else
+        {
+            pointAJour[0] = (pointAMAJ[0] - origineLongitude) * echelleLong;
+            pointAJour[1] = this.getHeight() - (pointAMAJ[1] - origineLatitude) * echelleLat;
+        }
+        return pointAJour;
     }
-
+    
     //Test
     public void effacerMarker() {
         this.marker.getGraphicsContext2D().clearRect(0,0,this.marker.getWidth(), this.marker.getHeight());
     }
     
     //Test
-    public void ajouterMarker(DescriptifChemin dc, double lat, double lon){
+    public void ajouterMarker(double lat, double lon){
+        int x = (int)((lon - origineLongitude)*echelleLong);
+        int y = (int)(this.getHeight() - (lat - origineLatitude)*echelleLat);
+
+        /*System.out.println("Entrepot : "+gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude()+" ; "+gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude());
+        System.out.println("Je suis dans la vue graphique : "+lon+" ; "+lat); //DEBUG
+        System.out.println("Je suis dans la vue graphique : "+this.imageMarker.getWidth()+" ; "+this.imageMarker.getHeight()); //DEBUG
+        System.out.println("Je suis dans la vue graphique : "+x+" ; "+y); //DEBUG*/
+
+        GraphicsContext gc = this.marker.getGraphicsContext2D();
+        gc.drawImage(imageMarker, x - this.imageMarker.getWidth()/2.0, y - this.imageMarker.getHeight());
+    }
+    
+    public void identifierPtPassage(DescriptifChemin dc, double lat, double lon){
         this.effacerMarker();
         
         if(!dc.estLocalise()){
-            int x = (int)((lon - origineLongitude)*echelleLong);
-            int y = (int)(this.getHeight() - (lat - origineLatitude)*echelleLat);
-
-            System.out.println("Entrepot : "+gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude()+" ; "+gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude());
-            System.out.println("Je suis dans la vue graphique : "+lon+" ; "+lat); //DEBUG
-            System.out.println("Je suis dans la vue graphique : "+this.imageMarker.getWidth()+" ; "+this.imageMarker.getHeight()); //DEBUG
-            System.out.println("Je suis dans la vue graphique : "+x+" ; "+y); //DEBUG
-
-            GraphicsContext gc = this.marker.getGraphicsContext2D();
-            gc.drawImage(imageMarker, x - this.imageMarker.getWidth()/2.0, y - this.imageMarker.getHeight());
+            this.ajouterMarker(lat,lon);
         }
     }
     
