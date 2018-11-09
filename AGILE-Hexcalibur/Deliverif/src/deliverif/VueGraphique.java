@@ -22,10 +22,11 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+
 import javafx.scene.input.MouseButton;
 import javafx.scene.control.Label;
+
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import modele.outils.Chemin;
@@ -44,12 +45,10 @@ import modele.outils.Troncon;
 public class VueGraphique extends StackPane implements Observer {
     
     private final GestionLivraison gestionLivraison;
-    private Deliverif fenetre;
     private double echelleLat;
     private double echelleLong;
     private double origineLatitude;
     private double origineLongitude;
-    private EcouteurBoutons ecouteur;
     
     //Composants
     private final Color[] couleurs = {Color.BLUEVIOLET, Color.BROWN, Color.CHARTREUSE,Color.CORAL,Color.CRIMSON,Color.DARKBLUE, Color.DARKGREEN, Color.DEEPPINK, Color.GOLD, Color.LIGHTSALMON};
@@ -58,10 +57,6 @@ public class VueGraphique extends StackPane implements Observer {
     private ArrayList<Canvas> tournees;
     private Canvas marker;
     private Image imageMarker;
-    
-    //Test
-    private Button bouton;
-    
     
 
     /**
@@ -72,15 +67,12 @@ public class VueGraphique extends StackPane implements Observer {
      * @see Deliverif
      */
 
-    public VueGraphique(GestionLivraison gl, EcouteurBoutons eb, Deliverif f){
+    public VueGraphique(GestionLivraison gl, Deliverif f){
         super();
         
         this.setPrefSize(640,640-95);
         
-        this.fenetre = f;
-        
         this.gestionLivraison = gl;
-        this.ecouteur = eb;
         gestionLivraison.addObserver(this);
         
         plan = new Canvas(640,640-95);
@@ -91,14 +83,7 @@ public class VueGraphique extends StackPane implements Observer {
         
         imageMarker = new Image("/deliverif/Marker_1.png",true);
         this.marker = new Canvas(640,640-95);
-        
-        /*//Test
-        bouton = new Button("Test");
-        bouton.setPrefSize(50,50);
-        bouton.setLayoutX(0);
-        bouton.setLayoutY(0);
-        thi.getChildren().add(bouton)*/
-            
+   
     }
     
     /**
@@ -180,20 +165,7 @@ public class VueGraphique extends StackPane implements Observer {
             //Dessin des traits
             gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
         }
-        this.setOnMouseClicked(m->{
-            try {
-                if(m.getButton().equals(MouseButton.PRIMARY))
-                {
-                    double[] pointAMAJ = ecouteur.recupererCoordonneesSouris((MouseEvent) m);
-                    double[] pointAJour = this.mettreCoordonneesALechelle(pointAMAJ, true);
-                }
-            } catch (InterruptedException ex) {
-                Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-
         
-        fenetre.informationEnCours("");
     }
     
     /**
@@ -237,7 +209,6 @@ public class VueGraphique extends StackPane implements Observer {
         gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
 
         
-        fenetre.informationEnCours("");
     }
     
     /**
@@ -282,20 +253,24 @@ public class VueGraphique extends StackPane implements Observer {
                 }
             }
             
-            //this.tournees.add(canvasTemp);
             i++;
             nCouleur++;
         }
         
+
+        fenetre.informationEnCours("");
         /*this.getChildren().addAll(this.tournees);
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();
         this.getChildren().add(this.marker);*/
         
-        fenetre.informationEnCours("");
         System.out.println("J'ai fini les tournées !");
     }
     
+    /**
+     * 
+     * @param nb 
+     */
     public void creerCalques(int nb){
         this.tournees.clear();
         
@@ -330,7 +305,7 @@ public class VueGraphique extends StackPane implements Observer {
         }
     }
     
-    private double[] mettreCoordonneesALechelle(double[] pointAMAJ, boolean estCoordonneesVueGraphique)
+    public double[] mettreCoordonneesALechelle(double[] pointAMAJ, boolean estCoordonneesVueGraphique)
     {
         double[] pointAJour = new double[2];
         if(estCoordonneesVueGraphique){
@@ -345,18 +320,6 @@ public class VueGraphique extends StackPane implements Observer {
         return pointAJour;
     }
     
-    //Test
-    private void activerBouton(){
-        bouton.setOnAction(new EventHandler<ActionEvent>() {
- 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Test");
-                tournees.get(1).getGraphicsContext2D().clearRect(0, 0, getWidth(), getHeight());
-            }
-        });
-    }
-
     //Test
     public void effacerMarker() {
         this.marker.getGraphicsContext2D().clearRect(0,0,this.marker.getWidth(), this.marker.getHeight());

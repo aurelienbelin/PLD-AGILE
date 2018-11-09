@@ -153,35 +153,40 @@ public class PlanVille {
                 for(PointPassage arrivee : listePoints){ 
                     if(arrivee!=depart){
                         //pour chaque
-                        if(i.getLatitude()==arrivee.getPosition().getLatitude()&&i.getLongitude()==arrivee.getPosition().getLongitude()){
-                        //recréer la liste de chemin
-                            List<Troncon> trChemin = new ArrayList<Troncon>();
-                            //retrouver point précédent
-                            Intersection ptInter1 = tab.get(i).getKey();
-                            Intersection ptInter2=i;
-                            while(ptInter2!=depart.getPosition()){
-                                //retrouver troncon entre ces 2 points
-                                List<Troncon> trPossibles = ptInter1.getTroncons();
-                                ListIterator<Troncon> it = trPossibles.listIterator();
-                                while(it.hasNext()){
-                                    Troncon tr = it.next();
-                                    if(tr.getFin()==ptInter2){
-                                        //l'ajouter en tête de liste
-                                        trChemin.add(0,tr);
-                                        break;
-                                    }
-                                }
-                                //remonter d'un troncon
-                                ptInter2=ptInter1;
-                                ptInter1=tab.get(ptInter2).getKey();
-                            }
-                        //ajouter a la liste des chemins entre pts de passages
-                        graph.add(new Chemin(trChemin,depart,arrivee)); 
+                        if(i.equals(arrivee.getPosition())){
+                            //recréer la liste de chemin
+                            Chemin chemin = reconstruireChemin(depart, arrivee, tab);
+                            //ajouter a la liste des chemins entre pts de passages
+                            graph.add(chemin); 
                         }
                     }
                 }
             }
         }
         return graph;
+    }
+    
+    protected Chemin reconstruireChemin(PointPassage depart, PointPassage arrivee, Map<Intersection, Pair<Intersection, Float>> tab){
+        List<Troncon> trChemin = new ArrayList<Troncon>();
+        //retrouver point précédent
+        Intersection ptInter1 = tab.get(arrivee.getPosition()).getKey();
+        Intersection ptInter2=arrivee.getPosition();
+        while(ptInter2!=depart.getPosition()){
+            //retrouver troncon entre ces 2 points
+            List<Troncon> trPossibles = ptInter1.getTroncons();
+            ListIterator<Troncon> it = trPossibles.listIterator();
+            while(it.hasNext()){
+                Troncon tr = it.next();
+                if(tr.getFin()==ptInter2){
+                    //l'ajouter en tête de liste
+                    trChemin.add(0,tr);
+                    break;
+                }
+            }
+            //remonter d'un troncon
+            ptInter2=ptInter1;
+            ptInter1=tab.get(ptInter2).getKey();
+        }
+        return new Chemin(trChemin, depart, arrivee);
     }
 }
