@@ -110,7 +110,7 @@ public class Chemin {
      */
     protected float getDuree(){
         float longueur = this.getLongueur();
-        float resultat = longueur/3.6f;
+        float resultat = longueur*0.24f;//Conversion par 15 km/h [/ (15/3.6) === * 0.24]
         if (this.fin!=null){
             resultat+=this.fin.getDuree();
         }

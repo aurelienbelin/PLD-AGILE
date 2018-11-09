@@ -105,7 +105,6 @@ public abstract class TemplateTSP extends Observable implements TSP{
                         setChanged();
                         notifyObservers(); // Coucou, màj vue  de ce qui observe ce calcul en cours.
                     }
-                    System.out.println("Nouvelle solution !");
                 }
                 
 	    }

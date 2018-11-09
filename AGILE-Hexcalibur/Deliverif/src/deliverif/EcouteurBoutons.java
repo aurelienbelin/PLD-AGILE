@@ -9,6 +9,7 @@
 package deliverif;
 
 import controleur.Controleur;
+import javafx.scene.input.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -23,6 +24,7 @@ import javafx.stage.FileChooser;
 public class EcouteurBoutons{
     
     private final Deliverif fenetrePrincipale;
+    private final VueGraphique vueGraphique;
     private final Controleur controleur;
     private File file;
     
@@ -33,9 +35,10 @@ public class EcouteurBoutons{
      * @see Deliverif
      * @see Controleur
      */
-    public EcouteurBoutons(Deliverif f, Controleur c){
+    public EcouteurBoutons(Deliverif f, Controleur c, VueGraphique v){
         this.fenetrePrincipale = f;
         this.controleur = c;
+        this.vueGraphique = v;
     }
     
     /**
@@ -147,4 +150,30 @@ public class EcouteurBoutons{
             return null;
         }
     }
+    
+    public void ajouterLivraison (ActionEvent e) {
+        controleur.boutonAjouterLivraison();
+    }
+    
+    public void recupererCoordonneesSouris(MouseEvent e) throws InterruptedException{
+        double[] point = new double[2];
+        point[0] = e.getX();;
+        point[1] = e.getY();
+        point = vueGraphique.mettreCoordonneesALechelle(point, true);
+        controleur.clicGauche(point[1], point[0]);
+    }
+    
+    public void boutonAnnuler(ActionEvent e){
+        controleur.boutonAnnuler();
+    }
+    
+    public void boutonValiderSelection(ActionEvent e) {
+        controleur.boutonValiderSelection();
+    }
+    
+    public void boutonRetour(ActionEvent e){
+        controleur.boutonRetour();
+    }
+    
+    
 }
