@@ -101,6 +101,11 @@ public class EcouteurBoutons{
         if(i!=-1)
             this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
     }
+    /**
+     * Actualise le plan en fonction du zoom
+     * @param e
+     * @throws InterruptedException
+     */
     
     /**
      * Envoie une requête au controleur pour connaitre la localisation du point de livraison associé au composant DescriptifChemin.
@@ -144,4 +149,5 @@ public class EcouteurBoutons{
             return null;
         }
     }
+    
 }
