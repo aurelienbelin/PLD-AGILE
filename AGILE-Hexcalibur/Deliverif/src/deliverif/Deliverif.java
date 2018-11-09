@@ -130,6 +130,7 @@ public class Deliverif extends Application {
         controleur = new Controleur(gestionLivraison,this);
         vueGraphique = new VueGraphique(this.gestionLivraison, this);
         ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
+        gestionLivraison.addObserver(this);
     }
     
     @Override

@@ -137,14 +137,14 @@ public class VueGraphique extends StackPane implements Observer {
     /**
      * Dessine le plan à l'échelle dans la VueGraphique.
      */
-    public void dessinerPlan(){        
+    public void dessinerPlan(){      
         GraphicsContext gc = this.plan.getGraphicsContext2D();
         gc.clearRect(0, 0, plan.getWidth(), plan.getHeight());
             
         GraphicsContext gc1 = this.dl.getGraphicsContext2D();
         gc1.clearRect(0, 0, dl.getWidth(), dl.getHeight());
         
-        this.tournees.clear();
+        //this.tournees.clear();
         
         Iterator<Node> iter = this.getChildren().iterator();
         while(iter.hasNext()) {
@@ -176,7 +176,7 @@ public class VueGraphique extends StackPane implements Observer {
         GraphicsContext gc = this.dl.getGraphicsContext2D();
         gc.clearRect(0, 0, dl.getWidth(), dl.getHeight());
         
-        this.tournees.clear();
+        //this.tournees.clear();
         
         Iterator<Node> iter = this.getChildren().iterator();
         while(iter.hasNext()) {
@@ -219,7 +219,7 @@ public class VueGraphique extends StackPane implements Observer {
         System.out.println("Je commence à dessiner les tournées !");
         
         Tournee[] listeTournees = this.gestionLivraison.getTournees();
-        
+        System.out.println(this.tournees.size());
         //Canvas canvasTemp;
         int nCouleur=0;
         int i=0;
@@ -245,7 +245,7 @@ public class VueGraphique extends StackPane implements Observer {
                 List<Troncon> troncons = chemin.getTroncons();
                 
                 for(Troncon troncon : troncons){
-                    double[] ptDebutTroncon = { 
+                    /*double[] ptDebutTroncon = { 
                                     troncon.getDebut().getLongitude(),
                                     troncon.getDebut().getLatitude()
                     };
@@ -254,20 +254,22 @@ public class VueGraphique extends StackPane implements Observer {
                                     troncon.getFin().getLongitude(),
                                     troncon.getFin().getLatitude()
                     };
-                    ptFinTroncon = this.mettreCoordonneesALechelle(ptFinTroncon, false);
+                    ptFinTroncon = this.mettreCoordonneesALechelle(ptFinTroncon, false);*/
                     
-                   // int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
-                   // int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
-                   // int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
-                   // int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+                   int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
+                   int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
+                   int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
+                   int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
                     
-                    gc.strokeLine(ptDebutTroncon[0],ptDebutTroncon[1],ptFinTroncon[0],ptFinTroncon[1]);
-                    //gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
+                    //gc.strokeLine(ptDebutTroncon[0],ptDebutTroncon[1],ptFinTroncon[0],ptFinTroncon[1]);
+                   
+                    gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
                 }
             }
             
             i++;
             nCouleur++;
+            
         }
         
 
@@ -278,6 +280,7 @@ public class VueGraphique extends StackPane implements Observer {
         this.getChildren().add(this.marker);*/
         
         System.out.println("J'ai fini les tournées !");
+        //this.getChildren().get(0).toBack();
     }
     
     /**
