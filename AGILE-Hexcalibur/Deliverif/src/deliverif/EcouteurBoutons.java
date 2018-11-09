@@ -156,6 +156,10 @@ public class EcouteurBoutons{
         controleur.boutonAjouterLivraison();
     }
     
+    public void supprimerLivraison (ActionEvent e) {
+        controleur.boutonSupprimerLivraison();
+    }
+    
     public void recupererCoordonneesSouris(MouseEvent e) throws InterruptedException{
         double[] point = new double[2];
         point[0] = e.getX();;

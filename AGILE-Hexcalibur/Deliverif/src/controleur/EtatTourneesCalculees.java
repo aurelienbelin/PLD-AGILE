@@ -99,4 +99,10 @@ public class EtatTourneesCalculees extends EtatDefaut{
         Controleur.etatCourant = Controleur.ETAT_PLAN_CLIQUABLE;
         fenetre.estPlanCliquable();
     }
+    
+    @Override
+    public void selectionnerPoint (deliverif.Deliverif fenetre) {
+        Controleur.etatCourant = Controleur.ETAT_POINT_SELECTIONNE;
+    }
+    
 }
