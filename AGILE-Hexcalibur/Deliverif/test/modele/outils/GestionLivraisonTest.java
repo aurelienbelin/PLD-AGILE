@@ -130,6 +130,7 @@ public class GestionLivraisonTest {
         }catch(Exception e){
             fail(e.getStackTrace().toString());
         }
+
         try{
             gestion.calculerTournees(1);
             while (gestion.threadAlive()){
@@ -155,6 +156,7 @@ public class GestionLivraisonTest {
         assertEquals(5, gestion.getTournees()[0].getTrajet().size());
         boolean intersectionTrouvee=false;
         PointPassage pointAEnlever=null;
+
         for(Tournee t : gestion.getTournees()){
             nouvelleDuree+=t.getTempsTournee();
             nouvelleLongueur+=t.getLongueur();

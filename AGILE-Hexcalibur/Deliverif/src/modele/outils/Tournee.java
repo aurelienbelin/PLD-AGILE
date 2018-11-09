@@ -93,8 +93,10 @@ public class Tournee {
      * @return - Le point de passage du trajet i 
      */
     protected PointPassage getPointPassage(int i){
-        if (this.trajet!=null){
+        if (this.trajet!=null && i!=(this.trajet.size())){
             return this.trajet.get(i).getDebut();
+        }else if(i==(this.trajet.size())){
+            return this.trajet.get(i-1).getFin();
         }
         return null;
     }
@@ -126,6 +128,7 @@ public class Tournee {
     public Iterator<List<String>> getDescription_Bis(){
         List<List<String>> sousDescription = new ArrayList<>();
         List<String> s = new ArrayList<>();
+        
         s.add(new SimpleDateFormat("HH:mm").format(heureDepart.getTime()));
         s.add(""+0);
         s.add("Entrepôt");

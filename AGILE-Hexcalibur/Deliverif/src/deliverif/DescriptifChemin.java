@@ -53,7 +53,7 @@ public class DescriptifChemin extends VBox{
     public DescriptifChemin(int largeur, int numTournee, int numLivraison, String horaire, String duree, String nomLivraison, List<String> description, EcouteurBoutons ecouteurBoutons){
         super();
         
-        System.out.println(largeur);
+        //System.out.println(largeur);
         
         this.identifiantPoint = numTournee+"_"+numLivraison;
         
@@ -65,7 +65,7 @@ public class DescriptifChemin extends VBox{
         this.setMaxWidth(largeur);
         this.setStyle("-fx-border-color:black; -fx-border-width:2px;");
         
-        this.creerEntete(horaire, duree, nomLivraison);
+        this.creerEntete(horaire, duree, nomLivraison, (description!=null && description.size()!=0));
         
         this.creerDetails(description);
         
@@ -82,7 +82,7 @@ public class DescriptifChemin extends VBox{
      * @param duree
      * @param nomLivraison 
      */
-    private void creerEntete(String horaire, String duree, String nomLivraison){
+    private void creerEntete(String horaire, String duree, String nomLivraison, boolean details){
         this.entete = new HBox();
         this.entete.setSpacing(0);
         this.entete.setStyle("-fx-background-color:white;");
@@ -113,15 +113,18 @@ public class DescriptifChemin extends VBox{
         this.livraison.setStyle("-fx-background-color: white; ");
         this.livraison.setOnMouseClicked(e->ecouteurBoutons.localiserPointVueGraphique(this));
         
-        this.obtenirDetails = new Button("+");
-        this.obtenirDetails.setOnAction(e->ecouteurBoutons.obtenirDetailsVueTextuelle(this));
-        this.obtenirDetails.setPrefHeight(50);
-        this.obtenirDetails.setMinWidth(largeur/10.0);
-        this.obtenirDetails.setStyle("-fx-background-color:#c3c4c4," +
-            "linear-gradient(#d6d6d6 50%, white 100%)," +
-            "radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);");
-    
-        this.entete.getChildren().addAll(temps,this.livraison,this.obtenirDetails);
+        this.entete.getChildren().addAll(temps,this.livraison);
+        
+        if(details){
+            this.obtenirDetails = new Button("+");
+            this.obtenirDetails.setOnAction(e->ecouteurBoutons.obtenirDetailsVueTextuelle(this));
+            this.obtenirDetails.setPrefHeight(50);
+            this.obtenirDetails.setMinWidth(largeur/10.0);
+            this.obtenirDetails.setStyle("-fx-background-color:#c3c4c4," +
+                "linear-gradient(#d6d6d6 50%, white 100%)," +
+                "radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);");
+            this.entete.getChildren().add(this.obtenirDetails);
+        }
     }
     
     /**
