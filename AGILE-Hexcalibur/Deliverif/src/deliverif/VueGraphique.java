@@ -22,10 +22,11 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+
 import javafx.scene.input.MouseButton;
 import javafx.scene.control.Label;
+
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import modele.outils.Chemin;
@@ -252,11 +253,12 @@ public class VueGraphique extends StackPane implements Observer {
                 }
             }
             
-            //this.tournees.add(canvasTemp);
             i++;
             nCouleur++;
         }
         
+
+        fenetre.informationEnCours("");
         /*this.getChildren().addAll(this.tournees);
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();

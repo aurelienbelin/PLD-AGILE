@@ -84,6 +84,8 @@ public class Deliverif extends Application {
      */
     public final static String CALCULER_TOURNEES = "Calculer les tournées";
     
+    public final static String ARRETER_CALCUL_TOURNEES = "Stop";
+    
     //private Controleur controleur;
     private GestionLivraison gestionLivraison;
     private EcouteurBoutons ecouteurBoutons;
@@ -107,6 +109,7 @@ public class Deliverif extends Application {
     private Button boutonSupprimerLivraison;
     private Button boutonReorganiserTournee;
     private Button boutonCalculerTournees;
+    private Button boutonArreterCalcul;
     private Button boutonAnnuler;
     private Button boutonValiderSelection;
     private Button boutonValiderAjout;
@@ -241,6 +244,7 @@ public class Deliverif extends Application {
         boutonReorganiserTournee.setDisable(true);
         boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
         
+
         boutonValiderSelection = new Button("Valider la sélection");
         boutonValiderSelection.setPrefSize(100,65);
         boutonValiderSelection.setWrapText(true);
@@ -310,8 +314,11 @@ public class Deliverif extends Application {
         
         boxLivreurs.getChildren().addAll(livreurs, nbLivreurs);
         
+        HBox boxBoutons = new HBox();
+        boxBoutons.setSpacing(15);
+        
         boutonCalculerTournees = new Button(CALCULER_TOURNEES);
-        boutonCalculerTournees.setPrefSize(300,50);
+        boutonCalculerTournees.setPrefSize(1024-640-90-50,50);
         boutonCalculerTournees.setMinHeight(50);
         boutonCalculerTournees.setWrapText(true);
         boutonCalculerTournees.setDisable(true);
@@ -325,6 +332,16 @@ public class Deliverif extends Application {
         }); 
         
         boxCalculTournees.getChildren().addAll(boxLivreurs, boutonCalculerTournees);
+        
+        boutonArreterCalcul = new Button(ARRETER_CALCUL_TOURNEES);
+        boutonArreterCalcul.setPrefSize(75,50);
+        boutonArreterCalcul.setMinHeight(50);
+        boutonArreterCalcul.setWrapText(true);
+        boutonArreterCalcul.setDisable(true);
+        boutonArreterCalcul.setTextAlignment(TextAlignment.CENTER);
+        boutonArreterCalcul.setOnAction(e -> ecouteurBoutons.arreterCalculTournees());
+        
+        boxBoutons.getChildren().addAll(boutonCalculerTournees, boutonArreterCalcul);
         
         Separator sh = new Separator();
         sh.setOrientation(Orientation.HORIZONTAL);
@@ -341,10 +358,13 @@ public class Deliverif extends Application {
         this.information.setMaxHeight(30);
         this.information.setAlignment(Pos.CENTER_RIGHT);
         this.information.setFont(new Font("Arial", 10));
-        this.information.setText("Test");
+        this.information.setStyle("-fx-font-style:italic; -fx-font-weight:bold; -fx-text-fill:red;");
+        //this.information.setText("Test");
         //this.information.setStyle("-fx-background-color:red;");
         
-        panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
+        panelDroit.getChildren().addAll(boxLivreurs, boxBoutons, sh, vueTextuelle, information);
+
+       // panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
     }
     
     protected void creerBoxAjoutLivraison(){
@@ -437,7 +457,7 @@ public class Deliverif extends Application {
      * @param message - message à afficher dans le pop-up
      */
     private void createMessagePopup(String message) {
-        System.out.println("Xx : "+this.boutons.getWidth()+" ; Yy : "+this.boutons.getHeight()); //DEBUG
+        //System.out.println("Xx : "+this.boutons.getWidth()+" ; Yy : "+this.boutons.getHeight()); //DEBUG
         
         Label mess = new Label(message);
         mess.setPadding(new Insets(15));
@@ -547,8 +567,11 @@ public class Deliverif extends Application {
             //avertir("Calcul des tournées terminé");
         }else{
             avertir("Le calcul des tournées n'a pas pu se terminer");
-    
         }
+        
+        /*if(!this.gestionLivraison.calculTSPEnCours()){
+            this.informationEnCours("");
+        }*/
     }
     
     public void estPlanCliquable(){
