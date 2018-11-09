@@ -75,6 +75,7 @@ public class VueGraphique extends StackPane implements Observer {
         
         this.gestionLivraison = gl;
         gestionLivraison.addObserver(this);
+        this.fenetre = f;
         
         plan = new Canvas(640,640-95);
         dl = new Canvas(640,640-95);

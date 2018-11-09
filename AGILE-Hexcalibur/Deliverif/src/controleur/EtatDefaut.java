@@ -76,6 +76,9 @@ public class EtatDefaut implements Etat
     public void ajouterLivraison(deliverif.Deliverif fenetre) {}
     
     @Override
+    public void supprimerLivraison(deliverif.Deliverif fenetre) {}
+    
+    @Override
     public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {}
     
     @Override
@@ -89,6 +92,9 @@ public class EtatDefaut implements Etat
    
     @Override
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}
+
     
+    @Override
+    public void selectionnerPoint(deliverif.Deliverif fenetre){}
 
 }

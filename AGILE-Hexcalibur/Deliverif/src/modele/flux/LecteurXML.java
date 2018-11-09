@@ -44,14 +44,10 @@ public class LecteurXML {
      * 
      * @param urlFichierXML chemin du XML à charger
      * @return Document XML parsé et normalisé
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
      * @throws Exception 
      */
-    public Document chargerXML (String urlFichierXML) throws ParserConfigurationException, SAXException, IOException, Exception{
-        try {
-            //chemin du fichier XML en entrée
+    public Document chargerXML (String urlFichierXML) throws Exception{
+        //chemin du fichier XML en entrée
             File fichier = new File(urlFichierXML);
             //type du fichier
             String mimeType = Files.probeContentType(fichier.toPath());
@@ -64,13 +60,8 @@ public class LecteurXML {
                 return documentXML;
             }
             else{
-                throw new IOException("Le fichier en entrée n'est pas au format xml");
+                throw new Exception("Le fichier en entrée n'est pas au format xml");
             }
-            //return null;
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
     
     /**
@@ -145,7 +136,7 @@ public class LecteurXML {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
         }
-        return null;
+        throw new Exception("Le fichier chargé ne correspond pas à un plan de ville");
     }
     
     /**
@@ -212,7 +203,7 @@ public class LecteurXML {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
         }
-        return null;
+        throw new Exception("Le fichier en entrée ne correspond pas à une demande de livraison");
     }
     
     public LecteurXML(){
