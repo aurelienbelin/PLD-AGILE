@@ -57,6 +57,9 @@ interface Etat
     
     public void retourSelection(deliverif.Deliverif fenetre);
     
+    public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
+
     public void selectionnerPoint(deliverif.Deliverif fenetre);
+
 
 }

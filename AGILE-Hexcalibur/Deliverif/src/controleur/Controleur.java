@@ -156,6 +156,10 @@ public class Controleur {
         etatCourant.retourSelection(this.fenetre);
     }
     
+    public void boutonArretCalcul(){
+        etatCourant.arreterCalcul(this.gestionLivraison, this.fenetre);
+    }
+    
 
 }
 

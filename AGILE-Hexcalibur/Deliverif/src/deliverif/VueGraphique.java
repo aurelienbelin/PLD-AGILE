@@ -85,6 +85,7 @@ public class VueGraphique extends StackPane implements Observer {
         
         imageMarker = new Image("/deliverif/Marker_1.png",true);
         this.marker = new Canvas(640,640-95);
+        this.fenetre = f;
    
     }
     
@@ -217,8 +218,6 @@ public class VueGraphique extends StackPane implements Observer {
      * Dessine les tournées à effectuer pour desservir tous les points de livraison préalablement affichée sur le plan.
      */
     public void dessinerTournees(){
-        System.out.println("Je commence à dessiner les tournées !");
-        
         Tournee[] listeTournees = this.gestionLivraison.getTournees();
         
         //Canvas canvasTemp;
@@ -258,15 +257,10 @@ public class VueGraphique extends StackPane implements Observer {
             i++;
             nCouleur++;
         }
-        
-
-        fenetre.informationEnCours("");
         /*this.getChildren().addAll(this.tournees);
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();
         this.getChildren().add(this.marker);*/
-        
-        System.out.println("J'ai fini les tournées !");
     }
     
     /**
