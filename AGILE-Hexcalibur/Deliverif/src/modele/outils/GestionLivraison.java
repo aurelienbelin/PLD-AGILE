@@ -42,9 +42,10 @@ public class GestionLivraison extends Observable{
     }
     
     public void calculerTournees(int nbLivreur) throws Exception{
-        if(this.plan==null || this.demande==null || (this.tsp!=null && this.tsp.calculEnCours())){
+        if(this.plan==null || this.demande==null || (this.calculTSPEnCours())){
             return;
         }
+        System.out.println("Début du calcul de tournée !");
         List<PointPassage> listePoints = new ArrayList<>();
         listePoints.add(this.demande.getEntrepot());
         listePoints.addAll(this.demande.getLivraisons());
@@ -62,7 +63,9 @@ public class GestionLivraison extends Observable{
             @Override
             public void run(){
                 tsp.chercheSolution(Integer.MAX_VALUE, listePoints.size(), nbLivreur, cout);
-                genererTournee(graphe, listePoints, nbLivreur);
+                if (tsp.getCoutMeilleureSolution()!=Integer.MAX_VALUE){
+                    genererTournee(graphe, listePoints, nbLivreur);
+                }
             }
         });
         threadTSP.start();
@@ -178,9 +181,6 @@ public class GestionLivraison extends Observable{
         if (tsp!=null && tsp.calculEnCours()){
             tsp.arreterCalcul();
         }
-        if (threadTSP.isAlive()){
-            threadTSP.interrupt();
-        }
     }
     
     /**
@@ -189,8 +189,15 @@ public class GestionLivraison extends Observable{
     public boolean calculTSPEnCours(){
         if (tsp!=null){
             return tsp.calculEnCours();
-        } 
+        }
         return false;
+    }
+    
+    public boolean aSolution(){
+        if (tsp==null){
+            return false;
+        }
+        return tsp.getCoutMeilleureSolution()!=Integer.MAX_VALUE;
     }
     
     /**

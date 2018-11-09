@@ -36,11 +36,11 @@ public class EtatTourneesCalculees extends EtatDefaut{
         Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
         try{
             gestionLivraison.calculerTournees(nbLivreurs);
+            fenetre.activerBoutonArreterCalcul(false);
             fenetre.estTourneesCalculees("SUCCESS");
         } catch(Exception e){
             
         }
-        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
     }
     
     /**  Cette méthode délègue la chargement des livraisons au modèle

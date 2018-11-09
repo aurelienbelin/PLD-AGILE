@@ -36,11 +36,11 @@ public class EtatLivraisonsChargees extends EtatDefaut{
         Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
         try{
             gestionLivraison.calculerTournees(nbLivreurs);
-            Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+            fenetre.activerBoutonArreterCalcul(false);
         } catch(Exception e){
+            e.printStackTrace();
             Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
         }
-        fenetre.estTourneesCalculees("SUCCESS");
     }
     
     /**  Cette méthode délègue la chargement des livraisons au modèle

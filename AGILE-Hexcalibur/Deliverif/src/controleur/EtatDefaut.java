@@ -86,5 +86,9 @@ public class EtatDefaut implements Etat
     
     @Override
     public void retourSelection(deliverif.Deliverif fenetre){}
+   
+    @Override
+    public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}
+    
 
 }
