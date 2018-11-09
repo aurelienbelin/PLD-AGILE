@@ -53,6 +53,7 @@ public class VueTextuelle extends VBox implements Observer {
     private Label descriptionTournee;
     private ArrayList<VBox> tournees;
     private ScrollPane panel;
+    private DescriptifChemin descriptifSelectionne;
     
     /**
      * Constructeur de VueTextuelle
@@ -69,6 +70,8 @@ public class VueTextuelle extends VBox implements Observer {
         this.gestionLivraison.addObserver(this);
         this.descriptions = new ArrayList<>();
         this.contenu = FXCollections.observableArrayList();
+        
+        this.descriptifSelectionne = null;
         
         this.tournees = new ArrayList<>();
         
@@ -132,7 +135,7 @@ public class VueTextuelle extends VBox implements Observer {
         tournees.clear();
         this.descriptionTournee.setText("");
         
-        if(this.gestionLivraison.getDemande()!=null){
+        /*if(this.gestionLivraison.getDemande()!=null && !this.gestionLivraison.calculTSPEnCours()){
             DemandeLivraison demande = this.gestionLivraison.getDemande();
             
             String des;
@@ -152,6 +155,27 @@ public class VueTextuelle extends VBox implements Observer {
             l.setText(des);
             
             box.getChildren().add(l);
+            
+            this.tournees.add(box);
+        }*/
+        
+        //A charger dès que la DL a été chargée ??
+        if(this.gestionLivraison.getDemande()!=null && !this.gestionLivraison.calculTSPEnCours()){
+            DemandeLivraison demande = this.gestionLivraison.getDemande();
+            
+            VBox box = new VBox();
+            box.setPrefWidth(this.panel.getViewportBounds().getWidth());
+            contenu.add("Demande de livraison");
+            
+            Iterator<String> it = demande.getDescription();
+            int j = 1;
+            
+            while(it.hasNext()){
+                String s = it.next();
+                DescriptifChemin dc = new DescriptifChemin((int)(this.panel.getViewportBounds().getWidth()),0,j,"", "", s, null,this.ecouteurBoutons);
+                box.getChildren().add(dc);
+                j++;
+            }
             
             this.tournees.add(box);
         }
@@ -174,12 +198,13 @@ public class VueTextuelle extends VBox implements Observer {
                     while(it.hasNext()){
                         List<String> s = it.next();
                         
-                        if(s.get(2).contains("Livraison")){
+                        /*if(s.get(2).contains("Livraison")){
                             j++;
-                        }
+                        }*/
                         
                         DescriptifChemin dc = new DescriptifChemin((int)(this.panel.getViewportBounds().getWidth()),i,j,s.get(0), s.get(1), s.get(2), s.size()>3?s.subList(4,s.size()):null,this.ecouteurBoutons);
                         vbox.getChildren().add(dc);
+                        j++;
                     }
                     i++;
                     
@@ -224,18 +249,12 @@ public class VueTextuelle extends VBox implements Observer {
      * @param dc - DescriptifChemin à mettre à jour
      * @see DescriptifChemin
      */
-    public void majVueTextuelle(DescriptifChemin dc){
-        for(VBox tournee : this.tournees){
-            for(Node n : tournee.getChildren()){
-                n.setStyle("-fx-border-color:black; -fx-border-width:2px;");
-            }
+    public void majVueTextuelle(DescriptifChemin nouveauDescriptif){
+        if(this.descriptifSelectionne!=null){
+            this.descriptifSelectionne.setLocalise(false);
         }
         
-        if(dc!= null && dc.estLocalise()){
-            dc.setLocalise(false);
-        }else if(dc!=null){
-            dc.setStyle("-fx-border-color:red; -fx-border-width:4px;");
-            dc.setLocalise(true);
-        }
+        this.descriptifSelectionne = nouveauDescriptif;
+        this.descriptifSelectionne.setLocalise(true);
     }
 }

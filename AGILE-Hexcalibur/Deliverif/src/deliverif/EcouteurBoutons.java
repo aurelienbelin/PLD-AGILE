@@ -76,15 +76,21 @@ public class EcouteurBoutons{
     }
 
     /**
-     * Appelle le calcule des tournées dans le controleur.
+     * Appelle le calcul des tournées dans le controleur.
      * @param e
      * @throws InterruptedException
      */
     public void calculerTourneesAction(ActionEvent e) throws InterruptedException{
-        //System.out.println(fenetrePrincipale.getNbLivreurs()); //DEBUG
-        //this.fenetrePrincipale.informationEnCours("Calcul des tournées...");
         this.fenetrePrincipale.getVueGraphique().creerCalques(fenetrePrincipale.getNbLivreurs());
+        this.fenetrePrincipale.informationEnCours("Calcul des tournées en cours...");
         controleur.boutonCalculerTournees(fenetrePrincipale.getNbLivreurs());
+    }
+    
+    /**
+     * Appelle la méthode du controleur correspondant à l'interruption du calcul des tournées.
+     */
+    public void arreterCalculTournees(){
+        //A compléter
     }
 
     /**
@@ -93,11 +99,7 @@ public class EcouteurBoutons{
      * @throws InterruptedException
      */
     public void changerTourneeAffichee(ActionEvent e) throws InterruptedException{
-        //int i = this.fenetrePrincipale.getVueTextuelle().changerDescriptionAffichee();
-        
         int i = this.fenetrePrincipale.getVueTextuelle().changerDescription_Bis();
-        
-        //System.out.println("Tournee n°"+i); //DEBUG
         
         if(i!=-1)
             this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
@@ -108,7 +110,6 @@ public class EcouteurBoutons{
      * @param dc 
      */
     public void localiserPointVueGraphique(DescriptifChemin dc){
-        //System.out.println(dc.getPoint()); //DEBUG
         controleur.afficherMarqueur(dc);
     }
     

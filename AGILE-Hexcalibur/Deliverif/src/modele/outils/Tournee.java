@@ -93,8 +93,10 @@ public class Tournee {
      * @return - Le point de passage du trajet i 
      */
     protected PointPassage getPointPassage(int i){
-        if (this.trajet!=null){
+        if (this.trajet!=null && i!=(this.trajet.size())){
             return this.trajet.get(i).getDebut();
+        }else if(i==(this.trajet.size())){
+            return this.trajet.get(i-1).getFin();
         }
         return null;
     }
