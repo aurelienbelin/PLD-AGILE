@@ -112,7 +112,7 @@ public class Controleur {
     public void boutonCalculerTournees (int nbLivreurs){
         etatCourant.calculerTournees(gestionLivraison, nbLivreurs, fenetre);
     }
-
+    
     //Test
     public void afficherMarqueur(deliverif.DescriptifChemin point) {
         etatCourant.trouverLocalisation(this.gestionLivraison, point, this.fenetre);
@@ -147,7 +147,20 @@ public class Controleur {
         etatCourant.retourSelection(this.fenetre);
     }
     
-
+    /** @see Etat
+     * @version 1
+     */
+    public void boutonZoomPlus (){
+        etatCourant.zoomPlus(this.fenetre);
+    }
+    
+    public void scrollZoomPlus(double lat, double lon){
+        etatCourant.zoomPlus(this.fenetre, lat, lon);
+    }
+    
+    public void scrollZoomMoins(double lat, double lon){
+        etatCourant.zoomMoins(this.fenetre, lat, lon);
+    }
 }
 
 

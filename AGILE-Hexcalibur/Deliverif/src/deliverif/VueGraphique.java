@@ -57,6 +57,7 @@ public class VueGraphique extends StackPane implements Observer {
     private ArrayList<Canvas> tournees;
     private Canvas marker;
     private Image imageMarker;
+    private Deliverif fenetre;
     
 
     /**
@@ -69,7 +70,7 @@ public class VueGraphique extends StackPane implements Observer {
 
     public VueGraphique(GestionLivraison gl, Deliverif f){
         super();
-        
+        this.fenetre=f;
         this.setPrefSize(640,640-95);
         
         this.gestionLivraison = gl;
@@ -347,4 +348,29 @@ public class VueGraphique extends StackPane implements Observer {
         }
     }
     
+    public void zoomPlus(){
+        echelleLong = echelleLong *1.2;
+        echelleLat=echelleLat*1.2;
+    }
+    
+    public void zoomPlus(double lat, double lon){
+        
+        
+         
+        origineLongitude+=(lon-origineLongitude)*0.2/1.2;
+        origineLatitude+= (lat-origineLatitude)*0.2/1.2;
+        echelleLong = echelleLong *1.2;
+        echelleLat=echelleLat*1.2;
+          
+                    
+    }
+    public void zoomMoins(double lat, double lon){
+        
+        echelleLong = echelleLong /1.2;
+        echelleLat=echelleLat/1.2; 
+        origineLongitude-=(lon-origineLongitude)*0.2;
+        origineLatitude-= (lat-origineLatitude)*0.2;
+        
+              
+    }
 }

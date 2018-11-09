@@ -99,4 +99,19 @@ public class EtatTourneesCalculees extends EtatDefaut{
         Controleur.etatCourant = Controleur.ETAT_PLAN_CLIQUABLE;
         fenetre.estPlanCliquable();
     }
+    @Override
+    public void zoomPlus(deliverif.Deliverif fenetre){
+        fenetre.getVueGraphique().zoomPlus();
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerTournees();
+    }
+    
+    @Override
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerTournees();
+    }
 }

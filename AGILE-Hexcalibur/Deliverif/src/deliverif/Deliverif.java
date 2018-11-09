@@ -36,6 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.input.ScrollEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
@@ -84,6 +85,8 @@ public class Deliverif extends Application {
      */
     public final static String CALCULER_TOURNEES = "Calculer les tournées";
     
+    public final static String ZOOM_AVANT = "+";
+    
     public final static String ARRETER_CALCUL_TOURNEES = "Stop";
     
     //private Controleur controleur;
@@ -119,6 +122,7 @@ public class Deliverif extends Application {
     private Label descriptionTextuelle;
     private ComboBox choixTournee;
     private Label information;
+    private Button boutonZoomPlus;
     
     @Override
     public void init() throws Exception{
@@ -169,6 +173,19 @@ public class Deliverif extends Application {
                     ecouteurBoutons.recupererCoordonneesSouris((MouseEvent) m);
                 }
             } catch (InterruptedException ex) {
+                Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        vueGraphique.setOnScroll(m->{
+            try{
+                double delta = m.getDeltaY();
+                if (delta >0){
+                    ecouteurBoutons.scrollZoomPlus((ScrollEvent) m);
+                }else if(delta<0){
+                    ecouteurBoutons.scrollZoomMoins((ScrollEvent) m);
+                }
+            }catch (Exception ex) {
                 Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -312,7 +329,16 @@ public class Deliverif extends Application {
         nbLivreurs.setValueFactory(valueFactory);
         nbLivreurs.setPrefSize(60,25);
         
-        boxLivreurs.getChildren().addAll(livreurs, nbLivreurs);
+        boutonZoomPlus = new Button(ZOOM_AVANT);
+        boutonZoomPlus.setPrefSize(50, 50);
+        boutonZoomPlus.setMinHeight(50);
+        boutonZoomPlus.setTextAlignment(TextAlignment.CENTER);
+        boutonZoomPlus.setDisable(true);
+        boutonZoomPlus.setOnAction(e ->ecouteurBoutons.boutonZoomPlus());
+        
+        boxLivreurs.getChildren().addAll(livreurs, nbLivreurs, boutonZoomPlus);
+        
+        
         
         HBox boxBoutons = new HBox();
         boxBoutons.setSpacing(15);
@@ -500,7 +526,7 @@ public class Deliverif extends Application {
         popUp.show();
     }
 
-    /**
+    /**n
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -520,6 +546,7 @@ public class Deliverif extends Application {
             boutonAjouterLivraison.setDisable(true);
             boutonSupprimerLivraison.setDisable(true);
             boutonReorganiserTournee.setDisable(true);
+            boutonZoomPlus.setDisable(false);
             //avertir("Le plan de la ville a bien été chargé");
         }else if(cre!=null){
             avertir(cre);

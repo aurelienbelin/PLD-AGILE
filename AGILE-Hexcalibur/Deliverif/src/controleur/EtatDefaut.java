@@ -86,5 +86,12 @@ public class EtatDefaut implements Etat
     
     @Override
     public void retourSelection(deliverif.Deliverif fenetre){}
-
+    
+    @Override
+    public void zoomPlus(deliverif.Deliverif fenetre){}
+    
+    @Override
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){}
+    @Override
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){}
 }
