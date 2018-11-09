@@ -112,8 +112,8 @@ public class TSPSimpleTest {
         for(int i=depart+1; i<cout.length; i++){
             nonVus.add(i);
         }
-        int resultat=tsp.bound(new ArrayList<Integer>(),depart, nonVus, cout);
-        assertEquals(0,resultat);
+        //int resultat=tsp.bound(new ArrayList<Integer>(),depart, nonVus, cout);
+        //assertEquals(0,resultat);
     }
     
     @Test
