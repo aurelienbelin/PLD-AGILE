@@ -99,6 +99,15 @@ public class Tournee {
         return null;
     }
     
+    protected boolean contientPointPassage(PointPassage p){
+        for(Chemin c : this.trajet){
+            if (c.getDebut()==p){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     /**
      * 
      * @return - La description de la tournée 
@@ -116,17 +125,16 @@ public class Tournee {
     //Test
     public Iterator<List<String>> getDescription_Bis(){
         List<List<String>> sousDescription = new ArrayList<>();
-        
-        for(Chemin c : this.trajet){
-            sousDescription.add(c.getDescription_Bis(this.heureDepart));
-        }
-        
         List<String> s = new ArrayList<>();
         s.add(new SimpleDateFormat("HH:mm").format(heureDepart.getTime()));
         s.add(""+0);
         s.add("Entrepôt");
         
         sousDescription.add(s);
+        
+        for(Chemin c : this.trajet){
+            sousDescription.add(c.getDescription_Bis(this.heureDepart));
+        }
         
         this.heureDepart.add(Calendar.SECOND, -(int)this.getTempsTournee());//retablir l'objet partagé heureDepart
         

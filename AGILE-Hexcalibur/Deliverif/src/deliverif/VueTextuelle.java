@@ -151,7 +151,7 @@ public class VueTextuelle extends VBox implements Observer {
             this.tournees.add(box);
         }
         
-        if(this.gestionLivraison.getTournees()!=null){
+        if(this.gestionLivraison.getTournees()!=null && !this.gestionLivraison.calculTSPEnCours()){
             Tournee[] tournees = this.gestionLivraison.getTournees();
             String nom ="";
             
@@ -162,19 +162,17 @@ public class VueTextuelle extends VBox implements Observer {
                     int j = 1;
                     VBox box = new VBox();
                     box.setMinWidth(this.panel.getViewportBounds().getWidth());
-                    contenu.add("Tournée "+i);
+                    contenu.add("Livreur "+i);
                     Iterator<List<String>> it = t.getDescription_Bis();
                     
                     while(it.hasNext()){
                         List<String> s = it.next();
                         
-                        if(s.get(2).equals("Livraison")){
-                            nom = s.get(2)+" "+j;
+                        if(s.get(2).contains("Livraison")){
                             j++;
-                        }else
-                            nom = s.get(2);
+                        }
                         
-                        DescriptifChemin dc = new DescriptifChemin((int)(this.panel.getViewportBounds().getWidth()),i,j,s.get(0), s.get(1), nom, s.size()>3?s.subList(4,s.size()):null,this.ecouteurBoutons);
+                        DescriptifChemin dc = new DescriptifChemin((int)(this.panel.getViewportBounds().getWidth()),i,j,s.get(0), s.get(1), s.get(2), s.size()>3?s.subList(4,s.size()):null,this.ecouteurBoutons);
                         box.getChildren().add(dc);
                     }
                     i++;
@@ -191,7 +189,6 @@ public class VueTextuelle extends VBox implements Observer {
                 n.setStyle("-fx-border-color:black; -fx-border-width:2px;");
             }
         }
-        
     }
     
     /**

@@ -36,7 +36,7 @@ public class TSPMinCFC extends TemplateTSP{
     }
     
     @Override
-    protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
+    protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout, int nombreEntrepot) {
         
         
         /*
@@ -52,13 +52,6 @@ public class TSPMinCFC extends TemplateTSP{
             return 0;
         }
         
-        //Compter le nombre d'entrepot passés
-        int nbreEntrepot=0;
-        for(Integer sommet : vus){
-            if(sommet==0){
-                nbreEntrepot++;
-            }
-        }
         int sommeMin=0;
         int minEntrepot=Integer.MAX_VALUE;
         for(Integer depart : nonVus){
@@ -74,7 +67,7 @@ public class TSPMinCFC extends TemplateTSP{
             sommeMin+=minimum;
         }
         
-        return sommeMin+(this.nbLivreur-nbreEntrepot)*minEntrepot;
+        return sommeMin+(this.nbLivreur-nombreEntrepot)*minEntrepot;
     }
 
     @Override

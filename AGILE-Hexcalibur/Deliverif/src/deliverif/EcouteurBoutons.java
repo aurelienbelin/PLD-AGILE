@@ -9,6 +9,7 @@
 package deliverif;
 
 import controleur.Controleur;
+import javafx.scene.input.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -23,6 +24,7 @@ import javafx.stage.FileChooser;
 public class EcouteurBoutons{
     
     private final Deliverif fenetrePrincipale;
+    private final VueGraphique vueGraphique;
     private final Controleur controleur;
     private File file;
     
@@ -33,9 +35,10 @@ public class EcouteurBoutons{
      * @see Deliverif
      * @see Controleur
      */
-    public EcouteurBoutons(Deliverif f, Controleur c){
+    public EcouteurBoutons(Deliverif f, Controleur c, VueGraphique v){
         this.fenetrePrincipale = f;
         this.controleur = c;
+        this.vueGraphique = v;
     }
     
     /**
@@ -76,13 +79,12 @@ public class EcouteurBoutons{
     }
 
     /**
-     * Appelle le calcule des tournées dans le controleur.
+     * Appelle le calcul des tournées dans le controleur.
      * @param e
      * @throws InterruptedException
      */
     public void calculerTourneesAction(ActionEvent e) throws InterruptedException{
-        //System.out.println(fenetrePrincipale.getNbLivreurs()); //DEBUG
-        //this.fenetrePrincipale.informationEnCours("Calcul des tournées...");
+        this.fenetrePrincipale.getVueGraphique().creerCalques(fenetrePrincipale.getNbLivreurs());
         controleur.boutonCalculerTournees(fenetrePrincipale.getNbLivreurs());
     }
 
@@ -150,4 +152,27 @@ public class EcouteurBoutons{
         }
     }
     
+    public void ajouterLivraison (ActionEvent e) {
+        controleur.boutonAjouterLivraison();
+    }
+    
+    public void recupererCoordonneesSouris(MouseEvent e) throws InterruptedException{
+        double[] point = new double[2];
+        point[0] = e.getX();;
+        point[1] = e.getY();
+        point = vueGraphique.mettreCoordonneesALechelle(point, true);
+        controleur.clicGauche(point[1], point[0]);
+    }
+    
+    public void boutonAnnuler(ActionEvent e){
+        controleur.boutonAnnuler();
+    }
+    
+    public void boutonValiderSelection(ActionEvent e) {
+        controleur.boutonValiderSelection();
+    }
+    
+    public void boutonRetour(ActionEvent e){
+        controleur.boutonRetour();
+    }
 }
