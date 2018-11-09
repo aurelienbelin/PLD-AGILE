@@ -35,12 +35,12 @@ public class EtatLivraisonsChargees extends EtatDefaut{
     public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
         try{
-            gestionLivraison.calculerTournees(nbLivreurs);
-            Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+            gestionLivraison.calculerTournees(nbLivreurs, Integer.MAX_VALUE);
+            fenetre.activerBoutonArreterCalcul(false);
         } catch(Exception e){
+            e.printStackTrace();
             Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
         }
-        fenetre.estTourneesCalculees("SUCCESS");
     }
     
     /**  Cette méthode délègue la chargement des livraisons au modèle

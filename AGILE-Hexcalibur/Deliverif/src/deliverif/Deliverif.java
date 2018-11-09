@@ -10,13 +10,14 @@ package deliverif;
 
 import controleur.Controleur;
 import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -33,13 +34,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.input.ScrollEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import modele.outils.GestionLivraison;
 
@@ -48,7 +47,7 @@ import modele.outils.GestionLivraison;
  * @author romain
  * @see Application
  */
-public class Deliverif extends Application {
+public class Deliverif extends Application implements Observer{
     
     private static Stage stage;
     private static Scene scene;
@@ -422,6 +421,20 @@ public class Deliverif extends Application {
         boxAjoutLivraison.getChildren().addAll(boxDuree, boutonValiderAjout);
     }
     
+    @Override
+    public void update(Observable o, Object arg){
+        if (o instanceof GestionLivraison){
+            if (arg instanceof modele.outils.Tournee[]){
+                if (!((GestionLivraison)o).calculTSPEnCours()){
+                    System.out.println("Le calcul est enfin fini !");
+                    /*On appelle la methode bouton stop, cela marchera puisque
+                    le calcul est fini !*/
+                    this.controleur.boutonArretCalcul();
+                }
+            }
+        }
+    }
+    
     /**
      * Affiche en bas à droite l'action en cours dans l'application.
      * @param message - message à afficher (état courant de l'application)
@@ -622,5 +635,12 @@ public class Deliverif extends Application {
         boxAjoutLivraison.setDisable(false);
         boutonValiderSelection.setVisible(false);
         boutonRetourSelection.setVisible(true);
+    }
+    
+    public void activerBoutonArreterCalcul(boolean activation){
+        this.boutonArreterCalcul.setDisable(activation);
+        this.boutonCalculerTournees.setDisable(!activation);
+        //this.boutonChargerPlan.setDisable(!activation);
+        //this.boutonChargerDL.setDisable(!activation);
     }
 }
