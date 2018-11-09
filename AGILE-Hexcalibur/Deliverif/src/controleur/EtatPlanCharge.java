@@ -74,11 +74,7 @@ public class EtatPlanCharge extends EtatDefaut{
             e.printStackTrace();
         }
     }
-    @Override
-    public void zoomPlus(deliverif.Deliverif fenetre){
-        fenetre.getVueGraphique().zoomPlus();
-        fenetre.getVueGraphique().dessinerPlan();
-    }
+   
     @Override
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
         fenetre.getVueGraphique().zoomPlus(lat,lon);

@@ -17,4 +17,5 @@ package controleur;
 
 public class EtatCalculTournees extends EtatDefaut{
     
+    
 }

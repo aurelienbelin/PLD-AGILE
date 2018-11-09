@@ -147,13 +147,7 @@ public class Controleur {
         etatCourant.retourSelection(this.fenetre);
     }
     
-    /** @see Etat
-     * @version 1
-     */
-    public void boutonZoomPlus (){
-        etatCourant.zoomPlus(this.fenetre);
-    }
-    
+
     public void scrollZoomPlus(double lat, double lon){
         etatCourant.zoomPlus(this.fenetre, lat, lon);
     }

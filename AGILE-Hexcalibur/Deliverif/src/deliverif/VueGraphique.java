@@ -245,12 +245,24 @@ public class VueGraphique extends StackPane implements Observer {
                 List<Troncon> troncons = chemin.getTroncons();
                 
                 for(Troncon troncon : troncons){
-                    int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
-                    int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
-                    int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
-                    int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+                    double[] ptDebutTroncon = { 
+                                    troncon.getDebut().getLongitude(),
+                                    troncon.getDebut().getLatitude()
+                    };
+                    ptDebutTroncon = this.mettreCoordonneesALechelle(ptDebutTroncon, false);
+                    double[] ptFinTroncon = { 
+                                    troncon.getFin().getLongitude(),
+                                    troncon.getFin().getLatitude()
+                    };
+                    ptFinTroncon = this.mettreCoordonneesALechelle(ptFinTroncon, false);
                     
-                    gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
+                   // int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
+                   // int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
+                   // int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
+                   // int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+                    
+                    gc.strokeLine(ptDebutTroncon[0],ptDebutTroncon[1],ptFinTroncon[0],ptFinTroncon[1]);
+                    //gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
                 }
             }
             
@@ -348,11 +360,7 @@ public class VueGraphique extends StackPane implements Observer {
         }
     }
     
-    public void zoomPlus(){
-        echelleLong = echelleLong *1.2;
-        echelleLat=echelleLat*1.2;
-    }
-    
+
     public void zoomPlus(double lat, double lon){
         
         

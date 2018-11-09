@@ -194,7 +194,5 @@ public class EcouteurBoutons{
         point = vueGraphique.mettreCoordonneesALechelle(point, true);
         controleur.scrollZoomMoins(point[1], point[0]);
     }
-    public void boutonZoomPlus(){
-        controleur.boutonZoomPlus();
-    }
+
 }
