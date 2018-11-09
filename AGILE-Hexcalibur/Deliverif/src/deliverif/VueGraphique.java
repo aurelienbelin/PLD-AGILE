@@ -49,6 +49,7 @@ public class VueGraphique extends StackPane implements Observer {
     private double echelleLong;
     private double origineLatitude;
     private double origineLongitude;
+    private Deliverif fenetre;
     
     //Composants
     private final Color[] couleurs = {Color.BLUEVIOLET, Color.BROWN, Color.CHARTREUSE,Color.CORAL,Color.CRIMSON,Color.DARKBLUE, Color.DARKGREEN, Color.DEEPPINK, Color.GOLD, Color.LIGHTSALMON};
@@ -73,6 +74,7 @@ public class VueGraphique extends StackPane implements Observer {
         this.setPrefSize(640,640-95);
         
         this.gestionLivraison = gl;
+        this.fenetre = f;
         gestionLivraison.addObserver(this);
         
         plan = new Canvas(640,640-95);
@@ -143,7 +145,7 @@ public class VueGraphique extends StackPane implements Observer {
         GraphicsContext gc1 = this.dl.getGraphicsContext2D();
         gc1.clearRect(0, 0, dl.getWidth(), dl.getHeight());
         
-        this.tournees.clear();
+        //this.tournees.clear();
         
         Iterator<Node> iter = this.getChildren().iterator();
         while(iter.hasNext()) {
@@ -175,7 +177,7 @@ public class VueGraphique extends StackPane implements Observer {
         GraphicsContext gc = this.dl.getGraphicsContext2D();
         gc.clearRect(0, 0, dl.getWidth(), dl.getHeight());
         
-        this.tournees.clear();
+        //this.tournees.clear();
         
         Iterator<Node> iter = this.getChildren().iterator();
         while(iter.hasNext()) {
@@ -199,11 +201,13 @@ public class VueGraphique extends StackPane implements Observer {
             gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
    
         }
+        
         double[] ptLivraison = { 
                                     gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude(),
                                     gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude()
             };
-            ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
+        
+        ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
         gc.setFill(Color.RED);
         
         gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
@@ -257,7 +261,14 @@ public class VueGraphique extends StackPane implements Observer {
             nCouleur++;
         }
         
-
+        /*Test
+        if(!this.gestionLivraison.calculTSPEnCours()){
+            for(Node n : this.getChildren()){
+                if(n!=this.plan && n!=this.dl)
+                    n.toFront();
+            }
+        }*/
+        
         fenetre.informationEnCours("");
         /*this.getChildren().addAll(this.tournees);
         this.getChildren().get(0).toBack();
