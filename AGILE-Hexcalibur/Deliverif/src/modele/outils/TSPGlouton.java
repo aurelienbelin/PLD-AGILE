@@ -63,7 +63,7 @@ public class TSPGlouton extends TemplateTSP {
 
 
     @Override
-    protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout) {
+    protected int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout, int nombreEntrepot) {
         
         /* On réalise un pseudo-dfs pour obtenir une approximation
          * du parcours de noeud.

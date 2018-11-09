@@ -99,6 +99,15 @@ public class Tournee {
         return null;
     }
     
+    protected boolean contientPointPassage(PointPassage p){
+        for(Chemin c : this.trajet){
+            if (c.getDebut()==p){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     /**
      * 
      * @return - La description de la tournée 

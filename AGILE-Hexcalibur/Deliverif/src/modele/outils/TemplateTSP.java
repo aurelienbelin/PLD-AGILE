@@ -10,21 +10,25 @@ package modele.outils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Observable;
 
 /**
  * @version 1.0 23/10/2018
- * @author Louis Ohl
+ * @author Christine Solnon, modifié par Louis Ohl.
  */
-public abstract class TemplateTSP implements TSP {
-	
+public abstract class TemplateTSP extends Observable implements TSP{
+	/*L'ajout du extends Observable permet de rendre compte en temps réel
+        des nouvelles modifications du meilleurChemin !
+        */
 	private Integer[] meilleureSolution;
 	private int coutMeilleureSolution = 0;
 	private Boolean tempsLimiteAtteint;
         private Boolean arretCalcul;
         
+        private Boolean calculEnCours;
+        
         protected int quantiteTournee;//compte le nombre de sommet visite au cours d'une tournee
-        public long appelsFaits;
+        private int nombreEntrepot;
 	
 	public Boolean getTempsLimiteAtteint(){
             return tempsLimiteAtteint;
@@ -40,9 +44,10 @@ public abstract class TemplateTSP implements TSP {
 		vus.add(0); // le premier sommet visite est 0
                 this.quantiteTournee=0;
                 this.arretCalcul=false;
-                appelsFaits=0;
+                this.nombreEntrepot=1;
+                this.calculEnCours=true;
 		branchAndBound(0, nonVus, vus, 0, cout, System.currentTimeMillis(), tpsLimite);
-                System.out.println("Appels réalisés : "+appelsFaits);
+                this.calculEnCours=false;
 	}
 	
 	public Integer getMeilleureSolution(int i){
@@ -61,10 +66,11 @@ public abstract class TemplateTSP implements TSP {
 	 * @param sommetCourant
 	 * @param nonVus : tableau des sommets restant a visiter
 	 * @param cout : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
+         * @param nombreEntrepot : le nombre d'entrepots (virtuels) vus jusqu'à présent
 	 * @return une borne inferieure du cout des permutations commencant par sommetCourant, 
 	 * contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0
 	 */
-	protected abstract int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout);
+	protected abstract int bound(ArrayList<Integer> vus, Integer sommetCourant, ArrayList<Integer> nonVus, int[][] cout, int nombreEntrepot);
 	
 	/**
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
@@ -95,19 +101,20 @@ public abstract class TemplateTSP implements TSP {
 	    	if (coutVus < coutMeilleureSolution){ // on a trouve une solution meilleure que meilleureSolution
                     vus.toArray(meilleureSolution);
                     coutMeilleureSolution = coutVus;
+                    synchronized(this){
+                        setChanged();
+                        notifyObservers(); // Coucou, màj vue  de ce qui observe ce calcul en cours.
+                    }
                 }
+                
 	    }
             if (!solutionConvenable(vus, nonVus, cout)){
                 return;
             }
-            else if (coutVus + bound(vus, sommetCrt, nonVus, cout) < coutMeilleureSolution){
-                appelsFaits++;
+            else if (coutVus + bound(vus, sommetCrt, nonVus, cout, nombreEntrepot) < coutMeilleureSolution){
                 //Eviter les erreurs d'overflow
                 //quand coutMeilleureSolution vaut encore Integer.MAX_VALUE au début
                 //car bound peut renvoyer coutMeilleureSolution.
-                if (bound(vus, sommetCrt, nonVus, cout)==coutMeilleureSolution){
-                    System.out.println("Alerte GOGOL !! Détail "+bound(vus, sommetCrt, nonVus, cout));
-                }
                 Iterator<Integer> it = iterator(sommetCrt, nonVus, cout);
                 while (it.hasNext()){
                     Integer prochainSommet = it.next();
@@ -117,6 +124,7 @@ public abstract class TemplateTSP implements TSP {
                         this.quantiteTournee++;
                     } else {
                         this.quantiteTournee=0;//reset, nouvelle tournee !
+                        this.nombreEntrepot++;
                     }
                     branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet], cout, tpsDebut, tpsLimite);
                     if (prochainSommet!=0){
@@ -128,6 +136,7 @@ public abstract class TemplateTSP implements TSP {
                         //entrepot virtuel
                         vus.remove(vus.size()-1);
                         this.quantiteTournee=0;
+                        this.nombreEntrepot--;
                         for(int i=vus.size()-1; vus.get(i)!=0;i--){
                             this.quantiteTournee++;
                         }
@@ -155,7 +164,6 @@ public abstract class TemplateTSP implements TSP {
             */
             int premierSommet=0;
             boolean apresZero=false;
-            int nombreEntrepotVirtuel=0;
             for (Integer sommet : vus){
                 if (apresZero){
                     apresZero=false;
@@ -167,17 +175,16 @@ public abstract class TemplateTSP implements TSP {
                 }
                 if (sommet==0){
                     apresZero=true;
-                    nombreEntrepotVirtuel++;
                 }
             }
             int nbLivreur = meilleureSolution.length-cout.length+1;
             int quantiteSommet = (cout.length-1)/nbLivreur;
-            if (quantiteSommet*(nbLivreur-nombreEntrepotVirtuel)>nonVus.size() && !nonVus.isEmpty()){
+            if (quantiteSommet*(nbLivreur-nombreEntrepot)>nonVus.size() && !nonVus.isEmpty()){
                 //Il ne reste pas assez de sommet pour que cela soit réparti équitablement
                 //entre les livreurs restant et le livreur courant
                 return false;
             }
-            if (nonVus.size()<quantiteSommet && nombreEntrepotVirtuel!=nbLivreur){
+            if (nonVus.size()<quantiteSommet && nombreEntrepot!=nbLivreur){
                 //Stop, l'un des pénultièmes est en train de tout rafler
                 //car les autres ont été trop gourmands !
                 //Le dernier n'aura rien !
@@ -188,6 +195,11 @@ public abstract class TemplateTSP implements TSP {
         
         public void arreterCalcul(){
             this.arretCalcul=true;
+            this.calculEnCours=false;
+        }
+        
+        public boolean calculEnCours(){
+            return this.calculEnCours;
         }
          
 }
