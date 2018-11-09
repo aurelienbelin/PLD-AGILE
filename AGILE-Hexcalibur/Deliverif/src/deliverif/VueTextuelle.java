@@ -135,30 +135,6 @@ public class VueTextuelle extends VBox implements Observer {
         tournees.clear();
         this.descriptionTournee.setText("");
         
-        /*if(this.gestionLivraison.getDemande()!=null && !this.gestionLivraison.calculTSPEnCours()){
-            DemandeLivraison demande = this.gestionLivraison.getDemande();
-            
-            String des;
-            des=new String("");
-            Iterator<String> it = demande.getDescription();
-            contenu.add("Demande de livraison");
-            while(it.hasNext()){
-                String s = it.next();
-                des+="\n\t"+s;
-            }
-
-            VBox box = new VBox();
-            box.setPrefWidth(this.panel.getViewportBounds().getWidth());
-            
-            Label l = new Label();
-            l.setWrapText(true);
-            l.setText(des);
-            
-            box.getChildren().add(l);
-            
-            this.tournees.add(box);
-        }*/
-        
         //A charger dès que la DL a été chargée ??
         if(this.gestionLivraison.getDemande()!=null && !this.gestionLivraison.calculTSPEnCours()){
             DemandeLivraison demande = this.gestionLivraison.getDemande();
