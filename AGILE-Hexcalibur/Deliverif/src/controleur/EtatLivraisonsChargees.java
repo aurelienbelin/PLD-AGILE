@@ -92,6 +92,19 @@ public class EtatLivraisonsChargees extends EtatDefaut{
             e.printStackTrace();
         }
     }
+    @Override
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+    }
+    
+    @Override
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+    }
 }
 
 

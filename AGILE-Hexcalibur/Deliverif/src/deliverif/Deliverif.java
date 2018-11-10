@@ -36,6 +36,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.input.ScrollEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -83,6 +84,8 @@ public class Deliverif extends Application implements Observer{
      */
     public final static String CALCULER_TOURNEES = "Calculer les tournées";
     
+    public final static String ZOOM_AVANT = "+";
+    
     public final static String ARRETER_CALCUL_TOURNEES = "Stop";
     
     //private Controleur controleur;
@@ -126,7 +129,6 @@ public class Deliverif extends Application implements Observer{
         controleur = new Controleur(gestionLivraison,this);
         vueGraphique = new VueGraphique(this.gestionLivraison, this);
         ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
-        
         gestionLivraison.addObserver(this);
     }
     
@@ -170,6 +172,19 @@ public class Deliverif extends Application implements Observer{
                     ecouteurBoutons.recupererCoordonneesSouris((MouseEvent) m);
                 }
             } catch (InterruptedException ex) {
+                Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        vueGraphique.setOnScroll(m->{
+            try{
+                double delta = m.getDeltaY();
+                if (delta >0){
+                    ecouteurBoutons.scrollZoomPlus((ScrollEvent) m);
+                }else if(delta<0){
+                    ecouteurBoutons.scrollZoomMoins((ScrollEvent) m);
+                }
+            }catch (Exception ex) {
                 Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -313,7 +328,11 @@ public class Deliverif extends Application implements Observer{
         nbLivreurs.setValueFactory(valueFactory);
         nbLivreurs.setPrefSize(60,25);
         
+        
+        
         boxLivreurs.getChildren().addAll(livreurs, nbLivreurs);
+        
+        
         
         HBox boxBoutons = new HBox();
         boxBoutons.setSpacing(15);
@@ -515,7 +534,7 @@ public class Deliverif extends Application implements Observer{
         popUp.show();
     }
 
-    /**
+    /**n
      * @param args the command line arguments
      */
     public static void main(String[] args) {

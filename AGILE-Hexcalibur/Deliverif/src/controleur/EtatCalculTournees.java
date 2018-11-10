@@ -25,6 +25,7 @@ public class EtatCalculTournees extends EtatDefaut{
         
     }
     
+    
     @Override
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre){
         System.out.println("J'arrête le calcul !");

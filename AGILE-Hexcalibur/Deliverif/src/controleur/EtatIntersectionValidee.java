@@ -29,5 +29,20 @@ public class EtatIntersectionValidee extends EtatDefaut{
         Controleur.etatCourant = Controleur.ETAT_INTERSECTION_SELECTIONNEE;
         fenetre.estIntersectionSelectionnee();
     }
+    @Override
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerTournees();
+    }
+    @Override
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerTournees();
+    }
+    
     
 }
