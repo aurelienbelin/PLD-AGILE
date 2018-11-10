@@ -65,7 +65,7 @@ public class DescriptifChemin extends VBox{
         this.setMaxWidth(largeur);
         this.setStyle("-fx-border-color:black; -fx-border-width:2px;");
         
-        this.creerEntete(horaire, duree, nomLivraison, (description!=null && description.size()!=0));
+        this.creerEnteteDescriptifTournee(horaire, duree, nomLivraison, (description!=null && description.size()!=0));
         
         this.creerDetails(description);
         
@@ -76,13 +76,61 @@ public class DescriptifChemin extends VBox{
         this.getChildren().addAll(this.entete);
     }
     
+    public DescriptifChemin(int largeur, int numLivraison, String duree, String nomLivraison, EcouteurBoutons ecouteurBoutons){
+        super();
+        
+        this.identifiantPoint = "-1_"+numLivraison;
+        
+        this.ecouteurBoutons = ecouteurBoutons;
+        
+        this.largeur = largeur;
+        
+        this.setSpacing(0);
+        this.setMaxWidth(largeur);
+        this.setStyle("-fx-border-color:black; -fx-border-width:2px;");
+        
+        this.creerEnteteDescriptifDL(duree, nomLivraison);
+        
+        this.developpe = false;
+        
+        this.localise = false;
+        
+        this.getChildren().addAll(this.entete);        
+    }
+    
     /**
-     * Crée l'entête du composant
+     * Crée l'entête du composant dans le cas où il correspond à une entête d'un descriptif d'une livraison de la demande de livraison
+     * @param duree
+     * @param nom 
+     */
+    private void creerEnteteDescriptifDL(String duree, String nom){
+        this.entete = new HBox();
+        this.entete.setSpacing(0);
+        this.entete.setStyle("-fx-background-color:white;");
+        
+        this.duree = new Label(duree+" min");
+        this.duree.setAlignment(Pos.CENTER);
+        this.duree.setPrefSize(largeur/4.0,50);
+        this.duree.setStyle("-fx-background-color:linear-gradient(#87CEFA, #6495ED); -fx-font-style:italic; -fx-font-weight:bold;");
+        
+        this.livraison = new Label(nom);
+        this.livraison.setAlignment(Pos.CENTER);
+        this.livraison.setWrapText(true);
+        this.livraison.setPrefHeight(50);
+        this.livraison.setPrefWidth(4*this.largeur/5.0);
+        this.livraison.setStyle("-fx-background-color: white; ");
+        this.livraison.setOnMouseClicked(e->ecouteurBoutons.localiserPointVueGraphique(this));
+        
+        this.entete.getChildren().addAll(this.duree,this.livraison);
+    }
+    
+    /**
+     * Crée l'entête du composant dans le cas où il correspond à une entête d'un descriptif de chemin pour une tournée
      * @param horaire
      * @param duree
      * @param nomLivraison 
      */
-    private void creerEntete(String horaire, String duree, String nomLivraison, boolean details){
+    private void creerEnteteDescriptifTournee(String horaire, String duree, String nomLivraison, boolean details){
         this.entete = new HBox();
         this.entete.setSpacing(0);
         this.entete.setStyle("-fx-background-color:white;");
