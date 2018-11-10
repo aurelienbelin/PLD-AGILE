@@ -68,12 +68,15 @@ public class EtatDefaut implements Etat
     public void trouverLocalisation(modele.outils.GestionLivraison gestionLivraison, deliverif.DescriptifChemin point, deliverif.Deliverif fenetre){
         modele.outils.Intersection intersection = gestionLivraison.identifierPointPassage(point.getPoint());
         
-        fenetre.getVueGraphique().identifierPtPassage(point, intersection.getLatitude(), intersection.getLongitude());
+        fenetre.getVueGraphique().identifierPtPassage(!point.estLocalise(), intersection.getLatitude(), intersection.getLongitude());
         fenetre.getVueTextuelle().majVueTextuelle(point);
     }
     
     @Override
     public void ajouterLivraison(deliverif.Deliverif fenetre) {}
+    
+    @Override
+    public void supprimerLivraison(deliverif.Deliverif fenetre) {}
     
     @Override
     public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {}
@@ -86,5 +89,12 @@ public class EtatDefaut implements Etat
     
     @Override
     public void retourSelection(deliverif.Deliverif fenetre){}
+   
+    @Override
+    public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}
+
+    
+    @Override
+    public void selectionnerPoint(deliverif.Deliverif fenetre){}
 
 }

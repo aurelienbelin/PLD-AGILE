@@ -93,7 +93,8 @@ public class EcouteurBoutons{
      * Appelle la méthode du controleur correspondant à l'interruption du calcul des tournées.
      */
     public void arreterCalculTournees(){
-        //A compléter
+        this.fenetrePrincipale.informationEnCours("Arrêt du calcul des tournées.");
+        controleur.boutonArretCalcul();
     }
 
     /**
@@ -153,6 +154,10 @@ public class EcouteurBoutons{
     
     public void ajouterLivraison (ActionEvent e) {
         controleur.boutonAjouterLivraison();
+    }
+    
+    public void supprimerLivraison (ActionEvent e) {
+        controleur.boutonSupprimerLivraison();
     }
     
     public void recupererCoordonneesSouris(MouseEvent e) throws InterruptedException{
