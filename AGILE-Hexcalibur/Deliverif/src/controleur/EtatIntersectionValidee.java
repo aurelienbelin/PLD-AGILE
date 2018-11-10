@@ -35,6 +35,7 @@ public class EtatIntersectionValidee extends EtatDefaut{
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
         fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
     }
     @Override
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
@@ -42,6 +43,7 @@ public class EtatIntersectionValidee extends EtatDefaut{
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
         fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
     }
     
     

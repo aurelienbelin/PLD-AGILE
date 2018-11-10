@@ -259,7 +259,6 @@ public class Deliverif extends Application implements Observer{
         boutonReorganiserTournee.setWrapText(true);
         boutonReorganiserTournee.setDisable(true);
         boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
-        
 
         boutonValiderSelection = new Button("Valider la sélection");
         boutonValiderSelection.setPrefSize(100,65);
@@ -554,6 +553,7 @@ public class Deliverif extends Application implements Observer{
             boutonAjouterLivraison.setDisable(true);
             boutonSupprimerLivraison.setDisable(true);
             boutonReorganiserTournee.setDisable(true);
+            vueTextuelle.effacer();
             //avertir("Le plan de la ville a bien été chargé");
         }else if(cre!=null){
             avertir(cre);

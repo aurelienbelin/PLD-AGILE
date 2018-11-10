@@ -15,10 +15,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -131,18 +131,31 @@ public class VueTextuelle extends VBox implements Observer {
      * @param arg - inutile
      */
     @Override
-    public void update(Observable o, Object arg){        
-        if (arg instanceof modele.outils.DemandeLivraison){
-            contenu.clear();
-            afficherDemandeLivraisons();
-        } else if (arg instanceof modele.outils.Tournee[]){
-            String c = contenu.get(0);
-            contenu.clear();
-            contenu.add(c);
-            tournees.clear();
-            
-            afficherTournees();
-        }
+    public void update(Observable o, Object arg){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (arg instanceof modele.outils.DemandeLivraison){
+                    contenu.clear();
+                    afficherDemandeLivraisons();
+                } else if (arg instanceof modele.outils.Tournee[]){
+                    String c = contenu.get(0);
+                    contenu.clear();
+                    contenu.add(c);
+                    tournees.clear();
+
+                    afficherTournees();
+                }
+            }
+        });
+    }
+    
+    public void effacer(){
+        contenu.clear();
+        tournees.clear();
+        choixTournee.getItems().clear();
+        
+        this.panel.setContent(null);
     }
     
     private void afficherDemandeLivraisons(){
