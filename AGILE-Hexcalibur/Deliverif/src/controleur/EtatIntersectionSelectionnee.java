@@ -37,11 +37,11 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
     }
     
     @Override
-    public void zoomPlus(deliverif.Deliverif fenetre){
-        fenetre.getVueGraphique().zoomPlus();
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerTournees();;
     }
     
     @Override

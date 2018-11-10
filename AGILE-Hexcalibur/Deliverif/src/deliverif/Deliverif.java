@@ -121,7 +121,6 @@ public class Deliverif extends Application implements Observer{
     private Label descriptionTextuelle;
     private ComboBox choixTournee;
     private Label information;
-    private Button boutonZoomPlus;
     
     @Override
     public void init() throws Exception{
@@ -130,7 +129,6 @@ public class Deliverif extends Application implements Observer{
         controleur = new Controleur(gestionLivraison,this);
         vueGraphique = new VueGraphique(this.gestionLivraison, this);
         ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
-        
         gestionLivraison.addObserver(this);
     }
     
@@ -330,14 +328,9 @@ public class Deliverif extends Application implements Observer{
         nbLivreurs.setValueFactory(valueFactory);
         nbLivreurs.setPrefSize(60,25);
         
-        boutonZoomPlus = new Button(ZOOM_AVANT);
-        boutonZoomPlus.setPrefSize(50, 50);
-        boutonZoomPlus.setMinHeight(50);
-        boutonZoomPlus.setTextAlignment(TextAlignment.CENTER);
-        boutonZoomPlus.setDisable(true);
-        boutonZoomPlus.setOnAction(e ->ecouteurBoutons.boutonZoomPlus());
         
-        boxLivreurs.getChildren().addAll(livreurs, nbLivreurs, boutonZoomPlus);
+        
+        boxLivreurs.getChildren().addAll(livreurs, nbLivreurs);
         
         
         
@@ -561,7 +554,6 @@ public class Deliverif extends Application implements Observer{
             boutonAjouterLivraison.setDisable(true);
             boutonSupprimerLivraison.setDisable(true);
             boutonReorganiserTournee.setDisable(true);
-            boutonZoomPlus.setDisable(false);
             //avertir("Le plan de la ville a bien été chargé");
         }else if(cre!=null){
             avertir(cre);

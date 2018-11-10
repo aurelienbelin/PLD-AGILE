@@ -58,7 +58,7 @@ public class VueGraphique extends StackPane implements Observer {
     private ArrayList<Canvas> tournees;
     private Canvas marker;
     private Image imageMarker;
-    private Deliverif fenetre;
+
     
 
     /**
@@ -141,7 +141,7 @@ public class VueGraphique extends StackPane implements Observer {
     /**
      * Dessine le plan à l'échelle dans la VueGraphique.
      */
-    public void dessinerPlan(){        
+    public void dessinerPlan(){      
         GraphicsContext gc = this.plan.getGraphicsContext2D();
         gc.clearRect(0, 0, plan.getWidth(), plan.getHeight());
             
@@ -223,7 +223,7 @@ public class VueGraphique extends StackPane implements Observer {
      */
     public void dessinerTournees(){
         Tournee[] listeTournees = this.gestionLivraison.getTournees();
-        
+        System.out.println(this.tournees.size());
         //Canvas canvasTemp;
         int nCouleur=0;
         int i=0;
@@ -249,17 +249,31 @@ public class VueGraphique extends StackPane implements Observer {
                 List<Troncon> troncons = chemin.getTroncons();
                 
                 for(Troncon troncon : troncons){
-                    int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
-                    int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
-                    int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
-                    int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+                    /*double[] ptDebutTroncon = { 
+                                    troncon.getDebut().getLongitude(),
+                                    troncon.getDebut().getLatitude()
+                    };
+                    ptDebutTroncon = this.mettreCoordonneesALechelle(ptDebutTroncon, false);
+                    double[] ptFinTroncon = { 
+                                    troncon.getFin().getLongitude(),
+                                    troncon.getFin().getLatitude()
+                    };
+                    ptFinTroncon = this.mettreCoordonneesALechelle(ptFinTroncon, false);*/
                     
+                   int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
+                   int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
+                   int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
+                   int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+                    
+                    //gc.strokeLine(ptDebutTroncon[0],ptDebutTroncon[1],ptFinTroncon[0],ptFinTroncon[1]);
+                   
                     gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
                 }
             }
             
             i++;
             nCouleur++;
+            
         }
         
         /*Test
@@ -275,6 +289,11 @@ public class VueGraphique extends StackPane implements Observer {
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();
         this.getChildren().add(this.marker);*/
+
+        
+        System.out.println("J'ai fini les tournées !");
+        //this.getChildren().get(0).toBack();
+
     }
     
     /**
@@ -356,11 +375,7 @@ public class VueGraphique extends StackPane implements Observer {
             this.ajouterMarker(lat,lon);
     }
     
-    public void zoomPlus(){
-        echelleLong = echelleLong *1.2;
-        echelleLat=echelleLat*1.2;
-    }
-    
+
     public void zoomPlus(double lat, double lon){
         
         

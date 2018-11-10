@@ -57,11 +57,11 @@ interface Etat
     
     public void retourSelection(deliverif.Deliverif fenetre);
 
+
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
 
     public void selectionnerPoint(deliverif.Deliverif fenetre);
 
-    public void zoomPlus(deliverif.Deliverif fenetre);
     
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon);
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon);
