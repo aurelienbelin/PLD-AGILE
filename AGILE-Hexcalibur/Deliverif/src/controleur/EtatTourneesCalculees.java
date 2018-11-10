@@ -111,6 +111,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
         fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
     }
     
     @Override
@@ -119,6 +120,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
         fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
     }
 
 }

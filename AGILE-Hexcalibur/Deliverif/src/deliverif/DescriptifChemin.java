@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Composant décrivant le point de départ d'un chemin, ainsi que le chemin associé pour aller au prochain point de passage de la tournée considérée.
@@ -116,6 +117,7 @@ public class DescriptifChemin extends VBox{
         this.livraison = new Label(nom);
         this.livraison.setAlignment(Pos.CENTER);
         this.livraison.setWrapText(true);
+        this.livraison.setTextAlignment(TextAlignment.CENTER);
         this.livraison.setPrefHeight(50);
         this.livraison.setPrefWidth(4*this.largeur/5.0);
         this.livraison.setStyle("-fx-background-color: white; ");
@@ -156,6 +158,7 @@ public class DescriptifChemin extends VBox{
         this.livraison = new Label(nomLivraison);
         this.livraison.setAlignment(Pos.CENTER);
         this.livraison.setWrapText(true);
+        this.livraison.setTextAlignment(TextAlignment.CENTER);
         this.livraison.setPrefHeight(50);
         this.livraison.setPrefWidth(4*this.largeur/5.0);
         this.livraison.setStyle("-fx-background-color: white; ");
