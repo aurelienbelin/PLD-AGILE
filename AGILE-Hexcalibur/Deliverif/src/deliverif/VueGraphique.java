@@ -75,6 +75,7 @@ public class VueGraphique extends StackPane implements Observer {
         this.setPrefSize(640,640-95);
         
         this.gestionLivraison = gl;
+        this.fenetre = f;
         gestionLivraison.addObserver(this);
         this.fenetre = f;
         
@@ -203,11 +204,13 @@ public class VueGraphique extends StackPane implements Observer {
             gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
    
         }
+        
         double[] ptLivraison = { 
                                     gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude(),
                                     gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude()
             };
-            ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
+        
+        ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
         gc.setFill(Color.RED);
         
         gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
@@ -272,6 +275,16 @@ public class VueGraphique extends StackPane implements Observer {
             nCouleur++;
             
         }
+        
+        /*Test
+        if(!this.gestionLivraison.calculTSPEnCours()){
+            for(Node n : this.getChildren()){
+                if(n!=this.plan && n!=this.dl)
+                    n.toFront();
+            }
+        }*/
+        
+        fenetre.informationEnCours("");
         /*this.getChildren().addAll(this.tournees);
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();
@@ -355,12 +368,11 @@ public class VueGraphique extends StackPane implements Observer {
         gc.drawImage(imageMarker, x - this.imageMarker.getWidth()/2.0, y - this.imageMarker.getHeight());
     }
     
-    public void identifierPtPassage(DescriptifChemin dc, double lat, double lon){
+    public void identifierPtPassage(boolean aAjouter, double lat, double lon){
         this.effacerMarker();
         
-        if(!dc.estLocalise()){
+        if(aAjouter)
             this.ajouterMarker(lat,lon);
-        }
     }
     
 

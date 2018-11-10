@@ -351,8 +351,6 @@ public class Deliverif extends Application implements Observer{
             }
         }); 
         
-        boxCalculTournees.getChildren().addAll(boxLivreurs, boutonCalculerTournees);
-        
         boutonArreterCalcul = new Button(ARRETER_CALCUL_TOURNEES);
         boutonArreterCalcul.setPrefSize(75,50);
         boutonArreterCalcul.setMinHeight(50);
@@ -362,6 +360,8 @@ public class Deliverif extends Application implements Observer{
         boutonArreterCalcul.setOnAction(e -> ecouteurBoutons.arreterCalculTournees());
         
         boxBoutons.getChildren().addAll(boutonCalculerTournees, boutonArreterCalcul);
+        
+        boxCalculTournees.getChildren().addAll(boxLivreurs, boxBoutons);
         
         Separator sh = new Separator();
         sh.setOrientation(Orientation.HORIZONTAL);
@@ -382,9 +382,9 @@ public class Deliverif extends Application implements Observer{
         //this.information.setText("Test");
         //this.information.setStyle("-fx-background-color:red;");
         
-        panelDroit.getChildren().addAll(boxLivreurs, boxBoutons, sh, vueTextuelle, information);
+        //panelDroit.getChildren().addAll(boxLivreurs, boxBoutons, sh, vueTextuelle, information);
 
-       // panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
+        panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
     }
     
     protected void creerBoxAjoutLivraison(){
