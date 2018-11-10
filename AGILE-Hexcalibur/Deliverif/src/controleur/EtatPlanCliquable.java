@@ -42,4 +42,21 @@ public class EtatPlanCliquable extends EtatDefaut{
         fenetre.estAjoutLivraisonFini();
     }
     
+    @Override
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
+    }
+    @Override
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
+    }
+    
 }

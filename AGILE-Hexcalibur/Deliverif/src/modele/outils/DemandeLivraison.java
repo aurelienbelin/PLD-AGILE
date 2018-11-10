@@ -103,12 +103,15 @@ public class DemandeLivraison {
      * 
      * @return La description de la livraison
      */
-    public Iterator<String> getDescription(){
-        List<String> sousDescription = new ArrayList<String>();
+    public Iterator<List<String>> getDescription(){
+        List<List<String>> sousDescription = new ArrayList<List<String>>();
         for(PointPassage pp : this.livraisons){
-            sousDescription.add("Livraison à "+pp.getPosition().getTroncon(0).getNom() + " pour une durée de "+(int)(pp.getDuree()/60)+" minutes");
+            String description = "Livraison à "+pp.getPosition().getTroncon(0).getNom();
+            ArrayList<String> a = new ArrayList<>();
+            a.add(""+(int)(pp.getDuree()/60));
+            a.add(description);
+            sousDescription.add(a);
         }
-        sousDescription.add("Fin de la demande");
         return sousDescription.iterator();
     }
 }

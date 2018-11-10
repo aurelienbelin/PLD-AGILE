@@ -59,6 +59,11 @@ public class Controleur {
      */
     protected static final EtatIntersectionValidee ETAT_INTERSECTION_VALIDEE = new EtatIntersectionValidee();
     
+    /**
+     * 
+     */
+    protected static final EtatPointSelectionne ETAT_POINT_SELECTIONNE = new EtatPointSelectionne();
+    
     /** etatCourant prendra successivement les états définis ci-dessus comme 
      * valeurs
      */
@@ -112,7 +117,7 @@ public class Controleur {
     public void boutonCalculerTournees (int nbLivreurs){
         etatCourant.calculerTournees(gestionLivraison, nbLivreurs, fenetre);
     }
-
+    
     //Test
     public void afficherMarqueur(deliverif.DescriptifChemin point) {
         etatCourant.trouverLocalisation(this.gestionLivraison, point, this.fenetre);
@@ -123,6 +128,10 @@ public class Controleur {
      */
     public void boutonAjouterLivraison() {
         etatCourant.ajouterLivraison(this.fenetre);
+    }
+    
+    public void boutonSupprimerLivraison() {
+        etatCourant.supprimerLivraison(this.fenetre);
     }
     
     /**@param latitude
@@ -148,6 +157,20 @@ public class Controleur {
     }
     
 
+    public void boutonArretCalcul(){
+        etatCourant.arreterCalcul(this.gestionLivraison, this.fenetre);
+    }
+    
+    /** @see Etat
+     * @version 1
+     */
+    public void scrollZoomPlus(double lat, double lon){
+        etatCourant.zoomPlus(this.fenetre, lat, lon);
+    }
+    
+    public void scrollZoomMoins(double lat, double lon){
+        etatCourant.zoomMoins(this.fenetre, lat, lon);
+    }
 }
 
 

@@ -10,13 +10,14 @@ package deliverif;
 
 import controleur.Controleur;
 import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -33,12 +34,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.input.ScrollEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import modele.outils.GestionLivraison;
 
@@ -47,7 +47,7 @@ import modele.outils.GestionLivraison;
  * @author romain
  * @see Application
  */
-public class Deliverif extends Application {
+public class Deliverif extends Application implements Observer{
     
     private static Stage stage;
     private static Scene scene;
@@ -83,6 +83,8 @@ public class Deliverif extends Application {
      *
      */
     public final static String CALCULER_TOURNEES = "Calculer les tournées";
+    
+    public final static String ZOOM_AVANT = "+";
     
     public final static String ARRETER_CALCUL_TOURNEES = "Stop";
     
@@ -127,6 +129,7 @@ public class Deliverif extends Application {
         controleur = new Controleur(gestionLivraison,this);
         vueGraphique = new VueGraphique(this.gestionLivraison, this);
         ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
+        gestionLivraison.addObserver(this);
     }
     
     @Override
@@ -169,6 +172,19 @@ public class Deliverif extends Application {
                     ecouteurBoutons.recupererCoordonneesSouris((MouseEvent) m);
                 }
             } catch (InterruptedException ex) {
+                Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        vueGraphique.setOnScroll(m->{
+            try{
+                double delta = m.getDeltaY();
+                if (delta >0){
+                    ecouteurBoutons.scrollZoomPlus((ScrollEvent) m);
+                }else if(delta<0){
+                    ecouteurBoutons.scrollZoomMoins((ScrollEvent) m);
+                }
+            }catch (Exception ex) {
                 Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -243,7 +259,6 @@ public class Deliverif extends Application {
         boutonReorganiserTournee.setWrapText(true);
         boutonReorganiserTournee.setDisable(true);
         boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
-        
 
         boutonValiderSelection = new Button("Valider la sélection");
         boutonValiderSelection.setPrefSize(100,65);
@@ -312,7 +327,11 @@ public class Deliverif extends Application {
         nbLivreurs.setValueFactory(valueFactory);
         nbLivreurs.setPrefSize(60,25);
         
+        
+        
         boxLivreurs.getChildren().addAll(livreurs, nbLivreurs);
+        
+        
         
         HBox boxBoutons = new HBox();
         boxBoutons.setSpacing(15);
@@ -331,8 +350,6 @@ public class Deliverif extends Application {
             }
         }); 
         
-        boxCalculTournees.getChildren().addAll(boxLivreurs, boutonCalculerTournees);
-        
         boutonArreterCalcul = new Button(ARRETER_CALCUL_TOURNEES);
         boutonArreterCalcul.setPrefSize(75,50);
         boutonArreterCalcul.setMinHeight(50);
@@ -342,6 +359,8 @@ public class Deliverif extends Application {
         boutonArreterCalcul.setOnAction(e -> ecouteurBoutons.arreterCalculTournees());
         
         boxBoutons.getChildren().addAll(boutonCalculerTournees, boutonArreterCalcul);
+        
+        boxCalculTournees.getChildren().addAll(boxLivreurs, boxBoutons);
         
         Separator sh = new Separator();
         sh.setOrientation(Orientation.HORIZONTAL);
@@ -362,9 +381,9 @@ public class Deliverif extends Application {
         //this.information.setText("Test");
         //this.information.setStyle("-fx-background-color:red;");
         
-        panelDroit.getChildren().addAll(boxLivreurs, boxBoutons, sh, vueTextuelle, information);
+        //panelDroit.getChildren().addAll(boxLivreurs, boxBoutons, sh, vueTextuelle, information);
 
-       // panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
+        panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
     }
     
     protected void creerBoxAjoutLivraison(){
@@ -399,6 +418,20 @@ public class Deliverif extends Application {
         }); */
         
         boxAjoutLivraison.getChildren().addAll(boxDuree, boutonValiderAjout);
+    }
+    
+    @Override
+    public void update(Observable o, Object arg){
+        if (o instanceof GestionLivraison){
+            if (arg instanceof modele.outils.Tournee[]){
+                if (!((GestionLivraison)o).calculTSPEnCours()){
+                    System.out.println("Le calcul est enfin fini !");
+                    /*On appelle la methode bouton stop, cela marchera puisque
+                    le calcul est fini !*/
+                    this.controleur.boutonArretCalcul();
+                }
+            }
+        }
     }
     
     /**
@@ -500,7 +533,7 @@ public class Deliverif extends Application {
         popUp.show();
     }
 
-    /**
+    /**n
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -520,6 +553,7 @@ public class Deliverif extends Application {
             boutonAjouterLivraison.setDisable(true);
             boutonSupprimerLivraison.setDisable(true);
             boutonReorganiserTournee.setDisable(true);
+            vueTextuelle.effacer();
             //avertir("Le plan de la ville a bien été chargé");
         }else if(cre!=null){
             avertir(cre);
@@ -601,5 +635,12 @@ public class Deliverif extends Application {
         boxAjoutLivraison.setDisable(false);
         boutonValiderSelection.setVisible(false);
         boutonRetourSelection.setVisible(true);
+    }
+    
+    public void activerBoutonArreterCalcul(boolean activation){
+        this.boutonArreterCalcul.setDisable(activation);
+        this.boutonCalculerTournees.setDisable(!activation);
+        //this.boutonChargerPlan.setDisable(!activation);
+        //this.boutonChargerDL.setDisable(!activation);
     }
 }
