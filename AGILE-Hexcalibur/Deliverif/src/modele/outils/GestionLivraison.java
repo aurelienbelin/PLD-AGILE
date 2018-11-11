@@ -143,7 +143,7 @@ public class GestionLivraison extends Observable{
         Map depuisPrecedent = this.plan.dijkstra(derniereLivraison);
         Chemin finVersLivraison = this.plan.reconstruireChemin(derniereLivraison, livraison, depuisPrecedent);
         
-        Chemin livraisonVersSuivant = this.plan.reconstruireChemin(livraison, this.tournees[pointPrecedent].getTrajet().get(pointPrecedent).getFin(), depuisLivraison);
+        Chemin livraisonVersSuivant = this.plan.reconstruireChemin(livraison, this.tournees[numeroTournee].getTrajet().get(pointPrecedent).getFin(), depuisLivraison);
         //Modifications sur la référence, rien d'autre à faire.
         List<Chemin> ancienneTournee = this.tournees[numeroTournee].getTrajet();
         List<Chemin> nouvelleTournee = new ArrayList<Chemin>();

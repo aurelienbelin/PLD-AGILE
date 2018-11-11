@@ -62,6 +62,7 @@ public class Controleur {
     /**
      * 
      */
+    protected static final EtatAjoutLivraison ETAT_AJOUT_LIVRAISON = new EtatAjoutLivraison();
     protected static final EtatPointSelectionne ETAT_POINT_SELECTIONNE = new EtatPointSelectionne();
     
     /** etatCourant prendra successivement les états définis ci-dessus comme 
@@ -155,7 +156,6 @@ public class Controleur {
     public void boutonRetour(){
         etatCourant.retourSelection(this.fenetre);
     }
-    
 
     public void boutonArretCalcul(){
         etatCourant.arreterCalcul(this.gestionLivraison, this.fenetre);
@@ -170,6 +170,14 @@ public class Controleur {
     
     public void scrollZoomMoins(double lat, double lon){
         etatCourant.zoomMoins(this.fenetre, lat, lon);
+    }
+    
+    public void clicPlus(int indexPlus, int indexTournee){
+        etatCourant.clicPlus(this.fenetre, indexPlus, indexTournee);
+    }
+    
+    public void boutonValiderAjout(float duree){
+        etatCourant.validerAjout(gestionLivraison, fenetre, duree);
     }
 }
 
