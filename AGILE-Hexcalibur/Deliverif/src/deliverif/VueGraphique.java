@@ -237,66 +237,103 @@ public class VueGraphique extends StackPane implements Observer {
      */
     public void dessinerTournees(){
         Tournee[] listeTournees = this.gestionLivraison.getTournees();
-        System.out.println(this.tournees.size());
-        //Canvas canvasTemp;
         int nCouleur=0;
         int i=0;
         
-        for(Tournee tournee : listeTournees){
-            //On créée un nouveau Canvas par tournée
-            //canvasTemp = new Canvas(this.getWidth(),this.getHeight());
-            //GraphicsContext gc = canvasTemp.getGraphicsContext2D();
-            
-            GraphicsContext gc = this.tournees.get(i).getGraphicsContext2D();
-            gc.clearRect(0, 0, this.getWidth(), this.getHeight());
-            
-            if(tournee != null){
-                List<Chemin> chemins = tournee.getTrajet();
+        if(listeTournees!=null){
+            for(Tournee tournee : listeTournees){            
+                GraphicsContext gc = this.tournees.get(i).getGraphicsContext2D();
+                gc.clearRect(0, 0, this.getWidth(), this.getHeight());
 
-                //Changer de couleur
-                /*int couleur = (int)(Math.random()*0xFFFFFF);
-                String couleur_hex = Integer.toHexString(couleur);
-                gc.setLineWidth(3);
-                gc.setStroke(Color.web("#"+couleur_hex.substring(2,couleur_hex.length())));*/
-                gc.setLineWidth(3);
-                gc.setStroke(couleurs[nCouleur]);
+                if(tournee != null){
+                    List<Chemin> chemins = tournee.getTrajet();
 
-                for(Chemin chemin : chemins){
-                    List<Troncon> troncons = chemin.getTroncons();
+                    //Changer de couleur
+                    /*int couleur = (int)(Math.random()*0xFFFFFF);
+                    String couleur_hex = Integer.toHexString(couleur);
+                    gc.setStroke(Color.web("#"+couleur_hex.substring(2,couleur_hex.length())));*/
+                    gc.setLineWidth(3);
+                    gc.setStroke(couleurs[nCouleur]);
+                    gc.setLineDashes(0,0);
 
-                    for(Troncon troncon : troncons){
-                        /*double[] ptDebutTroncon = { 
-                                        troncon.getDebut().getLongitude(),
-                                        troncon.getDebut().getLatitude()
-                        };
-                        ptDebutTroncon = this.mettreCoordonneesALechelle(ptDebutTroncon, false);
-                        double[] ptFinTroncon = { 
-                                        troncon.getFin().getLongitude(),
-                                        troncon.getFin().getLatitude()
-                        };
-                        ptFinTroncon = this.mettreCoordonneesALechelle(ptFinTroncon, false);*/
+                    for(Chemin chemin : chemins){
+                        List<Troncon> troncons = chemin.getTroncons();
 
-                       int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
-                       int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
-                       int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
-                       int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+                        for(Troncon troncon : troncons){
+                           int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
+                           int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
+                           int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
+                           int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
 
-                        //gc.strokeLine(ptDebutTroncon[0],ptDebutTroncon[1],ptFinTroncon[0],ptFinTroncon[1]);
-
-                        gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
+                            gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
+                        }
                     }
+
+                    this.getChildren().remove(this.tournees.get(i));
+                    this.getChildren().add(i+1, this.tournees.get(i));
                 }
 
-                this.getChildren().remove(this.tournees.get(i));
-                this.getChildren().add(i+1, this.tournees.get(i));
+                i++;
+                nCouleur++;
             }
-            
-            i++;
-            nCouleur++;
-            
         }
         
         fenetre.informationEnCours("");
+    }
+    
+    /**
+     * Dessine les tournées à effectuer pour desservir tous les points de livraison préalablement affichée sur le plan.
+     * Mets en valeur la tournée selectionnée par rapport aux autres.
+     * @param numTournee - la tournée à mettre en valeur
+     */
+    public void dessinerTournees(int numTournee){
+        Tournee[] listeTournees = this.gestionLivraison.getTournees();
+        int nCouleur=0;
+        int i=0;
+        
+        if(listeTournees!=null){
+            for(Tournee tournee : listeTournees){
+                GraphicsContext gc = this.tournees.get(i).getGraphicsContext2D();
+                gc.clearRect(0, 0, this.getWidth(), this.getHeight());
+
+                if(tournee != null){
+                    List<Chemin> chemins = tournee.getTrajet();
+
+                    gc.setLineWidth(3);
+
+                    if(i==(numTournee-1) || numTournee==0){
+                        gc.setStroke(couleurs[nCouleur]);
+                        gc.setLineDashes(0,0);
+                    }else{
+                        gc.setStroke(Color.rgb(0,0,0,0.5)); //A modifier : mettre la couleur du livreur, à 0.5 de transparence et en pointillé
+                        gc.setLineDashes(5,5);
+                    }
+
+                    for(Chemin chemin : chemins){
+                        List<Troncon> troncons = chemin.getTroncons();
+
+                        for(Troncon troncon : troncons){
+                           int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
+                           int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
+                           int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
+                           int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+
+                            gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
+                        }
+                    }
+
+                    this.getChildren().remove(this.tournees.get(i));
+                    this.getChildren().add(i+1, this.tournees.get(i));
+                }
+                
+                i++;
+                nCouleur++;
+            }
+
+            //On passe à l'affichage la tournée choisie devant les autres tournées, tout en conservant la demande de livraison et les marqueurs devant dans l'affichage
+            this.getChildren().removeAll(this.tournees.get(numTournee-1), this.dl, this.marker);
+            this.getChildren().addAll(this.tournees.get(numTournee-1), this.dl, this.marker);
+        }
     }
     
     /**
