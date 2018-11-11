@@ -139,7 +139,7 @@ public class Controleur {
     }
     
     public void boutonSupprimerLivraison() {
-        etatCourant.supprimerLivraison(this.fenetre);
+        etatCourant.supprimerLivraison(this.gestionLivraison, this.fenetre);
     }
     
     /**@param latitude
