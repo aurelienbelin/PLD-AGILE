@@ -82,7 +82,7 @@ public class EtatDefaut implements Etat
     public void supprimerLivraison(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}
     
     @Override
-    public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {}
+    public void clicGauche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {}
     
     @Override
     public void annuler(deliverif.Deliverif fenetre){}

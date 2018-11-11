@@ -566,6 +566,10 @@ public class Deliverif extends Application implements Observer{
         }
     }
     
+    public void estPointPassageSelectionne(double latitude, double longitude) {
+        getVueGraphique().effacerMarker();
+        getVueGraphique().ajouterMarker(latitude, longitude);
+    }
     /**
      * Passe l'IHM dans l'état suivant une fois la demande de livraison chargée.
      * @param cre - compte rendu d'execution des opérations sur le modèle
