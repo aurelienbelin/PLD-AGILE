@@ -209,6 +209,7 @@ public class EcouteurBoutons{
         point = vueGraphique.mettreCoordonneesALechelle(point, true);
         controleur.scrollZoomPlus(point[1], point[0]);
     }
+    
     public void scrollZoomMoins(ScrollEvent e){
         double[] point = new double[2];
         point[0] = e.getX();;
