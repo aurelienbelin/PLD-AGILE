@@ -5,13 +5,21 @@
  */
 package controleur;
 
+import modele.outils.GestionLivraison;
+import modele.outils.PointPassage;
+
 /**
  *
  * @author Amine Nahid
  */
 public class EtatPointSelectionne extends EtatDefaut{
+    
+    private PointPassage livraisonASupprimer;
 
     public EtatPointSelectionne() {
+    }
+    public void actionEntree(PointPassage intersectionASupprimer, int indexPlus, int indexTournee){
+        this.livraisonASupprimer = intersectionASupprimer;
     }
     
     @Override
@@ -19,12 +27,13 @@ public class EtatPointSelectionne extends EtatDefaut{
         modele.outils.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
         fenetre.getVueGraphique().effacerMarker();
         fenetre.getVueGraphique().ajouterMarker(pointClique.getLatitude(), pointClique.getLongitude());
-        fenetre.estIntersectionSelectionnee();
+        fenetre.estIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
         Controleur.etatCourant = Controleur.ETAT_POINT_SELECTIONNE;
     }
     
     @Override
-    public void supprimerLivraison (deliverif.Deliverif fenetre) {
+    public void supprimerLivraison (GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {
+        gestionLivraison.supprimerLivraison(livraisonASupprimer);
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
     }
     

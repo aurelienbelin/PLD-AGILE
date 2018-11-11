@@ -50,7 +50,7 @@ interface Etat
     
     public void ajouterLivraison(deliverif.Deliverif fenetre);
     
-    public void supprimerLivraison(deliverif.Deliverif fenetre);
+    public void supprimerLivraison(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
     
     public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
     

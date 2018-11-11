@@ -104,7 +104,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
     public void selectionnerPoint (modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
         modele.outils.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
         fenetre.getVueGraphique().ajouterMarker(pointClique.getLatitude(), pointClique.getLongitude());
-        fenetre.estIntersectionSelectionnee();
+        fenetre.estIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
         Controleur.etatCourant = Controleur.ETAT_POINT_SELECTIONNE;
     }
     
