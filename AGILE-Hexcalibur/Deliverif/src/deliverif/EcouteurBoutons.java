@@ -191,6 +191,17 @@ public class EcouteurBoutons{
     public void boutonRetour(ActionEvent e){
         controleur.boutonRetour();
     }
+    
+    public void clicPlus (ActionEvent e, int indexPlus, int indexTournee){
+        controleur.clicPlus(indexPlus, indexTournee);
+    }
+    
+    public void boutonValiderAjout(ActionEvent e){
+        float duree = fenetrePrincipale.getDuree();
+        controleur.boutonValiderAjout(duree);
+    }
+    
+    
     public void scrollZoomPlus(ScrollEvent e){
         double[] point = new double[2];
         point[0] = e.getX();;

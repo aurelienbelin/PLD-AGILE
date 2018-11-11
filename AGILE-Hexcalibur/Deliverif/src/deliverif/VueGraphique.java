@@ -62,8 +62,10 @@ public class VueGraphique extends StackPane implements Observer {
     private Canvas plan;
     private Canvas dl;
     private ArrayList<Canvas> tournees;
-    private Canvas marker;
-    private Image imageMarker;
+    private Canvas markerSelectionLivraison;
+    private Canvas markerAjoutLivraison;
+    private Image imageMarkerSelection;
+    private Image imageMarkerAjout;
     private Pair<Double, Double> positionMarker;
 
     /**
@@ -89,8 +91,11 @@ public class VueGraphique extends StackPane implements Observer {
         
         this.getChildren().addAll(plan,dl);
         
-        imageMarker = new Image("/deliverif/Marker_1.png",true);
-        this.marker = new Canvas(640,640-95);
+        imageMarkerSelection = new Image("/deliverif/Marker_1.png",true);
+        imageMarkerAjout = new Image("/deliverif/Marker_3.png", true);
+        this.markerSelectionLivraison = new Canvas(640,640-95);
+        this.markerAjoutLivraison = new Canvas(640,640-95);
+        
         this.fenetre = f;
     }
     
@@ -359,7 +364,8 @@ public class VueGraphique extends StackPane implements Observer {
         this.getChildren().addAll(this.tournees);
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();
-        this.getChildren().add(this.marker);
+        this.getChildren().add(this.markerSelectionLivraison);
+        this.getChildren().add(this.markerAjoutLivraison);
     }
     
     /**
@@ -388,10 +394,22 @@ public class VueGraphique extends StackPane implements Observer {
         return pointAJour;
     }
     
+    public void effacerMarkerAjout() {
+        this.markerAjoutLivraison.getGraphicsContext2D().clearRect(0, 0, this.markerAjoutLivraison.getWidth(), this.markerAjoutLivraison.getHeight());
+    }
+    
+    public void ajouterMarkerAjout(double lat, double lon) {
+        int x = (int)((lon - origineLongitude)*echelleLong);
+        int y = (int)(this.getHeight() - (lat - origineLatitude)*echelleLat);
+        
+        GraphicsContext gc = this.markerAjoutLivraison.getGraphicsContext2D();
+        gc.drawImage(imageMarkerAjout, x - this.imageMarkerAjout.getWidth()/2.0, y - this.imageMarkerAjout.getHeight());
+    }
+    
     //Test
     public void effacerMarker() {
         this.positionMarker = null;
-        this.marker.getGraphicsContext2D().clearRect(0,0,this.marker.getWidth(), this.marker.getHeight());
+        this.markerSelectionLivraison.getGraphicsContext2D().clearRect(0,0,this.markerSelectionLivraison.getWidth(), this.markerSelectionLivraison.getHeight());
     }
     
     //Test
@@ -399,18 +417,18 @@ public class VueGraphique extends StackPane implements Observer {
         int x = (int)((lon - origineLongitude)*echelleLong);
         int y = (int)(getHeight() - (lat - origineLatitude)*echelleLat);
 
-        GraphicsContext gc = marker.getGraphicsContext2D();
-        gc.drawImage(imageMarker, x - imageMarker.getWidth()/2.0, y - imageMarker.getHeight());
+        GraphicsContext gc =markerSelectionLivraison.getGraphicsContext2D();
+        gc.drawImage(imageMarkerSelection, x - imageMarkerSelection.getWidth()/2.0, y - imageMarkerSelection.getHeight());
         
         this.positionMarker = new Pair(lat,lon);
         
-        this.getChildren().remove(this.marker);
-        this.getChildren().add(this.marker);
+        this.getChildren().remove(this.markerSelectionLivraison);
+        this.getChildren().add(this.markerSelectionLivraison);
     }
     
     //Test
     public void dessinerMarker(){
-        this.marker.getGraphicsContext2D().clearRect(0,0,this.marker.getWidth(), this.marker.getHeight());
+        this.markerSelectionLivraison.getGraphicsContext2D().clearRect(0,0,this.markerSelectionLivraison.getWidth(), this.markerSelectionLivraison.getHeight());
         
         if(this.positionMarker != null)
             ajouterMarker(this.positionMarker.getKey(),this.positionMarker.getValue());

@@ -57,7 +57,7 @@ public class PointPassage {
      *
      * @return La durée que l'on doit passer sur ce point de passage.
      */
-    protected float getDuree() {
+    public float getDuree() {
         return duree;
     }
     
