@@ -88,9 +88,23 @@ public class EtatLivraisonsChargees extends EtatDefaut{
             fenetre.estPlanCharge(e.getMessage());
             
         } catch (Exception e) {
-            //fenetre.estPlanCharge(e.getMessage());
             e.printStackTrace();
         }
+    }
+    @Override
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerMarker();
+    }
+    
+    @Override
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerMarker();
     }
 }
 

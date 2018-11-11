@@ -68,7 +68,7 @@ public class GestionLivraison extends Observable{
         threadTSP = new Thread(new Runnable(){
             @Override
             public void run(){
-                tsp.chercheSolution(tempsLimite*1000, listePoints.size(), nbLivreur, cout);
+                tsp.chercheSolution(tempsLimite, listePoints.size(), nbLivreur, cout); //*1000
                 if (tsp.getCoutMeilleureSolution()!=Integer.MAX_VALUE){
                     genererTournee(graphe, listePoints, nbLivreur);
                 }
@@ -272,7 +272,10 @@ public class GestionLivraison extends Observable{
         int numTournee = Integer.parseInt(identifiants[0]);
         int numLivraison = Integer.parseInt(identifiants[1]);
         
-        return this.tournees[numTournee-1].getPointPassage(numLivraison-1).getPosition();        
+        if(numTournee != -1)
+            return this.tournees[numTournee-1].getPointPassage(numLivraison-1).getPosition();
+        else
+            return this.demande.getLivraisons().get(numLivraison-1).getPosition();
     }
     
     /**
