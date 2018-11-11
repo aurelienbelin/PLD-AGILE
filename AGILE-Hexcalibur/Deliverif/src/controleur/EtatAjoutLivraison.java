@@ -44,7 +44,9 @@ public class EtatAjoutLivraison extends EtatDefaut{
     
     @Override
     public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree){
-        gestionLivraison.ajouterLivraison(intersectionValidee, duree, indexTournee, indexPlus/2);
+        int indexLivraisonPreced = indexPlus/2;
+        duree = duree * 60;
+        gestionLivraison.ajouterLivraison(intersectionValidee, duree, indexTournee, indexLivraisonPreced);
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
         fenetre.estAjoutLivraisonFini();
     }
