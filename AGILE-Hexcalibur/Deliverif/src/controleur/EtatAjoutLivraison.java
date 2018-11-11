@@ -8,6 +8,9 @@
  */
 package controleur;
 
+import controleur.commandes.CdeAjoutLivraison;
+import controleur.commandes.Commande;
+import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
 import modele.outils.GestionLivraison;
 import modele.outils.Intersection;
@@ -43,10 +46,11 @@ public class EtatAjoutLivraison extends EtatDefaut{
     }
     
     @Override
-    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree){
+    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde){
         int indexLivraisonPreced = indexPlus/2;
         duree = duree * 60;
-        gestionLivraison.ajouterLivraison(intersectionValidee, duree, indexTournee, indexLivraisonPreced);
+        Commande cde = new CdeAjoutLivraison(gestionLivraison, intersectionValidee, indexTournee, indexLivraisonPreced, duree);
+        listeCde.ajouterCde(cde);
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
         fenetre.estAjoutLivraisonFini();
     }

@@ -126,6 +126,7 @@ public class Deliverif extends Application implements Observer{
     public void init() throws Exception{
         super.init();
         gestionLivraison = new GestionLivraison();
+        gestionLivraison.addObserver(this);
         controleur = new Controleur(gestionLivraison,this);
         vueGraphique = new VueGraphique(this.gestionLivraison, this);
         ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
@@ -422,7 +423,12 @@ public class Deliverif extends Application implements Observer{
                     System.out.println("Le calcul est enfin fini !");
                     /*On appelle la methode bouton stop, cela marchera puisque
                     le calcul est fini !*/
-                    this.controleur.boutonArretCalcul();
+                    try{
+                        this.controleur.boutonArretCalcul();
+                    } catch(IllegalStateException ise){
+                        //On s'en fiche que ça ne soit pas sur le thread fx.
+                        //Ça marche quand même !
+                    }
                 }
             }
         }
