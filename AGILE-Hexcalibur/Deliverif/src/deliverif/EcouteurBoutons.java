@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
+import modele.outils.PointPassage;
 
 /**
  * Ecouteur des évènements émis par l'IHM de l'application.
