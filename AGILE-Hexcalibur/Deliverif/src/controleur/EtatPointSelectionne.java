@@ -15,7 +15,22 @@ public class EtatPointSelectionne extends EtatDefaut{
     }
     
     @Override
+    public void selectionnerPoint (modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
+        modele.outils.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
+        fenetre.getVueGraphique().effacerMarker();
+        fenetre.getVueGraphique().ajouterMarker(pointClique.getLatitude(), pointClique.getLongitude());
+        fenetre.estIntersectionSelectionnee();
+        Controleur.etatCourant = Controleur.ETAT_POINT_SELECTIONNE;
+    }
+    
+    @Override
     public void supprimerLivraison (deliverif.Deliverif fenetre) {
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+    }
+    
+    @Override
+    public void ajouterLivraison (deliverif.Deliverif fenetre) {
+        Controleur.etatCourant = Controleur.ETAT_PLAN_CLIQUABLE;
+        fenetre.estPlanCliquable();
     }
 }

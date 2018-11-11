@@ -94,7 +94,7 @@ public class EtatDefaut implements Etat
 
     
     @Override
-    public void selectionnerPoint(deliverif.Deliverif fenetre){}
+    public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude){}
     
     
     @Override
