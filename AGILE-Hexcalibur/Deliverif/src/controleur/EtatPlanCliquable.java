@@ -30,15 +30,14 @@ public class EtatPlanCliquable extends EtatDefaut{
     @Override
     public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
         modele.outils.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
-        fenetre.getVueGraphique().ajouterMarker(pointClique.getLatitude(), pointClique.getLongitude());
-        fenetre.estIntersectionSelectionnee();
+        fenetre.estIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
+        Controleur.ETAT_INTERSECTION_SELECTIONNEE.actionEntree(pointClique);
         Controleur.etatCourant = Controleur.ETAT_INTERSECTION_SELECTIONNEE;
     }
     
     @Override
     public void annuler(deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
-        fenetre.estTourneesCalculees("SUCCESS");
         fenetre.estAjoutLivraisonFini();
     }
     
