@@ -8,7 +8,11 @@
  */
 package controleur;
 
+import deliverif.Deliverif;
+import deliverif.DescriptifChemin;
 import java.io.IOException;
+import modele.outils.GestionLivraison;
+import modele.outils.Intersection;
 import org.xml.sax.SAXException;
 
 /** Classe mère de tous les états.
@@ -88,6 +92,11 @@ public class EtatDefaut implements Etat
     
     @Override
     public void retourSelection(deliverif.Deliverif fenetre){}
+    
+    @Override
+    public void clicPlus(Deliverif fenetre, int indexPlus, int indexTournee) {}
+    
+    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree){}
 
     @Override
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}

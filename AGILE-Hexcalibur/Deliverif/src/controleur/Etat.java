@@ -8,7 +8,10 @@
  */
 package controleur;
 
+import deliverif.Deliverif;
+import deliverif.DescriptifChemin;
 import java.io.IOException;
+import modele.outils.GestionLivraison;
 import org.xml.sax.SAXException;
 
 /** Par ses actions, l'utilisateur fait passer l'application d'une situation 
@@ -56,6 +59,10 @@ interface Etat
     public void validerSelection(deliverif.Deliverif fenetre);
     
     public void retourSelection(deliverif.Deliverif fenetre);
+    
+    public void clicPlus(Deliverif fenetre, int indexPlus, int indexTournee);
+    
+    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree);
 
 
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
