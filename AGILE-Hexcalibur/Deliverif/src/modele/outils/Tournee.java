@@ -90,7 +90,7 @@ public class Tournee {
     /**
      * 
      * @param i
-     * @return - Le point de passage du trajet i 
+     * @return - Le point de passage du trajet i  (0==entrepot)
      */
     protected PointPassage getPointPassage(int i){
         if (this.trajet!=null && i!=(this.trajet.size())){
@@ -134,12 +134,10 @@ public class Tournee {
         s.add("Entrepôt");
         
         sousDescription.add(s);
-        
+        Calendar heureCalcul = (Calendar)this.heureDepart.clone();
         for(Chemin c : this.trajet){
-            sousDescription.add(c.getDescription_Bis(this.heureDepart));
+            sousDescription.add(c.getDescription_Bis(heureCalcul));
         }
-        
-        this.heureDepart.add(Calendar.SECOND, -(int)this.getTempsTournee());//retablir l'objet partagé heureDepart
         
         return sousDescription.iterator();
     }

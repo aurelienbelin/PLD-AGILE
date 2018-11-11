@@ -8,6 +8,7 @@
  */
 package controleur;
 
+import controleur.commandes.ListeCommandes;
 import java.io.IOException;
 import org.xml.sax.SAXException;
 
@@ -62,6 +63,7 @@ public class Controleur {
     /**
      * 
      */
+    protected static final EtatAjoutLivraison ETAT_AJOUT_LIVRAISON = new EtatAjoutLivraison();
     protected static final EtatPointSelectionne ETAT_POINT_SELECTIONNE = new EtatPointSelectionne();
     
     /** etatCourant prendra successivement les états définis ci-dessus comme 
@@ -77,6 +79,11 @@ public class Controleur {
     
     private final deliverif.Deliverif fenetre;
     
+    /**
+     * Stocke l'ensemble des commandes réalisées au cours de l'application.
+     */
+    private ListeCommandes listeCde;
+    
     
     
     /** * @param gestionLivraison
@@ -88,6 +95,7 @@ public class Controleur {
         this.gestionLivraison = gestionLivraison;
         Controleur.etatCourant = ETAT_INIT;
         this.fenetre = fenetre;
+        this.listeCde = new ListeCommandes();
     }
     
     /** * @param fichier
@@ -131,7 +139,7 @@ public class Controleur {
     }
     
     public void boutonSupprimerLivraison() {
-        etatCourant.supprimerLivraison(this.fenetre);
+        etatCourant.supprimerLivraison(this.gestionLivraison, this.fenetre);
     }
     
     /**@param latitude
@@ -155,7 +163,6 @@ public class Controleur {
     public void boutonRetour(){
         etatCourant.retourSelection(this.fenetre);
     }
-    
 
     public void boutonArretCalcul(){
         etatCourant.arreterCalcul(this.gestionLivraison, this.fenetre);
@@ -170,6 +177,14 @@ public class Controleur {
     
     public void scrollZoomMoins(double lat, double lon){
         etatCourant.zoomMoins(this.fenetre, lat, lon);
+    }
+    
+    public void clicPlus(int indexPlus, int indexTournee){
+        etatCourant.clicPlus(this.fenetre, indexPlus, indexTournee);
+    }
+    
+    public void boutonValiderAjout(float duree){
+        etatCourant.validerAjout(gestionLivraison, fenetre, duree, this.listeCde);
     }
 }
 
