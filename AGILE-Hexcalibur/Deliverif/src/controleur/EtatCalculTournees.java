@@ -27,16 +27,13 @@ public class EtatCalculTournees extends EtatDefaut{
     
     @Override
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre){
-        System.out.println("J'arrête le calcul !");
         if(gestionLivraison.calculTSPEnCours()){
             gestionLivraison.arreterCalculTournee();
         }
         if (gestionLivraison.aSolution()){
-            System.out.println("Tournées calculées !");
             Controleur.etatCourant=Controleur.ETAT_TOURNEES_CALCULEES;
             fenetre.estTourneesCalculees("SUCCESS");
         } else {
-            System.out.println("Retour case départ !");
             Controleur.etatCourant=Controleur.ETAT_LIVRAISONS_CHARGEES;
         }
         fenetre.activerBoutonArreterCalcul(true);
