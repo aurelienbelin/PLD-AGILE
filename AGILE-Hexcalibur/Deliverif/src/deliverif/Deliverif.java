@@ -36,6 +36,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.input.ScrollEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -83,6 +84,8 @@ public class Deliverif extends Application implements Observer{
      */
     public final static String CALCULER_TOURNEES = "Calculer les tournées";
     
+    public final static String ZOOM_AVANT = "+";
+    
     public final static String ARRETER_CALCUL_TOURNEES = "Stop";
     
     //private Controleur controleur;
@@ -126,6 +129,7 @@ public class Deliverif extends Application implements Observer{
         controleur = new Controleur(gestionLivraison,this);
         vueGraphique = new VueGraphique(this.gestionLivraison, this);
         ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
+        gestionLivraison.addObserver(this);
     }
     
     @Override
@@ -168,6 +172,19 @@ public class Deliverif extends Application implements Observer{
                     ecouteurBoutons.recupererCoordonneesSouris((MouseEvent) m);
                 }
             } catch (InterruptedException ex) {
+                Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        vueGraphique.setOnScroll(m->{
+            try{
+                double delta = m.getDeltaY();
+                if (delta >0){
+                    ecouteurBoutons.scrollZoomPlus((ScrollEvent) m);
+                }else if(delta<0){
+                    ecouteurBoutons.scrollZoomMoins((ScrollEvent) m);
+                }
+            }catch (Exception ex) {
                 Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -242,7 +259,6 @@ public class Deliverif extends Application implements Observer{
         boutonReorganiserTournee.setWrapText(true);
         boutonReorganiserTournee.setDisable(true);
         boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
-        
 
         boutonValiderSelection = new Button("Valider la sélection");
         boutonValiderSelection.setPrefSize(100,65);
@@ -311,7 +327,11 @@ public class Deliverif extends Application implements Observer{
         nbLivreurs.setValueFactory(valueFactory);
         nbLivreurs.setPrefSize(60,25);
         
+        
+        
         boxLivreurs.getChildren().addAll(livreurs, nbLivreurs);
+        
+        
         
         HBox boxBoutons = new HBox();
         boxBoutons.setSpacing(15);
@@ -330,8 +350,6 @@ public class Deliverif extends Application implements Observer{
             }
         }); 
         
-        boxCalculTournees.getChildren().addAll(boxLivreurs, boutonCalculerTournees);
-        
         boutonArreterCalcul = new Button(ARRETER_CALCUL_TOURNEES);
         boutonArreterCalcul.setPrefSize(75,50);
         boutonArreterCalcul.setMinHeight(50);
@@ -341,6 +359,8 @@ public class Deliverif extends Application implements Observer{
         boutonArreterCalcul.setOnAction(e -> ecouteurBoutons.arreterCalculTournees());
         
         boxBoutons.getChildren().addAll(boutonCalculerTournees, boutonArreterCalcul);
+        
+        boxCalculTournees.getChildren().addAll(boxLivreurs, boxBoutons);
         
         Separator sh = new Separator();
         sh.setOrientation(Orientation.HORIZONTAL);
@@ -361,9 +381,9 @@ public class Deliverif extends Application implements Observer{
         //this.information.setText("Test");
         //this.information.setStyle("-fx-background-color:red;");
         
-        panelDroit.getChildren().addAll(boxLivreurs, boxBoutons, sh, vueTextuelle, information);
+        //panelDroit.getChildren().addAll(boxLivreurs, boxBoutons, sh, vueTextuelle, information);
 
-       // panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
+        panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
     }
     
     protected void creerBoxAjoutLivraison(){
@@ -513,7 +533,7 @@ public class Deliverif extends Application implements Observer{
         popUp.show();
     }
 
-    /**
+    /**n
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -533,6 +553,7 @@ public class Deliverif extends Application implements Observer{
             boutonAjouterLivraison.setDisable(true);
             boutonSupprimerLivraison.setDisable(true);
             boutonReorganiserTournee.setDisable(true);
+            vueTextuelle.effacer();
             //avertir("Le plan de la ville a bien été chargé");
         }else if(cre!=null){
             avertir(cre);
