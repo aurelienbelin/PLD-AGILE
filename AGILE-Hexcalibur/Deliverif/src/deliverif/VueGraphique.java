@@ -30,9 +30,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+
+import javafx.scene.shape.Circle;
+
 import javafx.util.Pair;
 import modele.outils.Chemin;
 import modele.outils.GestionLivraison;
@@ -59,6 +63,7 @@ public class VueGraphique extends StackPane implements Observer {
     private double echelleLatitudeMin;
     private double echelleLongitudeMin;
     private Deliverif fenetre;
+    
     
     //Composants
     private final Color[] couleursDbt = {Color.BLUEVIOLET, Color.BROWN, Color.CHARTREUSE,Color.CORAL,Color.CRIMSON,Color.DARKBLUE, Color.DARKGREEN, Color.DEEPPINK, Color.GOLD, Color.LIGHTSALMON};
@@ -227,7 +232,6 @@ public class VueGraphique extends StackPane implements Observer {
             //Dessin marqueur
             gc.setFill(Color.BLUE);
             gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
-   
         }
         
         double[] ptLivraison = { 
@@ -237,7 +241,6 @@ public class VueGraphique extends StackPane implements Observer {
         
         ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
         gc.setFill(Color.RED);
-        
         gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
 
         
