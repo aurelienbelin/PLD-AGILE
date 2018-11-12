@@ -8,6 +8,7 @@
  */
 package controleur;
 
+import controleur.commandes.ListeCommandes;
 import java.io.IOException;
 import org.xml.sax.SAXException;
 
@@ -63,7 +64,17 @@ public class Controleur {
      * 
      */
     protected static final EtatAjoutLivraison ETAT_AJOUT_LIVRAISON = new EtatAjoutLivraison();
-    protected static final EtatPointSelectionne ETAT_POINT_SELECTIONNE = new EtatPointSelectionne();
+    
+    /**
+     * 
+     */
+    protected static final EtatSupprimerLivraison ETAT_SUPPRIMER_LIVRAISON = new EtatSupprimerLivraison();
+    
+    /**
+     * 
+     */
+    protected static final EtatLivraisonSelectionnee ETAT_LIVRAISON_SELECTIONNEE = new EtatLivraisonSelectionnee();
+    
     
     /** etatCourant prendra successivement les états définis ci-dessus comme 
      * valeurs
@@ -78,6 +89,11 @@ public class Controleur {
     
     private final deliverif.Deliverif fenetre;
     
+    /**
+     * Stocke l'ensemble des commandes réalisées au cours de l'application.
+     */
+    private ListeCommandes listeCde;
+    
     
     
     /** * @param gestionLivraison
@@ -89,6 +105,7 @@ public class Controleur {
         this.gestionLivraison = gestionLivraison;
         Controleur.etatCourant = ETAT_INIT;
         this.fenetre = fenetre;
+        this.listeCde = new ListeCommandes();
     }
     
     /** * @param fichier
@@ -132,7 +149,7 @@ public class Controleur {
     }
     
     public void boutonSupprimerLivraison() {
-        etatCourant.supprimerLivraison(this.gestionLivraison, this.fenetre);
+        etatCourant.validerSuppression(this.gestionLivraison, this.fenetre);
     }
     
     /**@param latitude
@@ -142,7 +159,7 @@ public class Controleur {
      * @version 2.1
      */
     public void clicGauche(double latitude, double longitude) {
-        etatCourant.intersectionPlusProche(this.gestionLivraison, this.fenetre, latitude, longitude);
+        etatCourant.clicGauche(this.gestionLivraison, this.fenetre, latitude, longitude);
     }
     
     public void boutonAnnuler() {
@@ -177,7 +194,7 @@ public class Controleur {
     }
     
     public void boutonValiderAjout(float duree){
-        etatCourant.validerAjout(gestionLivraison, fenetre, duree);
+        etatCourant.validerAjout(gestionLivraison, fenetre, duree, this.listeCde);
     }
 }
 
