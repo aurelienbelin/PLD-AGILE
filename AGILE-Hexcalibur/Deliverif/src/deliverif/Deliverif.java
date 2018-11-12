@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -420,7 +421,9 @@ public class Deliverif extends Application implements Observer{
         if (o instanceof GestionLivraison){
             if (arg instanceof modele.outils.Tournee[]){
                 if (!((GestionLivraison)o).calculTSPEnCours()){
-                    System.out.println("Le calcul est enfin fini !");
+                    System.out.println("Le calcul est enfin fini !"); //DEBUG
+                    
+                    this.informationEnCours("");
                     /*On appelle la methode bouton stop, cela marchera puisque
                     le calcul est fini !*/
                     try{
@@ -439,7 +442,12 @@ public class Deliverif extends Application implements Observer{
      * @param message - message à afficher (état courant de l'application)
      */
     protected void informationEnCours(String message){
-        this.information.setText(message);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                information.setText(message);
+            }
+        });
     }
     
     /**
@@ -666,7 +674,6 @@ public class Deliverif extends Application implements Observer{
         
         vueTextuelle.supprimerBoutonAjout();
         vueGraphique.effacerMarkerAjout();
-        
         
         estTourneesCalculees("SUCCESS");
     }

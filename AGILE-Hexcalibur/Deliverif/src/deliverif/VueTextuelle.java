@@ -42,6 +42,7 @@ import modele.outils.Tournee;
 public class VueTextuelle extends VBox implements Observer {
     
     private GestionLivraison gestionLivraison;
+    private final String[] NOMS_COULEURS = {"violet","marron","vert fluo","corail","rouge","bleu","vert foncé", "rose","or","beige"};
     
     /**
      * @deprecated
@@ -198,7 +199,8 @@ public class VueTextuelle extends VBox implements Observer {
                     int j = 1;
                     VBox vbox = new VBox();
                     vbox.setMinWidth(this.panel.getViewportBounds().getWidth());
-                    contenu.add("Livreur "+i);
+                    //contenu.add("Livreur "+i);
+                    contenu.add("Livreur "+NOMS_COULEURS[i-1]);
                     Iterator<List<String>> it = t.getDescription_Bis();
                     
                     while(it.hasNext()){
