@@ -28,7 +28,7 @@ public class EtatPlanCliquable extends EtatDefaut{
      * @param longitude
      */
     @Override
-    public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
+    public void clicGauche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
         modele.outils.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
         fenetre.estIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
         Controleur.ETAT_INTERSECTION_SELECTIONNEE.actionEntree(pointClique);
