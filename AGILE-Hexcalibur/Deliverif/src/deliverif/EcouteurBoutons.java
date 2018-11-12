@@ -107,8 +107,14 @@ public class EcouteurBoutons{
     public void changerTourneeAffichee(ActionEvent e) throws InterruptedException{
         int i = this.fenetrePrincipale.getVueTextuelle().changerDescription_Bis();
         
-        if(i!=-1)
-            this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
+        if(i!=-1){
+            //this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
+            if(i==0){
+                this.fenetrePrincipale.getVueGraphique().dessinerTournees();
+            }else{
+                this.fenetrePrincipale.getVueGraphique().dessinerTournees(i);
+            }
+        }
     }
     /**
      * Actualise le plan en fonction du zoom
@@ -204,6 +210,7 @@ public class EcouteurBoutons{
         point = vueGraphique.mettreCoordonneesALechelle(point, true);
         controleur.scrollZoomPlus(point[1], point[0]);
     }
+    
     public void scrollZoomMoins(ScrollEvent e){
         double[] point = new double[2];
         point[0] = e.getX();;

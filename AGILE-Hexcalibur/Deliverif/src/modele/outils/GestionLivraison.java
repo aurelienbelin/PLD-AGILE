@@ -51,7 +51,6 @@ public class GestionLivraison extends Observable{
         if(this.plan==null || this.demande==null || (this.calculTSPEnCours())){
             return;
         }
-        System.out.println("Début du calcul de tournée !");
         List<PointPassage> listePoints = new ArrayList<>();
         listePoints.add(this.demande.getEntrepot());
         listePoints.addAll(this.demande.getLivraisons());
@@ -74,6 +73,7 @@ public class GestionLivraison extends Observable{
                 }
             }
         });
+        threadTSP.setDaemon(true);
         threadTSP.start();
     }
     
@@ -222,6 +222,78 @@ public class GestionLivraison extends Observable{
         return false;
     }
     
+    /**
+     * Change l'ordre des points de passage d'une tournée.
+     * @param numeroTournee - La tournée sur laquelle l'opération de changement doit avoir lieu.
+     * @param nouvelOrdre - Une liste d'entier décrivant dans l'ordre les points de passages à placer,
+     * cet ordre étant indiqué par l'indice. Par ex : 2, 3, 1 veut dire "le deuxième sommet, puis le troisième et enfin le premier".
+     */
+    public void changerOrdreTournee(int numeroTournee, List<Integer> nouvelOrdre){
+        if (this.tournees==null || this.tournees.length<=numeroTournee || numeroTournee <0){
+            return;
+        }
+        if (this.tournees[numeroTournee].getTrajet().size()-1!=nouvelOrdre.size()){
+            return;
+        }
+        List<Chemin> nouveauTrajet = new ArrayList<Chemin>();
+        PointPassage precedent=this.tournees[numeroTournee].getPointPassage(0);
+        for(Integer i : nouvelOrdre){
+            PointPassage suivant=this.tournees[numeroTournee].getPointPassage(i);
+            Map coutChemins = this.plan.dijkstra(precedent);
+            Chemin chemin = this.plan.reconstruireChemin(precedent, suivant, coutChemins);
+            nouveauTrajet.add(chemin);
+            suivant=precedent;
+        }
+        //Une fois que tout est mis, il reste le chemin de la dernière livraison vers l'entrepot.
+        Map coutChemins = this.plan.dijkstra(precedent);
+        Chemin chemin = this.plan.reconstruireChemin(precedent, this.demande.getEntrepot(), coutChemins);
+        nouveauTrajet.add(chemin);
+        
+        this.tournees[numeroTournee] = new Tournee(nouveauTrajet, this.demande.getHeureDepart());
+    }
+    
+    /**
+     * Change un point de passage d'une tournée 1 vers une tournée 2.
+     * @param tournee1 - L'indice de la tournée originelle.
+     * @param tournee2 - L'indice de la tournée dans laquelle intégrer le point de passage.
+     * @param indice1 - L'indice du point de passage dans la tournée originelle.
+     * @param indice2 - L'indice où ajouter le point de passage dans la nouvelle tournée.
+     */
+    public void intervertirPoint(int tournee1, int tournee2, int indice1, int indice2){
+        if (this.tournees==null || tournee1<0 || tournee2 <0 || tournee1>=this.tournees.length || tournee2>=this.tournees.length){
+            return;
+        }
+        if (indice1<1 || indice2<1 || indice1>this.tournees[tournee1].getTrajet().size()-2|| indice2> this.tournees[tournee2].getTrajet().size()-2){
+            return;//IndexOutOfBoundsException quoi.
+        }
+        PointPassage livraison = this.tournees[tournee1].getPointPassage(indice1);
+        this.supprimerLivraison(livraison);
+        this.ajouterLivraison(livraison.getPosition(), livraison.getDuree(), tournee2, indice2);
+    }
+    
+    /**
+     * Renvoie l'indice d'un point de passage au sein d'une tournée.
+     * @param numeroTournee - Le numéro de la tournée (indice) dans laquelle on souhaite
+     * trouver l'indice du point de passage.
+     * @param p - Le point de passage à chercher dans la tournée.
+     * @return L'indice du point de passage p dans la tournée. -1 si le point de passage
+     * ne s'y trouve pas.
+     */
+    public int positionPointDansTournee(int numeroTournee, PointPassage p){
+        if (numeroTournee>=this.tournees.length || numeroTournee<0){
+            return -1;
+        }
+        for(int i=0; i<this.tournees[numeroTournee].getTrajet().size(); i++){
+            if (this.tournees[numeroTournee].getTrajet().get(i).getDebut()==p){
+                return i;
+            }
+        }
+        return-1;
+    }
+    
+    /**
+     * @return true si le tsp a actuellement trouvé une solution. false s'il n'a toujours rien trouvé.
+     */
     public boolean aSolution(){
         if (tsp==null){
             return false;
@@ -230,7 +302,7 @@ public class GestionLivraison extends Observable{
     }
     
     /**
-     * Methode de test
+     * @return False si le thread du tsp est dans l'état terminé. False sinon.
      */
     public boolean threadAlive(){
         if (threadTSP!=null){
@@ -339,6 +411,10 @@ public class GestionLivraison extends Observable{
         return demande;
     }
     
+    /**
+     * Cette classe interne permet d'observer notre thread déroulant le branchandbound
+     * du tsp. Elle s'intègre dans le mécanisme d'affichage dit "temps réel" du tsp.
+     */
     private class ObservateurTSP implements Observer{
         
         private List<Chemin> graphe;
@@ -346,6 +422,12 @@ public class GestionLivraison extends Observable{
         private int nbLivreur;
         private long dernierAffichage;
         
+        /**
+         * Construit un nouvel observateur de tsp.
+         * @param graphe - L'ensemble des chemins (arcs d'un graphe CFC) d'un point de passage à un autre.
+         * @param listePoints - L'ensemble des points de passages.
+         * @param nbLivreur - Le nombre de livreur, important pour la construction des tournées.
+         */
         public ObservateurTSP(List<Chemin> graphe, List<PointPassage> listePoints, int nbLivreur){
             this.graphe=graphe;
             this.listePoints=listePoints;
@@ -355,6 +437,8 @@ public class GestionLivraison extends Observable{
         
         @Override
         public void update(Observable o, Object arg){
+            //Le TSP a trouvé une nouvelle solution, donc on génère les nbLvreur tournées,
+            //Elle seront ensuite affichées dans la vue grâce au premier pattern observer.
             genererTournee(graphe, listePoints, nbLivreur);
         }
     }
