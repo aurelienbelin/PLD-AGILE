@@ -8,7 +8,10 @@
  */
 package controleur;
 
+import controleur.commandes.ListeCommandes;
+import deliverif.Deliverif;
 import java.io.IOException;
+import modele.outils.GestionLivraison;
 import org.xml.sax.SAXException;
 
 /** Par ses actions, l'utilisateur fait passer l'application d'une situation 
@@ -47,20 +50,24 @@ interface Etat
     
     public void ajouterLivraison(deliverif.Deliverif fenetre);
     
-    public void supprimerLivraison(deliverif.Deliverif fenetre);
+    public void supprimerLivraison(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
     
-    public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
+    public void clicGauche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
     
     public void annuler(deliverif.Deliverif fenetre);
     
     public void validerSelection(deliverif.Deliverif fenetre);
     
     public void retourSelection(deliverif.Deliverif fenetre);
+    
+    public void clicPlus(Deliverif fenetre, int indexPlus, int indexTournee);
+    
+    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde);
 
 
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
 
-    public void selectionnerPoint(deliverif.Deliverif fenetre);
+    public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
 
     
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon);

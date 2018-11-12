@@ -8,7 +8,10 @@
  */
 package controleur;
 
+import deliverif.Deliverif;
 import java.io.IOException;
+import modele.outils.GestionLivraison;
+import modele.outils.PointPassage;
 import org.xml.sax.SAXException;
 
 /**
@@ -95,14 +98,14 @@ public class EtatTourneesCalculees extends EtatDefaut{
     }
     
     @Override
-    public void ajouterLivraison (deliverif.Deliverif fenetre) {
+    public void ajouterLivraison (Deliverif fenetre) {
         Controleur.etatCourant = Controleur.ETAT_PLAN_CLIQUABLE;
         fenetre.estPlanCliquable();
     }
     
-    @Override
-    public void selectionnerPoint (deliverif.Deliverif fenetre) {
-        Controleur.etatCourant = Controleur.ETAT_POINT_SELECTIONNE;
+    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+        PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
+        fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
     }
     
     @Override
@@ -111,6 +114,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
         fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
     }
     
     @Override
@@ -119,6 +123,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
         fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
     }
 
 }

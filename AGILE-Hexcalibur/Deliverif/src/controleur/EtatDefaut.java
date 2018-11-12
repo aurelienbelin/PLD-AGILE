@@ -8,7 +8,10 @@
  */
 package controleur;
 
+import controleur.commandes.ListeCommandes;
+import deliverif.Deliverif;
 import java.io.IOException;
+import modele.outils.GestionLivraison;
 import org.xml.sax.SAXException;
 
 /** Classe mère de tous les états.
@@ -67,7 +70,6 @@ public class EtatDefaut implements Etat
     @Override
     public void trouverLocalisation(modele.outils.GestionLivraison gestionLivraison, deliverif.DescriptifChemin point, deliverif.Deliverif fenetre){
         modele.outils.Intersection intersection = gestionLivraison.identifierPointPassage(point.getPoint());
-        
         fenetre.getVueGraphique().identifierPtPassage(!point.estLocalise(), intersection.getLatitude(), intersection.getLongitude());
         fenetre.getVueTextuelle().majVueTextuelle(point);
     }
@@ -76,10 +78,10 @@ public class EtatDefaut implements Etat
     public void ajouterLivraison(deliverif.Deliverif fenetre) {}
     
     @Override
-    public void supprimerLivraison(deliverif.Deliverif fenetre) {}
+    public void supprimerLivraison(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}
     
     @Override
-    public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {}
+    public void clicGauche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {}
     
     @Override
     public void annuler(deliverif.Deliverif fenetre){}
@@ -89,13 +91,18 @@ public class EtatDefaut implements Etat
     
     @Override
     public void retourSelection(deliverif.Deliverif fenetre){}
+    
+    @Override
+    public void clicPlus(Deliverif fenetre, int indexPlus, int indexTournee) {}
+    
+    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde){}
 
     @Override
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}
 
     
     @Override
-    public void selectionnerPoint(deliverif.Deliverif fenetre){}
+    public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude){}
     
     
     @Override

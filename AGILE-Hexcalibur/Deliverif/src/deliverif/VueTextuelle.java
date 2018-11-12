@@ -15,10 +15,13 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -131,18 +134,31 @@ public class VueTextuelle extends VBox implements Observer {
      * @param arg - inutile
      */
     @Override
-    public void update(Observable o, Object arg){        
-        if (arg instanceof modele.outils.DemandeLivraison){
-            contenu.clear();
-            afficherDemandeLivraisons();
-        } else if (arg instanceof modele.outils.Tournee[]){
-            String c = contenu.get(0);
-            contenu.clear();
-            contenu.add(c);
-            tournees.clear();
-            
-            afficherTournees();
-        }
+    public void update(Observable o, Object arg){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (arg instanceof modele.outils.DemandeLivraison){
+                    contenu.clear();
+                    afficherDemandeLivraisons();
+                } else if (arg instanceof modele.outils.Tournee[]){
+                    String c = contenu.get(0);
+                    contenu.clear();
+                    contenu.add(c);
+                    tournees.clear();
+
+                    afficherTournees();
+                }
+            }
+        });
+    }
+    
+    public void effacer(){
+        contenu.clear();
+        tournees.clear();
+        choixTournee.getItems().clear();
+        
+        this.panel.setContent(null);
     }
     
     private void afficherDemandeLivraisons(){
@@ -245,5 +261,49 @@ public class VueTextuelle extends VBox implements Observer {
         }else{
             this.descriptifSelectionne = null;
         }
+    }
+    
+    
+    /**
+     * 
+     */
+    public void ajouterBoutonAjout(){
+        for(int parcoursConteneur=0;parcoursConteneur<this.tournees.size();parcoursConteneur++){
+            List <Node> tournee = this.tournees.get(parcoursConteneur).getChildren();
+            int taille = tournee.size();
+            for(int parcoursTournee=1; parcoursTournee<taille; parcoursTournee++){
+                Button plus = new Button("+");
+                plus.setAlignment(Pos.CENTER);
+                plus.setPrefWidth((int)this.panel.getViewportBounds().getWidth());
+                 
+                this.tournees.get(parcoursConteneur).getChildren().add(2*parcoursTournee-1, plus);
+                
+                int indexPlus = 2*parcoursTournee-1;
+                int indexTournee = parcoursConteneur;
+                plus.setOnAction(e -> ecouteurBoutons.clicPlus(e, indexPlus, indexTournee));
+            }
+        }
+        
+    }
+    
+    public void supprimerBoutonAjout(){
+        for(int parcoursConteneur=1;parcoursConteneur<this.tournees.size();parcoursConteneur++){
+            List <Node> tournee = this.tournees.get(parcoursConteneur).getChildren();
+            int taille = tournee.size();
+            for(int parcoursTournee=1; parcoursTournee<taille/2+1; parcoursTournee++){
+                this.tournees.get(parcoursConteneur).getChildren().remove(parcoursTournee);
+            }
+        }
+    }
+    
+    public void entourerPlusClique(int indexPlus, int indexTournee){
+        this.tournees.get(indexTournee).getChildren().get(indexPlus).setStyle("-fx-border-color:blue;-fx-border-width:4px;");
+        this.panel.setContent(this.tournees.get(indexTournee));
+    }
+    
+    public void changerPlusEntoure(int indexPlusPreced, int indexTourneePreced, int indexPlus, int indexTournee){
+        this.tournees.get(indexTourneePreced).getChildren().get(indexPlusPreced).setStyle("-fx-border-color:black;-fx-border-width:2px;");
+        this.tournees.get(indexTournee).getChildren().get(indexPlus).setStyle("-fx-border-color:blue;-fx-border-width:4px;");
+        this.panel.setContent(this.tournees.get(indexTournee));
     }
 }

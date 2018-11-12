@@ -8,30 +8,44 @@
  */
 package controleur;
 
+import modele.outils.GestionLivraison;
+import modele.outils.Intersection;
+
 /**
  *
  * @author Hex'calibur
  */
 public class EtatIntersectionSelectionnee extends EtatDefaut{
+    
+    private Intersection intersectionSelectionnee;
 
     public EtatIntersectionSelectionnee() {
     }
     
-    public void intersectionPlusProche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double  latitude, double longitude) {
-        modele.outils.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
-        fenetre.getVueGraphique().effacerMarker();
-        fenetre.getVueGraphique().ajouterMarker(pointClique.getLatitude(), pointClique.getLongitude());
+    public void actionEntree(Intersection intersectionCliquee){
+        intersectionSelectionnee = intersectionCliquee;
     }
     
+    @Override
+    public void clicGauche(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double  latitude, double longitude) {
+        Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
+        intersectionSelectionnee = pointClique;
+        fenetre.changerIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
+    }
+    
+    /**
+     *
+     * @param fenetre
+     */
+    @Override
     public void annuler(deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
-        fenetre.estTourneesCalculees("SUCCESS");
-        fenetre.getVueGraphique().effacerMarker();
         fenetre.estAjoutLivraisonFini();
     }
     
     @Override
     public void validerSelection(deliverif.Deliverif fenetre){
+        Controleur.ETAT_INTERSECTION_VALIDEE.actionEntree(intersectionSelectionnee);
         Controleur.etatCourant = Controleur.ETAT_INTERSECTION_VALIDEE;
         fenetre.estIntersectionValidee();
     }
@@ -41,7 +55,8 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
         fenetre.getVueGraphique().zoomPlus(lat,lon);
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees();;
+        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
     }
     
     @Override
@@ -50,5 +65,6 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
         fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
     }
 }

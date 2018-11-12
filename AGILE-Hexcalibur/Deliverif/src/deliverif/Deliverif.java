@@ -37,10 +37,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import modele.outils.GestionLivraison;
+import modele.outils.PointPassage;
 
 /**
  * Classe principale/point d'entrée de l'application. Il s'agit de la fenetre principale de l'application.
@@ -126,6 +128,7 @@ public class Deliverif extends Application implements Observer{
     public void init() throws Exception{
         super.init();
         gestionLivraison = new GestionLivraison();
+        gestionLivraison.addObserver(this);
         controleur = new Controleur(gestionLivraison,this);
         vueGraphique = new VueGraphique(this.gestionLivraison, this);
         ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
@@ -259,7 +262,6 @@ public class Deliverif extends Application implements Observer{
         boutonReorganiserTournee.setWrapText(true);
         boutonReorganiserTournee.setDisable(true);
         boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
-        
 
         boutonValiderSelection = new Button("Valider la sélection");
         boutonValiderSelection.setPrefSize(100,65);
@@ -410,13 +412,7 @@ public class Deliverif extends Application implements Observer{
         boutonValiderAjout.setWrapText(true);
         boutonValiderAjout.setDisable(true);
         boutonValiderAjout.setTextAlignment(TextAlignment.CENTER);
-        /*boutonValiderAjout.setOnAction(e -> {
-            try {
-                ecouteurBoutons.boutonValider(e);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }); */
+        boutonValiderAjout.setOnAction(e -> ecouteurBoutons.boutonValiderAjout(e));
         
         boxAjoutLivraison.getChildren().addAll(boxDuree, boutonValiderAjout);
     }
@@ -429,7 +425,12 @@ public class Deliverif extends Application implements Observer{
                     System.out.println("Le calcul est enfin fini !");
                     /*On appelle la methode bouton stop, cela marchera puisque
                     le calcul est fini !*/
-                    this.controleur.boutonArretCalcul();
+                    try{
+                        this.controleur.boutonArretCalcul();
+                    } catch(IllegalStateException ise){
+                        //On s'en fiche que ça ne soit pas sur le thread fx.
+                        //Ça marche quand même !
+                    }
                 }
             }
         }
@@ -449,6 +450,14 @@ public class Deliverif extends Application implements Observer{
      */
     public int getNbLivreurs(){
         return (Integer)this.nbLivreurs.getValue();
+    }
+    
+    /**
+     * Renvoie la durée de la livraison à ajouter.
+     * @return le nombre de livreurs
+     */
+    public int getDuree(){
+        return (int)this.choixDuree.getValue();
     }
     
     /**
@@ -554,6 +563,7 @@ public class Deliverif extends Application implements Observer{
             boutonAjouterLivraison.setDisable(true);
             boutonSupprimerLivraison.setDisable(true);
             boutonReorganiserTournee.setDisable(true);
+            vueTextuelle.effacer();
             //avertir("Le plan de la ville a bien été chargé");
         }else if(cre!=null){
             avertir(cre);
@@ -562,6 +572,10 @@ public class Deliverif extends Application implements Observer{
         }
     }
     
+    public void estPointPassageSelectionne(double latitude, double longitude) {
+        getVueGraphique().effacerMarker();
+        getVueGraphique().ajouterMarker(latitude, longitude);
+    }
     /**
      * Passe l'IHM dans l'état suivant une fois la demande de livraison chargée.
      * @param cre - compte rendu d'execution des opérations sur le modèle
@@ -588,7 +602,6 @@ public class Deliverif extends Application implements Observer{
      * @param cre - compte rendu d'execution des opérations sur le modèle
      */
     public void estTourneesCalculees(String cre){
-        bord.setTop(boutons);
         informationEnCours("");
         if(("SUCCESS").equals(cre)){
             boutonChargerPlan.setDisable(false);
@@ -597,44 +610,71 @@ public class Deliverif extends Application implements Observer{
             boutonAjouterLivraison.setDisable(false);
             boutonSupprimerLivraison.setDisable(false);
             boutonReorganiserTournee.setDisable(true);
-            //this.vueGraphique.dessinerTournees();
-            //avertir("Calcul des tournées terminé");
         }else{
             avertir("Le calcul des tournées n'a pas pu se terminer");
         }
-        
-        /*if(!this.gestionLivraison.calculTSPEnCours()){
-            this.informationEnCours("");
-        }*/
+       
     }
     
     public void estPlanCliquable(){
-        boutonValiderSelection.setVisible(true);
-        boutonRetourSelection.setVisible(false);
         bord.setTop(boutonsAjoutLivraison);
-        boutonAnnuler.setDisable(false);
-        boutonValiderSelection.setDisable(true);
         panelDroit.getChildren().remove(boxCalculTournees);
         panelDroit.getChildren().add(0, boxAjoutLivraison);
         boxAjoutLivraison.setDisable(true);
-    }
-    
-    public void estAjoutLivraisonFini(){
-        panelDroit.getChildren().remove(boxAjoutLivraison);
-        panelDroit.getChildren().add(0, boxCalculTournees);
-    }
-    
-    public void estIntersectionSelectionnee(){
+        
         boutonValiderSelection.setVisible(true);
         boutonRetourSelection.setVisible(false);
+        
+        boutonAnnuler.setDisable(false);
+        boutonValiderSelection.setDisable(true);
+    }
+    
+    public void estIntersectionSelectionnee(double latitude,double longitude){
         boutonValiderSelection.setDisable(false);
-        boxAjoutLivraison.setDisable(true);
+        vueGraphique.ajouterMarkerAjout(latitude, longitude);
+    }
+    
+    public void changerIntersectionSelectionnee(double latitude,double longitude){
+        vueGraphique.effacerMarkerAjout();
+        vueGraphique.ajouterMarkerAjout(latitude, longitude);
     }
     
     public void estIntersectionValidee(){
         boxAjoutLivraison.setDisable(false);
         boutonValiderSelection.setVisible(false);
         boutonRetourSelection.setVisible(true);
+        this.getVueTextuelle().ajouterBoutonAjout();
+    }
+    
+    public void estRetourSelection(){
+        boutonValiderSelection.setVisible(true);
+        boutonRetourSelection.setVisible(false);
+        boxAjoutLivraison.setDisable(true);
+        vueTextuelle.supprimerBoutonAjout();
+        
+        boutonValiderSelection.setDisable(false);
+    }
+    
+    public void estPlusClique(int indexPlus, int indexTournee){
+        boutonValiderAjout.setDisable(false);
+        vueTextuelle.entourerPlusClique(indexPlus, indexTournee);
+    }
+    
+    public void changePlusClique(int indexPlusPreced,int indexTourneePreced, int indexPlus, int indexTournee){
+        vueTextuelle.changerPlusEntoure(indexPlusPreced, indexTourneePreced, indexPlus, indexTournee);
+    }
+    
+    public void estAjoutLivraisonFini(){
+        bord.setTop(boutons);
+        
+        panelDroit.getChildren().remove(boxAjoutLivraison);
+        panelDroit.getChildren().add(0, boxCalculTournees);
+        
+        vueTextuelle.supprimerBoutonAjout();
+        vueGraphique.effacerMarkerAjout();
+        
+        
+        estTourneesCalculees("SUCCESS");
     }
     
     public void activerBoutonArreterCalcul(boolean activation){
