@@ -186,6 +186,14 @@ public class Controleur {
     public void boutonValiderAjout(float duree){
         etatCourant.validerAjout(gestionLivraison, fenetre, duree, this.listeCde);
     }
+    
+    public void undo(){
+        this.listeCde.undo();
+    }
+    
+    public void redo(){
+        this.listeCde.redo();
+    }
 }
 
 

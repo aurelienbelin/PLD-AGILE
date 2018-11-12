@@ -130,12 +130,11 @@ public class GestionLivraison extends Observable{
      * @param numeroTournee - La tournée à laquelle cette livraison doit être ajoutée.
      * @param pointPrecedent - L'indice du point de passage après lequel le novueau point est inséré
      */
-    public void ajouterLivraison(Intersection intersection, float dureePassage, int numeroTournee, int pointPrecedent){
+    public void ajouterLivraison(PointPassage livraison, int numeroTournee, int pointPrecedent){
         //FIXME : something for the undo/redo stuff.
         if (pointPrecedent>=this.tournees[numeroTournee].getTrajet().size()){
             return;
         }
-        PointPassage livraison = new PointPassage(false, intersection, dureePassage);
         this.demande.ajouterLivraison(livraison);
         PointPassage derniereLivraison = this.tournees[numeroTournee].getPointPassage(
             pointPrecedent);
@@ -172,6 +171,10 @@ public class GestionLivraison extends Observable{
         //Récupérer la tournée à laquelle appartient ce point, ainsi que sa place dans la tournée.
         int numero=0;
         for(numero=0; numero<this.tournees.length && !this.tournees[numero].contientPointPassage(livraison); numero++);
+        if (numero>=this.tournees.length){
+            System.out.println("Non, pas de suppression !");
+            return;
+        }
         int place;
         for(place=0; place<this.tournees[numero].getTrajet().size() &&
                     this.tournees[numero].getPointPassage(place)!=livraison;place++);
@@ -268,7 +271,7 @@ public class GestionLivraison extends Observable{
         }
         PointPassage livraison = this.tournees[tournee1].getPointPassage(indice1);
         this.supprimerLivraison(livraison);
-        this.ajouterLivraison(livraison.getPosition(), livraison.getDuree(), tournee2, indice2);
+        this.ajouterLivraison(livraison, tournee2, indice2);
     }
     
     /**
