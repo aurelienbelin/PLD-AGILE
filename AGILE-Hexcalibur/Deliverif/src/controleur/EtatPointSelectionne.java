@@ -32,6 +32,11 @@ public class EtatPointSelectionne extends EtatDefaut{
     }
     
     @Override
+    public void annuler(deliverif.Deliverif fenetre){
+        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+    }
+    
+    @Override
     public void supprimerLivraison (GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {
         gestionLivraison.supprimerLivraison(livraisonASupprimer);
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
