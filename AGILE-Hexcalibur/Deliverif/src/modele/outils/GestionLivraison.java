@@ -372,6 +372,24 @@ public class GestionLivraison extends Observable{
         return resultat;
     }
     
+    
+    public PointPassage pointPassagePlusProche(double latitude, double longitude) {
+        
+        PointPassage resultat = this.demande.getLivraisons().get(0);
+        double minDistance = Math.sqrt(Math.pow((resultat.getPosition().getLatitude()-latitude), 2) + Math.pow((resultat.getPosition().getLongitude()-longitude),2));
+        
+        for(PointPassage p: this.demande.getLivraisons()){
+            double distance = Math.sqrt(Math.pow((p.getPosition().getLatitude()-latitude), 2) + Math.pow((p.getPosition().getLongitude()-longitude),2));
+            if(distance <minDistance) {
+                resultat = p;
+                minDistance = distance;
+            }
+        }
+        
+        return resultat;
+    }
+    
+    
     /**
      *
      * @return - Le plan de la Ville

@@ -39,10 +39,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import modele.outils.GestionLivraison;
+import modele.outils.PointPassage;
 
 /**
  * Classe principale/point d'entrée de l'application. Il s'agit de la fenetre principale de l'application.
@@ -580,6 +582,10 @@ public class Deliverif extends Application implements Observer{
         }
     }
     
+    public void estPointPassageSelectionne(double latitude, double longitude) {
+        getVueGraphique().effacerMarker();
+        getVueGraphique().ajouterMarker(latitude, longitude);
+    }
     /**
      * Passe l'IHM dans l'état suivant une fois la demande de livraison chargée.
      * @param cre - compte rendu d'execution des opérations sur le modèle
