@@ -87,9 +87,7 @@ public class VueGraphique extends StackPane implements Observer {
         this.setPrefSize(640,640-95);
         
         this.gestionLivraison = gl;
-        this.fenetre = f;
         gestionLivraison.addObserver(this);
-        this.fenetre = f;
         
         plan = new Canvas(640,640-95);
         dl = new Canvas(640,640-95);
@@ -101,8 +99,6 @@ public class VueGraphique extends StackPane implements Observer {
         imageMarkerAjout = new Image("/deliverif/Marker_3.png", true);
         this.markerSelectionLivraison = new Canvas(640,640-95);
         this.markerAjoutLivraison = new Canvas(640,640-95);
-        
-        this.fenetre = f;
     }
     
     /**
@@ -355,12 +351,10 @@ public class VueGraphique extends StackPane implements Observer {
 
                     gc.setLineWidth(3);
 
-                    if(numTournee==(indexTournee-1) || indexTournee==0){
-                        //gc.setStroke(couleursDbt[nCouleur]);
+                    if(numTournee == -1 || numTournee==(indexTournee-1) || indexTournee==0){
                         degradeTournee = calculDegrade(couleursDbt[numTournee], couleursCible[numTournee], 1.0, chemins.size()+1);
                         gc.setLineDashes(0,0);
                     }else{
-                        //gc.setStroke(Color.rgb(0,0,0,0.5)); //A modifier : mettre la couleur du livreur, à 0.5 de transparence et en pointillé
                         degradeTournee = calculDegrade(new Color(couleursDbt[numTournee].getRed(), couleursDbt[numTournee].getGreen(),couleursDbt[numTournee].getBlue(),0.4), new Color(couleursCible[numTournee].getRed(),couleursCible[numTournee].getGreen(), couleursCible[numTournee].getBlue(), 0.4), 0.4, chemins.size()+1);
                         gc.setLineDashes(5,5);
                     }
@@ -394,9 +388,11 @@ public class VueGraphique extends StackPane implements Observer {
                 nCouleur++;
             }
 
-            //On passe à l'affichage la tournée choisie devant les autres tournées, tout en conservant la demande de livraison et les marqueurs devant dans l'affichage
-            this.getChildren().removeAll(this.tournees.get(indexTournee-1), this.dl, this.markerSelectionLivraison,this.markerAjoutLivraison);
-            this.getChildren().addAll(this.tournees.get(indexTournee-1), this.dl, this.markerSelectionLivraison, this.markerAjoutLivraison);
+            if(numTournee!=-1){
+                //On passe à l'affichage la tournée choisie devant les autres tournées, tout en conservant la demande de livraison et les marqueurs devant dans l'affichage
+                this.getChildren().removeAll(this.tournees.get(indexTournee-1), this.dl, this.markerSelectionLivraison,this.markerAjoutLivraison);
+                this.getChildren().addAll(this.tournees.get(indexTournee-1), this.dl, this.markerSelectionLivraison, this.markerAjoutLivraison);
+            }
         }
     }
     

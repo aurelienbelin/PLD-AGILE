@@ -263,6 +263,19 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
+    public int affichageActuel(){
+        String selec = this.choixTournee.getSelectionModel().getSelectedItem();
+        
+        if(selec!=null || "".equals(selec)){
+            for(int i=0;i<contenu.size();i++){
+                if(contenu.get(i).equals(selec)){
+                    return i;
+                }
+            }
+        }
+        
+        return -1;
+    }
     
     /**
      * 
