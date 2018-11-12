@@ -37,10 +37,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import modele.outils.GestionLivraison;
+import modele.outils.PointPassage;
 
 /**
  * Classe principale/point d'entrée de l'application. Il s'agit de la fenetre principale de l'application.
@@ -126,6 +128,7 @@ public class Deliverif extends Application implements Observer{
     public void init() throws Exception{
         super.init();
         gestionLivraison = new GestionLivraison();
+        gestionLivraison.addObserver(this);
         controleur = new Controleur(gestionLivraison,this);
         vueGraphique = new VueGraphique(this.gestionLivraison, this);
         ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
@@ -422,7 +425,12 @@ public class Deliverif extends Application implements Observer{
                     System.out.println("Le calcul est enfin fini !");
                     /*On appelle la methode bouton stop, cela marchera puisque
                     le calcul est fini !*/
-                    this.controleur.boutonArretCalcul();
+                    try{
+                        this.controleur.boutonArretCalcul();
+                    } catch(IllegalStateException ise){
+                        //On s'en fiche que ça ne soit pas sur le thread fx.
+                        //Ça marche quand même !
+                    }
                 }
             }
         }
@@ -564,6 +572,10 @@ public class Deliverif extends Application implements Observer{
         }
     }
     
+    public void estPointPassageSelectionne(double latitude, double longitude) {
+        getVueGraphique().effacerMarker();
+        getVueGraphique().ajouterMarker(latitude, longitude);
+    }
     /**
      * Passe l'IHM dans l'état suivant une fois la demande de livraison chargée.
      * @param cre - compte rendu d'execution des opérations sur le modèle

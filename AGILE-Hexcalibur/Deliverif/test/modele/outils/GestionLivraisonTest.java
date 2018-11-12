@@ -132,7 +132,7 @@ public class GestionLivraisonTest {
         }
 
         try{
-            gestion.calculerTournees(1);
+            gestion.calculerTournees(1,Integer.MAX_VALUE);
             while (gestion.threadAlive()){
                 try{
                     Thread.sleep(1000);
@@ -152,7 +152,7 @@ public class GestionLivraisonTest {
             duree+=t.getTempsTournee();
             longueur+=t.getLongueur();
         }
-        gestion.ajouterLivraison(gestion.getPlan().getIntersections().get(0), 0f, 0);
+        gestion.ajouterLivraison(gestion.getPlan().getIntersections().get(0), 0f, 0, 0);
         assertEquals(5, gestion.getTournees()[0].getTrajet().size());
         boolean intersectionTrouvee=false;
         PointPassage pointAEnlever=null;

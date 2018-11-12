@@ -5,7 +5,9 @@
  */
 package controleur;
 
+import deliverif.Deliverif;
 import modele.outils.GestionLivraison;
+import modele.outils.Intersection;
 import modele.outils.PointPassage;
 
 /**
@@ -22,17 +24,22 @@ public class EtatPointSelectionne extends EtatDefaut{
         this.livraisonASupprimer = intersectionASupprimer;
     }
     
+    /**
+     *
+     * @param gestionLivraison
+     * @param fenetre
+     * @param latitude
+     * @param longitude
+     */
     @Override
-    public void selectionnerPoint (modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
-        modele.outils.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
-        fenetre.getVueGraphique().effacerMarker();
-        fenetre.getVueGraphique().ajouterMarker(pointClique.getLatitude(), pointClique.getLongitude());
-        fenetre.estIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
+    public void selectionnerPoint (GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+        Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
+        fenetre.estPointPassageSelectionne(latitude, longitude);
         Controleur.etatCourant = Controleur.ETAT_POINT_SELECTIONNE;
     }
     
     @Override
-    public void supprimerLivraison (GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {
+    public void supprimerLivraison (GestionLivraison gestionLivraison, Deliverif fenetre) {
         gestionLivraison.supprimerLivraison(livraisonASupprimer);
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
     }
