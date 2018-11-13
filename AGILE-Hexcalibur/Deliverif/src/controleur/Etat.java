@@ -50,7 +50,7 @@ interface Etat
     
     public void ajouterLivraison(deliverif.Deliverif fenetre);
     
-    public void validerSuppression(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
+    public void validerSuppression(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, ListeCommandes listeCde);
     
     public void clicGauche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
     
