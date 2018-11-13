@@ -132,7 +132,7 @@ public class GestionLivraison extends Observable{
      */
     public void ajouterLivraison(PointPassage livraison, int numeroTournee, int pointPrecedent){
         //FIXME : something for the undo/redo stuff.
-        if (pointPrecedent>=this.tournees[numeroTournee].getTrajet().size()){
+        if (pointPrecedent>=this.tournees[numeroTournee].nombrePoints()){
             return;
         }
         this.demande.ajouterLivraison(livraison);
@@ -168,6 +168,7 @@ public class GestionLivraison extends Observable{
         if (livraison.estEntrepot()){
             return;//Non monsieur, on ne supprime pas l'entrepôt
         }
+        this.demande.annulerLivraison(livraison);
         //Récupérer la tournée à laquelle appartient ce point, ainsi que sa place dans la tournée.
         int numero=0;
         for(numero=0; numero<this.tournees.length && !this.tournees[numero].contientPointPassage(livraison); numero++);
@@ -176,12 +177,12 @@ public class GestionLivraison extends Observable{
             return;
         }
         int place;
-        for(place=0; place<this.tournees[numero].getTrajet().size() &&
+        for(place=0; place<this.tournees[numero].nombrePoints() &&
                     this.tournees[numero].getPointPassage(place)!=livraison;place++);
         //Remplacement de : precedent => suppression => suivant, par precedent => suivant
         Map res = this.plan.dijkstra(this.tournees[numero].getPointPassage(place-1));
         PointPassage suivant=null;
-        if (place==this.tournees[numero].getTrajet().size()-1){
+        if (place==this.tournees[numero].nombrePoints()-1){
             suivant=this.demande.getEntrepot();
         } else {
             suivant=this.tournees[numero].getPointPassage(place+1);
@@ -235,7 +236,7 @@ public class GestionLivraison extends Observable{
         if (this.tournees==null || this.tournees.length<=numeroTournee || numeroTournee <0){
             return;
         }
-        if (this.tournees[numeroTournee].getTrajet().size()-1!=nouvelOrdre.size()){
+        if (this.tournees[numeroTournee].nombrePoints()-1!=nouvelOrdre.size()){
             return;
         }
         List<Chemin> nouveauTrajet = new ArrayList<Chemin>();
@@ -266,7 +267,7 @@ public class GestionLivraison extends Observable{
         if (this.tournees==null || tournee1<0 || tournee2 <0 || tournee1>=this.tournees.length || tournee2>=this.tournees.length){
             return;
         }
-        if (indice1<1 || indice2<1 || indice1>this.tournees[tournee1].getTrajet().size()-2|| indice2> this.tournees[tournee2].getTrajet().size()-2){
+        if (indice1<1 || indice2<1 || indice1>this.tournees[tournee1].nombrePoints()-2|| indice2> this.tournees[tournee2].nombrePoints()-2){
             return;//IndexOutOfBoundsException quoi.
         }
         PointPassage livraison = this.tournees[tournee1].getPointPassage(indice1);
@@ -286,7 +287,7 @@ public class GestionLivraison extends Observable{
         if (numeroTournee>=this.tournees.length || numeroTournee<0){
             return -1;
         }
-        for(int i=0; i<this.tournees[numeroTournee].getTrajet().size(); i++){
+        for(int i=0; i<this.tournees[numeroTournee].nombrePoints(); i++){
             if (this.tournees[numeroTournee].getTrajet().get(i).getDebut()==p){
                 return i;
             }

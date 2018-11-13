@@ -64,7 +64,7 @@ public class Intersection {
     }
     
     /**
-     * 
+     * Renvoie le ième troncon partant de cette intersection.
      * @param i - La position du tronçon. 
      * @return - le tronçon situé à la position i dans la liste de tronçon.
      */
@@ -78,18 +78,11 @@ public class Intersection {
     }
     
     /**
-     *
      * @return - La liste des tronçons de l'intersection
      */
     public List<Troncon> getTroncons(){
         return this.troncons;
     }
-
-    /**
-     *
-     * @return - Le nombre de tronçons ayant pour une de ses extrémité cette intersection
-     */
-    protected int qteTroncons(){ return this.troncons.size(); }
     
     /**
      * @return - L'id de l'intersection dans son fichier xml d'origine.
