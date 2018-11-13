@@ -148,7 +148,11 @@ public class Controleur {
         etatCourant.ajouterLivraison(this.fenetre);
     }
     
-    public void boutonSupprimerLivraison() {
+    public void boutonSupprimerLivraison(){
+        etatCourant.supprimerLivraison(fenetre);
+    }
+    
+    public void boutonValiderSupprimerLivraison() {
         etatCourant.validerSuppression(this.gestionLivraison, this.fenetre);
     }
     
@@ -190,7 +194,7 @@ public class Controleur {
     }
     
     public void clicPlus(int indexPlus, int indexTournee){
-        etatCourant.clicPlus(this.fenetre, indexPlus, indexTournee);
+        etatCourant.clicPlus(this.gestionLivraison, this.fenetre, indexPlus, indexTournee, fenetre.getDuree(), this.listeCde);
     }
     
     public void boutonValiderAjout(float duree){

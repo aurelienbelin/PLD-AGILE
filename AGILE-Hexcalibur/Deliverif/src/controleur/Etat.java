@@ -60,7 +60,7 @@ interface Etat
     
     public void retourSelection(deliverif.Deliverif fenetre);
     
-    public void clicPlus(Deliverif fenetre, int indexPlus, int indexTournee);
+    public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde);
     
     public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde);
 
@@ -69,7 +69,6 @@ interface Etat
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
 
     public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
-
     
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon);
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon);

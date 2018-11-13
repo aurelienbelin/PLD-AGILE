@@ -10,6 +10,7 @@ package deliverif;
 
 import controleur.Controleur;
 import java.io.File;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -17,12 +18,14 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -106,8 +109,10 @@ public class Deliverif extends Application implements Observer{
     private HBox boutons;
     private VBox boxCalculTournees;
     private VBox boxAjoutLivraison;
+    private VBox boxSuppressionLivraison;
     private VBox panelDroit;
     private HBox boutonsAjoutLivraison;
+    private HBox boutonsSuppressionLivraison;
     
     //Composants de controle
     private Button boutonChargerPlan;
@@ -121,6 +126,8 @@ public class Deliverif extends Application implements Observer{
     private Button boutonValiderSelection;
     private Button boutonValiderAjout;
     private Button boutonRetourSelection;
+    private Button boutonValiderSuppression;
+    private Button boutonAnnulerSuppression;
     private Spinner nbLivreurs;
     private Spinner choixDuree;
     private Label descriptionTextuelle;
@@ -160,6 +167,12 @@ public class Deliverif extends Application implements Observer{
         boutonsAjoutLivraison.setSpacing(5);
         
         boutonsAjoutLivraison.getChildren().addAll(boutonAnnuler, boutonValiderSelection, boutonRetourSelection);
+        
+        boutonsSuppressionLivraison = new HBox();
+        boutonsSuppressionLivraison.setPadding(new Insets(15, 15, 15, 15));
+        boutonsSuppressionLivraison.setSpacing(5);
+        
+        boutonsSuppressionLivraison.getChildren().addAll(boutonAnnulerSuppression, boutonValiderSuppression);
         
         Separator sv = new Separator();
         sv.setOrientation(Orientation.VERTICAL);
@@ -267,6 +280,7 @@ public class Deliverif extends Application implements Observer{
         boutonSupprimerLivraison.setWrapText(true);
         boutonSupprimerLivraison.setDisable(true);
         boutonSupprimerLivraison.setTextAlignment(TextAlignment.CENTER);
+        boutonSupprimerLivraison.setOnAction(e -> ecouteurBoutons.boutonSupprimer(e));
         
         boutonReorganiserTournee = new Button(REORGANISER_TOURNEE);
         boutonReorganiserTournee.setPrefSize(100,65);
@@ -314,7 +328,23 @@ public class Deliverif extends Application implements Observer{
             } catch (Exception ex) {
                 Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }); 
+        });
+                
+        boutonValiderSuppression = new Button("Supprimer la livraison");
+        boutonValiderSuppression.setPrefSize(300,50);
+        boutonValiderSuppression.setMinHeight(50);
+        boutonValiderSuppression.setWrapText(true);
+        boutonValiderSuppression.setDisable(true);
+        boutonValiderSuppression.setTextAlignment(TextAlignment.CENTER);
+        boutonValiderSuppression.setOnAction(e -> ecouteurBoutons.boutonSupprimerLivraison(e));
+        
+        boutonAnnulerSuppression = new Button("Annuler");
+        boutonAnnulerSuppression.setPrefSize(300,50);
+        boutonAnnulerSuppression.setMinHeight(50);
+        boutonAnnulerSuppression.setWrapText(true);
+        boutonAnnulerSuppression.setDisable(true);
+        boutonAnnulerSuppression.setTextAlignment(TextAlignment.CENTER);
+        boutonAnnulerSuppression.setOnAction(e -> ecouteurBoutons.boutonAnnuler(e));        
     }
     
     /**
@@ -341,11 +371,7 @@ public class Deliverif extends Application implements Observer{
         nbLivreurs.setValueFactory(valueFactory);
         nbLivreurs.setPrefSize(60,25);
         
-        
-        
         boxLivreurs.getChildren().addAll(livreurs, nbLivreurs);
-        
-        
         
         HBox boxBoutons = new HBox();
         boxBoutons.setSpacing(15);
@@ -392,10 +418,6 @@ public class Deliverif extends Application implements Observer{
         this.information.setAlignment(Pos.CENTER_RIGHT);
         this.information.setFont(new Font("Arial", 10));
         this.information.setStyle("-fx-font-style:italic; -fx-font-weight:bold; -fx-text-fill:red;");
-        //this.information.setText("Test");
-        //this.information.setStyle("-fx-background-color:red;");
-        
-        //panelDroit.getChildren().addAll(boxLivreurs, boxBoutons, sh, vueTextuelle, information);
 
         panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
     }
@@ -427,15 +449,14 @@ public class Deliverif extends Application implements Observer{
         
         boxAjoutLivraison.getChildren().addAll(boxDuree, boutonValiderAjout);
     }
-    
+
     @Override
     public void update(Observable o, Object arg){
         if (o instanceof GestionLivraison){
             if (arg instanceof modele.outils.Tournee[]){
                 if (!((GestionLivraison)o).calculTSPEnCours()){
-                    System.out.println("Le calcul est enfin fini !"); //DEBUG
                     
-                    this.informationEnCours("");
+                    this.informationEnCours("Calcul terminé");
                     /*On appelle la methode bouton stop, cela marchera puisque
                     le calcul est fini !*/
                     try{
@@ -594,6 +615,20 @@ public class Deliverif extends Application implements Observer{
         getVueGraphique().effacerMarker();
         getVueGraphique().ajouterMarker(latitude, longitude);
     }
+    
+
+    public void estPointPassageASupprimerSelectionne(double latitude, double longitude){
+        vueGraphique.effacerMarkerAjout();
+        vueGraphique.ajouterMarkerAjout(latitude, longitude);
+    }
+
+    public void estSelectionne(int tournee, int position){
+        DescriptifChemin dc = getVueTextuelle().getDescriptifChemin(tournee, position);
+        getVueTextuelle().majVueTextuelle(dc);
+        getVueTextuelle().changerDescription_Ter(tournee);
+    }
+    
+
     /**
      * Passe l'IHM dans l'état suivant une fois la demande de livraison chargée.
      * @param cre - compte rendu d'execution des opérations sur le modèle
@@ -632,6 +667,14 @@ public class Deliverif extends Application implements Observer{
             avertir("Le calcul des tournées n'a pas pu se terminer");
         }
        
+    }
+    
+    public void ajouterSuppression(){
+        bord.setTop(boutonsSuppressionLivraison);
+        boutonValiderSuppression.setDisable(false);
+        boutonAnnulerSuppression.setDisable(false);
+        
+        boxCalculTournees.setDisable(true);
     }
     
     public void estPlanCliquable(){
@@ -676,9 +719,11 @@ public class Deliverif extends Application implements Observer{
     public void estPlusClique(int indexPlus, int indexTournee){
         boutonValiderAjout.setDisable(false);
         vueTextuelle.entourerPlusClique(indexPlus, indexTournee);
+        vueTextuelle.ajouterBoutonAjout();
     }
     
     public void changePlusClique(int indexPlusPreced,int indexTourneePreced, int indexPlus, int indexTournee){
+        vueTextuelle.ajouterBoutonAjout();
         vueTextuelle.changerPlusEntoure(indexPlusPreced, indexTourneePreced, indexPlus, indexTournee);
     }
     
@@ -694,10 +739,28 @@ public class Deliverif extends Application implements Observer{
         estTourneesCalculees("SUCCESS");
     }
     
+    public void estSuppressionFinie(){
+        bord.setTop(boutons);
+        
+        boxCalculTournees.setDisable(false);
+        
+        vueGraphique.effacerMarkerAjout();
+        
+        estTourneesCalculees("SUCCESS");
+    }
+    
     public void activerBoutonArreterCalcul(boolean activation){
         this.boutonArreterCalcul.setDisable(activation);
         this.boutonCalculerTournees.setDisable(!activation);
         //this.boutonChargerPlan.setDisable(!activation);
         //this.boutonChargerDL.setDisable(!activation);
+    }
+    
+    public void estReorgTourneesDemandee(){
+        vueTextuelle.estReorgTourneesDemandee();
+    }
+    public void estReorgFinie(){
+        vueTextuelle.estReorgFinie();
+        
     }
 }
