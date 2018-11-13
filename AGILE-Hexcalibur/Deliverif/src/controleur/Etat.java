@@ -60,7 +60,7 @@ interface Etat
     
     public void retourSelection(deliverif.Deliverif fenetre);
     
-    public void clicPlus(Deliverif fenetre, int indexPlus, int indexTournee);
+    public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde);
     
     public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde);
 
