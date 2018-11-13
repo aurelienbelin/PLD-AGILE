@@ -291,6 +291,17 @@ public class GestionLivraison extends Observable{
         return-1;
     }
     
+    public int[] ouEstLePoint(PointPassage p){
+        int numTournee = -1;
+        int numDansTournee = -1;
+        while(numDansTournee==-1 && numTournee<this.tournees.length){
+            numTournee++;
+            numDansTournee = positionPointDansTournee(numTournee, p);
+        }
+        int[] result = {numTournee, numDansTournee};
+        return result;
+    }
+    
     /**
      * @return true si le tsp a actuellement trouvé une solution. false s'il n'a toujours rien trouvé.
      */

@@ -220,6 +220,16 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
+    public DescriptifChemin getDescriptifChemin(int tournee, int position)
+    {
+        return (DescriptifChemin) tournees.get(tournee).getChildren().get(position);
+    }
+    
+    public void changerDescription_Ter(int tournee){
+        this.panel.setContent(this.tournees.get(tournee));
+        choixTournee.setValue(contenu.get(tournee+1));
+    }
+    
     /**
      * Change la description affichée en fonction de l'option choisie dans le ComboBox (attribut choixTournee).
      * @return l'indice de la description affichée 
