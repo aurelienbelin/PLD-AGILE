@@ -8,6 +8,9 @@
  */
 package controleur;
 
+import controleur.commandes.CdeAjoutLivraison;
+import controleur.commandes.Commande;
+import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
 import modele.outils.GestionLivraison;
 import modele.outils.Intersection;
@@ -40,17 +43,21 @@ public class EtatIntersectionValidee extends EtatDefaut{
     }
     
     @Override
-    public void clicPlus(Deliverif fenetre, int indexPlus, int indexTournee) {
+    public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {
         Controleur.ETAT_AJOUT_LIVRAISON.actionEntree(intersectionValidee, indexPlus, indexTournee);
-        Controleur.etatCourant = Controleur.ETAT_AJOUT_LIVRAISON;
+        int indexLivraisonPreced = indexPlus/2;
+        duree = duree * 60;
+        Commande cde = new CdeAjoutLivraison(gestionLivraison, intersectionValidee, indexTournee, indexLivraisonPreced, duree);
+        listeCde.ajouterCde(cde);
         fenetre.estPlusClique(indexPlus, indexTournee);
+        Controleur.etatCourant=Controleur.ETAT_AJOUT_LIVRAISON;
     }
     @Override
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
         fenetre.getVueGraphique().zoomPlus(lat,lon);
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
         fenetre.getVueGraphique().dessinerMarker();
     }
     @Override
@@ -58,7 +65,7 @@ public class EtatIntersectionValidee extends EtatDefaut{
         fenetre.getVueGraphique().zoomMoins(lat,lon);
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
         fenetre.getVueGraphique().dessinerMarker();
     }
     

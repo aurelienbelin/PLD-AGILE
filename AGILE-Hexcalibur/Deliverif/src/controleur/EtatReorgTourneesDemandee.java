@@ -29,7 +29,7 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
             //méthode intervertir livraison
             
             if(indexLivraison==1){
-                fenetre.changerExtremites(haut);
+                //fenetre.changerExtremites(haut);
             }
         }else{
             String point = indexLivraison+"_"+indexTournee;
@@ -37,7 +37,7 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
             //méthode intervertir livraison
             
             if(indexLivraison == gestionLivraison.getTournees()[indexTournee].getLongueur()-1){
-                fenetre.changerExtremites(!haut);
+                //fenetre.changerExtremites(!haut);
             }
         }
     }

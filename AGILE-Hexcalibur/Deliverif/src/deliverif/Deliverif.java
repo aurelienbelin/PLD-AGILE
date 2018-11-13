@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -29,6 +30,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -189,6 +192,14 @@ public class Deliverif extends Application implements Observer{
                 }
             }catch (Exception ex) {
                 Logger.getLogger(VueTextuelle.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        //FIXME : y a-t-il un meilleur endroit où mettre cette instruction ?
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>(){
+            @Override
+            public void handle(KeyEvent key){
+                ecouteurBoutons.actionClavier(key);
             }
         });
         
@@ -422,7 +433,8 @@ public class Deliverif extends Application implements Observer{
         if (o instanceof GestionLivraison){
             if (arg instanceof modele.outils.Tournee[]){
                 if (!((GestionLivraison)o).calculTSPEnCours()){
-                    System.out.println("Le calcul est enfin fini !");
+                    
+                    this.informationEnCours("Calcul terminé");
                     /*On appelle la methode bouton stop, cela marchera puisque
                     le calcul est fini !*/
                     try{
@@ -441,7 +453,12 @@ public class Deliverif extends Application implements Observer{
      * @param message - message à afficher (état courant de l'application)
      */
     protected void informationEnCours(String message){
-        this.information.setText(message);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                information.setText(message);
+            }
+        });
     }
     
     /**
@@ -576,6 +593,13 @@ public class Deliverif extends Application implements Observer{
         getVueGraphique().effacerMarker();
         getVueGraphique().ajouterMarker(latitude, longitude);
     }
+    
+    public void estSelectionne(int tournee, int position){
+        DescriptifChemin dc = getVueTextuelle().getDescriptifChemin(tournee, position);
+        getVueTextuelle().majVueTextuelle(dc);
+        getVueTextuelle().changerDescription_Ter(tournee);
+    }
+    
     /**
      * Passe l'IHM dans l'état suivant une fois la demande de livraison chargée.
      * @param cre - compte rendu d'execution des opérations sur le modèle
@@ -658,9 +682,11 @@ public class Deliverif extends Application implements Observer{
     public void estPlusClique(int indexPlus, int indexTournee){
         boutonValiderAjout.setDisable(false);
         vueTextuelle.entourerPlusClique(indexPlus, indexTournee);
+        vueTextuelle.ajouterBoutonAjout();
     }
     
     public void changePlusClique(int indexPlusPreced,int indexTourneePreced, int indexPlus, int indexTournee){
+        vueTextuelle.ajouterBoutonAjout();
         vueTextuelle.changerPlusEntoure(indexPlusPreced, indexTourneePreced, indexPlus, indexTournee);
     }
     
@@ -672,7 +698,6 @@ public class Deliverif extends Application implements Observer{
         
         vueTextuelle.supprimerBoutonAjout();
         vueGraphique.effacerMarkerAjout();
-        
         
         estTourneesCalculees("SUCCESS");
     }

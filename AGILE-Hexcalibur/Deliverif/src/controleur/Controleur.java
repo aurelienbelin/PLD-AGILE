@@ -68,8 +68,14 @@ public class Controleur {
     /**
      * 
      */
-    protected static final EtatPointSelectionne ETAT_POINT_SELECTIONNE = new EtatPointSelectionne();
+    protected static final EtatSupprimerLivraison ETAT_SUPPRIMER_LIVRAISON = new EtatSupprimerLivraison();
     
+    /**
+     * 
+     */
+    protected static final EtatLivraisonSelectionnee ETAT_LIVRAISON_SELECTIONNEE = new EtatLivraisonSelectionnee();
+    
+
     /**
      * 
      */
@@ -148,7 +154,7 @@ public class Controleur {
     }
     
     public void boutonSupprimerLivraison() {
-        etatCourant.supprimerLivraison(this.gestionLivraison, this.fenetre);
+        etatCourant.validerSuppression(this.gestionLivraison, this.fenetre);
     }
     
     /**@param latitude
@@ -189,7 +195,7 @@ public class Controleur {
     }
     
     public void clicPlus(int indexPlus, int indexTournee){
-        etatCourant.clicPlus(this.fenetre, indexPlus, indexTournee);
+        etatCourant.clicPlus(this.gestionLivraison, this.fenetre, indexPlus, indexTournee, fenetre.getDuree(), this.listeCde);
     }
     
     public void boutonValiderAjout(float duree){
@@ -210,6 +216,14 @@ public class Controleur {
     
     public void validerReorganisation(){
         etatCourant.validerReorganisation(fenetre);
+    }
+    
+    public void undo(){
+        this.listeCde.undo();
+    }
+    
+    public void redo(){
+        this.listeCde.redo();
     }
 }
 
