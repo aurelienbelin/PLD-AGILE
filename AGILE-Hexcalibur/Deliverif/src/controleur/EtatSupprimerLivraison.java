@@ -14,14 +14,10 @@ import modele.outils.PointPassage;
  *
  * @author Amine Nahid
  */
-public class EtatPointSelectionne extends EtatDefaut{
+public class EtatSupprimerLivraison extends EtatDefaut{
     
-    private PointPassage livraisonASupprimer;
 
-    public EtatPointSelectionne() {
-    }
-    public void actionEntree(PointPassage intersectionASupprimer, int indexPlus, int indexTournee){
-        this.livraisonASupprimer = intersectionASupprimer;
+    public EtatSupprimerLivraison() {
     }
     
     /**
@@ -33,14 +29,13 @@ public class EtatPointSelectionne extends EtatDefaut{
      */
     @Override
     public void selectionnerPoint (GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
-        Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
+        PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
         fenetre.estPointPassageSelectionne(latitude, longitude);
-        Controleur.etatCourant = Controleur.ETAT_POINT_SELECTIONNE;
+        Controleur.etatCourant = Controleur.ETAT_LIVRAISON_SELECTIONNEE;
     }
     
     @Override
-    public void supprimerLivraison (GestionLivraison gestionLivraison, Deliverif fenetre) {
-        gestionLivraison.supprimerLivraison(livraisonASupprimer);
+    public void annuler(deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
     }
     

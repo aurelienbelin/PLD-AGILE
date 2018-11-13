@@ -64,7 +64,17 @@ public class Controleur {
      * 
      */
     protected static final EtatAjoutLivraison ETAT_AJOUT_LIVRAISON = new EtatAjoutLivraison();
-    protected static final EtatPointSelectionne ETAT_POINT_SELECTIONNE = new EtatPointSelectionne();
+    
+    /**
+     * 
+     */
+    protected static final EtatSupprimerLivraison ETAT_SUPPRIMER_LIVRAISON = new EtatSupprimerLivraison();
+    
+    /**
+     * 
+     */
+    protected static final EtatLivraisonSelectionnee ETAT_LIVRAISON_SELECTIONNEE = new EtatLivraisonSelectionnee();
+    
     
     /** etatCourant prendra successivement les états définis ci-dessus comme 
      * valeurs
@@ -139,7 +149,7 @@ public class Controleur {
     }
     
     public void boutonSupprimerLivraison() {
-        etatCourant.supprimerLivraison(this.gestionLivraison, this.fenetre);
+        etatCourant.validerSuppression(this.gestionLivraison, this.fenetre);
     }
     
     /**@param latitude
@@ -185,6 +195,14 @@ public class Controleur {
     
     public void boutonValiderAjout(float duree){
         etatCourant.validerAjout(gestionLivraison, fenetre, duree, this.listeCde);
+    }
+    
+    public void undo(){
+        this.listeCde.undo();
+    }
+    
+    public void redo(){
+        this.listeCde.redo();
     }
 }
 

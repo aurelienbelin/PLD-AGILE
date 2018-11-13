@@ -43,7 +43,7 @@ public class CdeAjoutLivraison extends Commande{
         if(this.etatCommande==EtatCommande.EXECUTEE){
             return;
         }
-        gestion.ajouterLivraison(this.livraison.getPosition(), this.livraison.getDuree(), numeroTournee, positionTournee);
+        gestion.ajouterLivraison(this.livraison, numeroTournee, positionTournee);
         this.etatCommande=EtatCommande.EXECUTEE;
     }
     
