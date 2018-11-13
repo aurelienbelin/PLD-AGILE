@@ -16,6 +16,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -29,6 +30,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+
+import javafx.scene.shape.Circle;
+
+import javafx.util.Pair;
 import modele.outils.Chemin;
 import modele.outils.GestionLivraison;
 import modele.outils.Tournee;
@@ -49,15 +58,26 @@ public class VueGraphique extends StackPane implements Observer {
     private double echelleLong;
     private double origineLatitude;
     private double origineLongitude;
+    private double origineLatitudeMin;
+    private double origineLongitudeMin;
+    private double echelleLatitudeMin;
+    private double echelleLongitudeMin;
+    private Deliverif fenetre;
+    
     
     //Composants
-    private final Color[] couleurs = {Color.BLUEVIOLET, Color.BROWN, Color.CHARTREUSE,Color.CORAL,Color.CRIMSON,Color.DARKBLUE, Color.DARKGREEN, Color.DEEPPINK, Color.GOLD, Color.LIGHTSALMON};
+    private final Color[] couleursDbt = {Color.BLUEVIOLET, Color.BROWN, Color.CHARTREUSE,Color.CORAL,Color.CRIMSON,Color.DARKBLUE, Color.DARKGREEN, Color.DEEPPINK, Color.GOLD, Color.LIGHTSALMON};
+    private final Color[] couleursCible = {new Color(0.85,0.723,0.96,1), new Color(0.88,0.72,0.72,1), new Color(0.83,1.0,2.0/3.0,1), new Color(1.0,0.83,0.77,1), new Color(0.955,0.69,0.745,1), new Color(2.0/3.0,2.0/3.0,0.848,1), new Color(2.0/3.0, 0.797, 2.0/3.0,1), new Color(1.0,0.693,0.859,1), new Color(1.0,0.95,2.0/3.0,1), new Color(1.0,0.876,0.83,1.0)};
     private Canvas plan;
     private Canvas dl;
     private ArrayList<Canvas> tournees;
-    private Canvas marker;
-    private Image imageMarker;
+    private Canvas markerSelectionLivraison;
+    private Canvas markerAjoutLivraison;
+    private Image imageMarkerSelection;
+    private Image imageMarkerAjout;
+    private Pair<Double, Double> positionMarker;
     
+    //Couleurs
 
     /**
      * Constructeur de VueGraphique.
@@ -66,14 +86,15 @@ public class VueGraphique extends StackPane implements Observer {
      * @see GestionLivraison
      * @see Deliverif
      */
-
     public VueGraphique(GestionLivraison gl, Deliverif f){
         super();
-        
+        this.fenetre=f;
         this.setPrefSize(640,640-95);
         
         this.gestionLivraison = gl;
+        this.fenetre = f;
         gestionLivraison.addObserver(this);
+        this.fenetre = f;
         
         plan = new Canvas(640,640-95);
         dl = new Canvas(640,640-95);
@@ -81,9 +102,12 @@ public class VueGraphique extends StackPane implements Observer {
         
         this.getChildren().addAll(plan,dl);
         
-        imageMarker = new Image("/deliverif/Marker_1.png",true);
-        this.marker = new Canvas(640,640-95);
-   
+        imageMarkerSelection = new Image("/deliverif/Marker_1.png",true);
+        imageMarkerAjout = new Image("/deliverif/Marker_3.png", true);
+        this.markerSelectionLivraison = new Canvas(640,640-95);
+        this.markerAjoutLivraison = new Canvas(640,640-95);
+        
+        this.fenetre = f;
     }
     
     /**
@@ -93,14 +117,19 @@ public class VueGraphique extends StackPane implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        if(arg instanceof modele.outils.PlanVille){
-            calculEchelle(gestionLivraison.getPlan().getIntersections());
-            dessinerPlan();
-        } else if (arg instanceof modele.outils.DemandeLivraison){
-            dessinerPtLivraison();
-        } else if (arg instanceof modele.outils.Tournee[]){
-            dessinerTournees();
-        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if(arg instanceof modele.outils.PlanVille){
+                    calculEchelle(gestionLivraison.getPlan().getIntersections());
+                    dessinerPlan();
+                } else if (arg instanceof modele.outils.DemandeLivraison){
+                    dessinerPtLivraison();
+                } else if (arg instanceof modele.outils.Tournee[]){
+                    dessinerTournees();
+                }
+            }
+        });
     }
     
     /**
@@ -129,21 +158,27 @@ public class VueGraphique extends StackPane implements Observer {
         echelleLat = (640-95)/(maxLatitude-minLatitude);
         echelleLong = (640)/(maxLongitude-minLongitude); //longueur fenetre
         
+        echelleLatitudeMin = echelleLat;
+        echelleLongitudeMin = echelleLong;
+        
         origineLatitude = minLatitude;
         origineLongitude = minLongitude;
+        
+        origineLatitudeMin = minLatitude;
+        origineLongitudeMin = minLongitude;
     }
     
     /**
      * Dessine le plan à l'échelle dans la VueGraphique.
      */
-    public void dessinerPlan(){        
+    public void dessinerPlan(){      
         GraphicsContext gc = this.plan.getGraphicsContext2D();
         gc.clearRect(0, 0, plan.getWidth(), plan.getHeight());
             
         GraphicsContext gc1 = this.dl.getGraphicsContext2D();
         gc1.clearRect(0, 0, dl.getWidth(), dl.getHeight());
         
-        this.tournees.clear();
+        //this.tournees.clear();
         
         Iterator<Node> iter = this.getChildren().iterator();
         while(iter.hasNext()) {
@@ -175,7 +210,7 @@ public class VueGraphique extends StackPane implements Observer {
         GraphicsContext gc = this.dl.getGraphicsContext2D();
         gc.clearRect(0, 0, dl.getWidth(), dl.getHeight());
         
-        this.tournees.clear();
+        //this.tournees.clear();
         
         Iterator<Node> iter = this.getChildren().iterator();
         while(iter.hasNext()) {
@@ -197,15 +232,15 @@ public class VueGraphique extends StackPane implements Observer {
             //Dessin marqueur
             gc.setFill(Color.BLUE);
             gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
-   
         }
+        
         double[] ptLivraison = { 
                                     gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude(),
                                     gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude()
             };
-            ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
-        gc.setFill(Color.RED);
         
+        ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
+        gc.setFill(Color.RED);
         gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
 
         
@@ -215,56 +250,157 @@ public class VueGraphique extends StackPane implements Observer {
      * Dessine les tournées à effectuer pour desservir tous les points de livraison préalablement affichée sur le plan.
      */
     public void dessinerTournees(){
-        System.out.println("Je commence à dessiner les tournées !");
-        
         Tournee[] listeTournees = this.gestionLivraison.getTournees();
+        int numTournee=0;
         
-        //Canvas canvasTemp;
-        int nCouleur=0;
-        int i=0;
+        Color[] degradeTournee;
         
-        for(Tournee tournee : listeTournees){
-            //On créée un nouveau Canvas par tournée
-            //canvasTemp = new Canvas(this.getWidth(),this.getHeight());
-            //GraphicsContext gc = canvasTemp.getGraphicsContext2D();
-            GraphicsContext gc = this.tournees.get(i).getGraphicsContext2D();
-            gc.clearRect(0, 0, this.getWidth(), this.getHeight());
-            
-            List<Chemin> chemins = tournee.getTrajet();
-            
-            //Changer de couleur
-            /*int couleur = (int)(Math.random()*0xFFFFFF);
-            String couleur_hex = Integer.toHexString(couleur);
-            gc.setLineWidth(3);
-            gc.setStroke(Color.web("#"+couleur_hex.substring(2,couleur_hex.length())));*/
-            gc.setLineWidth(3);
-            gc.setStroke(couleurs[nCouleur]);
-            
-            for(Chemin chemin : chemins){
-                List<Troncon> troncons = chemin.getTroncons();
-                
-                for(Troncon troncon : troncons){
-                    int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
-                    int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
-                    int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
-                    int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+        if(listeTournees!=null){
+            for(Tournee tournee : listeTournees){            
+                GraphicsContext gc = this.tournees.get(numTournee).getGraphicsContext2D();
+                gc.clearRect(0, 0, this.getWidth(), this.getHeight());
+
+                if(tournee != null){
+                    List<Chemin> chemins = tournee.getTrajet();
                     
-                    gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
+                    gc.setLineWidth(3);
+                    gc.setLineDashes(0,0);
+                    
+                    degradeTournee = calculDegrade(couleursDbt[numTournee], couleursCible[numTournee], 1.0, chemins.size()+1);
+                    
+                    int numChemin=0;
+                    for(Chemin chemin : chemins){
+                        List<Troncon> troncons = chemin.getTroncons();
+                        Color[] degradeChemin = calculDegrade(degradeTournee[numChemin], degradeTournee[numChemin+1], 1.0, troncons.size()+1);
+                        
+                        int numTroncon=0;
+                        for(Troncon troncon : troncons){
+                           int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
+                           int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
+                           int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
+                           int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+                           
+                           //faire un gc.setStroke() du gradient à faire sur la ligne uniquement :) (ce qui implique de recalculer à chaque fois la prochaine couleur).
+                           Stop[] stops = new Stop[] { new Stop(0, degradeChemin[numTroncon]), new Stop(1, degradeChemin[numTroncon+1])};
+                           gc.setStroke(new LinearGradient(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon, true, CycleMethod.NO_CYCLE, stops));
+                           gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
+                           numTroncon++;
+                        }
+                        numChemin++;
+                    }
+                    
+                    this.getChildren().remove(this.tournees.get(numTournee));
+                    this.getChildren().add(numTournee+1, this.tournees.get(numTournee));
                 }
+
+                numTournee++;
             }
-            
-            i++;
-            nCouleur++;
         }
         
-
         fenetre.informationEnCours("");
-        /*this.getChildren().addAll(this.tournees);
-        this.getChildren().get(0).toBack();
-        this.getChildren().get(1).toFront();
-        this.getChildren().add(this.marker);*/
+    }
+    
+    //test
+    protected void calculCouleursFin(){
+        int i=0;
         
-        System.out.println("J'ai fini les tournées !");
+        Color bl = Color.WHITE;
+        
+        for(Color c : couleursDbt){
+            System.out.println("Couleur n° "+i);
+            
+            double red = c.getRed() + 2*Math.abs(c.getRed() - bl.getRed())/3;
+            double green = c.getGreen() + 2*Math.abs(c.getGreen() - bl.getGreen())/3;
+            double blue = c.getBlue() + 2*Math.abs(c.getBlue() - bl.getBlue())/3;
+            
+            System.out.println(red+" ; "+green+" ; "+blue);
+            System.out.println();
+            i++;
+        }
+    }
+    
+    private Color[] calculDegrade(Color debut, Color fin, double transparence, int nbPoints){        
+        Color[] degrade = new Color[nbPoints];
+        
+        double diffR = Math.abs(debut.getRed()-fin.getRed())/nbPoints;
+        double diffG = (Math.abs(debut.getGreen()-fin.getGreen()))/nbPoints;
+        double diffB = (Math.abs(debut.getBlue()-fin.getBlue()))/nbPoints;
+        
+        degrade[0] = debut;
+        degrade[nbPoints-1] = fin;
+        
+        for(int i=1;i<nbPoints-1;i++){
+            degrade[i] = new Color(degrade[i-1].getRed()+diffR, degrade[i-1].getGreen()+diffG, degrade[i-1].getBlue()+diffB, transparence);
+        }
+        
+        return degrade;
+    }
+    
+    /**
+     * Dessine les tournées à effectuer pour desservir tous les points de livraison préalablement affichée sur le plan.
+     * Mets en valeur la tournée selectionnée par rapport aux autres.
+     * @param indexTournee - la tournée à mettre en valeur
+     */
+    public void dessinerTournees(int indexTournee){
+        Tournee[] listeTournees = this.gestionLivraison.getTournees();
+        int nCouleur=0;
+        int numTournee=0;
+        
+        Color[] degradeTournee;
+        
+        if(listeTournees!=null){
+            for(Tournee tournee : listeTournees){
+                GraphicsContext gc = this.tournees.get(numTournee).getGraphicsContext2D();
+                gc.clearRect(0, 0, this.getWidth(), this.getHeight());
+
+                if(tournee != null){
+                    List<Chemin> chemins = tournee.getTrajet();
+
+                    gc.setLineWidth(3);
+
+                    if(numTournee==(indexTournee-1) || indexTournee==0){
+                        //gc.setStroke(couleursDbt[nCouleur]);
+                        degradeTournee = calculDegrade(couleursDbt[numTournee], couleursCible[numTournee], 1.0, chemins.size()+1);
+                        gc.setLineDashes(0,0);
+                    }else{
+                        //gc.setStroke(Color.rgb(0,0,0,0.5)); //A modifier : mettre la couleur du livreur, à 0.5 de transparence et en pointillé
+                        degradeTournee = calculDegrade(new Color(couleursDbt[numTournee].getRed(), couleursDbt[numTournee].getGreen(),couleursDbt[numTournee].getBlue(),0.4), new Color(couleursCible[numTournee].getRed(),couleursCible[numTournee].getGreen(), couleursCible[numTournee].getBlue(), 0.4), 0.4, chemins.size()+1);
+                        gc.setLineDashes(5,5);
+                    }
+                                        
+                    int numChemin=0;
+                    for(Chemin chemin : chemins){
+                        List<Troncon> troncons = chemin.getTroncons();
+                        Color[] degradeChemin = calculDegrade(degradeTournee[numChemin], degradeTournee[numChemin+1], degradeTournee[numChemin].getOpacity(), troncons.size()+1);
+                        
+                        int numTroncon=0;
+                        for(Troncon troncon : troncons){
+                           int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
+                           int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
+                           int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
+                           int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+
+                           Stop[] stops = new Stop[] { new Stop(0, degradeChemin[numTroncon]), new Stop(1, degradeChemin[numTroncon+1])};
+                           gc.setStroke(new LinearGradient(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon, true, CycleMethod.NO_CYCLE, stops));
+                           gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
+                           numTroncon++;
+                        }
+                        
+                        numChemin++;
+                    }
+                    
+                    this.getChildren().remove(this.tournees.get(numTournee));
+                    this.getChildren().add(numTournee+1, this.tournees.get(numTournee));
+                }
+                
+                numTournee++;
+                nCouleur++;
+            }
+
+            //On passe à l'affichage la tournée choisie devant les autres tournées, tout en conservant la demande de livraison et les marqueurs devant dans l'affichage
+            this.getChildren().removeAll(this.tournees.get(indexTournee-1), this.dl, this.markerSelectionLivraison,this.markerAjoutLivraison);
+            this.getChildren().addAll(this.tournees.get(indexTournee-1), this.dl, this.markerSelectionLivraison, this.markerAjoutLivraison);
+        }
     }
     
     /**
@@ -290,7 +426,8 @@ public class VueGraphique extends StackPane implements Observer {
         this.getChildren().addAll(this.tournees);
         this.getChildren().get(0).toBack();
         this.getChildren().get(1).toFront();
-        this.getChildren().add(this.marker);
+        this.getChildren().add(this.markerSelectionLivraison);
+        this.getChildren().add(this.markerAjoutLivraison);
     }
     
     /**
@@ -305,8 +442,7 @@ public class VueGraphique extends StackPane implements Observer {
         }
     }
     
-    public double[] mettreCoordonneesALechelle(double[] pointAMAJ, boolean estCoordonneesVueGraphique)
-    {
+    public double[] mettreCoordonneesALechelle(double[] pointAMAJ, boolean estCoordonneesVueGraphique){
         double[] pointAJour = new double[2];
         if(estCoordonneesVueGraphique){
             pointAJour[0] = pointAMAJ[0] / echelleLong + origineLongitude;
@@ -320,31 +456,72 @@ public class VueGraphique extends StackPane implements Observer {
         return pointAJour;
     }
     
+    public void effacerMarkerAjout() {
+        this.markerAjoutLivraison.getGraphicsContext2D().clearRect(0, 0, this.markerAjoutLivraison.getWidth(), this.markerAjoutLivraison.getHeight());
+    }
+    
+    public void ajouterMarkerAjout(double lat, double lon) {
+        int x = (int)((lon - origineLongitude)*echelleLong);
+        int y = (int)(this.getHeight() - (lat - origineLatitude)*echelleLat);
+        
+        GraphicsContext gc = this.markerAjoutLivraison.getGraphicsContext2D();
+        gc.drawImage(imageMarkerAjout, x - this.imageMarkerAjout.getWidth()/2.0, y - this.imageMarkerAjout.getHeight());
+    }
+    
     //Test
     public void effacerMarker() {
-        this.marker.getGraphicsContext2D().clearRect(0,0,this.marker.getWidth(), this.marker.getHeight());
+        this.positionMarker = null;
+        this.markerSelectionLivraison.getGraphicsContext2D().clearRect(0,0,this.markerSelectionLivraison.getWidth(), this.markerSelectionLivraison.getHeight());
     }
     
     //Test
     public void ajouterMarker(double lat, double lon){
         int x = (int)((lon - origineLongitude)*echelleLong);
-        int y = (int)(this.getHeight() - (lat - origineLatitude)*echelleLat);
+        int y = (int)(getHeight() - (lat - origineLatitude)*echelleLat);
 
-        /*System.out.println("Entrepot : "+gestionLivraison.getDemande().getEntrepot().getPosition().getLongitude()+" ; "+gestionLivraison.getDemande().getEntrepot().getPosition().getLatitude());
-        System.out.println("Je suis dans la vue graphique : "+lon+" ; "+lat); //DEBUG
-        System.out.println("Je suis dans la vue graphique : "+this.imageMarker.getWidth()+" ; "+this.imageMarker.getHeight()); //DEBUG
-        System.out.println("Je suis dans la vue graphique : "+x+" ; "+y); //DEBUG*/
-
-        GraphicsContext gc = this.marker.getGraphicsContext2D();
-        gc.drawImage(imageMarker, x - this.imageMarker.getWidth()/2.0, y - this.imageMarker.getHeight());
+        GraphicsContext gc =markerSelectionLivraison.getGraphicsContext2D();
+        gc.drawImage(imageMarkerSelection, x - imageMarkerSelection.getWidth()/2.0, y - imageMarkerSelection.getHeight());
+        
+        this.positionMarker = new Pair(lat,lon);
+        
+        this.getChildren().remove(this.markerSelectionLivraison);
+        this.getChildren().add(this.markerSelectionLivraison);
     }
     
-    public void identifierPtPassage(DescriptifChemin dc, double lat, double lon){
+    //Test
+    public void dessinerMarker(){
+        this.markerSelectionLivraison.getGraphicsContext2D().clearRect(0,0,this.markerSelectionLivraison.getWidth(), this.markerSelectionLivraison.getHeight());
+        
+        if(this.positionMarker != null)
+            ajouterMarker(this.positionMarker.getKey(),this.positionMarker.getValue());
+    }
+    
+    public void identifierPtPassage(boolean aAjouter, double lat, double lon){
         this.effacerMarker();
         
-        if(!dc.estLocalise()){
+        if(aAjouter)
             this.ajouterMarker(lat,lon);
-        }
+    }
+
+    public void zoomPlus(double lat, double lon){
+        origineLongitude+=(lon-origineLongitude)*0.2/1.2;
+        origineLatitude+= (lat-origineLatitude)*0.2/1.2;
+        echelleLong = echelleLong *1.2;
+        echelleLat=echelleLat*1.2;   
     }
     
+    public void zoomMoins(double lat, double lon){
+        echelleLong = echelleLong /1.2;
+        echelleLat=echelleLat/1.2;
+        
+        if(echelleLong<=echelleLongitudeMin && echelleLat<=echelleLatitudeMin){
+            echelleLong = echelleLongitudeMin;
+            echelleLat = echelleLatitudeMin;
+            origineLatitude = origineLatitudeMin;
+            origineLongitude = origineLongitudeMin;
+        }else{
+            origineLongitude-=(lon-origineLongitude)*0.2;
+            origineLatitude-= (lat-origineLatitude)*0.2;
+        }
+    }
 }

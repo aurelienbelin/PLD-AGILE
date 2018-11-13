@@ -8,7 +8,10 @@
  */
 package controleur;
 
+import deliverif.Deliverif;
 import java.io.IOException;
+import modele.outils.GestionLivraison;
+import modele.outils.PointPassage;
 import org.xml.sax.SAXException;
 
 /**
@@ -35,12 +38,12 @@ public class EtatTourneesCalculees extends EtatDefaut{
     public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
         try{
-            gestionLivraison.calculerTournees(nbLivreurs);
+            gestionLivraison.calculerTournees(nbLivreurs, Integer.MAX_VALUE);
+            fenetre.activerBoutonArreterCalcul(false);
             fenetre.estTourneesCalculees("SUCCESS");
         } catch(Exception e){
             
         }
-        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
     }
     
     /**  Cette méthode délègue la chargement des livraisons au modèle
@@ -95,8 +98,32 @@ public class EtatTourneesCalculees extends EtatDefaut{
     }
     
     @Override
-    public void ajouterLivraison (deliverif.Deliverif fenetre) {
+    public void ajouterLivraison (Deliverif fenetre) {
         Controleur.etatCourant = Controleur.ETAT_PLAN_CLIQUABLE;
         fenetre.estPlanCliquable();
     }
+    
+    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+        PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
+        fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
+    }
+    
+    @Override
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
+    }
+    
+    @Override
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerMarker();
+    }
+
 }

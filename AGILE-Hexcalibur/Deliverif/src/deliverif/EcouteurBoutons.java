@@ -10,10 +10,12 @@ package deliverif;
 
 import controleur.Controleur;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import java.io.File;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.stage.FileChooser;
+import modele.outils.PointPassage;
 
 /**
  * Ecouteur des évènements émis par l'IHM de l'application.
@@ -93,7 +95,8 @@ public class EcouteurBoutons{
      * Appelle la méthode du controleur correspondant à l'interruption du calcul des tournées.
      */
     public void arreterCalculTournees(){
-        //A compléter
+        this.fenetrePrincipale.informationEnCours("Arrêt du calcul des tournées.");
+        controleur.boutonArretCalcul();
     }
 
     /**
@@ -104,9 +107,20 @@ public class EcouteurBoutons{
     public void changerTourneeAffichee(ActionEvent e) throws InterruptedException{
         int i = this.fenetrePrincipale.getVueTextuelle().changerDescription_Bis();
         
-        if(i!=-1)
-            this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
+        if(i!=-1){
+            //this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
+            if(i==0){
+                this.fenetrePrincipale.getVueGraphique().dessinerTournees();
+            }else{
+                this.fenetrePrincipale.getVueGraphique().dessinerTournees(i);
+            }
+        }
     }
+    /**
+     * Actualise le plan en fonction du zoom
+     * @param e
+     * @throws InterruptedException
+     */
     
     /**
      * Envoie une requête au controleur pour connaitre la localisation du point de livraison associé au composant DescriptifChemin.
@@ -155,6 +169,10 @@ public class EcouteurBoutons{
         controleur.boutonAjouterLivraison();
     }
     
+    public void supprimerLivraison (ActionEvent e) {
+        controleur.boutonSupprimerLivraison();
+    }
+    
     public void recupererCoordonneesSouris(MouseEvent e) throws InterruptedException{
         double[] point = new double[2];
         point[0] = e.getX();;
@@ -175,5 +193,30 @@ public class EcouteurBoutons{
         controleur.boutonRetour();
     }
     
+    public void clicPlus (ActionEvent e, int indexPlus, int indexTournee){
+        controleur.clicPlus(indexPlus, indexTournee);
+    }
     
+    public void boutonValiderAjout(ActionEvent e){
+        float duree = fenetrePrincipale.getDuree();
+        controleur.boutonValiderAjout(duree);
+    }
+    
+    
+    public void scrollZoomPlus(ScrollEvent e){
+        double[] point = new double[2];
+        point[0] = e.getX();;
+        point[1] = e.getY();
+        point = vueGraphique.mettreCoordonneesALechelle(point, true);
+        controleur.scrollZoomPlus(point[1], point[0]);
+    }
+    
+    public void scrollZoomMoins(ScrollEvent e){
+        double[] point = new double[2];
+        point[0] = e.getX();;
+        point[1] = e.getY();
+        point = vueGraphique.mettreCoordonneesALechelle(point, true);
+        controleur.scrollZoomMoins(point[1], point[0]);
+    }
+
 }
