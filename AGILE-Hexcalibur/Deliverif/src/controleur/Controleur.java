@@ -194,7 +194,7 @@ public class Controleur {
     }
     
     public void clicPlus(int indexPlus, int indexTournee){
-        etatCourant.clicPlus(this.fenetre, indexPlus, indexTournee);
+        etatCourant.clicPlus(this.gestionLivraison, this.fenetre, indexPlus, indexTournee, fenetre.getDuree(), this.listeCde);
     }
     
     public void boutonValiderAjout(float duree){
