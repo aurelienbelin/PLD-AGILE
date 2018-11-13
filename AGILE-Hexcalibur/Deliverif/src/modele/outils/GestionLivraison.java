@@ -294,6 +294,17 @@ public class GestionLivraison extends Observable{
         return-1;
     }
     
+    public int[] ouEstLePoint(PointPassage p){
+        int numTournee = -1;
+        int numDansTournee = -1;
+        while(numDansTournee==-1 && numTournee<this.tournees.length){
+            numTournee++;
+            numDansTournee = positionPointDansTournee(numTournee, p);
+        }
+        int[] result = {numTournee, numDansTournee};
+        return result;
+    }
+    
     /**
      * @return true si le tsp a actuellement trouvé une solution. false s'il n'a toujours rien trouvé.
      */
@@ -341,16 +352,16 @@ public class GestionLivraison extends Observable{
     }
     
     //Test
-    public Intersection identifierPointPassage(String point){
+    public PointPassage identifierPointPassage(String point){
         String[] identifiants = point.split("_");
         
         int numTournee = Integer.parseInt(identifiants[0]);
         int numLivraison = Integer.parseInt(identifiants[1]);
         
         if(numTournee != -1)
-            return this.tournees[numTournee-1].getPointPassage(numLivraison-1).getPosition();
+            return this.tournees[numTournee-1].getPointPassage(numLivraison-1);
         else
-            return this.demande.getLivraisons().get(numLivraison-1).getPosition();
+            return this.demande.getLivraisons().get(numLivraison-1);
     }
     
     /**

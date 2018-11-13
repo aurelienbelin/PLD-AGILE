@@ -222,6 +222,16 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
+    public DescriptifChemin getDescriptifChemin(int tournee, int position)
+    {
+        return (DescriptifChemin) tournees.get(tournee).getChildren().get(position);
+    }
+    
+    public void changerDescription_Ter(int tournee){
+        this.panel.setContent(this.tournees.get(tournee));
+        choixTournee.setValue(contenu.get(tournee+1));
+    }
+    
     /**
      * Change la description affichée en fonction de l'option choisie dans le ComboBox (attribut choixTournee).
      * @return l'indice de la description affichée 
@@ -327,5 +337,20 @@ public class VueTextuelle extends VBox implements Observer {
         this.tournees.get(indexTourneePreced).getChildren().get(indexPlusPreced).setStyle("-fx-border-color:black;-fx-border-width:2px;");
         this.tournees.get(indexTournee).getChildren().get(indexPlus).setStyle("-fx-border-color:blue;-fx-border-width:4px;");
         this.panel.setContent(this.tournees.get(indexTournee));
+    }
+    
+    public void estReorgFinie(){
+        VBox tournee = this.tournees.get(0);
+        List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
+        for(DescriptifChemin pt : desc){
+            pt.disableUpDown();
+         }
+    }
+    public void estReorgTourneesDemandee(){
+        VBox tournee = this.tournees.get(0);
+        List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
+        for(DescriptifChemin pt : desc){
+            pt.enableUpDown();
+         }
     }
 }
