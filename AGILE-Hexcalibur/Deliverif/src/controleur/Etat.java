@@ -69,7 +69,6 @@ interface Etat
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
 
     public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
-
     
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon);
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon);

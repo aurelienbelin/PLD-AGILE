@@ -204,6 +204,13 @@ public class EcouteurBoutons{
         controleur.boutonValiderAjout(duree);
     }
     
+    public void boutonSupprimerLivraison(ActionEvent e){
+        controleur.boutonValiderSupprimerLivraison();
+    }
+    
+    public void boutonSupprimer(ActionEvent e){
+        controleur.boutonSupprimerLivraison();
+    }
     
     public void scrollZoomPlus(ScrollEvent e){
         double[] point = new double[2];
