@@ -65,9 +65,12 @@ public class VueGraphique extends StackPane implements Observer {
     private Deliverif fenetre;
     
     
-    //Composants
+    //Couleurs
+    private final String[] NOMS_COULEURS = {"violet","marron","vert fluo","corail","rouge","bleu","vert foncé", "rose","or","beige"};
     private final Color[] couleursDbt = {Color.BLUEVIOLET, Color.BROWN, Color.CHARTREUSE,Color.CORAL,Color.CRIMSON,Color.DARKBLUE, Color.DARKGREEN, Color.DEEPPINK, Color.GOLD, Color.LIGHTSALMON};
     private final Color[] couleursCible = {new Color(0.85,0.723,0.96,1), new Color(0.88,0.72,0.72,1), new Color(0.83,1.0,2.0/3.0,1), new Color(1.0,0.83,0.77,1), new Color(0.955,0.69,0.745,1), new Color(2.0/3.0,2.0/3.0,0.848,1), new Color(2.0/3.0, 0.797, 2.0/3.0,1), new Color(1.0,0.693,0.859,1), new Color(1.0,0.95,2.0/3.0,1), new Color(1.0,0.876,0.83,1.0)};
+    
+    //Composants
     private Canvas plan;
     private Canvas dl;
     private ArrayList<Canvas> tournees;
@@ -77,8 +80,7 @@ public class VueGraphique extends StackPane implements Observer {
     private Image imageMarkerAjout;
     private Pair<Double, Double> positionMarker;
     
-    //Couleurs
-
+    
     /**
      * Constructeur de VueGraphique.
      * @param gl - point d'entrée du modèle observé
@@ -92,9 +94,7 @@ public class VueGraphique extends StackPane implements Observer {
         this.setPrefSize(640,640-95);
         
         this.gestionLivraison = gl;
-        this.fenetre = f;
         gestionLivraison.addObserver(this);
-        this.fenetre = f;
         
         plan = new Canvas(640,640-95);
         dl = new Canvas(640,640-95);
@@ -106,8 +106,6 @@ public class VueGraphique extends StackPane implements Observer {
         imageMarkerAjout = new Image("/deliverif/Marker_3.png", true);
         this.markerSelectionLivraison = new Canvas(640,640-95);
         this.markerAjoutLivraison = new Canvas(640,640-95);
-        
-        this.fenetre = f;
     }
     
     /**
@@ -126,6 +124,7 @@ public class VueGraphique extends StackPane implements Observer {
                 } else if (arg instanceof modele.outils.DemandeLivraison){
                     dessinerPtLivraison();
                 } else if (arg instanceof modele.outils.Tournee[]){
+                    dessinerPtLivraison();
                     dessinerTournees();
                 }
             }
@@ -242,7 +241,9 @@ public class VueGraphique extends StackPane implements Observer {
         ptLivraison = this.mettreCoordonneesALechelle(ptLivraison, false);
         gc.setFill(Color.RED);
         gc.fillOval(ptLivraison[0]-4, ptLivraison[1]-4, 8, 8);
-
+        
+        this.getChildren().removeAll(this.dl,this.markerSelectionLivraison, this.markerAjoutLivraison);
+        this.getChildren().addAll(this.dl,this.markerSelectionLivraison, this.markerAjoutLivraison);
         
     }
     
@@ -296,8 +297,6 @@ public class VueGraphique extends StackPane implements Observer {
                 numTournee++;
             }
         }
-        
-        fenetre.informationEnCours("");
     }
     
     //test
@@ -319,6 +318,14 @@ public class VueGraphique extends StackPane implements Observer {
         }
     }
     
+    /**
+     * Détermine les diffénrentes couleurs intermédiaires pour réaliser un dégradé d'une couleur d'origine à une couleur cible en nbPoints étapes.
+     * @param debut - Couleur d'origine
+     * @param fin - Couleur cible
+     * @param transparence - transparence souhaité pour le dégradé
+     * @param nbPoints - nombre de points nécessaires (discrétisation du dégradé)
+     * @return Une collection de couleur correspondantes aux couleurs intermédiaires pour réaliser le dégradé
+     */
     private Color[] calculDegrade(Color debut, Color fin, double transparence, int nbPoints){        
         Color[] degrade = new Color[nbPoints];
         
@@ -358,12 +365,10 @@ public class VueGraphique extends StackPane implements Observer {
 
                     gc.setLineWidth(3);
 
-                    if(numTournee==(indexTournee-1) || indexTournee==0){
-                        //gc.setStroke(couleursDbt[nCouleur]);
+                    if(numTournee == -1 || numTournee==(indexTournee-1) || indexTournee==0){
                         degradeTournee = calculDegrade(couleursDbt[numTournee], couleursCible[numTournee], 1.0, chemins.size()+1);
                         gc.setLineDashes(0,0);
                     }else{
-                        //gc.setStroke(Color.rgb(0,0,0,0.5)); //A modifier : mettre la couleur du livreur, à 0.5 de transparence et en pointillé
                         degradeTournee = calculDegrade(new Color(couleursDbt[numTournee].getRed(), couleursDbt[numTournee].getGreen(),couleursDbt[numTournee].getBlue(),0.4), new Color(couleursCible[numTournee].getRed(),couleursCible[numTournee].getGreen(), couleursCible[numTournee].getBlue(), 0.4), 0.4, chemins.size()+1);
                         gc.setLineDashes(5,5);
                     }
@@ -397,9 +402,11 @@ public class VueGraphique extends StackPane implements Observer {
                 nCouleur++;
             }
 
-            //On passe à l'affichage la tournée choisie devant les autres tournées, tout en conservant la demande de livraison et les marqueurs devant dans l'affichage
-            this.getChildren().removeAll(this.tournees.get(indexTournee-1), this.dl, this.markerSelectionLivraison,this.markerAjoutLivraison);
-            this.getChildren().addAll(this.tournees.get(indexTournee-1), this.dl, this.markerSelectionLivraison, this.markerAjoutLivraison);
+            if(indexTournee>0){
+                //On passe à l'affichage la tournée choisie devant les autres tournées, tout en conservant la demande de livraison et les marqueurs devant dans l'affichage
+                this.getChildren().removeAll(this.tournees.get(indexTournee-1), this.dl, this.markerSelectionLivraison,this.markerAjoutLivraison);
+                this.getChildren().addAll(this.tournees.get(indexTournee-1), this.dl, this.markerSelectionLivraison, this.markerAjoutLivraison);
+            }
         }
     }
     
