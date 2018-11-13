@@ -20,7 +20,7 @@ public class EtatLivraisonSelectionnee extends EtatDefaut {
     public EtatLivraisonSelectionnee() {
     }
     
-    public void actionEntree(PointPassage intersectionASupprimer, int indexPlus, int indexTournee){
+    public void actionEntree(PointPassage intersectionASupprimer){
         this.livraisonASupprimer = intersectionASupprimer;
     }
     

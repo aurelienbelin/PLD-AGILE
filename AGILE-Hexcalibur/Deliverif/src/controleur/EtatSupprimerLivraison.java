@@ -28,9 +28,10 @@ public class EtatSupprimerLivraison extends EtatDefaut{
      * @param longitude
      */
     @Override
-    public void selectionnerPoint (GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
-        fenetre.estPointPassageSelectionne(latitude, longitude);
+        fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
+        Controleur.ETAT_LIVRAISON_SELECTIONNEE.actionEntree(pointClique);
         Controleur.etatCourant = Controleur.ETAT_LIVRAISON_SELECTIONNEE;
     }
     

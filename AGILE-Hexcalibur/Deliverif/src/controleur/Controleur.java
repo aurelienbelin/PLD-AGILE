@@ -148,7 +148,11 @@ public class Controleur {
         etatCourant.ajouterLivraison(this.fenetre);
     }
     
-    public void boutonSupprimerLivraison() {
+    public void boutonSupprimerLivraison(){
+        etatCourant.supprimerLivraison(fenetre);
+    }
+    
+    public void boutonValiderSupprimerLivraison() {
         etatCourant.validerSuppression(this.gestionLivraison, this.fenetre);
     }
     
