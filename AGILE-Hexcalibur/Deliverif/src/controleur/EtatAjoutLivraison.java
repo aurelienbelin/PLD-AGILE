@@ -39,18 +39,19 @@ public class EtatAjoutLivraison extends EtatDefaut{
     }
     
     @Override
-    public void clicPlus(Deliverif fenetre, int indexPlus, int indexTournee) {
-        fenetre.changePlusClique(this.indexPlus, this.indexTournee, indexPlus, indexTournee);
+    public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {
+        listeCde.undo();
         this.indexPlus = indexPlus;
         this.indexTournee = indexTournee;
-    }
-    
-    @Override
-    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde){
         int indexLivraisonPreced = indexPlus/2;
         duree = duree * 60;
         Commande cde = new CdeAjoutLivraison(gestionLivraison, intersectionValidee, indexTournee, indexLivraisonPreced, duree);
         listeCde.ajouterCde(cde);
+        fenetre.changePlusClique(this.indexPlus, this.indexTournee, indexPlus, indexTournee);
+    }
+    
+    @Override
+    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
         fenetre.estAjoutLivraisonFini();
     }
