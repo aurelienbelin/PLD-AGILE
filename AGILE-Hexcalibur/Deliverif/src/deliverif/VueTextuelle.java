@@ -293,21 +293,28 @@ public class VueTextuelle extends VBox implements Observer {
      * 
      */
     public void ajouterBoutonAjout(){
-        for(int parcoursConteneur=0;parcoursConteneur<this.tournees.size();parcoursConteneur++){
-            List <Node> tournee = this.tournees.get(parcoursConteneur).getChildren();
-            int taille = tournee.size();
-            for(int parcoursTournee=1; parcoursTournee<taille; parcoursTournee++){
-                Button plus = new Button("+");
-                plus.setAlignment(Pos.CENTER);
-                plus.setPrefWidth((int)this.panel.getViewportBounds().getWidth());
-                 
-                this.tournees.get(parcoursConteneur).getChildren().add(2*parcoursTournee-1, plus);
-                
-                int indexPlus = 2*parcoursTournee-1;
-                int indexTournee = parcoursConteneur;
-                plus.setOnAction(e -> ecouteurBoutons.clicPlus(e, indexPlus, indexTournee));
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run(){
+                for(int parcoursConteneur=0;parcoursConteneur<tournees.size();parcoursConteneur++){
+                    List <Node> tournee = tournees.get(parcoursConteneur).getChildren();
+                    int taille = tournee.size();
+                    for(int parcoursTournee=1; parcoursTournee<taille; parcoursTournee++){
+                        Button plus = new Button("+");
+                        plus.setAlignment(Pos.CENTER);
+                        plus.setPrefWidth((int)panel.getViewportBounds().getWidth());
+
+                        tournees.get(parcoursConteneur).getChildren().add(2*parcoursTournee-1, plus);
+
+                        int indexPlus = 2*parcoursTournee-1;
+                        int indexTournee = parcoursConteneur;
+                        plus.setOnAction(e -> ecouteurBoutons.clicPlus(e, indexPlus, indexTournee));
+                    }
+                }
+                System.out.println("Bouton ajoutes");
             }
-        }
+        });
+        
         
     }
     
