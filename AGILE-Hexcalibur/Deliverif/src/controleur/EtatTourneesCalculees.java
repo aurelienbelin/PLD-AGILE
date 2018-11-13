@@ -103,6 +103,11 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.estPlanCliquable();
     }
     
+    @Override
+    public void supprimerLivraison (Deliverif fenetre) {
+        Controleur.etatCourant = Controleur.ETAT_SUPPRIMER_LIVRAISON;
+    }
+    
     public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
         fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
