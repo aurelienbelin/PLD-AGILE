@@ -35,7 +35,10 @@ public class DescriptifChemin extends VBox{
     private Label duree;
     private Label livraison;
     private Button obtenirDetails;
+    private Button up;
+    private Button down;
     private VBox details;
+    private VBox upDown;
     private boolean developpe;
     
     private boolean localise;
@@ -61,6 +64,7 @@ public class DescriptifChemin extends VBox{
         this.ecouteurBoutons = ecouteurBoutons;
         
         this.largeur = largeur;
+        this.upDown = new VBox(2);
         
         this.setSpacing(0);
         this.setMaxWidth(largeur);
@@ -74,7 +78,11 @@ public class DescriptifChemin extends VBox{
         
         this.localise = false;
         
+        
+
         this.getChildren().addAll(this.entete);
+       
+
     }
     
     public DescriptifChemin(int largeur, int numLivraison, String duree, String nomLivraison, EcouteurBoutons ecouteurBoutons){
@@ -175,6 +183,22 @@ public class DescriptifChemin extends VBox{
                 "linear-gradient(#d6d6d6 50%, white 100%)," +
                 "radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);");
             this.entete.getChildren().add(this.obtenirDetails);
+         
+             
+            this.up = new Button("▲");
+            this.down = new Button ("▼");
+            this.upDown.setMaxHeight(50);
+
+            this.up.setOnAction(e->ecouteurBoutons.avancerLivraison(this));
+            this.down.setOnAction(e->ecouteurBoutons.reculerLivraison(this));
+            this.up.setMaxHeight(15);
+            this.down.setMaxHeight(15);
+            this.up.setMinWidth(largeur/10.0);
+            this.down.setMinWidth(largeur/10.0);
+            this.up.setAlignment(Pos.TOP_RIGHT);
+            this.down.setAlignment(Pos.BOTTOM_RIGHT);
+
+            this.upDown.getChildren().addAll(this.up,this.down);
         }
     }
     
@@ -213,6 +237,7 @@ public class DescriptifChemin extends VBox{
         this.developpe = !this.developpe;
     }
     
+        
     /**
      * Renvoie vrai si le point de passage associé est localisé par un marqueur sur la Vue Graphique, false sinon
      * @return 
@@ -241,5 +266,25 @@ public class DescriptifChemin extends VBox{
      */
     public String getPoint(){
         return this.identifiantPoint;
+    }
+    
+    public void setIdentifiantPoint(String id){
+        this.identifiantPoint=id;
+    }
+    
+    public void enableUpDown(){
+        
+        if(this.obtenirDetails!=null){
+            this.entete.getChildren().remove(this.obtenirDetails);
+            this.entete.getChildren().add(this.upDown);
+        }        
+    }
+    
+    public void disableUpDown(){
+        
+        if(this.obtenirDetails!=null){
+            this.entete.getChildren().add(this.obtenirDetails);
+            this.entete.getChildren().remove(this.upDown);
+        }     
     }
 }

@@ -10,6 +10,7 @@ package deliverif;
 
 import controleur.Controleur;
 import java.io.File;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -17,12 +18,14 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -699,5 +702,13 @@ public class Deliverif extends Application implements Observer{
         this.boutonCalculerTournees.setDisable(!activation);
         //this.boutonChargerPlan.setDisable(!activation);
         //this.boutonChargerDL.setDisable(!activation);
+    }
+    
+    public void estReorgTourneesDemandee(){
+        vueTextuelle.estReorgTourneesDemandee();
+    }
+    public void estReorgFinie(){
+        vueTextuelle.estReorgFinie();
+        
     }
 }

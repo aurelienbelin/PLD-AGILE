@@ -139,7 +139,21 @@ public class EcouteurBoutons{
     public void obtenirDetailsVueTextuelle(DescriptifChemin dc){
         dc.developperDetails();
     }
-    
+    /**
+     * Remonte la livraison dans la liste
+     * @param dc 
+     */
+     public void avancerLivraison(DescriptifChemin dc){
+        
+    }
+     /**
+      * Descend la livraison dans la liste
+      * @param dc 
+      */
+    public void reculerLivraison(DescriptifChemin dc){
+        
+    }
+   
     /**
      * Crée un objet donnat accès au Gestionnaire de fichier pour choisir un fichier à charger.
      * @param docACharger
@@ -228,5 +242,7 @@ public class EcouteurBoutons{
             this.controleur.redo();
         }
     }
+    
+   
 
 }
