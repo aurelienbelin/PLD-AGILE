@@ -14,6 +14,8 @@ import javafx.scene.input.ScrollEvent;
 import java.io.File;
 import java.io.IOException;
 import javafx.event.ActionEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import modele.outils.PointPassage;
 
@@ -86,8 +88,8 @@ public class EcouteurBoutons{
      * @throws InterruptedException
      */
     public void calculerTourneesAction(ActionEvent e) throws InterruptedException{
-        this.fenetrePrincipale.getVueGraphique().creerCalques(fenetrePrincipale.getNbLivreurs());
         this.fenetrePrincipale.informationEnCours("Calcul des tournées en cours...");
+        this.fenetrePrincipale.getVueGraphique().creerCalques(fenetrePrincipale.getNbLivreurs());
         controleur.boutonCalculerTournees(fenetrePrincipale.getNbLivreurs());
     }
     
@@ -217,6 +219,14 @@ public class EcouteurBoutons{
         point[1] = e.getY();
         point = vueGraphique.mettreCoordonneesALechelle(point, true);
         controleur.scrollZoomMoins(point[1], point[0]);
+    }
+    
+    public void actionClavier(KeyEvent e){
+        if (e.getCode()==KeyCode.Z){
+            this.controleur.undo();
+        } else if(e.getCode()==KeyCode.Y){
+            this.controleur.redo();
+        }
     }
 
 }

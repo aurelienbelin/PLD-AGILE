@@ -103,9 +103,16 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.estPlanCliquable();
     }
     
+    @Override
+    public void supprimerLivraison (Deliverif fenetre) {
+        Controleur.etatCourant = Controleur.ETAT_SUPPRIMER_LIVRAISON;
+    }
+    
     public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
         fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
+        int[] positionDansTournee = gestionLivraison.ouEstLePoint(pointClique);
+        fenetre.estSelectionne(positionDansTournee[0], positionDansTournee[1]);
     }
     
     @Override
@@ -113,7 +120,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.getVueGraphique().zoomPlus(lat,lon);
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
         fenetre.getVueGraphique().dessinerMarker();
     }
     
@@ -122,7 +129,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.getVueGraphique().zoomMoins(lat,lon);
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
         fenetre.getVueGraphique().dessinerMarker();
     }
 

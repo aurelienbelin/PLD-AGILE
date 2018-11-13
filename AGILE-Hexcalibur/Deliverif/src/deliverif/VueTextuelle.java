@@ -42,6 +42,7 @@ import modele.outils.Tournee;
 public class VueTextuelle extends VBox implements Observer {
     
     private GestionLivraison gestionLivraison;
+    private final String[] NOMS_COULEURS = {"violet","marron","vert fluo","corail","rouge","bleu","vert foncé", "rose","or","beige"};
     
     /**
      * @deprecated
@@ -198,7 +199,8 @@ public class VueTextuelle extends VBox implements Observer {
                     int j = 1;
                     VBox vbox = new VBox();
                     vbox.setMinWidth(this.panel.getViewportBounds().getWidth());
-                    contenu.add("Livreur "+i);
+                    //contenu.add("Livreur "+i);
+                    contenu.add("Livreur "+NOMS_COULEURS[i-1]);
                     Iterator<List<String>> it = t.getDescription_Bis();
                     
                     while(it.hasNext()){
@@ -218,6 +220,16 @@ public class VueTextuelle extends VBox implements Observer {
             choixTournee.getSelectionModel().selectFirst();
             this.panel.setContent(this.demandeLivraisons);
         }
+    }
+    
+    public DescriptifChemin getDescriptifChemin(int tournee, int position)
+    {
+        return (DescriptifChemin) tournees.get(tournee).getChildren().get(position);
+    }
+    
+    public void changerDescription_Ter(int tournee){
+        this.panel.setContent(this.tournees.get(tournee));
+        choixTournee.setValue(contenu.get(tournee+1));
     }
     
     /**
@@ -263,26 +275,46 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
+    public int affichageActuel(){
+        String selec = this.choixTournee.getSelectionModel().getSelectedItem();
+        
+        if(selec!=null || "".equals(selec)){
+            for(int i=0;i<contenu.size();i++){
+                if(contenu.get(i).equals(selec)){
+                    return i;
+                }
+            }
+        }
+        
+        return -1;
+    }
     
     /**
      * 
      */
     public void ajouterBoutonAjout(){
-        for(int parcoursConteneur=0;parcoursConteneur<this.tournees.size();parcoursConteneur++){
-            List <Node> tournee = this.tournees.get(parcoursConteneur).getChildren();
-            int taille = tournee.size();
-            for(int parcoursTournee=1; parcoursTournee<taille; parcoursTournee++){
-                Button plus = new Button("+");
-                plus.setAlignment(Pos.CENTER);
-                plus.setPrefWidth((int)this.panel.getViewportBounds().getWidth());
-                 
-                this.tournees.get(parcoursConteneur).getChildren().add(2*parcoursTournee-1, plus);
-                
-                int indexPlus = 2*parcoursTournee-1;
-                int indexTournee = parcoursConteneur;
-                plus.setOnAction(e -> ecouteurBoutons.clicPlus(e, indexPlus, indexTournee));
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run(){
+                for(int parcoursConteneur=0;parcoursConteneur<tournees.size();parcoursConteneur++){
+                    List <Node> tournee = tournees.get(parcoursConteneur).getChildren();
+                    int taille = tournee.size();
+                    for(int parcoursTournee=1; parcoursTournee<taille; parcoursTournee++){
+                        Button plus = new Button("+");
+                        plus.setAlignment(Pos.CENTER);
+                        plus.setPrefWidth((int)panel.getViewportBounds().getWidth());
+
+                        tournees.get(parcoursConteneur).getChildren().add(2*parcoursTournee-1, plus);
+
+                        int indexPlus = 2*parcoursTournee-1;
+                        int indexTournee = parcoursConteneur;
+                        plus.setOnAction(e -> ecouteurBoutons.clicPlus(e, indexPlus, indexTournee));
+                    }
+                }
+                System.out.println("Bouton ajoutes");
             }
-        }
+        });
+        
         
     }
     
