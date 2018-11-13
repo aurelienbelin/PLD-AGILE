@@ -69,8 +69,8 @@ public class EtatDefaut implements Etat
     //Test
     @Override
     public void trouverLocalisation(modele.outils.GestionLivraison gestionLivraison, deliverif.DescriptifChemin point, deliverif.Deliverif fenetre){
-        modele.outils.Intersection intersection = gestionLivraison.identifierPointPassage(point.getPoint());
-        fenetre.getVueGraphique().identifierPtPassage(!point.estLocalise(), intersection.getLatitude(), intersection.getLongitude());
+        modele.outils.PointPassage intersection = gestionLivraison.identifierPointPassage(point.getPoint());
+        fenetre.getVueGraphique().identifierPtPassage(!point.estLocalise(), intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());
         fenetre.getVueTextuelle().majVueTextuelle(point);
     }
     

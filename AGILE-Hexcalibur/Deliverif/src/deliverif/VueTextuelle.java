@@ -338,4 +338,19 @@ public class VueTextuelle extends VBox implements Observer {
         this.tournees.get(indexTournee).getChildren().get(indexPlus).setStyle("-fx-border-color:blue;-fx-border-width:4px;");
         this.panel.setContent(this.tournees.get(indexTournee));
     }
+    
+    public void estReorgFinie(){
+        VBox tournee = this.tournees.get(0);
+        List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
+        for(DescriptifChemin pt : desc){
+            pt.disableUpDown();
+         }
+    }
+    public void estReorgTourneesDemandee(){
+        VBox tournee = this.tournees.get(0);
+        List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
+        for(DescriptifChemin pt : desc){
+            pt.enableUpDown();
+         }
+    }
 }
