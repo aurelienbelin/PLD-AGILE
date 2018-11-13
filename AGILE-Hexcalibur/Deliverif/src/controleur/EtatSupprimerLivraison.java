@@ -30,7 +30,7 @@ public class EtatSupprimerLivraison extends EtatDefaut{
     @Override
     public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
-        fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
+        fenetre.estPointPassageASupprimerSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
         Controleur.ETAT_LIVRAISON_SELECTIONNEE.actionEntree(pointClique);
         Controleur.etatCourant = Controleur.ETAT_LIVRAISON_SELECTIONNEE;
     }
@@ -38,11 +38,6 @@ public class EtatSupprimerLivraison extends EtatDefaut{
     @Override
     public void annuler(deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
-    }
-    
-    @Override
-    public void ajouterLivraison (deliverif.Deliverif fenetre) {
-        Controleur.etatCourant = Controleur.ETAT_PLAN_CLIQUABLE;
-        fenetre.estPlanCliquable();
+        fenetre.estSuppressionFinie();
     }
 }

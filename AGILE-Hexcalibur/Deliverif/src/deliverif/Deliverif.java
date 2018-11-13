@@ -613,6 +613,11 @@ public class Deliverif extends Application implements Observer{
         getVueGraphique().effacerMarker();
         getVueGraphique().ajouterMarker(latitude, longitude);
     }
+    
+    public void estPointPassageASupprimerSelectionne(double latitude, double longitude){
+        vueGraphique.effacerMarkerAjout();
+        vueGraphique.ajouterMarkerAjout(latitude, longitude);
+    }
     /**
      * Passe l'IHM dans l'état suivant une fois la demande de livraison chargée.
      * @param cre - compte rendu d'execution des opérations sur le modèle
@@ -659,8 +664,6 @@ public class Deliverif extends Application implements Observer{
         boutonAnnulerSuppression.setDisable(false);
         
         boxCalculTournees.setDisable(true);
-        
-        
     }
     
     public void estPlanCliquable(){
@@ -718,6 +721,16 @@ public class Deliverif extends Application implements Observer{
         panelDroit.getChildren().add(0, boxCalculTournees);
         
         vueTextuelle.supprimerBoutonAjout();
+        vueGraphique.effacerMarkerAjout();
+        
+        estTourneesCalculees("SUCCESS");
+    }
+    
+    public void estSuppressionFinie(){
+        bord.setTop(boutons);
+        
+        boxCalculTournees.setDisable(false);
+        
         vueGraphique.effacerMarkerAjout();
         
         estTourneesCalculees("SUCCESS");
