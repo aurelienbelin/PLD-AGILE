@@ -153,7 +153,7 @@ public class Controleur {
     }
     
     public void boutonValiderSupprimerLivraison() {
-        etatCourant.validerSuppression(this.gestionLivraison, this.fenetre);
+        etatCourant.validerSuppression(this.gestionLivraison, this.fenetre, this.listeCde);
     }
     
     /**@param latitude
