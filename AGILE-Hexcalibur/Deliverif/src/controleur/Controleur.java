@@ -64,7 +64,16 @@ public class Controleur {
      * 
      */
     protected static final EtatAjoutLivraison ETAT_AJOUT_LIVRAISON = new EtatAjoutLivraison();
+    
+    /**
+     * 
+     */
     protected static final EtatPointSelectionne ETAT_POINT_SELECTIONNE = new EtatPointSelectionne();
+    
+    /**
+     * 
+     */
+    protected static final EtatReorgTourneesDemandee ETAT_REORG_TOURNEES_DEMANDE = new EtatReorgTourneesDemandee();
     
     /** etatCourant prendra successivement les états définis ci-dessus comme 
      * valeurs
@@ -185,6 +194,22 @@ public class Controleur {
     
     public void boutonValiderAjout(float duree){
         etatCourant.validerAjout(gestionLivraison, fenetre, duree, this.listeCde);
+    }
+    
+    public void boutonReorgTournees(){
+        etatCourant.reorgTournees(fenetre);
+    }
+    
+    public void clicFleche(boolean haut, int indexLivraison, int indexTournee){
+        etatCourant.clicFleche(gestionLivraison, fenetre, haut, indexLivraison, indexTournee);
+    }
+    
+    public void boutonChangerTournee(int indexLivraison, int indexTournee, int indexTourneeChoisi){
+        etatCourant.changerLivraisonDeTournee(gestionLivraison, fenetre, indexLivraison, indexTournee, indexTourneeChoisi);
+    }
+    
+    public void validerReorganisation(){
+        etatCourant.validerReorganisation(fenetre);
     }
 }
 

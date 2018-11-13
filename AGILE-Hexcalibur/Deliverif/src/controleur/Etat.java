@@ -69,6 +69,13 @@ interface Etat
 
     public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
 
+    public void reorgTournees(deliverif.Deliverif fenetre);
+    
+    public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee);
+    
+    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexLivraison, int indexTournee, int indexTourneeChoisi);
+    
+    public void validerReorganisation(Deliverif fenetre);
     
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon);
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon);

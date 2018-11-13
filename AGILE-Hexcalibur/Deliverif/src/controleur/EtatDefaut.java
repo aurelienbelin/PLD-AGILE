@@ -69,7 +69,7 @@ public class EtatDefaut implements Etat
     //Test
     @Override
     public void trouverLocalisation(modele.outils.GestionLivraison gestionLivraison, deliverif.DescriptifChemin point, deliverif.Deliverif fenetre){
-        modele.outils.Intersection intersection = gestionLivraison.identifierPointPassage(point.getPoint());
+        modele.outils.Intersection intersection = gestionLivraison.identifierPointPassage(point.getPoint()).getPosition();
         fenetre.getVueGraphique().identifierPtPassage(!point.estLocalise(), intersection.getLatitude(), intersection.getLongitude());
         fenetre.getVueTextuelle().majVueTextuelle(point);
     }
@@ -104,10 +104,18 @@ public class EtatDefaut implements Etat
     @Override
     public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude){}
     
+    @Override
+    public void reorgTournees(deliverif.Deliverif fenetre){}
     
     @Override
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){}
     @Override
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){}
+    
+    public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee){}
+    
+    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexLivraison, int indexTournee, int indexTourneeChoisi){}
+    
+    public void validerReorganisation(Deliverif fenetre){}
 
 }

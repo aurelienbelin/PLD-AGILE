@@ -263,6 +263,9 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
+    public void identifierDescriptifChemin(){
+        
+    }
     
     /**
      * 
