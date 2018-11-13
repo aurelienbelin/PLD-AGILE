@@ -594,6 +594,13 @@ public class Deliverif extends Application implements Observer{
         getVueGraphique().effacerMarker();
         getVueGraphique().ajouterMarker(latitude, longitude);
     }
+    
+    public void estSelectionne(int tournee, int position){
+        DescriptifChemin dc = getVueTextuelle().getDescriptifChemin(tournee, position);
+        getVueTextuelle().majVueTextuelle(dc);
+        getVueTextuelle().changerDescription_Ter(tournee);
+    }
+    
     /**
      * Passe l'IHM dans l'état suivant une fois la demande de livraison chargée.
      * @param cre - compte rendu d'execution des opérations sur le modèle
