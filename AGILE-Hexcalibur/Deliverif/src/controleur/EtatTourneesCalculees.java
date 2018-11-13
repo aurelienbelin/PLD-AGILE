@@ -113,7 +113,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.getVueGraphique().zoomPlus(lat,lon);
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
         fenetre.getVueGraphique().dessinerMarker();
     }
     
@@ -122,7 +122,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.getVueGraphique().zoomMoins(lat,lon);
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees();
+        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
         fenetre.getVueGraphique().dessinerMarker();
     }
 

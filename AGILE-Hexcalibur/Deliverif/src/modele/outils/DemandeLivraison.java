@@ -106,7 +106,7 @@ public class DemandeLivraison {
     public Iterator<List<String>> getDescription(){
         List<List<String>> sousDescription = new ArrayList<List<String>>();
         for(PointPassage pp : this.livraisons){
-            String description = "Livraison à "+pp.getPosition().getTroncon(0).getNom();
+            String description = "Livraison à "+(!pp.getPosition().getTroncon(0).getNom().equals("")?pp.getPosition().getTroncon(0).getNom():"Rue sans nom");
             ArrayList<String> a = new ArrayList<>();
             a.add(""+(int)(pp.getDuree()/60));
             a.add(description);

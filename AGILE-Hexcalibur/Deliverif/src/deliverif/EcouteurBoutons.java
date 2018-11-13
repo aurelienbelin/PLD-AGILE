@@ -88,8 +88,8 @@ public class EcouteurBoutons{
      * @throws InterruptedException
      */
     public void calculerTourneesAction(ActionEvent e) throws InterruptedException{
-        this.fenetrePrincipale.getVueGraphique().creerCalques(fenetrePrincipale.getNbLivreurs());
         this.fenetrePrincipale.informationEnCours("Calcul des tournées en cours...");
+        this.fenetrePrincipale.getVueGraphique().creerCalques(fenetrePrincipale.getNbLivreurs());
         controleur.boutonCalculerTournees(fenetrePrincipale.getNbLivreurs());
     }
     
