@@ -433,9 +433,8 @@ public class Deliverif extends Application implements Observer{
         if (o instanceof GestionLivraison){
             if (arg instanceof modele.outils.Tournee[]){
                 if (!((GestionLivraison)o).calculTSPEnCours()){
-                    System.out.println("Le calcul est enfin fini !"); //DEBUG
                     
-                    this.informationEnCours("");
+                    this.informationEnCours("Calcul terminé");
                     /*On appelle la methode bouton stop, cela marchera puisque
                     le calcul est fini !*/
                     try{
@@ -676,9 +675,11 @@ public class Deliverif extends Application implements Observer{
     public void estPlusClique(int indexPlus, int indexTournee){
         boutonValiderAjout.setDisable(false);
         vueTextuelle.entourerPlusClique(indexPlus, indexTournee);
+        vueTextuelle.ajouterBoutonAjout();
     }
     
     public void changePlusClique(int indexPlusPreced,int indexTourneePreced, int indexPlus, int indexTournee){
+        vueTextuelle.ajouterBoutonAjout();
         vueTextuelle.changerPlusEntoure(indexPlusPreced, indexTourneePreced, indexPlus, indexTournee);
     }
     
