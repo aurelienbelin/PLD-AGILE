@@ -55,7 +55,7 @@ public class CdeSuppressionLivraison extends Commande{
         if(this.etatCommande==EtatCommande.ANNULEE){
             return;
         }
-        this.gestion.ajouterLivraison(livraison.getPosition(), livraison.getDuree(), numeroTournee, positionTournee-1);
+        this.gestion.ajouterLivraison(livraison, numeroTournee, positionTournee-1);
         this.etatCommande=EtatCommande.ANNULEE;
     }
     
