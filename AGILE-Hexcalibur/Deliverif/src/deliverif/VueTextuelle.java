@@ -1,10 +1,10 @@
 /*
  * Projet Deliverif
  *
- * Hexanome nÂ° 41
+ * Hexanome n° 4102
  *
- * Projet dÃ©veloppÃ© dans le cadre du cours "Conception OrientÃ©e Objet
- * et dÃ©veloppement logiciel AGILE".
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package deliverif;
 
