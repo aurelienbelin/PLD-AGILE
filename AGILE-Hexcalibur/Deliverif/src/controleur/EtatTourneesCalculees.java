@@ -92,8 +92,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
             fenetre.estPlanCharge(e.getMessage());
             
         } catch (Exception e) {
-            //fenetre.estPlanCharge(e.getMessage());
-            e.printStackTrace();
+            fenetre.estPlanCharge(e.getMessage());
         }
     }
     

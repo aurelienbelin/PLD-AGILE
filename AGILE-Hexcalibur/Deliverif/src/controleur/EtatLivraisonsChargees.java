@@ -88,7 +88,7 @@ public class EtatLivraisonsChargees extends EtatDefaut{
             fenetre.estPlanCharge(e.getMessage());
             
         } catch (Exception e) {
-            e.printStackTrace();
+            fenetre.estPlanCharge(e.getMessage());
         }
     }
     @Override
