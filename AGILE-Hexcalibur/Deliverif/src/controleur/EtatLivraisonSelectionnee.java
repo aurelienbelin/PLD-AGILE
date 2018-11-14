@@ -62,4 +62,14 @@ public class EtatLivraisonSelectionnee extends EtatDefaut {
         fenetre.estPointPassageASupprimerSelectionne(intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());
         this.livraisonASupprimer = intersection;
     }
+    
+    @Override
+    public void undo(ListeCommandes listeCde){
+        //L'utilisateur ne peut pas faire de undo à ce moment-là.
+    }
+    
+    @Override
+    public void redo(ListeCommandes listeCde){
+        //L'utilisateur ne peut pas faire de redo à ce moment-là.
+    }
 }

@@ -202,11 +202,11 @@ public class Controleur {
     }
     
     public void undo(){
-        this.listeCde.undo();
+        this.etatCourant.undo(this.listeCde);
     }
     
     public void redo(){
-        this.listeCde.redo();
+        this.etatCourant.redo(this.listeCde);
     }
 }
 

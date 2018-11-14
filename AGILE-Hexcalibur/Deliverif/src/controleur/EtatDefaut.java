@@ -112,5 +112,15 @@ public class EtatDefaut implements Etat
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){}
     @Override
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){}
+    
+    @Override
+    public void undo(ListeCommandes listeCde){
+        listeCde.undo();//Par défaut
+    }
+    
+    @Override
+    public void redo(ListeCommandes listeCde){
+        listeCde.redo();//Par défaut
+    }
 
 }

@@ -67,4 +67,14 @@ public class EtatAjoutLivraison extends EtatDefaut{
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
         fenetre.estAjoutLivraisonFini();
     }
+    
+    @Override
+    public void undo(ListeCommandes listeCde){
+        //L'utilisateur ne peut pas faire d'undo à ce moment-là.
+    }
+    
+    @Override
+    public void redo(ListeCommandes listeCde){
+        //L'utilisateur ne peut pas faire de redo à ce moment-là.
+    }
 }
