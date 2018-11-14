@@ -112,6 +112,9 @@ public class LecteurXML {
                            .filter(a -> Objects.equals(a.getIdXML(), destination))
                            .collect(Collectors.toList()).get(0);
                    float longueur = Float.parseFloat(eNoeud.getAttribute("longueur"));
+                   if (longueur<0){
+                       continue;//Pas de troncon négatif !
+                   }
                    Troncon troncon = new Troncon(nomRue, debut, fin, longueur);
                    
                    //ajout du tronçon à la liste des tronçons du plan de la ville

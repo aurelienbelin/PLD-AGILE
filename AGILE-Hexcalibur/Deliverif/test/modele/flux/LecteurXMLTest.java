@@ -86,6 +86,7 @@ public class LecteurXMLTest {
      * - Il manque un attribut dans un noeud
      * - Il manque un attribut dans un troncon
      * - Un troncon réfère un noeud inexistant
+     * - Un troncon possède une longueur négative (ce qui démolit dijkstra)
      * - On passe une demande de livraison à la place d'un plan
      * - On donne quelque chose qui n'a rien à voir
      */
@@ -93,24 +94,31 @@ public class LecteurXMLTest {
     public void testPlanCasse(){
         System.out.println("-- test plan cassé");
         String[] fichiers = {url+"planCasse0.xml", url+"planCasse1.xml", url+"planCasse2.xml",
-        url+"planCasse3.xml", url+"dl-petit3.xml", "src/modele/outils/TemplateTSP.java"};
+        url+"planCasse3.xml", url+"planCasse4.xml", url+"dl-petit3.xml", "src/modele/outils/TemplateTSP.java"};
         LecteurXML lecteur = new LecteurXML();
         for(String fichier : fichiers){
             
             try{
                 PlanVille ville = lecteur.creerPlanVille(fichier);
-                fail("Le plan cassé "+fichier+" a tout de même passé.");
-            } catch(Exception e) {}
+                if (!fichier.equals(fichiers[4])){
+                    fail("Le plan cassé "+fichier+" a tout de même passé.");
+                }
+            } catch(Exception e) {
+                if(fichier.equals(fichiers[4])){
+                    fail("La longueur négative génère une exception");
+                }
+            }
         }
     }
     
     /**
      * Test d'une demande de livraison cassée
-     * - La livraison est chargée avant un plan
-     * - Une livraison n'est pas au bon format (caractère manquant
-     * - Une livraison n'a pas d'entrepot
-     * - Une livraison n'a pas de livraison
+     * - La dl est chargée avant un plan
+     * - Une dl n'est pas au bon format (caractère manquant)
+     * - Une dl n'a pas d'entrepot
+     * - Une dl n'a pas de livraison
      * - Une livraison réfère un noeud inexistant
+     * - Une livraison avec un attribut manquant
      * - Un fichier qui n'a vraiment rien à voir
      */
     @Test
@@ -122,7 +130,7 @@ public class LecteurXMLTest {
             fail("La création d'une DL a eu lieu malgré l'absence de plan !");
         } catch(Exception e) {}
         String[] fichiers = {url+"dlCasse0.xml", url+"dlCasse1.xml", url+"dlCasse2.xml",
-            url+"dlCasse3.xml", "src/modele/outils/TemplateTSP.java"};
+            url+"dlCasse3.xml", url+"dlCasse4.xml", "src/modele/outils/TemplateTSP.java"};
         //Nous avons maintenant besoin d'une ville.
         PlanVille ville=null;
         try{
