@@ -172,6 +172,9 @@ public class LecteurXML {
             
             //Intégration des livraisons à l'instance demande de lobjet DemandeLivraison
             NodeList listeNoeudsXML = documentXML.getElementsByTagName("livraison");
+            if (listeNoeudsXML.getLength()==0){
+                throw new IndexOutOfBoundsException("Pas de livraison dans cette demande !");
+            }
             List<PointPassage> listeLivraisons = new ArrayList<>();
             for (int temp = 0; temp < listeNoeudsXML.getLength(); temp++) {
                 Node noeud = listeNoeudsXML.item(temp);
