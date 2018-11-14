@@ -36,7 +36,6 @@ public class IteratorSeq implements Iterator<Integer> {
 	}
 	
         /**
-         * 
          * @return - True si le nombre de candidats est positif. 
          */
 	@Override
@@ -45,7 +44,6 @@ public class IteratorSeq implements Iterator<Integer> {
 	}
 
         /**
-         * 
          * @return - Le candidat suivant 
          */
 	@Override

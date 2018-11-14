@@ -5,6 +5,8 @@
  */
 package controleur;
 
+import controleur.commandes.CdeSuppressionLivraison;
+import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
 import deliverif.DescriptifChemin;
 import modele.outils.GestionLivraison;
@@ -46,8 +48,8 @@ public class EtatLivraisonSelectionnee extends EtatDefaut {
     }
     
     @Override
-    public void validerSuppression (GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {
-        gestionLivraison.supprimerLivraison(livraisonASupprimer);
+    public void validerSuppression (GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, ListeCommandes listeCde) {
+        listeCde.ajouterCde(new CdeSuppressionLivraison(gestionLivraison, livraisonASupprimer));
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
         fenetre.estSuppressionFinie();
     }
