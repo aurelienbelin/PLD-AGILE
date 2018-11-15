@@ -117,6 +117,7 @@ public class EtatDefaut implements Etat
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){}
     
     @Override
+
     public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes){}
     
     @Override
@@ -128,4 +129,12 @@ public class EtatDefaut implements Etat
     @Override
     public void validerReorganisation(Deliverif fenetre){}
 
+    public void undo(ListeCommandes listeCde){
+        listeCde.undo();//Par défaut
+    }
+    
+    @Override
+    public void redo(ListeCommandes listeCde){
+        listeCde.redo();//Par défaut
+    }
 }
