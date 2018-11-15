@@ -54,7 +54,7 @@ public class EcouteurBoutons{
      * @throws IOException
      * @throws Exception 
      */
-    public void chargerPlanAction(ActionEvent e) throws InterruptedException, IOException, Exception{
+    public void chargerPlan(ActionEvent e) throws InterruptedException, IOException, Exception{
         this.fenetrePrincipale.informationEnCours("Chargement du plan...");
         String nomFichier = choisirFichier("Choisir le plan à charger");
         if(nomFichier != null)
@@ -72,7 +72,7 @@ public class EcouteurBoutons{
      * @throws IOException
      * @throws Exception 
      */
-    public void chargerDemandeLivraisonAction(ActionEvent e) throws InterruptedException, IOException, Exception{
+    public void chargerDemandeLivraison(ActionEvent e) throws InterruptedException, IOException, Exception{
         //System.out.println("Choisir une demande de livraison à charger"); //DEBUG
         this.fenetrePrincipale.informationEnCours("Chargement de la demande de livraison...");
         String nomFichier = choisirFichier("Choisir la demande de livraison à charger");
@@ -89,7 +89,7 @@ public class EcouteurBoutons{
      * @param e
      * @throws InterruptedException
      */
-    public void calculerTourneesAction(ActionEvent e) throws InterruptedException{
+    public void calculerTournees(ActionEvent e) throws InterruptedException{
         this.fenetrePrincipale.informationEnCours("Calcul des tournées en cours...");
         this.fenetrePrincipale.getVueGraphique().creerCalques(fenetrePrincipale.getNbLivreurs());
         controleur.boutonCalculerTournees(fenetrePrincipale.getNbLivreurs());
@@ -112,7 +112,6 @@ public class EcouteurBoutons{
         int i = this.fenetrePrincipale.getVueTextuelle().changerDescription_Bis();
         
         if(i!=-1){
-            //this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
             if(i==0){
                 this.fenetrePrincipale.getVueGraphique().dessinerTournees();
             }else{
@@ -182,7 +181,7 @@ public class EcouteurBoutons{
         fileChooser.getExtensionFilters().addAll(
                         new FileChooser.ExtensionFilter("XML File", "*.xml")
         );
-        file = Deliverif.openFileChooser(fileChooser);
+        file = Deliverif.ouvrirFileChooser(fileChooser);
         if (file != null) {
             //On appelle la méthode du controleur devant charger la demande de livraison
             return file.getAbsolutePath();
@@ -207,7 +206,7 @@ public class EcouteurBoutons{
         controleur.clicGauche(point[1], point[0]);
     }
     
-    public void boutonAnnuler(ActionEvent e){
+    public void boutonRetourAuMenu(ActionEvent e){
         controleur.boutonAnnuler();
     }
     

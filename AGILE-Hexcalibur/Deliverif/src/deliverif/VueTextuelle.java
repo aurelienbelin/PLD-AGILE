@@ -150,8 +150,8 @@ public class VueTextuelle extends VBox implements Observer {
                     String c = contenu.get(0);
                     contenu.clear();
                     contenu.add(c);
+                    
                     tournees.clear();
-
                     afficherTournees();
                 }
             }
@@ -315,7 +315,6 @@ public class VueTextuelle extends VBox implements Observer {
                         plus.setOnAction(e -> ecouteurBoutons.clicPlus(e, indexPlus, indexTournee));
                     }
                 }
-                System.out.println("Bouton ajoutes");
             }
         });
         
@@ -323,7 +322,7 @@ public class VueTextuelle extends VBox implements Observer {
     }
     
     public void supprimerBoutonAjout(){
-        for(int parcoursConteneur=1;parcoursConteneur<this.tournees.size();parcoursConteneur++){
+        for(int parcoursConteneur=0;parcoursConteneur<this.tournees.size();parcoursConteneur++){
             List <Node> tournee = this.tournees.get(parcoursConteneur).getChildren();
             int taille = tournee.size();
             for(int parcoursTournee=1; parcoursTournee<taille/2+1; parcoursTournee++){
