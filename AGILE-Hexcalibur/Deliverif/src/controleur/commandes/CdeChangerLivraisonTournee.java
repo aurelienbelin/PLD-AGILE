@@ -38,7 +38,7 @@ public class CdeChangerLivraisonTournee extends Commande{
     }
     
     @Override
-    public void doCde(){
+    protected void doCde(){
         if (this.etatCommande==EtatCommande.EXECUTEE){
             return;
         }
@@ -47,7 +47,7 @@ public class CdeChangerLivraisonTournee extends Commande{
     }
     
     @Override
-    public void undoCde(){
+    protected void undoCde(){
         if (this.etatCommande==EtatCommande.ANNULEE){
             return;
         }

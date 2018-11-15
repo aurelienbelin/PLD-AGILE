@@ -52,7 +52,7 @@ public class GestionLivraisonTest {
     /**
      * Test of calculerTournee method, of class GestionLivraison.
      */
-    /*@Test(timeout = 30*60*1000)
+    @Test(timeout = 30*60*1000)
     public void testCalculerTournee() {
         System.out.println("-- methode calculerTournee");
         Pair<String, String> paire1 = new Pair<>("petitPlan","petit-3");
@@ -85,12 +85,12 @@ public class GestionLivraisonTest {
             }
             int maxLivreur = gestion.getDemande().getLivraisons().size();
             if (2*maxLivreur>20){
-                maxLivreur=20;
+                maxLivreur=20-maxLivreur;
             }
             for(int nbLivreur=1; nbLivreur<maxLivreur; nbLivreur++){
                 System.out.println("\t=>"+nbLivreur+" livreurs");
                 try{
-                    gestion.calculerTournees(nbLivreur);
+                    gestion.calculerTournees(nbLivreur, Integer.MAX_VALUE);
                     while(gestion.threadAlive()){
                         try{
                             Thread.sleep(1000);//Attente active, je sais, c'est mal.
@@ -104,14 +104,11 @@ public class GestionLivraisonTest {
                 assertFalse(gestion.calculTSPEnCours());
                 assertNotNull(gestion.getTournees());
                 assertEquals(nbLivreur,gestion.getTournees().length);
-                for(Tournee t : gestion.getTournees()){
-                    assertSame(t.getDepart(), t.getArrivee());
-                }
             }
         }
         
         
-    }*/
+    }
     
     @Test(timeout=2000)
     public void testAjoutTournee(){

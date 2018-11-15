@@ -32,45 +32,30 @@ public class TronconTest {
     }
 
     /**
-     * Test of setDebut method, of class Troncon.
+     * Test du constructeur
+     * - Cas normal
+     * - Paramètres null
      */
     @Test
-    public void testDebut() {
-        System.out.println("--methode setDebut");
-        Intersection inter1 = new Intersection(0, 1.0f, 1.0f);
-        Intersection inter2 = new Intersection(0, 1.0f, 1.0f);
-        Intersection inter3 = new Intersection(0, 1.0f, 1.0f);
-        Troncon t = new Troncon("rue", inter1, inter2, 1.0f);
+    public void testConstructeur(){
+        System.out.println("-- constructeur");
+        //Cas normal
+        Intersection inter = new Intersection(0,0,0);
+        Intersection inter2 = new Intersection(1,1,1);
+        String nom = "bonjour";
+        float longueur=10f;
+        Troncon t = new Troncon(nom, inter, inter2, longueur);
+        assertEquals(nom, t.getNom());
+        assertSame(inter,t.getDebut());
+        assertSame(inter2,t.getFin());
+        assertEquals(longueur,t.getLongueur(),0.01f);
         
-        t.setDebut(inter3);
-        assertNotSame(t.getDebut(), inter1);
-        assertSame(t.getDebut(), inter3);
-        assertSame(t.getFin(), inter2);
-        
-        assertEquals(0, inter1.qteTroncons());
-        assertEquals(0, inter2.qteTroncons());
-        assertEquals(1, inter3.qteTroncons());
-    }
-
-    /**
-     * Test of getDebut method, of class Troncon.
-     */
-    @Test
-    public void testFin() {
-        System.out.println("--methode setFin");
-        Intersection inter1 = new Intersection(0, 1.0f, 1.0f);
-        Intersection inter2 = new Intersection(0, 1.0f, 1.0f);
-        Intersection inter3 = new Intersection(0, 1.0f, 1.0f);
-        Troncon t = new Troncon("rue", inter1, inter2, 1.0f);
-        
-        t.setFin(inter3);
-        assertNotSame(t.getFin(), inter2);
-        assertSame(t.getDebut(), inter1);
-        assertSame(t.getFin(), inter3);
-        
-        assertEquals(1, inter1.qteTroncons());
-        assertEquals(0, inter2.qteTroncons());
-        assertEquals(0, inter3.qteTroncons());
-    }
+        //Cas avec null
+        t = new Troncon(null, null, null, -3);
+        assertNotNull(t.getNom());
+        assertNotNull(t.getDebut());
+        assertNotNull(t.getFin());
+        assertTrue(t.getLongueur()==0);
+    }   
     
 }

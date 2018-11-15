@@ -51,19 +51,6 @@ public class Intersection {
     }
     
     /**
-     * Enlève un element parmi l'ensemble des troncons desservis
-     * par cette intersection.
-     * @param troncon  - Le troncon a enlever.
-     */
-    public void removeTroncon(Troncon troncon){
-        try{
-            this.troncons.remove(troncon);
-        } catch(Exception e){
-            //do nothing
-        }
-    }
-    
-    /**
      * Renvoie le ième troncon partant de cette intersection.
      * @param i - La position du tronçon. 
      * @return - le tronçon situé à la position i dans la liste de tronçon.

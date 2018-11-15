@@ -32,11 +32,11 @@ public abstract class Commande {
     /**
      * Exécution de la commande.
      */
-    public abstract void doCde();
+    protected abstract void doCde();
     
     /**
      * Annulation de la commande.
      */
-    public abstract void undoCde();
+    protected abstract void undoCde();
     
 }

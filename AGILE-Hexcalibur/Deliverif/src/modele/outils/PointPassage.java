@@ -34,7 +34,7 @@ public class PointPassage {
     public PointPassage(boolean entrepot, Intersection position, float duree) {
         this.entrepot = entrepot;
         this.position = position;
-        this.duree = duree;
+        this.duree = (duree>0 ? duree : 0);
     }
     
     /**
