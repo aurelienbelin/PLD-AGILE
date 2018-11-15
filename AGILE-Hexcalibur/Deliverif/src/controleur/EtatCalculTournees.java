@@ -33,7 +33,7 @@ public class EtatCalculTournees extends EtatDefaut{
         }
         if (gestionLivraison.aSolution()){
             Controleur.etatCourant=Controleur.ETAT_TOURNEES_CALCULEES;
-            fenetre.estTourneesCalculees("SUCCESS");
+            fenetre.estTourneesCalculees("SUCCES");
         } else {
             Controleur.etatCourant=Controleur.ETAT_LIVRAISONS_CHARGEES;
         }

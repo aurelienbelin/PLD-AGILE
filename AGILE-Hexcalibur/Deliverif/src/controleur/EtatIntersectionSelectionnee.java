@@ -30,7 +30,7 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
     public void clicGauche(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double  latitude, double longitude) {
         Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
         intersectionSelectionnee = pointClique;
-        fenetre.changerIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
+        fenetre.estIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
     }
     
     /**
