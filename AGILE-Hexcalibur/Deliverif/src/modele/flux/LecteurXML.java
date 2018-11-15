@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -128,13 +128,13 @@ public class LecteurXML {
         }
         } catch (SAXException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier chargé ne correspond pas à un plan de ville");
         } catch (IOException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier chargé ne correspond pas à un plan de ville");
         } catch (Exception ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier chargé ne correspond pas à un plan de ville");
         }
         throw new Exception("Le fichier chargé ne correspond pas à un plan de ville");
     }
@@ -191,17 +191,16 @@ public class LecteurXML {
             
             demande.setLivraisons(listeLivraisons);
             return demande;
-
         }
         } catch (SAXException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier en entrée ne correspond pas à une demande de livraison");
         } catch (IOException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier en entrée ne correspond pas à une demande de livraison");
         } catch (Exception ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier en entrée ne correspond pas à une demande de livraison");
         }
         throw new Exception("Le fichier en entrée ne correspond pas à une demande de livraison");
     }

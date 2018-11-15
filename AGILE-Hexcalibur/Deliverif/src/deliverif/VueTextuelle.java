@@ -1,10 +1,10 @@
 /*
  * Projet Deliverif
  *
- * Hexanome nÂ° 41
+ * Hexanome n° 4102
  *
- * Projet dÃ©veloppÃ© dans le cadre du cours "Conception OrientÃ©e Objet
- * et dÃ©veloppement logiciel AGILE".
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package deliverif;
 
@@ -201,7 +201,7 @@ public class VueTextuelle extends VBox implements Observer {
                     vbox.setMinWidth(this.panel.getViewportBounds().getWidth());
                     //contenu.add("Livreur "+i);
                     contenu.add("Livreur "+NOMS_COULEURS[i-1]);
-                    Iterator<List<String>> it = t.getDescription_Bis();
+                    Iterator<List<String>> it = t.getDescription();
                     
                     while(it.hasNext()){
                         List<String> s = it.next();
