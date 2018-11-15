@@ -579,7 +579,7 @@ public class Deliverif extends Application implements Observer{
         vbox.setStyle("-fx-background-color : FFFFFF;" + "-fx-background-radius : 5;" + "-fx-border-color : C0C0C0;"
                         + "-fx-border-width : 3;");
         
-        Scene secondeScene = new Scene(vbox, 230, 130);
+        Scene secondeScene = new Scene(vbox, 230, 175);
  
         // New window (Stage)
         Stage popUp = new Stage();
@@ -782,7 +782,8 @@ public class Deliverif extends Application implements Observer{
     
     public void estReorgTourneesDemandee(){
         bord.setTop(boutonsReorgLivraison);
-        panelDroit.getChildren().remove(boxCalculTournees);
+        //panelDroit.getChildren().remove(boxCalculTournees);
+        boxCalculTournees.setDisable(true);
         vueTextuelle.ajouterMenuChangerTournee();
         vueTextuelle.ajouterBoutonsReorg();
         vueTextuelle.changerDescription_Ter(0);
@@ -800,7 +801,8 @@ public class Deliverif extends Application implements Observer{
     
     public void estReorgFinie(){
         bord.setTop(boutons);
-        panelDroit.getChildren().add(0, boxCalculTournees);
+        //panelDroit.getChildren().add(0, boxCalculTournees);
+        boxCalculTournees.setDisable(false);
         vueTextuelle.remettreBoutonsDetails();
         
     }
