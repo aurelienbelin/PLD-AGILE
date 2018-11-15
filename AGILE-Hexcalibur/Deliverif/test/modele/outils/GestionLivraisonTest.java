@@ -152,7 +152,8 @@ public class GestionLivraisonTest {
             duree+=t.getTempsTournee();
             longueur+=t.getLongueur();
         }
-        gestion.ajouterLivraison(gestion.getPlan().getIntersections().get(0), 0f, 0, 0);
+        PointPassage ajout = new PointPassage(false, gestion.getPlan().getIntersections().get(0), 0f);
+        gestion.ajouterLivraison(ajout, 0, 0);
         assertEquals(5, gestion.getTournees()[0].getTrajet().size());
         boolean intersectionTrouvee=false;
         PointPassage pointAEnlever=null;

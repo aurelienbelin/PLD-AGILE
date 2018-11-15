@@ -43,6 +43,15 @@ public class Tournee {
     }
     
     /**
+     * @return Le nombre de points de passage contenu dans cette tournée. Le retour
+     * à l'entrepôt n'est pas considéré comme un point de passage.
+     * i.e. : entrepot -liv1-liv2-entrepot = 3 points.
+     */
+    public int nombrePoints(){
+        return this.trajet.size();
+    }
+    
+    /**
      * @return - La durée totale que le livreur mettra entre son départ de l'entrepot
      * et son retour à l'entrepot.
      */
@@ -66,31 +75,9 @@ public class Tournee {
     }
     
     /**
-     * 
-     * @return - Le point de départ de la tournée 
-     */
-    protected PointPassage getDepart(){
-        if(this.trajet!=null){
-            return this.trajet.get(0).getDebut();
-        }
-        return null;
-    }
-    
-    /**
-     * 
-     * @return - Le point d'arrivée de la tournée 
-     */
-    protected PointPassage getArrivee(){
-        if (this.trajet!=null){
-            return this.trajet.get(this.trajet.size()-1).getFin();
-        }
-        return null;
-    }
-    
-    /**
-     * 
-     * @param i
-     * @return - Le point de passage du trajet i  (0==entrepot)
+     * Renvoie le ième point de passage de la tournée.
+     * @param i - L'indice du point de passage à chercher.
+     * @return Le point de passage recherché.
      */
     protected PointPassage getPointPassage(int i){
         if (this.trajet!=null && i!=(this.trajet.size())){
@@ -101,6 +88,11 @@ public class Tournee {
         return null;
     }
     
+    /**
+     * Vérifie si un point de passage est contenu dans la tournée.
+     * @param p - Le point de passage à rechercher.
+     * @return true si ce point de passage est contenu dans la tournée, false sinon.
+     */
     protected boolean contientPointPassage(PointPassage p){
         for(Chemin c : this.trajet){
             if (c.getDebut()==p){
@@ -111,21 +103,12 @@ public class Tournee {
     }
     
     /**
-     * 
-     * @return - La description de la tournée 
+     * Renvoie une description de cette tournée, chemin par chemin.
+     * @param heureDepart -  L'heure permettant de calculer les horaires de passage
+     * dans chaque point de la tournée.
+     * @return Un itérateur renvoyant dans l'ordre la description de chaque chemin dans une liste.
      */
-    public Iterator<String> getDescription(){
-        List<String> sousDescription = new ArrayList<String>();
-        for(Chemin c : this.trajet){
-            sousDescription.addAll(c.getDescription(this.heureDepart));
-        }
-        sousDescription.add("Fin de la tournée");
-        this.heureDepart.add(Calendar.SECOND, -(int)this.getTempsTournee());//retablir l'objet partagé heureDepart
-        return sousDescription.iterator();
-    }
-    
-    //Test
-    public Iterator<List<String>> getDescription_Bis(){
+    public Iterator<List<String>> getDescription(){
         List<List<String>> sousDescription = new ArrayList<>();
         List<String> s = new ArrayList<>();
         
@@ -136,7 +119,7 @@ public class Tournee {
         sousDescription.add(s);
         Calendar heureCalcul = (Calendar)this.heureDepart.clone();
         for(Chemin c : this.trajet){
-            sousDescription.add(c.getDescription_Bis(heureCalcul));
+            sousDescription.add(c.getDescription(heureCalcul));
         }
         
         return sousDescription.iterator();

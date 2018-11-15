@@ -201,7 +201,7 @@ public class VueTextuelle extends VBox implements Observer {
                     vbox.setMinWidth(this.panel.getViewportBounds().getWidth());
                     //contenu.add("Livreur "+i);
                     contenu.add("Livreur "+NOMS_COULEURS[i-1]);
-                    Iterator<List<String>> it = t.getDescription_Bis();
+                    Iterator<List<String>> it = t.getDescription();
                     
                     while(it.hasNext()){
                         List<String> s = it.next();
@@ -337,5 +337,20 @@ public class VueTextuelle extends VBox implements Observer {
         this.tournees.get(indexTourneePreced).getChildren().get(indexPlusPreced).setStyle("-fx-border-color:black;-fx-border-width:2px;");
         this.tournees.get(indexTournee).getChildren().get(indexPlus).setStyle("-fx-border-color:blue;-fx-border-width:4px;");
         this.panel.setContent(this.tournees.get(indexTournee));
+    }
+    
+    public void estReorgFinie(){
+        VBox tournee = this.tournees.get(0);
+        List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
+        for(DescriptifChemin pt : desc){
+            pt.disableUpDown();
+         }
+    }
+    public void estReorgTourneesDemandee(){
+        VBox tournee = this.tournees.get(0);
+        List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
+        for(DescriptifChemin pt : desc){
+            pt.enableUpDown();
+         }
     }
 }
