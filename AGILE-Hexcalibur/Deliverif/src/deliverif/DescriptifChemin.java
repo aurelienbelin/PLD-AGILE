@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -197,6 +197,7 @@ public class DescriptifChemin extends VBox{
             this.down.setMinWidth(largeur/10.0);
             this.up.setAlignment(Pos.TOP_RIGHT);
             this.down.setAlignment(Pos.BOTTOM_RIGHT);
+            
 
             this.upDown.getChildren().addAll(this.up,this.down);
         }
@@ -286,5 +287,19 @@ public class DescriptifChemin extends VBox{
             this.entete.getChildren().add(this.obtenirDetails);
             this.entete.getChildren().remove(this.upDown);
         }     
+    }
+    
+    public void enleverDetails(){
+        if(this.obtenirDetails!=null){
+            this.entete.getChildren().remove(this.obtenirDetails);
+        }            
+    }
+    
+    public void disableUp(){
+        this.up.setDisable(true);
+    }
+    
+    public void disableDown(){
+        this.down.setDisable(true);
     }
 }
