@@ -110,7 +110,6 @@ public class EcouteurBoutons{
         int i = this.fenetrePrincipale.getVueTextuelle().changerDescription_Bis();
         
         if(i!=-1){
-            //this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
             if(i==0){
                 this.fenetrePrincipale.getVueGraphique().dessinerTournees();
             }else{
