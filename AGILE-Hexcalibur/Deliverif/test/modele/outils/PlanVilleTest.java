@@ -18,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 /**
@@ -28,8 +29,6 @@ public class PlanVilleTest {
     
     private List<Intersection> intersections;
     private List<Troncon> troncons;
-    Intersection dep= new Intersection(1,3,0);
-    PointPassage p = new PointPassage(false,dep,2);
     Intersection C = new Intersection(1,3,0);
         Intersection B = new Intersection(2,3,2);
         Intersection F= new Intersection(3,2,1);
@@ -49,6 +48,7 @@ public class PlanVilleTest {
         Troncon FC = new Troncon("FC",F,C,6);
         Troncon FB = new Troncon("FB",F,B,3);
         Troncon BF = new Troncon("BF",B,F,3);
+    PointPassage p = new PointPassage(false,C,2);
     
     public PlanVilleTest(){
         
@@ -168,7 +168,6 @@ public class PlanVilleTest {
      * Test de reconstruireChemin
      * -Cas normal
      * - Avec un point inatteignable
-     * - Avec un depart inatteignable
      * - Sans structure de precedence
      */
     @Test
@@ -176,7 +175,27 @@ public class PlanVilleTest {
         System.out.println("-- reconstruireChemin");
         
         PlanVille pv = new PlanVille(intersections, troncons);
+        PointPassage p2 = new PointPassage(false, A, 10);
+        PointPassage p3 = new PointPassage(false, new Intersection(10,10,10), 10);
         
+        //Cas normal
+        Map<Intersection, Pair<Intersection, Float>> precedence = pv.dijkstra(p);
+        Chemin chemin = pv.reconstruireChemin(p, p2, precedence);
+        assertNotNull(chemin);
+        assertSame(p, chemin.getDebut());
+        assertSame(p2, chemin.getFin());
+        
+        //Cas fin inatteignable
+        chemin = pv.reconstruireChemin(p, p3, precedence);
+        assertNull(chemin);
+        
+        //Atteindre un null
+        chemin = pv.reconstruireChemin(p, null, precedence);
+        assertNull(chemin);
+        
+        //Pas de structure de precedence
+        chemin =pv.reconstruireChemin(p, p2, null);
+        assertNull(chemin);
         
     }
 }
