@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -70,8 +70,7 @@ public class EtatPlanCharge extends EtatDefaut{
             fenetre.estPlanCharge(e.getMessage());
             
         } catch (Exception e) {
-            //fenetre.estPlanCharge(e.getMessage());
-            e.printStackTrace();
+            fenetre.estPlanCharge(e.getMessage());
         }
     }
    
