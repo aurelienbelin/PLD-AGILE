@@ -7,17 +7,15 @@ package modele.outils;
 
 
 import java.util.List;
-import java.util.ListIterator;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import javafx.util.Pair;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 /**
  *
@@ -100,5 +98,82 @@ public class PlanVilleTest {
         assertEquals(C, result.get(D).getKey());
         assertEquals(10.0, result.get(A).getValue(),0.0);
         assertEquals(B, result.get(A).getKey());
+    }
+    
+    /**
+     * Test de dijkstraTousPoints
+     * - Pas de points
+     * - Certains points sont absent du plan
+     * - Certains points sont null
+     * - Tout va bien
+     */
+    @Test
+    public void testDijkstraTousPoints(){
+        System.out.println("-- dijkstraTousPoints");
+        PlanVille pv = new PlanVille(intersections, troncons);
+        PointPassage p2 = new PointPassage(false, A, 10);
+        //Pas de points
+        List<Chemin> resultat = pv.dijkstraTousPoints(null);
+        assertNotNull(resultat);
+        assertEquals(0, resultat.size());
+        
+        Intersection exterieur = new Intersection(10,10,10);
+        PointPassage pDehors = new PointPassage(false, exterieur, 10);
+        //Certains points sont en-dehors
+        List<PointPassage> liste = new ArrayList<PointPassage>();
+        liste.add(pDehors);
+        liste.add(p);
+        liste.add(p2);
+        resultat = pv.dijkstraTousPoints(liste);
+        assertNotNull(resultat);
+        assertEquals(2, resultat.size());
+        assertSame(p, resultat.get(0).getDebut());
+        
+        //Une liste avec des null
+        liste = new ArrayList<PointPassage>();
+        liste.add(null);
+        liste.add(p);
+        liste.add(p2);
+        resultat = pv.dijkstraTousPoints(liste);
+        assertNotNull(resultat);
+        assertEquals(2,resultat.size());
+        assertSame(p, resultat.get(0).getDebut());
+        
+        //Une liste avec un seul point !
+        liste = new ArrayList<PointPassage>();
+        liste.add(p);
+        resultat=pv.dijkstraTousPoints(liste);
+        assertNotNull(resultat);
+        assertEquals(0,resultat.size());
+        
+        //Une liste correcte
+        liste = new ArrayList<PointPassage>();
+        liste.add(p);
+        liste.add(p2);
+        resultat = pv.dijkstraTousPoints(liste);
+        assertNotNull(resultat);
+        assertEquals(2, resultat.size());
+        assertSame(p, resultat.get(0).getDebut());
+        assertSame(p2, resultat.get(0).getFin());
+        assertSame(p2, resultat.get(1).getDebut());
+        assertSame(p, resultat.get(1).getFin());
+        
+        
+    }
+    
+    /**
+     * Test de reconstruireChemin
+     * -Cas normal
+     * - Avec un point inatteignable
+     * - Avec un depart inatteignable
+     * - Sans structure de precedence
+     */
+    @Test
+    public void testReconstruireChemin(){
+        System.out.println("-- reconstruireChemin");
+        
+        PlanVille pv = new PlanVille(intersections, troncons);
+        
+        
     }
 }

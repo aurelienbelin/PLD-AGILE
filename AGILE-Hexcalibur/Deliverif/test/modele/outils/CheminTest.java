@@ -72,6 +72,8 @@ public class CheminTest {
     
     /**
      * test de getDuree
+     * - Chemin normal
+     * - Chemin sans debut ni fin ni troncons
      */
     @Test
     public void testGetDuree(){
@@ -86,6 +88,8 @@ public class CheminTest {
     
     /**
      * Test de getDescription
+     * - Chemin normal
+     * - Chemin sans debut ni fin ni troncons
      */
     @Test
     public void testGetDescription(){
@@ -102,16 +106,31 @@ public class CheminTest {
     
     /**
      * Test de getLongueur
+     * - Chemin normal
+     * - Chemin sans troncon
+     * - Chemin sans debut
+     * - Chemin sans fin
      */
     @Test
     public void testGetLongueur(){
         System.out.println("-- getLongueur");
         
+        //Normal
         Chemin chemin = new Chemin(this.trajet, this.p1, this.p2);
         assertEquals(500, chemin.getLongueur(),0.1f);
         
+        //Pas de troncon
         chemin = new Chemin(null,this.p1, this.p2);
         assertEquals(0, chemin.getLongueur(),0.1f);
+        
+        //Pas de debut
+        chemin = new Chemin(this.trajet, null, this.p2);
+        assertEquals(0, chemin.getLongueur(), 0.1f);
+        
+        //Pas de fin
+        chemin = new Chemin(this.trajet, this.p1, null);
+        assertEquals(0, chemin.getLongueur(),0.1f);
+        
     }
     
 }
