@@ -268,19 +268,21 @@ public class EcouteurBoutons{
        controleur.validerReorganisation();
    }
    
-    public void montrerMenuContextuel(ContextMenuEvent event, ContextMenu contextMenu, DescriptifChemin dc){
-        controleur.clicDroit(dc);
-        String[] identifiants = dc.getPoint().split("_");
-        int indexTournee = Integer.parseInt(identifiants[0])-1;
-        for(MenuItem item: contextMenu.getItems()){
-            item.setVisible(true);
+    public void montrerMenuContextuel(ContextMenuEvent event, ContextMenu choixLivreurs, DescriptifChemin livraisonCliquee){
+        controleur.clicDroit(livraisonCliquee);
+        
+        String[] identifiants = livraisonCliquee.getPoint().split("_");
+        int indiceTournee = Integer.parseInt(identifiants[0])-1;
+        for(MenuItem livreur: choixLivreurs.getItems()){
+            livreur.setVisible(true);
         }
-        contextMenu.getItems().get(indexTournee).setVisible(false);
-        contextMenu.show(dc, event.getScreenX(), event.getScreenY());
+        
+        choixLivreurs.getItems().get(indiceTournee).setVisible(false);
+        choixLivreurs.show(livraisonCliquee, event.getScreenX(), event.getScreenY());
     }
     
     public void reorgSelectionTournee(ActionEvent e, int indexTourneeChoisi) {
-        controleur.boutonChangerTournee(indexTourneeChoisi);
+        controleur.selectionMenuChangerTournee(indexTourneeChoisi);
     }
 
 }

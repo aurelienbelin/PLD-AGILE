@@ -24,7 +24,7 @@ import modele.outils.PointPassage;
 public class EtatReorgTourneesDemandee extends EtatDefaut{
     
     protected int tourneeLivraisonAChanger;
-    protected int indexLivraisonAChanger;
+    protected int indiceLivraisonAChanger;
 
     public EtatReorgTourneesDemandee() {
     }
@@ -40,14 +40,12 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
      */
     @Override
     public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes){
+        String point = (indexTournee+1)+"_"+(indexLivraison+1); //DESCRIPTIF
+        PointPassage pointPassage = gestionLivraison.identifierPointPassage(point);
         if(haut){
-            String point = (indexTournee+1)+"_"+(indexLivraison+1); //DESCRIPTIF
-            PointPassage pointPassage = gestionLivraison.identifierPointPassage(point);
             commandes.ajouterCde(new CdeDeplacerLivraison(gestionLivraison, pointPassage, indexTournee, indexLivraison-1));
           
         }else{
-            String point = (indexTournee+1)+"_"+(indexLivraison+1); //DESCRIPTIF
-            PointPassage pointPassage = gestionLivraison.identifierPointPassage(point);
             commandes.ajouterCde(new CdeDeplacerLivraison(gestionLivraison, pointPassage, indexTournee, indexLivraison+1));
             
         }
@@ -55,18 +53,18 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
     }
     
     @Override
-    public void clicDroit(DescriptifChemin dc){
-        String[] identifiants = dc.getPoint().split("_");
+    public void clicDroit(DescriptifChemin livraisonCliquee){
+        String[] identifiants = livraisonCliquee.getPoint().split("_");
         tourneeLivraisonAChanger = Integer.parseInt(identifiants[0])-1; //DESCRIPTIF
-        indexLivraisonAChanger = Integer.parseInt(identifiants[1])-1; //DESCRIPTIF
+        indiceLivraisonAChanger = Integer.parseInt(identifiants[1])-1; //DESCRIPTIF
         
     }
     
     @Override
-    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes){
-        int nouvelIndex = gestionLivraison.getTournees()[indexTourneeChoisi].getTrajet().size()-1;
-        commandes.ajouterCde(new CdeChangerLivraisonTournee(gestionLivraison, tourneeLivraisonAChanger, indexTourneeChoisi, indexLivraisonAChanger, nouvelIndex));
-        fenetre.changerVueTextuelle(indexTourneeChoisi);
+    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indiceTourneeChoisi, ListeCommandes commandes){
+        int nouvelIndice = gestionLivraison.getTournees()[indiceTourneeChoisi].getTrajet().size()-1;
+        commandes.ajouterCde(new CdeChangerLivraisonTournee(gestionLivraison, tourneeLivraisonAChanger, indiceTourneeChoisi, indiceLivraisonAChanger, nouvelIndice));
+        fenetre.changerVueTextuelle(indiceTourneeChoisi);
     }
     
     /**

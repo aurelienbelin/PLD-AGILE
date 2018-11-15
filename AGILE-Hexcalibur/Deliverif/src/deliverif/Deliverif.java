@@ -92,6 +92,11 @@ public class Deliverif extends Application implements Observer{
      */
     public final static String CALCULER_TOURNEES = "Calculer les tournées";
     
+    /**
+     * 
+     */
+    public final static String VALIDER_MODIF = "Valider modifications";
+    
     public final static String ZOOM_AVANT = "+";
     
     public final static String ARRETER_CALCUL_TOURNEES = "Stop";
@@ -314,7 +319,7 @@ public class Deliverif extends Application implements Observer{
         boutonAnnuler = new Button("Retour au menu");
         boutonAnnuler.setPrefSize(100,65);
         boutonAnnuler.setWrapText(true);
-        boutonAnnuler.setDisable(true);
+        boutonAnnuler.setDisable(false);
         boutonAnnuler.setTextAlignment(TextAlignment.CENTER);
         boutonAnnuler.setOnAction(e -> {
             try {
@@ -355,12 +360,12 @@ public class Deliverif extends Application implements Observer{
         boutonAnnulerSuppression.setTextAlignment(TextAlignment.CENTER);
         boutonAnnulerSuppression.setOnAction(e -> ecouteurBoutons.boutonAnnuler(e)); 
         
-        boutonValiderReorg = new Button("Valider modifications");
+        boutonValiderReorg = new Button(VALIDER_MODIF);
         boutonValiderReorg.setPrefSize(110,65);
         boutonValiderReorg.setMinHeight(50);
         boutonValiderReorg.setTranslateX(400);
         boutonValiderReorg.setWrapText(true);
-        boutonValiderReorg.setDisable(true);
+        boutonValiderReorg.setDisable(false);
         boutonValiderReorg.setTextAlignment(TextAlignment.CENTER);
         boutonValiderReorg.setOnAction(e -> ecouteurBoutons.boutonValiderReorg(e));
        
@@ -777,10 +782,8 @@ public class Deliverif extends Application implements Observer{
     
     public void estReorgTourneesDemandee(){
         bord.setTop(boutonsReorgLivraison);
-        boutonAnnuler.setDisable(false);
-        boutonValiderReorg.setDisable(false);
         panelDroit.getChildren().remove(boxCalculTournees);
-        vueTextuelle.ajouterEcouteurDescriptif();
+        vueTextuelle.ajouterMenuChangerTournee();
         vueTextuelle.ajouterBoutonsReorg();
         vueTextuelle.changerDescription_Ter(0);
     }
@@ -798,7 +801,7 @@ public class Deliverif extends Application implements Observer{
     public void estReorgFinie(){
         bord.setTop(boutons);
         panelDroit.getChildren().add(0, boxCalculTournees);
-        vueTextuelle.estReorgFinie();
+        vueTextuelle.remettreBoutonsDetails();
         
     }
 }

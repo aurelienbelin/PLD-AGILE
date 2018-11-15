@@ -46,6 +46,7 @@ public class VueTextuelle extends VBox implements Observer {
     
     private GestionLivraison gestionLivraison;
     private final String[] NOMS_COULEURS = {"violet","marron","vert fluo","corail","rouge","bleu","vert foncé", "rose","or","beige"};
+    private final String CHANGER_LIVRAISON_DE_TOURNEE = "Vers livreur ";
     
     /**
      * @deprecated
@@ -342,49 +343,49 @@ public class VueTextuelle extends VBox implements Observer {
         this.panel.setContent(this.tournees.get(indexTournee));
     }
     
-    public void estReorgFinie(){
+    public void remettreBoutonsDetails(){
         List<VBox> tournees = this.tournees;
         for(VBox tournee: tournees){ 
-            List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
-            for(DescriptifChemin pt : desc){
-                pt.disableUpDown();
+            List<DescriptifChemin> livraisonsDeTournee= (ObservableList) tournee.getChildren();
+            for(DescriptifChemin livraison : livraisonsDeTournee){
+                livraison.disableUpDown();
             }
         }
     }
     public void ajouterBoutonsReorg(){
 
         for(VBox tournee: tournees){ 
-            List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
-            for(int j=0; j<(desc.size()-1);j++){
-                DescriptifChemin pt = desc.get(j);
-                pt.enableUpDown();
+            List<DescriptifChemin> livraisonsDeTournee= (ObservableList) tournee.getChildren();
+            for(int indiceLivraison=0; indiceLivraison<(livraisonsDeTournee.size()-1);indiceLivraison++){
+                DescriptifChemin livraison = livraisonsDeTournee.get(indiceLivraison);
+                livraison.enableUpDown();
             }
-            DescriptifChemin entrepot = desc.get(desc.size()-1);
+            DescriptifChemin entrepot = livraisonsDeTournee.get(livraisonsDeTournee.size()-1);
             entrepot.enleverDetails();
             
-            DescriptifChemin debut = desc.get(1);
-            debut.disableUp();
+            DescriptifChemin debutTournee = livraisonsDeTournee.get(1);
+            debutTournee.disableUp();
             
-            DescriptifChemin fin = desc.get(desc.size()-2);
-            fin.disableDown();
+            DescriptifChemin finTournee = livraisonsDeTournee.get(livraisonsDeTournee.size()-2);
+            finTournee.disableDown();
         }
     }
     
-    public void ajouterEcouteurDescriptif(){
+    public void ajouterMenuChangerTournee(){
         
-        ContextMenu contextMenu = new ContextMenu();
+        ContextMenu choixTournee = new ContextMenu();
  
-        for(int i=0; i<tournees.size(); i++){
-            MenuItem livreur = new MenuItem("Vers livreur "+NOMS_COULEURS[i]);
-            int indexTournee = i;
-            livreur.setOnAction(e -> ecouteurBoutons.reorgSelectionTournee(e, indexTournee));
+        for(int indiceLivreur=0; indiceLivreur<tournees.size(); indiceLivreur++){
+            MenuItem livreur = new MenuItem(CHANGER_LIVRAISON_DE_TOURNEE+NOMS_COULEURS[indiceLivreur]);
+            int indiceTournee = indiceLivreur;
+            livreur.setOnAction(e -> ecouteurBoutons.reorgSelectionTournee(e, indiceTournee));
             
-            contextMenu.getItems().add(livreur);
+            choixTournee.getItems().add(livreur);
             
-            List<DescriptifChemin> desc= (ObservableList) tournees.get(i).getChildren();
-            for(int j=0; j<(desc.size()-1);j++){
-                DescriptifChemin pt = desc.get(j);
-                pt.setOnContextMenuRequested(e -> ecouteurBoutons.montrerMenuContextuel(e, contextMenu, pt));
+            List<DescriptifChemin> livraisonsDeLivreur= (ObservableList) tournees.get(indiceLivreur).getChildren();
+            for(int indiceLivraison=0; indiceLivraison<(livraisonsDeLivreur.size()-1);indiceLivraison++){
+                DescriptifChemin livraison = livraisonsDeLivreur.get(indiceLivraison);
+                livraison.setOnContextMenuRequested(e -> ecouteurBoutons.montrerMenuContextuel(e, choixTournee, livraison));
             }
         }
     }

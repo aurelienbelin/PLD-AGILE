@@ -211,16 +211,16 @@ public class Controleur {
         etatCourant.reorgTournees(fenetre);
     }
     
-    public void clicFleche(boolean haut, int indexLivraison, int indexTournee){
-        etatCourant.clicFleche(gestionLivraison, fenetre, haut, indexLivraison, indexTournee, this.listeCde);
+    public void clicFleche(boolean haut, int indiceLivraison, int indiceTournee){
+        etatCourant.clicFleche(gestionLivraison, fenetre, haut, indiceLivraison, indiceTournee, this.listeCde);
     }
     
-    public void clicDroit(DescriptifChemin dc){
-        etatCourant.clicDroit(dc);
+    public void clicDroit(DescriptifChemin livraisonCliquee){
+        etatCourant.clicDroit(livraisonCliquee);
     }
     
-    public void boutonChangerTournee(int indexTourneeChoisi){
-        etatCourant.changerLivraisonDeTournee(gestionLivraison, fenetre, indexTourneeChoisi, listeCde);
+    public void selectionMenuChangerTournee(int indiceTourneeChoisi){
+        etatCourant.changerLivraisonDeTournee(gestionLivraison, fenetre, indiceTourneeChoisi, listeCde);
     }
     
     public void validerReorganisation(){

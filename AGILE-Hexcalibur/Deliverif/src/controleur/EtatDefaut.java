@@ -120,7 +120,7 @@ public class EtatDefaut implements Etat
     public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes){}
     
     @Override
-    public void clicDroit(DescriptifChemin dc){}
+    public void clicDroit(DescriptifChemin livraisonCliquee){}
     
     @Override
     public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes){}
