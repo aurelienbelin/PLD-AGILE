@@ -115,6 +115,11 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.estSelectionne(positionDansTournee[0], positionDansTournee[1]);
     }
     
+    public void reorgTournees(Deliverif fenetre){
+        fenetre.estReorgTourneesDemandee();
+        Controleur.etatCourant = Controleur.ETAT_REORG_TOURNEES_DEMANDE;
+    }
+    
     @Override
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
         fenetre.getVueGraphique().zoomPlus(lat,lon);

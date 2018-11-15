@@ -336,6 +336,7 @@ public class GestionLivraison extends Observable{
      * @param indice2 - L'indice où ajouter le point de passage dans la nouvelle
      * tournée.
      */
+
     public void intervertirPoint(int tournee1, int tournee2, int indice1, 
             int indice2){
         if (this.tournees==null || 
@@ -352,6 +353,10 @@ public class GestionLivraison extends Observable{
         }
         PointPassage livraison = 
                 this.tournees[tournee1].getPointPassage(indice1);
+
+
+
+
         this.supprimerLivraison(livraison);
         this.ajouterLivraison(livraison, tournee2, indice2);
     }

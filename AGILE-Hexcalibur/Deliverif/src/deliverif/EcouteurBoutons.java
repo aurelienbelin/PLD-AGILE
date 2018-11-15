@@ -14,10 +14,12 @@ import javafx.scene.input.ScrollEvent;
 import java.io.File;
 import java.io.IOException;
 import javafx.event.ActionEvent;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
-import modele.outils.PointPassage;
 
 /**
  * Ecouteur des évènements émis par l'IHM de l'application.
@@ -144,14 +146,22 @@ public class EcouteurBoutons{
      * @param dc 
      */
      public void avancerLivraison(DescriptifChemin dc){
+        String[] identifiants = dc.getPoint().split("_");
         
+        int indexTournee = Integer.parseInt(identifiants[0]);
+        int indexLivraison = Integer.parseInt(identifiants[1]);
+        controleur.clicFleche(true, indexLivraison-1, indexTournee-1); //DESCRIPTIF
     }
      /**
       * Descend la livraison dans la liste
       * @param dc 
       */
     public void reculerLivraison(DescriptifChemin dc){
+        String[] identifiants = dc.getPoint().split("_");
         
+        int indexTournee = Integer.parseInt(identifiants[0]);
+        int indexLivraison = Integer.parseInt(identifiants[1]);
+        controleur.clicFleche(false, indexLivraison-1, indexTournee-1); //DESCRIPTIF
     }
    
     /**
@@ -250,6 +260,29 @@ public class EcouteurBoutons{
         }
     }
     
+   public void boutonReorgLivraisons(ActionEvent e){
+       controleur.boutonReorgTournees();
+   }
    
+   public void boutonValiderReorg(ActionEvent e){
+       controleur.validerReorganisation();
+   }
+   
+    public void montrerMenuContextuel(ContextMenuEvent event, ContextMenu choixLivreurs, DescriptifChemin livraisonCliquee){
+        controleur.clicDroit(livraisonCliquee);
+        
+        String[] identifiants = livraisonCliquee.getPoint().split("_");
+        int indiceTournee = Integer.parseInt(identifiants[0])-1;
+        for(MenuItem livreur: choixLivreurs.getItems()){
+            livreur.setVisible(true);
+        }
+        
+        choixLivreurs.getItems().get(indiceTournee).setVisible(false);
+        choixLivreurs.show(livraisonCliquee, event.getScreenX(), event.getScreenY());
+    }
+    
+    public void reorgSelectionTournee(ActionEvent e, int indexTourneeChoisi) {
+        controleur.selectionMenuChangerTournee(indexTourneeChoisi);
+    }
 
 }
