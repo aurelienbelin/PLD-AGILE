@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -51,20 +51,7 @@ public class Intersection {
     }
     
     /**
-     * Enlève un element parmi l'ensemble des troncons desservis
-     * par cette intersection.
-     * @param troncon  - Le troncon a enlever.
-     */
-    public void removeTroncon(Troncon troncon){
-        try{
-            this.troncons.remove(troncon);
-        } catch(Exception e){
-            //do nothing
-        }
-    }
-    
-    /**
-     * 
+     * Renvoie le ième troncon partant de cette intersection.
      * @param i - La position du tronçon. 
      * @return - le tronçon situé à la position i dans la liste de tronçon.
      */
@@ -78,18 +65,11 @@ public class Intersection {
     }
     
     /**
-     *
      * @return - La liste des tronçons de l'intersection
      */
     public List<Troncon> getTroncons(){
         return this.troncons;
     }
-
-    /**
-     *
-     * @return - Le nombre de tronçons ayant pour une de ses extrémité cette intersection
-     */
-    protected int qteTroncons(){ return this.troncons.size(); }
     
     /**
      * @return - L'id de l'intersection dans son fichier xml d'origine.

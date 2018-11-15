@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 4102
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package modele.outils;
 
@@ -52,9 +55,9 @@ public class TSP1Test {
                 if (cout[i][j]!=0){
                     Troncon t = new Troncon(i+"->"+j, intersections.get(i),
                             intersections.get(j), cout[i][j]);
-                    Chemin c = new Chemin(passages.get(i), null);
-                    c.addTroncon(t);
-                    c.setFin(passages.get(j));
+                    List<Troncon> parcours = new ArrayList<Troncon>();
+                    parcours.add(t);
+                    Chemin c = new Chemin(parcours, passages.get(i), passages.get(j));
                     noeud1.add(c);
                 }
             }

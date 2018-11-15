@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -53,13 +53,23 @@ public class TSPMinCFC extends TemplateTSP{
         }
         
         int sommeMin=0;
+        int minimum = Integer.MAX_VALUE;
+        for(Integer arrivee : nonVus){
+            if (cout[sommetCourant][arrivee]<minimum){
+                minimum=cout[sommetCourant][arrivee];
+            }
+        }
+        sommeMin+=minimum;
         int minEntrepot=Integer.MAX_VALUE;
         for(Integer depart : nonVus){
-            int minimum=Integer.MAX_VALUE;
+            minimum=Integer.MAX_VALUE;
             for(Integer arrivee : nonVus){
                 if (cout[depart][arrivee]<minimum && depart!=arrivee){
                     minimum=cout[depart][arrivee];
                 }
+            }
+            if (cout[depart][0]<minimum){
+                minimum=cout[depart][0];
             }
             if (cout[depart][0]<minEntrepot){
                 minEntrepot=cout[depart][0];

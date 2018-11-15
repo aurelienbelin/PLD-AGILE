@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -92,8 +92,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
             fenetre.estPlanCharge(e.getMessage());
             
         } catch (Exception e) {
-            //fenetre.estPlanCharge(e.getMessage());
-            e.printStackTrace();
+            fenetre.estPlanCharge(e.getMessage());
         }
     }
     
@@ -112,6 +111,13 @@ public class EtatTourneesCalculees extends EtatDefaut{
     public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
         fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
+        int[] positionDansTournee = gestionLivraison.ouEstLePoint(pointClique);
+        fenetre.estSelectionne(positionDansTournee[0], positionDansTournee[1]);
+    }
+    
+    public void reorgTournees(Deliverif fenetre){
+        fenetre.estReorgTourneesDemandee();
+        Controleur.etatCourant = Controleur.ETAT_REORG_TOURNEES_DEMANDE;
     }
     
     @Override

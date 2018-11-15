@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -36,7 +36,6 @@ public class IteratorSeq implements Iterator<Integer> {
 	}
 	
         /**
-         * 
          * @return - True si le nombre de candidats est positif. 
          */
 	@Override
@@ -45,7 +44,6 @@ public class IteratorSeq implements Iterator<Integer> {
 	}
 
         /**
-         * 
          * @return - Le candidat suivant 
          */
 	@Override

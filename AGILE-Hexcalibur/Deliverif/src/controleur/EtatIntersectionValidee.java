@@ -1,13 +1,16 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
 package controleur;
 
+import controleur.commandes.CdeAjoutLivraison;
+import controleur.commandes.Commande;
+import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
 import modele.outils.GestionLivraison;
 import modele.outils.Intersection;
@@ -40,10 +43,14 @@ public class EtatIntersectionValidee extends EtatDefaut{
     }
     
     @Override
-    public void clicPlus(Deliverif fenetre, int indexPlus, int indexTournee) {
+    public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {
         Controleur.ETAT_AJOUT_LIVRAISON.actionEntree(intersectionValidee, indexPlus, indexTournee);
-        Controleur.etatCourant = Controleur.ETAT_AJOUT_LIVRAISON;
+        int indexLivraisonPreced = indexPlus/2;
+        duree = duree * 60;
+        Commande cde = new CdeAjoutLivraison(gestionLivraison, intersectionValidee, indexTournee, indexLivraisonPreced, duree);
+        listeCde.ajouterCde(cde);
         fenetre.estPlusClique(indexPlus, indexTournee);
+        Controleur.etatCourant=Controleur.ETAT_AJOUT_LIVRAISON;
     }
     @Override
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){

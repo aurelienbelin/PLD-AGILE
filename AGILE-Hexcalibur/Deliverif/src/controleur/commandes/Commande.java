@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -32,11 +32,11 @@ public abstract class Commande {
     /**
      * Exécution de la commande.
      */
-    public abstract void doCde();
+    protected abstract void doCde();
     
     /**
      * Annulation de la commande.
      */
-    public abstract void undoCde();
+    protected abstract void undoCde();
     
 }

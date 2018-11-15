@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -10,6 +10,7 @@ package controleur;
 
 import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
+import deliverif.DescriptifChemin;
 import java.io.IOException;
 import modele.outils.GestionLivraison;
 import org.xml.sax.SAXException;
@@ -78,7 +79,7 @@ public class EtatDefaut implements Etat
     public void ajouterLivraison(deliverif.Deliverif fenetre) {}
     
     @Override
-    public void validerSuppression(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}
+    public void validerSuppression(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, ListeCommandes listeCde) {}
     
     @Override
     public void clicGauche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {}
@@ -93,7 +94,7 @@ public class EtatDefaut implements Etat
     public void retourSelection(deliverif.Deliverif fenetre){}
     
     @Override
-    public void clicPlus(Deliverif fenetre, int indexPlus, int indexTournee) {}
+    public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {}
     
     public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde){}
     
@@ -107,10 +108,33 @@ public class EtatDefaut implements Etat
     @Override
     public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude){}
     
+    @Override
+    public void reorgTournees(deliverif.Deliverif fenetre){}
     
     @Override
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){}
     @Override
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){}
+    
+    @Override
 
+    public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes){}
+    
+    @Override
+    public void clicDroit(DescriptifChemin livraisonCliquee){}
+    
+    @Override
+    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes){}
+    
+    @Override
+    public void validerReorganisation(Deliverif fenetre){}
+
+    public void undo(ListeCommandes listeCde){
+        listeCde.undo();//Par défaut
+    }
+    
+    @Override
+    public void redo(ListeCommandes listeCde){
+        listeCde.redo();//Par défaut
+    }
 }
