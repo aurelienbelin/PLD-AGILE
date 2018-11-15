@@ -10,6 +10,7 @@ package controleur;
 
 import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
+import deliverif.DescriptifChemin;
 import java.io.IOException;
 import modele.outils.GestionLivraison;
 import org.xml.sax.SAXException;
@@ -69,6 +70,16 @@ interface Etat
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
 
     public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
+
+    public void reorgTournees(deliverif.Deliverif fenetre);
+    
+    public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes);
+    
+    public void clicDroit(DescriptifChemin livraisonCliquee);
+    
+    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes);
+    
+    public void validerReorganisation(Deliverif fenetre);
     
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon);
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon);
