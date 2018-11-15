@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -29,22 +29,22 @@ public class Troncon {
      */
     public Troncon(String nom, Intersection debut, Intersection fin,
             float longueur){
-        this.nom=nom;
-        this.debut=debut;
-        debut.addTroncon(this);
-        this.fin=fin;
-        this.longueur=longueur;
-    }
-    
-    /**
-     * Ce setter se charge d'affecter à l'intersection un nouveau troncon
-     * partant.
-     * @param debut - La nouvelle intersection au debut de ce troncon
-     */
-    public void setDebut(Intersection debut){
+        if (nom!=null){
+            this.nom=nom;
+        } else {
+            this.nom="";
+        }
+        this.longueur=(longueur>0 ? longueur : 0);
+        if (fin!=null){
+            this.fin=fin;
+        } else {
+            this.fin=new Intersection(0,0,0);
+        }
         if (debut!=null){
-            this.debut.removeTroncon(this);
             this.debut=debut;
+            this.debut.addTroncon(this);
+        } else {
+            this.debut = new Intersection(0,0,0);
             this.debut.addTroncon(this);
         }
     }
@@ -57,15 +57,6 @@ public class Troncon {
     }
     
     /**
-     * @param fin - La nouvelle intersection à la fin de ce troncon
-     */
-    public void setFin(Intersection fin){
-        if(fin!=null){
-            this.fin=fin;
-        }
-    }
-    
-    /**
      * @return L'intersection à la seconde extrémité de ce troncon
      */
     public Intersection getFin(){
@@ -73,20 +64,24 @@ public class Troncon {
     }
     
     /**
-     *
      * @return La longueur du troncon (en m)
      */
     public float getLongueur(){ return this.longueur; }
 
     /**
-     *
      * @return Le nom du troncon (ex : "Rue Rivoli")
      */
     public String getNom() {
         return nom;
     }
     
-    public String toString(){
-        return this.nom;
+    @Override
+    public boolean equals(Object o){
+        if (o instanceof Troncon){
+            Troncon t = (Troncon)o;
+            return this.nom.equals(t.getNom()) && this.debut.equals(t.getDebut()) &&
+                    this.fin.equals(t.getFin());
+        }
+        return false;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -31,6 +31,7 @@ public class CdeSuppressionLivraison extends Commande{
     public CdeSuppressionLivraison(GestionLivraison gestion, PointPassage livraison){
         super(gestion);
         //Il faut déterminer le numéro et la position de tournée.
+        this.livraison=livraison;
         this.numeroTournee=-1;
         for(int i=0; i<this.gestion.getTournees().length; i++){
             int position=this.gestion.positionPointDansTournee(i,livraison);

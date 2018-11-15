@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 4102
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package modele.outils;
 
@@ -38,13 +41,13 @@ public class IteratorMinTest {
     /**
      * Test of hasNext method, of class IteratorMin.
      */
-    /*@Test(timeout = 1000)
+    @Test(timeout = 1000)
     public void testConstruction() {
+        System.out.println("-- Constructeur");
         int n=50;//50 noeuds dans le graphe
-        int[][] cout = new int[1][];
-        cout[0] = new int[n];
+        int[] cout = new int[n];
         for (int i=0; i<n; i++){
-            cout[0][i]=i*i;
+            cout[i]=i*i;
         }
         List<Integer> nonVus = new ArrayList<Integer>();
         int m = 40; //40 non vus.
@@ -56,13 +59,13 @@ public class IteratorMinTest {
                 nonVus.add(i);
             }
         }
-        IteratorMin it = new IteratorMin(nonVus, 0, cout);
+        IteratorMin it = new IteratorMin(nonVus, cout);
         int precedent = it.next();
         while(it.hasNext()){
             int courant = it.next();
-            assertTrue(cout[0][precedent]<cout[0][courant]);
+            assertTrue(cout[precedent]<cout[courant]);
             precedent=courant;
         }
-    }*/
+    }
     
 }

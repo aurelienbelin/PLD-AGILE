@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -112,6 +112,9 @@ public class LecteurXML {
                            .filter(a -> Objects.equals(a.getIdXML(), destination))
                            .collect(Collectors.toList()).get(0);
                    float longueur = Float.parseFloat(eNoeud.getAttribute("longueur"));
+                   if (longueur<0){
+                       continue;//Pas de troncon négatif !
+                   }
                    Troncon troncon = new Troncon(nomRue, debut, fin, longueur);
                    
                    //ajout du tronçon à la liste des tronçons du plan de la ville
@@ -128,13 +131,13 @@ public class LecteurXML {
         }
         } catch (SAXException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier chargé ne correspond pas à un plan de ville");
         } catch (IOException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier chargé ne correspond pas à un plan de ville");
         } catch (Exception ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier chargé ne correspond pas à un plan de ville");
         }
         throw new Exception("Le fichier chargé ne correspond pas à un plan de ville");
     }
@@ -172,6 +175,9 @@ public class LecteurXML {
             
             //Intégration des livraisons à l'instance demande de lobjet DemandeLivraison
             NodeList listeNoeudsXML = documentXML.getElementsByTagName("livraison");
+            if (listeNoeudsXML.getLength()==0){
+                throw new IndexOutOfBoundsException("Pas de livraison dans cette demande !");
+            }
             List<PointPassage> listeLivraisons = new ArrayList<>();
             for (int temp = 0; temp < listeNoeudsXML.getLength(); temp++) {
                 Node noeud = listeNoeudsXML.item(temp);
@@ -191,17 +197,16 @@ public class LecteurXML {
             
             demande.setLivraisons(listeLivraisons);
             return demande;
-
         }
         } catch (SAXException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier en entrée ne correspond pas à une demande de livraison");
         } catch (IOException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier en entrée ne correspond pas à une demande de livraison");
         } catch (Exception ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
-            throw ex;
+            throw new Exception("Le fichier en entrée ne correspond pas à une demande de livraison");
         }
         throw new Exception("Le fichier en entrée ne correspond pas à une demande de livraison");
     }

@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -38,7 +38,7 @@ public class CdeChangerLivraisonTournee extends Commande{
     }
     
     @Override
-    public void doCde(){
+    protected void doCde(){
         if (this.etatCommande==EtatCommande.EXECUTEE){
             return;
         }
@@ -47,7 +47,7 @@ public class CdeChangerLivraisonTournee extends Commande{
     }
     
     @Override
-    public void undoCde(){
+    protected void undoCde(){
         if (this.etatCommande==EtatCommande.ANNULEE){
             return;
         }
