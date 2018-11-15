@@ -33,7 +33,7 @@ public class CdeDeplacerLivraison extends Commande{
             return;
         }
         this.gestion.supprimerLivraison(this.livraisonDeplacee);
-        this.gestion.ajouterLivraison(this.livraisonDeplacee, this.numeroTournee, this.nouvelIndice+(this.nouvelIndice>this.ancienIndice ? -1:0));
+        this.gestion.ajouterLivraison(this.livraisonDeplacee, this.numeroTournee, this.nouvelIndice-1); 
         
         this.etatCommande=EtatCommande.EXECUTEE;
     }

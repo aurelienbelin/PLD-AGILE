@@ -263,12 +263,6 @@ public class GestionLivraison extends Observable{
      * @param indice2 - L'indice où ajouter le point de passage dans la nouvelle tournée.
      */
     public void intervertirPoint(int tournee1, int tournee2, int indice1, int indice2){
-        if (this.tournees==null || tournee1<0 || tournee2 <0 || tournee1>=this.tournees.length || tournee2>=this.tournees.length){
-            return;
-        }
-        if (indice1<1 || indice2<1 || indice1>this.tournees[tournee1].getTrajet().size()-2|| indice2> this.tournees[tournee2].getTrajet().size()-2){
-            return;//IndexOutOfBoundsException quoi.
-        }
         PointPassage livraison = this.tournees[tournee1].getPointPassage(indice1);
         this.supprimerLivraison(livraison);
         this.ajouterLivraison(livraison, tournee2, indice2);

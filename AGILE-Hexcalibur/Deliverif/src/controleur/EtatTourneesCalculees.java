@@ -106,6 +106,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
     @Override
     public void supprimerLivraison (Deliverif fenetre) {
         Controleur.etatCourant = Controleur.ETAT_SUPPRIMER_LIVRAISON;
+        fenetre.ajouterSuppression();
     }
     
     public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {

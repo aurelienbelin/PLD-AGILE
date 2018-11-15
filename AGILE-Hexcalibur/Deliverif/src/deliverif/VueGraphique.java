@@ -509,6 +509,13 @@ public class VueGraphique extends StackPane implements Observer {
         if(aAjouter)
             this.ajouterMarker(lat,lon);
     }
+    
+    public void identifierPtPassageAModifier(boolean aAjouter, double lat, double lon){
+        this.effacerMarkerAjout();
+        
+        if(aAjouter)
+            this.ajouterMarkerAjout(lat,lon);
+    }
 
     public void zoomPlus(double lat, double lon){
         origineLongitude+=(lon-origineLongitude)*0.2/1.2;

@@ -10,6 +10,7 @@ package controleur;
 
 import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
+import deliverif.DescriptifChemin;
 import java.io.IOException;
 import modele.outils.GestionLivraison;
 import org.xml.sax.SAXException;
@@ -72,9 +73,11 @@ interface Etat
 
     public void reorgTournees(deliverif.Deliverif fenetre);
     
-    public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee);
+    public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes);
     
-    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexLivraison, int indexTournee, int indexTourneeChoisi);
+    public void clicDroit(DescriptifChemin dc);
+    
+    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes);
     
     public void validerReorganisation(Deliverif fenetre);
     

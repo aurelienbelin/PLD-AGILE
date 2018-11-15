@@ -19,11 +19,14 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.VBox;
@@ -337,5 +340,52 @@ public class VueTextuelle extends VBox implements Observer {
         this.tournees.get(indexTourneePreced).getChildren().get(indexPlusPreced).setStyle("-fx-border-color:black;-fx-border-width:2px;");
         this.tournees.get(indexTournee).getChildren().get(indexPlus).setStyle("-fx-border-color:blue;-fx-border-width:4px;");
         this.panel.setContent(this.tournees.get(indexTournee));
+    }
+    
+    public void estReorgFinie(){
+        List<VBox> tournees = this.tournees;
+        for(VBox tournee: tournees){ 
+            List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
+            for(DescriptifChemin pt : desc){
+                pt.disableUpDown();
+            }
+        }
+    }
+    public void ajouterBoutonsReorg(){
+
+        for(VBox tournee: tournees){ 
+            List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
+            for(int j=0; j<(desc.size()-1);j++){
+                DescriptifChemin pt = desc.get(j);
+                pt.enableUpDown();
+            }
+            DescriptifChemin entrepot = desc.get(desc.size()-1);
+            entrepot.enleverDetails();
+            
+            DescriptifChemin debut = desc.get(1);
+            debut.disableUp();
+            
+            DescriptifChemin fin = desc.get(desc.size()-2);
+            fin.disableDown();
+        }
+    }
+    
+    public void ajouterEcouteurDescriptif(){
+        
+        ContextMenu contextMenu = new ContextMenu();
+ 
+        for(int i=0; i<tournees.size(); i++){
+            MenuItem livreur = new MenuItem("Vers livreur "+NOMS_COULEURS[i]);
+            int indexTournee = i;
+            livreur.setOnAction(e -> ecouteurBoutons.reorgSelectionTournee(e, indexTournee));
+            
+            contextMenu.getItems().add(livreur);
+            
+            List<DescriptifChemin> desc= (ObservableList) tournees.get(i).getChildren();
+            for(int j=0; j<(desc.size()-1);j++){
+                DescriptifChemin pt = desc.get(j);
+                pt.setOnContextMenuRequested(e -> ecouteurBoutons.montrerMenuContextuel(e, contextMenu, pt));
+            }
+        }
     }
 }

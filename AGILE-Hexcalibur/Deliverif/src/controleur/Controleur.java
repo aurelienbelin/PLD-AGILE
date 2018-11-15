@@ -9,6 +9,7 @@
 package controleur;
 
 import controleur.commandes.ListeCommandes;
+import deliverif.DescriptifChemin;
 import java.io.IOException;
 import org.xml.sax.SAXException;
 
@@ -153,7 +154,11 @@ public class Controleur {
         etatCourant.ajouterLivraison(this.fenetre);
     }
     
-    public void boutonSupprimerLivraison() {
+    public void boutonSupprimerLivraison(){
+        etatCourant.supprimerLivraison(fenetre);
+    }
+    
+    public void boutonValiderSupprimerLivraison() {
         etatCourant.validerSuppression(this.gestionLivraison, this.fenetre);
     }
     
@@ -207,11 +212,15 @@ public class Controleur {
     }
     
     public void clicFleche(boolean haut, int indexLivraison, int indexTournee){
-        etatCourant.clicFleche(gestionLivraison, fenetre, haut, indexLivraison, indexTournee);
+        etatCourant.clicFleche(gestionLivraison, fenetre, haut, indexLivraison, indexTournee, this.listeCde);
     }
     
-    public void boutonChangerTournee(int indexLivraison, int indexTournee, int indexTourneeChoisi){
-        etatCourant.changerLivraisonDeTournee(gestionLivraison, fenetre, indexLivraison, indexTournee, indexTourneeChoisi);
+    public void clicDroit(DescriptifChemin dc){
+        etatCourant.clicDroit(dc);
+    }
+    
+    public void boutonChangerTournee(int indexTourneeChoisi){
+        etatCourant.changerLivraisonDeTournee(gestionLivraison, fenetre, indexTourneeChoisi, listeCde);
     }
     
     public void validerReorganisation(){

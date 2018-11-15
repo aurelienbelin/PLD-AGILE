@@ -8,7 +8,11 @@
  */
 package controleur;
 
+import controleur.commandes.CdeChangerLivraisonTournee;
+import controleur.commandes.CdeDeplacerLivraison;
+import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
+import deliverif.DescriptifChemin;
 import modele.outils.GestionLivraison;
 import modele.outils.PointPassage;
 
@@ -18,45 +22,78 @@ import modele.outils.PointPassage;
  */
 
 public class EtatReorgTourneesDemandee extends EtatDefaut{
+    
+    protected int tourneeLivraisonAChanger;
+    protected int indexLivraisonAChanger;
 
     public EtatReorgTourneesDemandee() {
     }
     
-    public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee){
+    /**
+     *
+     * @param gestionLivraison
+     * @param fenetre
+     * @param haut
+     * @param indexLivraison
+     * @param indexTournee
+     * @param commandes
+     */
+    @Override
+    public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes){
         if(haut){
-            String point = indexLivraison+"_"+indexTournee;
+            String point = (indexTournee+1)+"_"+(indexLivraison+1); //DESCRIPTIF
             PointPassage pointPassage = gestionLivraison.identifierPointPassage(point);
-            //méthode intervertir livraison
-            
-            if(indexLivraison==1){
-                //fenetre.changerExtremites(haut);
-            }
+            commandes.ajouterCde(new CdeDeplacerLivraison(gestionLivraison, pointPassage, indexTournee, indexLivraison-1));
+          
         }else{
-            String point = indexLivraison+"_"+indexTournee;
+            String point = (indexTournee+1)+"_"+(indexLivraison+1); //DESCRIPTIF
             PointPassage pointPassage = gestionLivraison.identifierPointPassage(point);
-            //méthode intervertir livraison
+            commandes.ajouterCde(new CdeDeplacerLivraison(gestionLivraison, pointPassage, indexTournee, indexLivraison+1));
             
-            if(indexLivraison == gestionLivraison.getTournees()[indexTournee].getLongueur()-1){
-                //fenetre.changerExtremites(!haut);
-            }
         }
+        fenetre.changerVueTextuelle(indexTournee);
     }
     
-    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexLivraison, int indexTournee, int indexTourneeChoisi){
+    @Override
+    public void clicDroit(DescriptifChemin dc){
+        String[] identifiants = dc.getPoint().split("_");
+        tourneeLivraisonAChanger = Integer.parseInt(identifiants[0])-1; //DESCRIPTIF
+        indexLivraisonAChanger = Integer.parseInt(identifiants[1])-1; //DESCRIPTIF
         
     }
     
+    @Override
+    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes){
+        int nouvelIndex = gestionLivraison.getTournees()[indexTourneeChoisi].getTrajet().size()-1;
+        commandes.ajouterCde(new CdeChangerLivraisonTournee(gestionLivraison, tourneeLivraisonAChanger, indexTourneeChoisi, indexLivraisonAChanger, nouvelIndex));
+        fenetre.changerVueTextuelle(indexTourneeChoisi);
+    }
+    
+    /**
+     *
+     * @param fenetre
+     */
+    @Override
     public void validerReorganisation(Deliverif fenetre){
+        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
         fenetre.estReorgFinie();
     }
     
-    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude){
+    @Override
+    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
         fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
+        int[] positionDansTournee = gestionLivraison.ouEstLePoint(pointClique);
+        fenetre.estSelectionne(positionDansTournee[0], positionDansTournee[1]);
     }
     
+    /**
+     *
+     * @param fenetre
+     */
+    @Override
     public void annuler(Deliverif fenetre){
-        fenetre.estReorgFini();
+        fenetre.estReorgFinie();
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
     }
     

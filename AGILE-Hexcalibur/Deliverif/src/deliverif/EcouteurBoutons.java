@@ -14,10 +14,12 @@ import javafx.scene.input.ScrollEvent;
 import java.io.File;
 import java.io.IOException;
 import javafx.event.ActionEvent;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
-import modele.outils.PointPassage;
 
 /**
  * Ecouteur des évènements émis par l'IHM de l'application.
@@ -139,7 +141,29 @@ public class EcouteurBoutons{
     public void obtenirDetailsVueTextuelle(DescriptifChemin dc){
         dc.developperDetails();
     }
-    
+    /**
+     * Remonte la livraison dans la liste
+     * @param dc 
+     */
+     public void avancerLivraison(DescriptifChemin dc){
+        String[] identifiants = dc.getPoint().split("_");
+        
+        int indexTournee = Integer.parseInt(identifiants[0]);
+        int indexLivraison = Integer.parseInt(identifiants[1]);
+        controleur.clicFleche(true, indexLivraison-1, indexTournee-1); //DESCRIPTIF
+    }
+     /**
+      * Descend la livraison dans la liste
+      * @param dc 
+      */
+    public void reculerLivraison(DescriptifChemin dc){
+        String[] identifiants = dc.getPoint().split("_");
+        
+        int indexTournee = Integer.parseInt(identifiants[0]);
+        int indexLivraison = Integer.parseInt(identifiants[1]);
+        controleur.clicFleche(false, indexLivraison-1, indexTournee-1); //DESCRIPTIF
+    }
+   
     /**
      * Crée un objet donnat accès au Gestionnaire de fichier pour choisir un fichier à charger.
      * @param docACharger
@@ -204,6 +228,13 @@ public class EcouteurBoutons{
         controleur.boutonValiderAjout(duree);
     }
     
+    public void boutonSupprimerLivraison(ActionEvent e){
+        controleur.boutonValiderSupprimerLivraison();
+    }
+    
+    public void boutonSupprimer(ActionEvent e){
+        controleur.boutonSupprimerLivraison();
+    }
     
     public void scrollZoomPlus(ScrollEvent e){
         double[] point = new double[2];
@@ -227,6 +258,29 @@ public class EcouteurBoutons{
         } else if(e.getCode()==KeyCode.Y){
             this.controleur.redo();
         }
+    }
+    
+   public void boutonReorgLivraisons(ActionEvent e){
+       controleur.boutonReorgTournees();
+   }
+   
+   public void boutonValiderReorg(ActionEvent e){
+       controleur.validerReorganisation();
+   }
+   
+    public void montrerMenuContextuel(ContextMenuEvent event, ContextMenu contextMenu, DescriptifChemin dc){
+        controleur.clicDroit(dc);
+        String[] identifiants = dc.getPoint().split("_");
+        int indexTournee = Integer.parseInt(identifiants[0])-1;
+        for(MenuItem item: contextMenu.getItems()){
+            item.setVisible(true);
+        }
+        contextMenu.getItems().get(indexTournee).setVisible(false);
+        contextMenu.show(dc, event.getScreenX(), event.getScreenY());
+    }
+    
+    public void reorgSelectionTournee(ActionEvent e, int indexTourneeChoisi) {
+        controleur.boutonChangerTournee(indexTourneeChoisi);
     }
 
 }
