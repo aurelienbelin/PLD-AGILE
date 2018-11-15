@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 4102
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package modele.outils;
 
@@ -41,17 +44,17 @@ public class IntersectionTest {
         Intersection inter2 = new Intersection(0, 1.0f, 1.0f);
         Troncon t = new Troncon("rue quelconque", inter, inter2, 1.0f);
         
-        assertEquals(1, inter.qteTroncons());
-        assertEquals(0, inter2.qteTroncons());
+        assertEquals(1, inter.getTroncons().size());
+        assertEquals(0, inter2.getTroncons().size());
         assertSame(t, inter.getTroncon(0));
         assertNull(inter2.getTroncon(0));
         
         inter.addTroncon(t); // Aucun troncons ne devrait être en double
-        assertEquals(1, inter.qteTroncons());
+        assertEquals(1, inter.getTroncons().size());
         
         Intersection inter3 = new Intersection(0,1.0f, 1.0f);
         Troncon t2 = new Troncon("une autre rue", inter3, inter3, 1.0f);
-        assertEquals(1, inter3.qteTroncons());
+        assertEquals(1, inter3.getTroncons().size());
         assertSame(t2.getDebut(), t2.getFin());
     }
 
@@ -67,7 +70,7 @@ public class IntersectionTest {
         Troncon t = new Troncon("rue quelconque", inter, inter2, 1.0f);
         
         inter.removeTroncon(t);
-        assertEquals(0, inter.qteTroncons());
+        assertEquals(0, inter.getTroncons().size());
         assertNull(inter.getTroncon(0));
     }
 }

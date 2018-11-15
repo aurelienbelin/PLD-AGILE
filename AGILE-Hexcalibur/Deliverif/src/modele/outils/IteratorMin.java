@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -38,7 +38,7 @@ public class IteratorMin implements Iterator<Integer>{
     }
     
     /**
-    * 
+    * Réalise un tri rapide.
     * @param debut -  L'indice du debut du tableau a trier
     * @param fin - L'indice de fin du tableau a trier
     * @param cout - Le tableau des cout 
@@ -53,7 +53,7 @@ public class IteratorMin implements Iterator<Integer>{
     }
     
     /**
-    * 
+    * Arrange les permutations de valeur par comparaison à un pivot.
     * @param debut - L'indice de debut du tableau a trier
     * @param fin - L'indice de fin du tableau a trier
     * @param pivot - L'indice du pivot
@@ -85,7 +85,6 @@ public class IteratorMin implements Iterator<Integer>{
     }
 
     /**
-     * 
      * @return - True si le nombre de candidats est positif 
      */
     @Override
@@ -94,7 +93,6 @@ public class IteratorMin implements Iterator<Integer>{
     }
 
     /**
-     * 
      * @return - Le candidat suivant 
      */
     @Override

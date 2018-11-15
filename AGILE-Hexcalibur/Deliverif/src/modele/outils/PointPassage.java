@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -38,7 +38,6 @@ public class PointPassage {
     }
     
     /**
-     *
      * @return true si ce point de passage est l'entrepot, false si point de livraison.
      */
     protected boolean estEntrepot() {
@@ -46,7 +45,6 @@ public class PointPassage {
     }
 
     /**
-     *
      * @return L'intersection localisant le point de passage.
      */
     public Intersection getPosition() {
@@ -54,7 +52,6 @@ public class PointPassage {
     }
 
     /**
-     *
      * @return La durée que l'on doit passer sur ce point de passage.
      */
     public float getDuree() {

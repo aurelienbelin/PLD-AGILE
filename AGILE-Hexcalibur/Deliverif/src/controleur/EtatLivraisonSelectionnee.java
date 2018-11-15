@@ -1,10 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 4102
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package controleur;
 
+import controleur.commandes.CdeSuppressionLivraison;
+import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
 import deliverif.DescriptifChemin;
 import modele.outils.GestionLivraison;
@@ -46,8 +51,8 @@ public class EtatLivraisonSelectionnee extends EtatDefaut {
     }
     
     @Override
-    public void validerSuppression (GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {
-        gestionLivraison.supprimerLivraison(livraisonASupprimer);
+    public void validerSuppression (GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, ListeCommandes listeCde) {
+        listeCde.ajouterCde(new CdeSuppressionLivraison(gestionLivraison, livraisonASupprimer));
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
         fenetre.estSuppressionFinie();
     }

@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -36,6 +36,7 @@ public class Troncon {
         this.longueur=longueur;
     }
     
+    //Useless
     /**
      * Ce setter se charge d'affecter à l'intersection un nouveau troncon
      * partant.
@@ -57,15 +58,6 @@ public class Troncon {
     }
     
     /**
-     * @param fin - La nouvelle intersection à la fin de ce troncon
-     */
-    public void setFin(Intersection fin){
-        if(fin!=null){
-            this.fin=fin;
-        }
-    }
-    
-    /**
      * @return L'intersection à la seconde extrémité de ce troncon
      */
     public Intersection getFin(){
@@ -73,20 +65,14 @@ public class Troncon {
     }
     
     /**
-     *
      * @return La longueur du troncon (en m)
      */
     public float getLongueur(){ return this.longueur; }
 
     /**
-     *
      * @return Le nom du troncon (ex : "Rue Rivoli")
      */
     public String getNom() {
         return nom;
-    }
-    
-    public String toString(){
-        return this.nom;
     }
 }

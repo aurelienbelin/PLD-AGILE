@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -30,9 +30,10 @@ public class PlanVille {
     private List<Troncon> troncons;
     
     /**
-     *
-     * @param i
-     * @param t
+     * Crée un nouveau plan de ville à partir d'un ensemble d'intersections reliées
+     * par un ensemble de troncons.
+     * @param i - Une liste d'intersections composant la ville.
+     * @param t - Une liste de troncons reliant les intersections de la ville.
      */
     public PlanVille(List<Intersection> i, List<Troncon> t){
         this.intersections =i;
@@ -40,34 +41,17 @@ public class PlanVille {
     }
 
     /**
-     *
-     * @return
+     * @return La liste des intersections de la ville.
      */
     public List<Intersection> getIntersections() {
         return intersections;
     }
 
     /**
-     *
-     * @param intersections
-     */
-    protected void setIntersections(List<Intersection> intersections) {
-        this.intersections = intersections;
-    }
-
-    /**
-     * @return
+     * @return La liste des troncons reliant les intersections de la ville.
      */
     public List<Troncon> getTroncons() {
         return troncons;
-    }
-
-    /**
-     *
-     * @param troncons
-     */
-    public void setTroncons(List<Troncon> troncons) {
-        this.troncons = troncons;
     }
     
     /**
@@ -166,6 +150,14 @@ public class PlanVille {
         return graph;
     }
     
+    /**
+     * Reconstruit le chemin menant d'un point de départ à un point d'arrivée à l'aide de la structure de précédence générée
+     * par dijkstra.
+     * @param depart - Le Point de passage duquel le chemin doit partir.
+     * @param arrivee - Le point de passage où l'on souhaite arriver.
+     * @param tab - Une Map liant à une intersection son cout et sa précédence. Il s'agit de la structure obtenue après algorithme de Dijkstra.
+     * @return Le Chemin menant du départ à l'arrivée.
+     */
     protected Chemin reconstruireChemin(PointPassage depart, PointPassage arrivee, Map<Intersection, Pair<Intersection, Float>> tab){
         List<Troncon> trChemin = new ArrayList<Troncon>();
         //retrouver point précédent

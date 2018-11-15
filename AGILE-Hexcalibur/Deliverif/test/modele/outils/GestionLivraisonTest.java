@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 4102
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package modele.outils;
 
@@ -152,7 +155,8 @@ public class GestionLivraisonTest {
             duree+=t.getTempsTournee();
             longueur+=t.getLongueur();
         }
-        gestion.ajouterLivraison(gestion.getPlan().getIntersections().get(0), 0f, 0, 0);
+        PointPassage ajout = new PointPassage(false, gestion.getPlan().getIntersections().get(0), 0f);
+        gestion.ajouterLivraison(ajout, 0, 0);
         assertEquals(5, gestion.getTournees()[0].getTrajet().size());
         boolean intersectionTrouvee=false;
         PointPassage pointAEnlever=null;
