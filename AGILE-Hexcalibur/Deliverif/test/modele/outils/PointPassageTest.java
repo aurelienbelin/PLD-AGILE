@@ -54,7 +54,6 @@ public class PointPassageTest {
         assertTrue(p.estEntrepot());
         assertNull(p.getPosition());
         assertTrue(p.getDuree()==0);
-        
     }
     
 }
