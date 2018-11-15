@@ -8,6 +8,7 @@
  */
 package controleur;
 
+import deliverif.Deliverif;
 import java.io.IOException;
 import org.xml.sax.SAXException;
 
@@ -50,4 +51,10 @@ public class EtatInit extends EtatDefaut{
             
         }
     }
+    
+    @Override
+    public void zoomPlus(Deliverif fenetre, double lat, double lon){}
+    
+    @Override
+    public void zoomMoins(Deliverif fenetre, double lat, double lon){}
 }

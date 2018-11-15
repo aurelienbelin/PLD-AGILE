@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Une DemandeLivraison liste l'ensemble des points que l'on aimerait livrer,
@@ -97,6 +95,11 @@ public class DemandeLivraison {
      */
     public void annulerLivraison(PointPassage livraisonAnnulee){
         this.livraisons.remove(livraisonAnnulee);
+    }
+    
+    public void effacerLivraisons(){
+        this.livraisons.clear();
+        this.entrepot = null;
     }
     
     /**

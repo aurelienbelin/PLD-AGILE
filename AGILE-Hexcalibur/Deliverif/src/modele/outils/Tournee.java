@@ -35,6 +35,11 @@ public class Tournee {
         this.heureDepart=heureDepart;
     }
 
+    public void effacerTournee(){
+        trajet.clear();
+        heureDepart = null;
+    }
+    
     /**
      * @return - La suite ordonné des trajets
      */

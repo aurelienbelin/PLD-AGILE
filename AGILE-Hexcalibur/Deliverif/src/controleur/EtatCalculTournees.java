@@ -24,8 +24,7 @@ public class EtatCalculTournees extends EtatDefaut{
     public EtatCalculTournees(){
         
     }
-    
-    
+        
     @Override
     public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre){
         if(gestionLivraison.calculTSPEnCours()){
