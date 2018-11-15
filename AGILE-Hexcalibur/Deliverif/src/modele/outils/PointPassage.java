@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -34,7 +34,7 @@ public class PointPassage {
     public PointPassage(boolean entrepot, Intersection position, float duree) {
         this.entrepot = entrepot;
         this.position = position;
-        this.duree = duree;
+        this.duree = (duree>0 ? duree : 0);
     }
     
     /**

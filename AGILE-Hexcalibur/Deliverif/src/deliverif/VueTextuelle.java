@@ -1,10 +1,10 @@
 /*
  * Projet Deliverif
  *
- * Hexanome nÂ° 41
+ * Hexanome n° 4102
  *
- * Projet dÃ©veloppÃ© dans le cadre du cours "Conception OrientÃ©e Objet
- * et dÃ©veloppement logiciel AGILE".
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package deliverif;
 
@@ -19,11 +19,14 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.VBox;
@@ -43,6 +46,7 @@ public class VueTextuelle extends VBox implements Observer {
     
     private GestionLivraison gestionLivraison;
     private final String[] NOMS_COULEURS = {"violet","marron","vert fluo","corail","rouge","bleu","vert foncé", "rose","or","beige"};
+    private final String CHANGER_LIVRAISON_DE_TOURNEE = "Vers livreur ";
     
     /**
      * @deprecated
@@ -274,7 +278,7 @@ public class VueTextuelle extends VBox implements Observer {
             this.descriptifSelectionne = null;
         }
     }
-    
+       
     public int affichageActuel(){
         String selec = this.choixTournee.getSelectionModel().getSelectedItem();
         
@@ -339,18 +343,50 @@ public class VueTextuelle extends VBox implements Observer {
         this.panel.setContent(this.tournees.get(indexTournee));
     }
     
-    public void estReorgFinie(){
-        VBox tournee = this.tournees.get(0);
-        List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
-        for(DescriptifChemin pt : desc){
-            pt.disableUpDown();
-         }
+    public void remettreBoutonsDetails(){
+        List<VBox> tournees = this.tournees;
+        for(VBox tournee: tournees){ 
+            List<DescriptifChemin> livraisonsDeTournee= (ObservableList) tournee.getChildren();
+            for(DescriptifChemin livraison : livraisonsDeTournee){
+                livraison.disableUpDown();
+            }
+        }
     }
-    public void estReorgTourneesDemandee(){
-        VBox tournee = this.tournees.get(0);
-        List<DescriptifChemin> desc= (ObservableList) tournee.getChildren();
-        for(DescriptifChemin pt : desc){
-            pt.enableUpDown();
-         }
+    public void ajouterBoutonsReorg(){
+
+        for(VBox tournee: tournees){ 
+            List<DescriptifChemin> livraisonsDeTournee= (ObservableList) tournee.getChildren();
+            for(int indiceLivraison=0; indiceLivraison<(livraisonsDeTournee.size()-1);indiceLivraison++){
+                DescriptifChemin livraison = livraisonsDeTournee.get(indiceLivraison);
+                livraison.enableUpDown();
+            }
+            DescriptifChemin entrepot = livraisonsDeTournee.get(livraisonsDeTournee.size()-1);
+            entrepot.enleverDetails();
+            
+            DescriptifChemin debutTournee = livraisonsDeTournee.get(1);
+            debutTournee.disableUp();
+            
+            DescriptifChemin finTournee = livraisonsDeTournee.get(livraisonsDeTournee.size()-2);
+            finTournee.disableDown();
+        }
+    }
+    
+    public void ajouterMenuChangerTournee(){
+        
+        ContextMenu choixTournee = new ContextMenu();
+ 
+        for(int indiceLivreur=0; indiceLivreur<tournees.size(); indiceLivreur++){
+            MenuItem livreur = new MenuItem(CHANGER_LIVRAISON_DE_TOURNEE+NOMS_COULEURS[indiceLivreur]);
+            int indiceTournee = indiceLivreur;
+            livreur.setOnAction(e -> ecouteurBoutons.reorgSelectionTournee(e, indiceTournee));
+            
+            choixTournee.getItems().add(livreur);
+            
+            List<DescriptifChemin> livraisonsDeLivreur= (ObservableList) tournees.get(indiceLivreur).getChildren();
+            for(int indiceLivraison=0; indiceLivraison<(livraisonsDeLivreur.size()-1);indiceLivraison++){
+                DescriptifChemin livraison = livraisonsDeLivreur.get(indiceLivraison);
+                livraison.setOnContextMenuRequested(e -> ecouteurBoutons.montrerMenuContextuel(e, choixTournee, livraison));
+            }
+        }
     }
 }

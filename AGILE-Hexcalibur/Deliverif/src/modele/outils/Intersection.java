@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -47,19 +47,6 @@ public class Intersection {
     public void addTroncon(Troncon troncon) {
         if (troncon!=null && !this.troncons.contains(troncon)){
             this.troncons.add(troncon);
-        }
-    }
-    
-    /**
-     * Enlève un element parmi l'ensemble des troncons desservis
-     * par cette intersection.
-     * @param troncon  - Le troncon a enlever.
-     */
-    public void removeTroncon(Troncon troncon){
-        try{
-            this.troncons.remove(troncon);
-        } catch(Exception e){
-            //do nothing
         }
     }
     

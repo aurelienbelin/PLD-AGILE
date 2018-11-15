@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -130,18 +130,25 @@ public class PlanVille {
      */
     protected List<Chemin> dijkstraTousPoints(List<PointPassage> listePoints){
         List<Chemin> graph = new ArrayList<Chemin>();
+        if(listePoints==null || listePoints.size()<2){
+            return graph;
+        }
         for(PointPassage depart : listePoints){
-            Map<Intersection, Pair<Intersection,Float>> tab = dijkstra(depart);
-            //identifier lesquels sont des points passages
-            for(Intersection i : tab.keySet()){
-                for(PointPassage arrivee : listePoints){ 
-                    if(arrivee!=depart){
-                        //pour chaque
-                        if(i.equals(arrivee.getPosition())){
-                            //recréer la liste de chemin
-                            Chemin chemin = reconstruireChemin(depart, arrivee, tab);
-                            //ajouter a la liste des chemins entre pts de passages
-                            graph.add(chemin); 
+            if (depart!=null){
+                Map<Intersection, Pair<Intersection,Float>> tab = dijkstra(depart);
+                //identifier lesquels sont des points passages
+                for(Intersection i : tab.keySet()){
+                    for(PointPassage arrivee : listePoints){ 
+                        if(arrivee!=depart && arrivee!=null){
+                            //pour chaque
+                            if(i.equals(arrivee.getPosition())){
+                                //recréer la liste de chemin
+                                Chemin chemin = reconstruireChemin(depart, arrivee, tab);
+                                //ajouter a la liste des chemins entre pts de passages
+                                if (chemin!=null){
+                                    graph.add(chemin); 
+                                }
+                            }
                         }
                     }
                 }
@@ -161,19 +168,29 @@ public class PlanVille {
     protected Chemin reconstruireChemin(PointPassage depart, PointPassage arrivee, Map<Intersection, Pair<Intersection, Float>> tab){
         List<Troncon> trChemin = new ArrayList<Troncon>();
         //retrouver point précédent
-        Intersection ptInter1 = tab.get(arrivee.getPosition()).getKey();
+        Intersection ptInter1;
+        try{
+            ptInter1 = tab.get(arrivee.getPosition()).getKey();
+        } catch(Exception e){
+            return null; //L'arrivee ne fait pas partie des precedences, on ne peut l'atteindre
+        }
         Intersection ptInter2=arrivee.getPosition();
         while(ptInter2!=depart.getPosition()){
             //retrouver troncon entre ces 2 points
             List<Troncon> trPossibles = ptInter1.getTroncons();
             ListIterator<Troncon> it = trPossibles.listIterator();
+            boolean suite=false;
             while(it.hasNext()){
                 Troncon tr = it.next();
                 if(tr.getFin()==ptInter2){
                     //l'ajouter en tête de liste
                     trChemin.add(0,tr);
+                    suite=true;
                     break;
                 }
+            }
+            if(!suite){
+                return null;
             }
             //remonter d'un troncon
             ptInter2=ptInter1;

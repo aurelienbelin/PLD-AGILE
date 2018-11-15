@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -61,7 +61,14 @@ public class Deliverif extends Application implements Observer{
     public final static String SUPPRIMER_LIVRAISON = "Supprimer une livraison";
     public final static String REORGANISER_TOURNEE = "Réorganiser tournée";
     public final static String CALCULER_TOURNEES = "Calculer les tournées";
-    public final static String ZOOM_AVANT = "+"; 
+    
+    /**
+     * 
+     */
+    public final static String VALIDER_MODIF = "Valider modifications";
+    
+    public final static String ZOOM_AVANT = "+";
+
     public final static String ARRETER_CALCUL_TOURNEES = "Stop";
     public final static String TITRE = "Deliver'IF";
     public final static String VALIDER_SELECTION = "Valider la sélection";
@@ -108,6 +115,7 @@ public class Deliverif extends Application implements Observer{
     private VBox panelDroit;
     private HBox boutonsAjoutLivraison;
     private HBox boutonsSuppressionLivraison;
+    private HBox boutonsReorgLivraison;
     
     //Composants de controle
     private Button boutonChargerPlan;
@@ -123,6 +131,7 @@ public class Deliverif extends Application implements Observer{
     private Button boutonRetourSelection;
     private Button boutonValiderSuppression;
     private Button boutonAnnulerSuppression;
+    private Button boutonValiderReorg;
     private Spinner nbLivreurs;
     private Spinner choixDuree;
     private Label descriptionTextuelle;
@@ -168,6 +177,12 @@ public class Deliverif extends Application implements Observer{
         boutonsSuppressionLivraison.setSpacing(5);
         
         boutonsSuppressionLivraison.getChildren().addAll(boutonAnnulerSuppression, boutonValiderSuppression);
+        
+        boutonsReorgLivraison = new HBox();
+        boutonsReorgLivraison.setPadding(new Insets(15, 15, 15, 15));
+        boutonsReorgLivraison.setSpacing(5);
+        
+        boutonsReorgLivraison.getChildren().addAll(boutonAnnuler, boutonValiderReorg);
         
         Separator sv = new Separator();
         sv.setOrientation(Orientation.VERTICAL);
@@ -267,6 +282,7 @@ public class Deliverif extends Application implements Observer{
             }
         });
         
+
         boutonSupprimerLivraison = templateBoutonAction(SUPPRIMER_LIVRAISON, true);
         boutonSupprimerLivraison.setOnAction(e -> {
             ecouteurBoutons.boutonSupprimer(e);
@@ -278,6 +294,25 @@ public class Deliverif extends Application implements Observer{
     
     private void creerBoutonsActionsModifications(){
         boutonValiderSelection = templateBoutonAction(VALIDER_SELECTION, true);
+        boutonSupprimerLivraison = new Button(SUPPRIMER_LIVRAISON);
+        boutonSupprimerLivraison.setPrefSize(100,65);
+        boutonSupprimerLivraison.setWrapText(true);
+        boutonSupprimerLivraison.setDisable(true);
+        boutonSupprimerLivraison.setTextAlignment(TextAlignment.CENTER);
+        boutonSupprimerLivraison.setOnAction(e -> ecouteurBoutons.boutonSupprimer(e));
+        
+        boutonReorganiserTournee = new Button(REORGANISER_TOURNEE);
+        boutonReorganiserTournee.setPrefSize(100,65);
+        boutonReorganiserTournee.setWrapText(true);
+        boutonReorganiserTournee.setDisable(true);
+        boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
+        boutonReorganiserTournee.setOnAction(e -> ecouteurBoutons.boutonReorgLivraisons(e));
+
+        boutonValiderSelection = new Button("Valider la sélection");
+        boutonValiderSelection.setPrefSize(100,65);
+        boutonValiderSelection.setWrapText(true);
+        boutonValiderSelection.setDisable(true);
+        boutonValiderSelection.setTextAlignment(TextAlignment.CENTER);
         boutonValiderSelection.setTranslateX(400);
         boutonValiderSelection.setOnAction(e -> {
             try {
@@ -287,6 +322,7 @@ public class Deliverif extends Application implements Observer{
             }
         }); 
         
+
         boutonRetourAuMenu = templateBoutonAction(RETOUR_MENU, true);
         boutonRetourAuMenu.setOnAction(e -> {
             try {
@@ -322,7 +358,18 @@ public class Deliverif extends Application implements Observer{
         boutonAnnulerSuppression.setWrapText(true);
         boutonAnnulerSuppression.setDisable(true);
         boutonAnnulerSuppression.setTextAlignment(TextAlignment.CENTER);
+
         boutonAnnulerSuppression.setOnAction(e -> ecouteurBoutons.boutonRetourAuMenu(e)); 
+      
+        boutonValiderReorg = new Button(VALIDER_MODIF);
+        boutonValiderReorg.setPrefSize(110,65);
+        boutonValiderReorg.setMinHeight(50);
+        boutonValiderReorg.setTranslateX(400);
+        boutonValiderReorg.setWrapText(true);
+        boutonValiderReorg.setDisable(false);
+        boutonValiderReorg.setTextAlignment(TextAlignment.CENTER);
+        boutonValiderReorg.setOnAction(e -> ecouteurBoutons.boutonValiderReorg(e));
+
     }
     
     /**
@@ -637,7 +684,7 @@ public class Deliverif extends Application implements Observer{
             boutonCalculerTournees.setDisable(false);
             boutonAjouterLivraison.setDisable(false);
             boutonSupprimerLivraison.setDisable(false);
-            boutonReorganiserTournee.setDisable(true);
+            boutonReorganiserTournee.setDisable(false);
         }else{
             avertir(CALCUL_NON_TERMINE);
         }
@@ -719,10 +766,27 @@ public void estSuppressionFinie(){
     }
       
     public void estReorgTourneesDemandee(){
-        vueTextuelle.estReorgTourneesDemandee();
+        bord.setTop(boutonsReorgLivraison);
+        panelDroit.getChildren().remove(boxCalculTournees);
+        vueTextuelle.ajouterMenuChangerTournee();
+        vueTextuelle.ajouterBoutonsReorg();
+        vueTextuelle.changerDescription_Ter(0);
     }
+    
+    public void changerVueTextuelle(int indexTournee){
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run(){
+                vueTextuelle.ajouterBoutonsReorg();
+                vueTextuelle.changerDescription_Ter(indexTournee);
+            }
+        });
+    }
+    
     public void estReorgFinie(){
-        vueTextuelle.estReorgFinie();
+        bord.setTop(boutons);
+        panelDroit.getChildren().add(0, boxCalculTournees);
+        vueTextuelle.remettreBoutonsDetails();
         
     }
 

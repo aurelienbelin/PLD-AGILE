@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -32,7 +32,13 @@ public class Tournee {
      */
     public Tournee(List<Chemin> trajet, Calendar heureDepart) {
         this.trajet = trajet;
+        if(this.trajet==null){
+            this.trajet= new ArrayList<Chemin>();
+        }
         this.heureDepart=heureDepart;
+        if(this.heureDepart==null){
+            this.heureDepart=Calendar.getInstance();
+        }
     }
 
     public void effacerTournee(){
@@ -85,9 +91,9 @@ public class Tournee {
      * @return Le point de passage recherché.
      */
     protected PointPassage getPointPassage(int i){
-        if (this.trajet!=null && i!=(this.trajet.size())){
+        if (this.trajet!=null && i<(this.trajet.size()) && i>=0){
             return this.trajet.get(i).getDebut();
-        }else if(i==(this.trajet.size())){
+        }else if(i==(this.trajet.size()) && this.trajet.size()>0){
             return this.trajet.get(i-1).getFin();
         }
         return null;
@@ -116,7 +122,9 @@ public class Tournee {
     public Iterator<List<String>> getDescription(){
         List<List<String>> sousDescription = new ArrayList<>();
         List<String> s = new ArrayList<>();
-        
+        if(this.trajet.size()==0){
+            return sousDescription.iterator();
+        }
         s.add(new SimpleDateFormat("HH:mm").format(heureDepart.getTime()));
         s.add(""+0);
         s.add("Entrepôt");

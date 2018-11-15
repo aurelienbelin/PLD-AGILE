@@ -1,7 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Projet Deliverif
+ *
+ * Hexanome n° 4102
+ *
+ * Projet développé dans le cadre du cours "Conception Orientée Objet
+ * et développement logiciel AGILE".
  */
 package controleur.commandes;
 
@@ -33,7 +36,7 @@ public class CdeDeplacerLivraison extends Commande{
             return;
         }
         this.gestion.supprimerLivraison(this.livraisonDeplacee);
-        this.gestion.ajouterLivraison(this.livraisonDeplacee, this.numeroTournee, this.nouvelIndice+(this.nouvelIndice>this.ancienIndice ? -1:0));
+        this.gestion.ajouterLivraison(this.livraisonDeplacee, this.numeroTournee, this.nouvelIndice-1); 
         
         this.etatCommande=EtatCommande.EXECUTEE;
     }
