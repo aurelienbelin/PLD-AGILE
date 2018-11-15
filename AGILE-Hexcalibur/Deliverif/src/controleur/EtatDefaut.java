@@ -112,9 +112,13 @@ public class EtatDefaut implements Etat
     public void reorgTournees(deliverif.Deliverif fenetre){}
     
     @Override
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){}
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);      
+    }
     @Override
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){}
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+    }
     
     @Override
 
