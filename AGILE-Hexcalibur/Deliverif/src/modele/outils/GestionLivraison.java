@@ -43,8 +43,7 @@ public class GestionLivraison extends Observable{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.plan = Lecteur.creerPlanVille(fichier);
         setChanged();
-        this.notifyObservers(plan); //?
-
+        this.notifyObservers(plan);
     }
     
     /**
@@ -60,7 +59,7 @@ public class GestionLivraison extends Observable{
         modele.flux.LecteurXML Lecteur = new modele.flux.LecteurXML();
         this.demande = Lecteur.creerDemandeLivraison(fichier, this.plan);
         setChanged();
-        this.notifyObservers(demande); //?
+        this.notifyObservers(demande);
     }
     
     /**
@@ -204,7 +203,6 @@ public class GestionLivraison extends Observable{
      */
     public void ajouterLivraison(PointPassage livraison, int numeroTournee, 
             int pointPrecedent){
-        //FIXME : something for the undo/redo stuff.
         if (pointPrecedent>=this.tournees[numeroTournee].nombrePoints()){
             return;
         }
@@ -332,9 +330,11 @@ public class GestionLivraison extends Observable{
     /**
      * Change un point de passage d'une tournée 1 vers une tournée 2.
      * @param tournee1 - L'indice de la tournée originelle.
-     * @param tournee2 - L'indice de la tournée dans laquelle intégrer le point de passage.
+     * @param tournee2 - L'indice de la tournée dans laquelle intégrer le point 
+     * de passage.
      * @param indice1 - L'indice du point de passage dans la tournée originelle.
-     * @param indice2 - L'indice où ajouter le point de passage dans la nouvelle tournée.
+     * @param indice2 - L'indice où ajouter le point de passage dans la nouvelle
+     * tournée.
      */
     public void intervertirPoint(int tournee1, int tournee2, int indice1, 
             int indice2){
@@ -508,11 +508,14 @@ public class GestionLivraison extends Observable{
         
         /**
          * Construit un nouvel observateur de tsp.
-         * @param graphe - L'ensemble des chemins (arcs d'un graphe CFC) d'un point de passage à un autre.
+         * @param graphe - L'ensemble des chemins (arcs d'un graphe CFC) d'un 
+         * point de passage à un autre.
          * @param listePoints - L'ensemble des points de passages.
-         * @param nbLivreur - Le nombre de livreur, important pour la construction des tournées.
+         * @param nbLivreur - Le nombre de livreur, important pour la 
+         * construction des tournées.
          */
-        public ObservateurTSP(List<Chemin> graphe, List<PointPassage> listePoints, int nbLivreur){
+        public ObservateurTSP(List<Chemin> graphe, 
+                List<PointPassage> listePoints, int nbLivreur){
             this.graphe=graphe;
             this.listePoints=listePoints;
             this.nbLivreur=nbLivreur;
@@ -526,8 +529,10 @@ public class GestionLivraison extends Observable{
          */
         @Override
         public void update(Observable o, Object arg){
-            //Le TSP a trouvé une nouvelle solution, donc on génère les nbLvreur tournées,
-            //Elle seront ensuite affichées dans la vue grâce au premier pattern observer.
+            //Le TSP a trouvé une nouvelle solution, donc on génère les nbLvreur 
+            //tournées,
+            //Elles seront ensuite affichées dans la vue grâce au premier pattern 
+            //observer.
             genererTournee(graphe, listePoints, nbLivreur);
         }
     }
