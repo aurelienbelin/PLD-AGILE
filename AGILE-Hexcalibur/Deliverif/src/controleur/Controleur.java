@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -9,6 +9,7 @@
 package controleur;
 
 import controleur.commandes.ListeCommandes;
+import deliverif.DescriptifChemin;
 import java.io.IOException;
 import org.xml.sax.SAXException;
 
@@ -75,6 +76,11 @@ public class Controleur {
      */
     protected static final EtatLivraisonSelectionnee ETAT_LIVRAISON_SELECTIONNEE = new EtatLivraisonSelectionnee();
     
+
+    /**
+     * 
+     */
+    protected static final EtatReorgTourneesDemandee ETAT_REORG_TOURNEES_DEMANDE = new EtatReorgTourneesDemandee();
     
     /** etatCourant prendra successivement les états définis ci-dessus comme 
      * valeurs
@@ -199,6 +205,26 @@ public class Controleur {
     
     public void boutonValiderAjout(float duree){
         etatCourant.validerAjout(gestionLivraison, fenetre, duree, this.listeCde);
+    }
+    
+    public void boutonReorgTournees(){
+        etatCourant.reorgTournees(fenetre);
+    }
+    
+    public void clicFleche(boolean haut, int indiceLivraison, int indiceTournee){
+        etatCourant.clicFleche(gestionLivraison, fenetre, haut, indiceLivraison, indiceTournee, this.listeCde);
+    }
+    
+    public void clicDroit(DescriptifChemin livraisonCliquee){
+        etatCourant.clicDroit(livraisonCliquee);
+    }
+    
+    public void selectionMenuChangerTournee(int indiceTourneeChoisi){
+        etatCourant.changerLivraisonDeTournee(gestionLivraison, fenetre, indiceTourneeChoisi, listeCde);
+    }
+    
+    public void validerReorganisation(){
+        etatCourant.validerReorganisation(fenetre);
     }
     
     public void undo(){

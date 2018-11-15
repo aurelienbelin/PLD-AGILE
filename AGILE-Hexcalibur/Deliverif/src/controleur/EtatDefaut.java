@@ -1,7 +1,7 @@
 /*
  * Projet Deliverif
  *
- * Hexanome n° 41
+ * Hexanome n° 4102
  *
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
@@ -10,6 +10,7 @@ package controleur;
 
 import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
+import deliverif.DescriptifChemin;
 import java.io.IOException;
 import modele.outils.GestionLivraison;
 import org.xml.sax.SAXException;
@@ -107,6 +108,8 @@ public class EtatDefaut implements Etat
     @Override
     public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude){}
     
+    @Override
+    public void reorgTournees(deliverif.Deliverif fenetre){}
     
     @Override
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){}
@@ -114,6 +117,18 @@ public class EtatDefaut implements Etat
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){}
     
     @Override
+
+    public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes){}
+    
+    @Override
+    public void clicDroit(DescriptifChemin livraisonCliquee){}
+    
+    @Override
+    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes){}
+    
+    @Override
+    public void validerReorganisation(Deliverif fenetre){}
+
     public void undo(ListeCommandes listeCde){
         listeCde.undo();//Par défaut
     }
@@ -122,5 +137,4 @@ public class EtatDefaut implements Etat
     public void redo(ListeCommandes listeCde){
         listeCde.redo();//Par défaut
     }
-
 }
