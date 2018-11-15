@@ -35,8 +35,17 @@ public class DemandeLivraison {
      */
     public DemandeLivraison(List<PointPassage> livraisons, PointPassage entrepot, Calendar heureDepart) {
         this.livraisons = livraisons;
+        if(this.livraisons==null){
+            this.livraisons=new ArrayList<PointPassage>();
+        }
         this.entrepot = entrepot;
+        if(this.entrepot!= null && !this.entrepot.estEntrepot()){
+            this.entrepot=null;
+        }
         this.heureDepart=heureDepart;
+        if(this.heureDepart==null){
+            this.heureDepart=Calendar.getInstance();
+        }
     }
 
     /**
@@ -57,7 +66,9 @@ public class DemandeLivraison {
      * @param livraisons - Le nouvel ensemble de points à livrer pour cette demande.
      */
     public void setLivraisons(List<PointPassage> livraisons) {
-        this.livraisons = livraisons;
+        if(livraisons!=null && livraisons.size()>0){
+            this.livraisons = livraisons;
+        }
     }
 
     /**
@@ -65,7 +76,9 @@ public class DemandeLivraison {
      * pour cette demande.
      */
     public void setEntrepot(PointPassage entrepot) {
-        this.entrepot = entrepot;
+        if (entrepot!=null && entrepot.estEntrepot()){
+            this.entrepot = entrepot;
+        }
     }
     
     /**
@@ -73,7 +86,9 @@ public class DemandeLivraison {
      * des tournees.
      */
     public void setHeureDepart(Calendar heureDepart){
-        this.heureDepart=heureDepart;
+        if(heureDepart!=null){
+            this.heureDepart=heureDepart;
+        }
     }
     
     /**
@@ -88,7 +103,9 @@ public class DemandeLivraison {
      * @param nouvelleLivraison 
      */
     public void ajouterLivraison(PointPassage nouvelleLivraison){
-        this.livraisons.add(nouvelleLivraison);
+        if(nouvelleLivraison!=null){
+            this.livraisons.add(nouvelleLivraison);
+        }
     }
     
     /**
@@ -96,7 +113,9 @@ public class DemandeLivraison {
      * @param livraisonAnnulee 
      */
     public void annulerLivraison(PointPassage livraisonAnnulee){
-        this.livraisons.remove(livraisonAnnulee);
+        if(livraisonAnnulee!=null){
+            this.livraisons.remove(livraisonAnnulee);
+        }
     }
     
     /**
@@ -106,9 +125,12 @@ public class DemandeLivraison {
     public Iterator<List<String>> getDescription(){
         List<List<String>> sousDescription = new ArrayList<List<String>>();
         for(PointPassage pp : this.livraisons){
-
-            String description = "Livraison à "+(pp.getPosition().getTroncon(0).getNom().equals("") ? "Rue sans nom" : pp.getPosition().getTroncon(0).getNom());
-
+            String description;
+            if (pp.getPosition().getTroncons().size()!=0){
+                description = "Livraison à "+(pp.getPosition().getTroncon(0).getNom().equals("") ? "Rue sans nom" : pp.getPosition().getTroncon(0).getNom());
+            } else {
+                description = "Livraison à Rue sans nom";
+            }
             ArrayList<String> a = new ArrayList<>();
             a.add(""+(int)(pp.getDuree()/60));
             a.add(description);

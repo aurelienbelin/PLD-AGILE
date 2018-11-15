@@ -68,20 +68,6 @@ public class PlanVilleTest {
         troncons.add(FC);
         troncons.add(FB);
         troncons.add(BF);
-        /*Creer un troncon l'ajoute automatique a l'intersection dont il part
-        C.addTroncon(CD);
-        C.addTroncon(CB);
-        C.addTroncon(CF);
-        B.addTroncon(BA);       
-        B.addTroncon(BF);     
-        F.addTroncon(FA);
-        F.addTroncon(FB);
-        F.addTroncon(FC);
-        D.addTroncon(DC);
-        D.addTroncon(DA);
-        D.addTroncon(DF);
-        E.addTroncon(ED);
-        A.addTroncon(AE);*/
         intersections = new ArrayList<Intersection>();
         intersections.add(A);
         intersections.add(B);
@@ -107,7 +93,7 @@ public class PlanVilleTest {
     @Test
     public void testDijkstra() {
         PlanVille pv = new PlanVille(intersections,troncons);
-        System.out.println("-- methode dijkstra");
+        System.out.println("-- dijkstra");
         Map<Intersection,Pair<Intersection,Float>> result = pv.dijkstra(p);
         assertEquals(8.0, result.get(B).getValue(),0.0);
         assertEquals(F, result.get(B).getKey());
