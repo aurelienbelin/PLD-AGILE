@@ -112,11 +112,16 @@ public class EtatDefaut implements Etat
     public void reorgTournees(deliverif.Deliverif fenetre){}
     
     @Override
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){}
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);      
+    }
     @Override
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){}
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+    }
     
     @Override
+
     public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes){}
     
     @Override
@@ -128,4 +133,12 @@ public class EtatDefaut implements Etat
     @Override
     public void validerReorganisation(Deliverif fenetre){}
 
+    public void undo(ListeCommandes listeCde){
+        listeCde.undo();//Par défaut
+    }
+    
+    @Override
+    public void redo(ListeCommandes listeCde){
+        listeCde.redo();//Par défaut
+    }
 }

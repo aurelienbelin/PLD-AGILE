@@ -10,17 +10,16 @@ package modele.outils;
 
 
 import java.util.List;
-import java.util.ListIterator;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import javafx.util.Pair;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 /**
  *
@@ -30,8 +29,6 @@ public class PlanVilleTest {
     
     private List<Intersection> intersections;
     private List<Troncon> troncons;
-    Intersection dep= new Intersection(1,3,0);
-    PointPassage p = new PointPassage(false,dep,2);
     Intersection C = new Intersection(1,3,0);
         Intersection B = new Intersection(2,3,2);
         Intersection F= new Intersection(3,2,1);
@@ -51,6 +48,7 @@ public class PlanVilleTest {
         Troncon FC = new Troncon("FC",F,C,6);
         Troncon FB = new Troncon("FB",F,B,3);
         Troncon BF = new Troncon("BF",B,F,3);
+    PointPassage p = new PointPassage(false,C,2);
     
     public PlanVilleTest(){
         
@@ -68,20 +66,6 @@ public class PlanVilleTest {
         troncons.add(FC);
         troncons.add(FB);
         troncons.add(BF);
-        /*Creer un troncon l'ajoute automatique a l'intersection dont il part
-        C.addTroncon(CD);
-        C.addTroncon(CB);
-        C.addTroncon(CF);
-        B.addTroncon(BA);       
-        B.addTroncon(BF);     
-        F.addTroncon(FA);
-        F.addTroncon(FB);
-        F.addTroncon(FC);
-        D.addTroncon(DC);
-        D.addTroncon(DA);
-        D.addTroncon(DF);
-        E.addTroncon(ED);
-        A.addTroncon(AE);*/
         intersections = new ArrayList<Intersection>();
         intersections.add(A);
         intersections.add(B);
@@ -107,7 +91,7 @@ public class PlanVilleTest {
     @Test
     public void testDijkstra() {
         PlanVille pv = new PlanVille(intersections,troncons);
-        System.out.println("-- methode dijkstra");
+        System.out.println("-- dijkstra");
         Map<Intersection,Pair<Intersection,Float>> result = pv.dijkstra(p);
         assertEquals(8.0, result.get(B).getValue(),0.0);
         assertEquals(F, result.get(B).getKey());
@@ -117,5 +101,101 @@ public class PlanVilleTest {
         assertEquals(C, result.get(D).getKey());
         assertEquals(10.0, result.get(A).getValue(),0.0);
         assertEquals(B, result.get(A).getKey());
+    }
+    
+    /**
+     * Test de dijkstraTousPoints
+     * - Pas de points
+     * - Certains points sont absent du plan
+     * - Certains points sont null
+     * - Tout va bien
+     */
+    @Test
+    public void testDijkstraTousPoints(){
+        System.out.println("-- dijkstraTousPoints");
+        PlanVille pv = new PlanVille(intersections, troncons);
+        PointPassage p2 = new PointPassage(false, A, 10);
+        //Pas de points
+        List<Chemin> resultat = pv.dijkstraTousPoints(null);
+        assertNotNull(resultat);
+        assertEquals(0, resultat.size());
+        
+        Intersection exterieur = new Intersection(10,10,10);
+        PointPassage pDehors = new PointPassage(false, exterieur, 10);
+        //Certains points sont en-dehors
+        List<PointPassage> liste = new ArrayList<PointPassage>();
+        liste.add(pDehors);
+        liste.add(p);
+        liste.add(p2);
+        resultat = pv.dijkstraTousPoints(liste);
+        assertNotNull(resultat);
+        assertEquals(2, resultat.size());
+        assertSame(p, resultat.get(0).getDebut());
+        
+        //Une liste avec des null
+        liste = new ArrayList<PointPassage>();
+        liste.add(null);
+        liste.add(p);
+        liste.add(p2);
+        resultat = pv.dijkstraTousPoints(liste);
+        assertNotNull(resultat);
+        assertEquals(2,resultat.size());
+        assertSame(p, resultat.get(0).getDebut());
+        
+        //Une liste avec un seul point !
+        liste = new ArrayList<PointPassage>();
+        liste.add(p);
+        resultat=pv.dijkstraTousPoints(liste);
+        assertNotNull(resultat);
+        assertEquals(0,resultat.size());
+        
+        //Une liste correcte
+        liste = new ArrayList<PointPassage>();
+        liste.add(p);
+        liste.add(p2);
+        resultat = pv.dijkstraTousPoints(liste);
+        assertNotNull(resultat);
+        assertEquals(2, resultat.size());
+        assertSame(p, resultat.get(0).getDebut());
+        assertSame(p2, resultat.get(0).getFin());
+        assertSame(p2, resultat.get(1).getDebut());
+        assertSame(p, resultat.get(1).getFin());
+        
+        
+    }
+    
+    /**
+     * Test de reconstruireChemin
+     * -Cas normal
+     * - Avec un point inatteignable
+     * - Sans structure de precedence
+     */
+    @Test
+    public void testReconstruireChemin(){
+        System.out.println("-- reconstruireChemin");
+        
+        PlanVille pv = new PlanVille(intersections, troncons);
+        PointPassage p2 = new PointPassage(false, A, 10);
+        PointPassage p3 = new PointPassage(false, new Intersection(10,10,10), 10);
+        
+        //Cas normal
+        Map<Intersection, Pair<Intersection, Float>> precedence = pv.dijkstra(p);
+        Chemin chemin = pv.reconstruireChemin(p, p2, precedence);
+        assertNotNull(chemin);
+        assertSame(p, chemin.getDebut());
+        assertSame(p2, chemin.getFin());
+        
+        //Cas fin inatteignable
+        chemin = pv.reconstruireChemin(p, p3, precedence);
+        assertNull(chemin);
+        
+        //Atteindre un null
+        chemin = pv.reconstruireChemin(p, null, precedence);
+        assertNull(chemin);
+        
+        //Pas de structure de precedence
+        chemin =pv.reconstruireChemin(p, p2, null);
+        assertNull(chemin);
+        
     }
 }
