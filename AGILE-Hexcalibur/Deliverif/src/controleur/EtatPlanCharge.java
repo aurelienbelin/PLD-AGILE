@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 /** Etat dans lequel se trouve l'application après le chargement du plan
  *  La seule action possible depuis cet état est le chargement d'une demande de 
  *  livraisons ou le chargement d'un autre plan
+ * 
  * @author Hex'Calibur
  */
 
@@ -27,17 +28,17 @@ public class EtatPlanCharge extends EtatDefaut{
     public EtatPlanCharge() {
     }
     
-    /**  Cette méthode délègue la chargement des livraisons au modèle
-     *   Si le chargement s'est bien passé on passe dans 
-     *   l'EtatLivraisonsChargees   
-     *  @param gestionLivraison
-     *  @param fichier
+    /**Cette méthode délègue la chargement des livraisons au modèle
+     * Si le chargement s'est bien passé on passe dans l'EtatLivraisonsChargees   
+     * @param controleur
+     * @param gestionLivraison
+     * @param fichier
      * @param fenetre
-     *  @see modele.GestionLivraison
-     *  @see EtatLivraisonsChargees
+     * @see GestionLivraison
+     * @see EtatLivraisonsChargees
      */
     @Override
-    public void boutonChargeLivraisons (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+    public void boutonChargeLivraisons (Controleur controleur, GestionLivraison gestionLivraison, String fichier, Deliverif fenetre) {
         try{
             gestionLivraison.chargerDemandeLivraison(fichier);
             controleur.setEtatCourant(Controleur.ETAT_LIVRAISONS_CHARGEES);
@@ -51,17 +52,17 @@ public class EtatPlanCharge extends EtatDefaut{
         }
     }
     
-    /**  Cette méthode délègue la chargement du plan au modèle
-      *  Si le chargement s'est bien passé on passe dans 
-      *  l'EtatPlanCharge 
-      *  @param gestionLivraison
-      *  @param fichier
-     * @param fenetre
-      *  @see modele.GestionLivraison
-      *  @see EtatPlanCharge
+    /**Cette méthode délègue la chargement du plan au modèle
+      *Si le chargement s'est bien passé on passe dans l'EtatPlanCharge 
+      *@param controleur
+      *@param gestionLivraison
+      *@param fichier
+      *@param fenetre
+      *@see GestionLivraison
+      *@see EtatPlanCharge
      */
     @Override
-    public void boutonChargePlan (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
+    public void boutonChargePlan (Controleur controleur, GestionLivraison gestionLivraison, String fichier, Deliverif fenetre){
         try{
             gestionLivraison.chargerPlan(fichier);
             fenetre.estPlanCharge("SUCCES");
@@ -76,6 +77,13 @@ public class EtatPlanCharge extends EtatDefaut{
         }
     }
     
+    /**Pas de sélection livraison sur le plan possible dans cet état
+     * @param controleur
+     * @param gestionLivraison
+     * @param fenetre
+     * @param latitude
+     * @param longitude 
+     */
     @Override
     public void clicGauche(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
     }

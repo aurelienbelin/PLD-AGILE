@@ -16,26 +16,34 @@ import deliverif.DescriptifLivraison;
 import modele.GestionLivraison;
 import modele.PointPassage;
 
-/**
- *
+/**Etat dans lequel se trouve l'application après que l'utilisateur ait demandé
+ * la réorganisation des tournées
+ * 
  * @author Hex'Calibur
  */
 
 public class EtatReorgTourneesDemandee extends EtatDefaut{
     
+    /**Tournée de la livraison sélectionnée pour un changement de tournées
+     */
     protected int tourneeLivraisonAChanger;
+    /**Place dans la tournée de la livraison sélectionnée pour un changement de tournées
+     */
     protected int indiceLivraisonAChanger;
 
+    /**
+     * Contructeur de EtatReorgTourneesDemandee
+     */
     public EtatReorgTourneesDemandee() {
     }
     
-    /**
-     *
+    /**Permet d'avancer ou de retarder une livraison en échangeant deux 
+     * livraisons au sein d'une même tournée
      * @param gestionLivraison
      * @param fenetre
-     * @param haut
-     * @param indexLivraison
-     * @param indexTournee
+     * @param haut Vrai si la livraison est avancée
+     * @param indexLivraison Place dans la tournée de la livraison à avancer ou retarder
+     * @param indexTournee Tournée de la livraison à avancer ou retarder
      * @param commandes
      */
     @Override
@@ -52,6 +60,10 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
         fenetre.changerVueTextuelle(indexTournee);
     }
     
+    /**Retient la tournée et la place d'une livraison dans une tournée en vue
+     * d'un changement de tournée
+     * @param livraisonCliquee 
+     */
     @Override
     public void clicDroit(DescriptifLivraison livraisonCliquee){
         String[] identifiants = livraisonCliquee.getPoint().split("_");
@@ -60,6 +72,12 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
         
     }
     
+    /**Change de tournée la livraison retenue dans cet état
+     * @param gestionLivraison
+     * @param fenetre
+     * @param indiceTourneeChoisi
+     * @param commandes 
+     */
     @Override
     public void selectionMenuLivreurs(GestionLivraison gestionLivraison, Deliverif fenetre, int indiceTourneeChoisi, ListeCommandes commandes){
         int nouvelIndice = gestionLivraison.getTournees()[indiceTourneeChoisi].getTrajet().size()-1;
@@ -67,8 +85,8 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
         fenetre.changerVueTextuelle(indiceTourneeChoisi);
     }
     
-    /**
-     *
+    /**Validation des modifications et retour au menu
+     * @param controleur
      * @param fenetre
      */
     @Override
@@ -77,6 +95,13 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
         fenetre.estReorgFinie();
     }
     
+    /**Sélectionne une livraison sur le plan et l'identifie sur la vue graphique et textuelle
+     * @param controleur
+     * @param gestionLivraison
+     * @param fenetre
+     * @param latitude
+     * @param longitude 
+     */
     @Override
     public void clicGauche(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
@@ -85,8 +110,7 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
         fenetre.estSelectionne(positionDansTournee[0], positionDansTournee[1]);
     }
     
-    /**
-     *
+    /**Retour au menu avec annulation des modifications
      * @param fenetre
      */
     @Override
@@ -95,8 +119,14 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
         controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
     }
     
+    /**
+     * 
+     * @param fenetre
+     * @param lat
+     * @param lon 
+     */
     @Override
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+    public void zoomPlus(Deliverif fenetre, double lat, double lon){
         fenetre.getVueGraphique().zoomPlus(lat,lon);
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
@@ -104,8 +134,14 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
         fenetre.getVueGraphique().dessinerMarqueur();
     }
     
+    /**
+     * 
+     * @param fenetre
+     * @param lat
+     * @param lon 
+     */
     @Override
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+    public void zoomMoins(Deliverif fenetre, double lat, double lon){
         fenetre.getVueGraphique().zoomMoins(lat,lon);
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();

@@ -8,8 +8,8 @@
  */
 package controleur;
 
-import deliverif.Deliverif;
 import java.io.IOException;
+import deliverif.Deliverif;
 import modele.GestionLivraison;
 import org.xml.sax.SAXException;
 
@@ -28,15 +28,16 @@ public class EtatInit extends EtatDefaut{
     
     /**  Cette méthode délègue le chargement du plan au modèle
       *  Si le chargement s'est bien passé on passe dans 
-      *  l'EtatPlanCharge 
+      *  l'EtatPlanCharge
+      *  @param controleur
       *  @param gestionLivraison
-      *  @param fichier
+      *  @param fichier Nom du fichier du plan choisi
       *  @param fenetre
-      *  @see modele.GestionLivraison
+      *  @see GestionLivraison
       *  @see EtatPlanCharge
      */
     @Override
-    public void boutonChargePlan (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+    public void boutonChargePlan (Controleur controleur, GestionLivraison gestionLivraison, String fichier, Deliverif fenetre) {
         try{
             gestionLivraison.chargerPlan(fichier);
             controleur.setEtatCourant(Controleur.ETAT_PLAN_CHARGE);
@@ -53,13 +54,30 @@ public class EtatInit extends EtatDefaut{
         }
     }
 
+    /**Pas de sélection livraison sur le plan dans cet état
+     * @param controleur
+     * @param gestionLivraison
+     * @param fenetre
+     * @param latitude
+     * @param longitude 
+     */
     @Override
     public void clicGauche(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
     }
     
+    /**Pas de zoom dans cet état
+     * @param fenetre
+     * @param lat
+     * @param lon 
+     */
     @Override
     public void zoomPlus(Deliverif fenetre, double lat, double lon){}
     
+    /**Pas de zoom dans cet état
+     * @param fenetre
+     * @param lat
+     * @param lon 
+     */
     @Override
     public void zoomMoins(Deliverif fenetre, double lat, double lon){}
 }
