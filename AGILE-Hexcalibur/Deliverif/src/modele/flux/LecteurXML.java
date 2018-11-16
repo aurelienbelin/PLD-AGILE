@@ -47,7 +47,8 @@ public class LecteurXML {
             + "correspond pas à un plan de ville";
     public final static String DEMANDE_LIVRAISON_ERREUR = "Le fichier en entrée"
             + " ne correspond pas à une demande de livraison";
-    public final static String PLAN_NON_CHARGE = "Le plan n'est pas chargé";
+    public final static String PLAN_NON_CHARGE = "Le plan n'est pas chargé,"
+            + " ou le fichier est corrompu";
     public final static String ENTREPOT_NON_DEFINI = "L'entrepôt n'est pas "
             + "défini";
     public final static String PAS_DE_LIVRAISON = "Pas de livraison dans cette"
