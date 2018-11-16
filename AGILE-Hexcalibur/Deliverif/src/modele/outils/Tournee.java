@@ -41,11 +41,6 @@ public class Tournee {
         }
     }
 
-    public void effacerTournee(){
-        trajet.clear();
-        heureDepart = null;
-    }
-    
     /**
      * @return - La suite ordonné des trajets
      */

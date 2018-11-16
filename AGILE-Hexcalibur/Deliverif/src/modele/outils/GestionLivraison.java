@@ -507,11 +507,6 @@ public class GestionLivraison extends Observable{
         return tournees;
     }
 
-    public void effacerTournees(){
-        for(Tournee tournee : tournees){
-            tournee.effacerTournee();
-        }
-    }
     /**
      *
      * @return La demande de livraison

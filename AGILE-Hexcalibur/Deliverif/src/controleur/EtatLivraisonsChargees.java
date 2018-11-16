@@ -18,8 +18,6 @@ import org.xml.sax.SAXException;
 
 public class EtatLivraisonsChargees extends EtatDefaut{
 
-    private final String SUCCES = "SUCCES";
-    
     /**
      * Constructeur EtatLivraisonsChargees
      */
@@ -58,7 +56,7 @@ public class EtatLivraisonsChargees extends EtatDefaut{
     public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
             gestionLivraison.chargerDemandeLivraison(fichier);
-            fenetre.estDemandeLivraisonChargee(SUCCES);
+            fenetre.estDemandeLivraisonChargee("SUCCESS");
         } catch (SAXException e){
             fenetre.estDemandeLivraisonChargee(e.getMessage());
         } catch (IOException e) {
@@ -80,10 +78,9 @@ public class EtatLivraisonsChargees extends EtatDefaut{
     @Override
     public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
         try{
-            gestionLivraison.getDemande().effacerLivraisons();
             gestionLivraison.chargerPlan(fichier);
             Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
-            fenetre.estPlanCharge(SUCCES);
+            fenetre.estPlanCharge("SUCCESS");
         } catch (SAXException e) {
             fenetre.estPlanCharge(e.getMessage());
             
@@ -94,4 +91,21 @@ public class EtatLivraisonsChargees extends EtatDefaut{
             fenetre.estPlanCharge(e.getMessage());
         }
     }
+    @Override
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerMarker();
+    }
+    
+    @Override
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+        fenetre.getVueGraphique().dessinerPtLivraison();
+        fenetre.getVueGraphique().dessinerMarker();
+    }
 }
+
+
