@@ -8,8 +8,8 @@
  */
 package controleur;
 
-import deliverif.Deliverif;
 import java.io.IOException;
+import deliverif.Deliverif;
 import modele.GestionLivraison;
 import org.xml.sax.SAXException;
 
@@ -33,11 +33,11 @@ public class EtatInit extends EtatDefaut{
       *  @param gestionLivraison
       *  @param fichier Nom du fichier du plan choisi
       *  @param fenetre
-      *  @see modele.GestionLivraison
+      *  @see GestionLivraison
       *  @see EtatPlanCharge
      */
     @Override
-    public void boutonChargePlan (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+    public void boutonChargePlan (Controleur controleur, GestionLivraison gestionLivraison, String fichier, Deliverif fenetre) {
         try{
             gestionLivraison.chargerPlan(fichier);
             controleur.setEtatCourant(Controleur.ETAT_PLAN_CHARGE);

@@ -9,6 +9,9 @@
 package controleur;
 
 import controleur.commandes.ListeCommandes;
+import deliverif.Deliverif;
+import modele.GestionLivraison;
+import modele.Intersection;
 
 /**Etat dans lequel se trouve l'application après que l'utilisateur ait demandé
  * l'ajout d'une livraison.
@@ -32,8 +35,8 @@ public class EtatIntersectionCliquable extends EtatDefaut{
      * @param longitude
      */
     @Override
-    public void clicGauche(Controleur controleur, modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
-        modele.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
+    public void clicGauche(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+        Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
         fenetre.estIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
         Controleur.ETAT_INTERSECTION_SELECTIONNEE.actionEntree(pointClique);
         controleur.setEtatCourant(Controleur.ETAT_INTERSECTION_SELECTIONNEE);
@@ -43,7 +46,7 @@ public class EtatIntersectionCliquable extends EtatDefaut{
      * @param fenetre 
      */
     @Override
-    public void boutonAnnuler(Controleur controleur, deliverif.Deliverif fenetre, ListeCommandes listeCdes){
+    public void boutonAnnuler(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes){
         controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
         fenetre.estAjoutLivraisonFini(false, -1, -1);
     } 

@@ -9,6 +9,8 @@
 package controleur;
 
 import controleur.commandes.ListeCommandes;
+import deliverif.Deliverif;
+import modele.GestionLivraison;
 
 /** Etat dans lequel se trouve l'application pendant le calcul des tournées
  *  Permet l'affichage des solutions au fur et à mesure du calcul et l'arrêt du 
@@ -33,7 +35,7 @@ public class EtatCalculTournees extends EtatDefaut{
      * @param fenetre 
      */
     @Override
-    public void boutonArreterCalcul(Controleur controleur, modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre){
+    public void boutonArreterCalcul(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre){
         if(gestionLivraison.calculTSPEnCours()){
             gestionLivraison.arreterCalculTournee();
         }
