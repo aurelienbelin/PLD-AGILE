@@ -12,9 +12,9 @@ import controleur.commandes.CdeChangerLivraisonTournee;
 import controleur.commandes.CdeDeplacerLivraison;
 import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
-import deliverif.DescriptifChemin;
-import modele.outils.GestionLivraison;
-import modele.outils.PointPassage;
+import deliverif.DescriptifLivraison;
+import modele.GestionLivraison;
+import modele.PointPassage;
 
 /**
  *
@@ -53,7 +53,7 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
     }
     
     @Override
-    public void clicDroit(DescriptifChemin livraisonCliquee){
+    public void clicDroit(DescriptifLivraison livraisonCliquee){
         String[] identifiants = livraisonCliquee.getPoint().split("_");
         tourneeLivraisonAChanger = Integer.parseInt(identifiants[0])-1; //DESCRIPTIF
         indiceLivraisonAChanger = Integer.parseInt(identifiants[1])-1; //DESCRIPTIF

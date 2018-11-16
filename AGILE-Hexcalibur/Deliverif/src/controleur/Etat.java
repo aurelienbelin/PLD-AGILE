@@ -10,9 +10,9 @@ package controleur;
 
 import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
-import deliverif.DescriptifChemin;
+import deliverif.DescriptifLivraison;
 import java.io.IOException;
-import modele.outils.GestionLivraison;
+import modele.GestionLivraison;
 import org.xml.sax.SAXException;
 
 /** Par ses actions, l'utilisateur fait passer l'application d'une situation 
@@ -30,30 +30,30 @@ interface Etat
       *  @param fichier
       *  @see modele.GestionLivraison
      */
-    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception;
+    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception;
     
     /** 
       *  @param gestionLivraison
       *  @param fichier
       *  @see modele.GestionLivraison
      */
-    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception;
+    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception;
     
     /** 
       *  @param gestionLivraison
       *  @param nbLivreurs
       *  @see modele.GestionLivraison
      */
-    public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre);
+    public void calculerTournees(modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre);
     
     //Test
-    public void trouverLocalisation(modele.outils.GestionLivraison gestionLivraison, deliverif.DescriptifChemin point, deliverif.Deliverif fenetre);
+    public void trouverLocalisation(modele.GestionLivraison gestionLivraison, deliverif.DescriptifLivraison point, deliverif.Deliverif fenetre);
     
     public void ajouterLivraison(deliverif.Deliverif fenetre);
     
     public void validerSuppression(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, ListeCommandes listeCde);
     
-    public void clicGauche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
+    public void clicGauche(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
     
     public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes);
     
@@ -67,15 +67,15 @@ interface Etat
 
     public void supprimerLivraison (Deliverif fenetre);
 
-    public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
+    public void arreterCalcul(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
 
-    public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
+    public void selectionnerPoint(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
 
     public void reorgTournees(deliverif.Deliverif fenetre);
     
     public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes);
     
-    public void clicDroit(DescriptifChemin livraisonCliquee);
+    public void clicDroit(DescriptifLivraison livraisonCliquee);
     
     public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes);
     

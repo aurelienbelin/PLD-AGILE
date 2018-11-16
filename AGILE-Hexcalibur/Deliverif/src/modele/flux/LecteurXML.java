@@ -27,11 +27,11 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import javax.xml.parsers.ParserConfigurationException;
-import modele.outils.DemandeLivraison;
-import modele.outils.Intersection;
-import modele.outils.PlanVille;
-import modele.outils.PointPassage;
-import modele.outils.Troncon;
+import modele.DemandeLivraison;
+import modele.Intersection;
+import modele.PlanVille;
+import modele.PointPassage;
+import modele.Troncon;
 import org.xml.sax.SAXException;
 /**
  * Classe chargé de la lecture des fichier XML et de charger ainsi les plans de ville et les demandes de livraisons

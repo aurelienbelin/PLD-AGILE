@@ -9,8 +9,8 @@
 package controleur;
 
 import controleur.commandes.ListeCommandes;
-import modele.outils.GestionLivraison;
-import modele.outils.Intersection;
+import modele.GestionLivraison;
+import modele.Intersection;
 
 /**
  *

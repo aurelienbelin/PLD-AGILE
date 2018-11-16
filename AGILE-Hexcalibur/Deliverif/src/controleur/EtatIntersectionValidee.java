@@ -12,8 +12,8 @@ import controleur.commandes.CdeAjoutLivraison;
 import controleur.commandes.Commande;
 import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
-import modele.outils.GestionLivraison;
-import modele.outils.Intersection;
+import modele.GestionLivraison;
+import modele.Intersection;
 
 /**
  *

@@ -26,13 +26,13 @@ import javafx.scene.paint.Stop;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.CubicCurve;
 import javafx.util.Pair;
-import modele.outils.Chemin;
-import modele.outils.DemandeLivraison;
-import modele.outils.GestionLivraison;
-import modele.outils.PlanVille;
-import modele.outils.PointPassage;
-import modele.outils.Tournee;
-import modele.outils.Troncon;
+import modele.Chemin;
+import modele.DemandeLivraison;
+import modele.GestionLivraison;
+import modele.PlanVille;
+import modele.PointPassage;
+import modele.Tournee;
+import modele.Troncon;
 
 /**
  * Classe implémentant le composant de Vue Graphique de l'IHM du projet ainsi que son comportement.
@@ -136,13 +136,13 @@ public class VueGraphique extends StackPane implements Observer {
      * Calcule l'échelle d'affichage du plan de la ville à afficher.
      * @param intersections - liste des intersections contenues dans le plan à afficher.
      */
-    public void calculEchelle (List <modele.outils.Intersection> intersections) {
+    public void calculEchelle (List <modele.Intersection> intersections) {
         float maxLatitude = -90;
         float minLatitude = 90;
         float maxLongitude = -180;
         float minLongitude = 180;
         
-        for(modele.outils.Intersection i: intersections){
+        for(modele.Intersection i: intersections){
             if(i.getLatitude() > maxLatitude){
                 maxLatitude = i.getLatitude();
             }else if(i.getLatitude() < minLatitude){

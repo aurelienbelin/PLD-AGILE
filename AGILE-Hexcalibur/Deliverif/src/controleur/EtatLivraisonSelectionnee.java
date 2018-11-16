@@ -11,9 +11,9 @@ package controleur;
 import controleur.commandes.CdeSuppressionLivraison;
 import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
-import deliverif.DescriptifChemin;
-import modele.outils.GestionLivraison;
-import modele.outils.PointPassage;
+import deliverif.DescriptifLivraison;
+import modele.GestionLivraison;
+import modele.PointPassage;
 
 /**
  *
@@ -58,8 +58,8 @@ public class EtatLivraisonSelectionnee extends EtatDefaut {
     }
     
     @Override
-    public void trouverLocalisation(GestionLivraison gestionLivraison, DescriptifChemin point, Deliverif fenetre) {
-        modele.outils.PointPassage intersection = gestionLivraison.identifierPointPassage(point.getPoint());
+    public void trouverLocalisation(GestionLivraison gestionLivraison, DescriptifLivraison point, Deliverif fenetre) {
+        modele.PointPassage intersection = gestionLivraison.identifierPointPassage(point.getPoint());
         fenetre.getVueGraphique().identifierPtPassageAModifier(!point.estLocalise(), intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());
         fenetre.getVueTextuelle().majVueTextuelle(point);
         fenetre.estPointPassageASupprimerSelectionne(intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());

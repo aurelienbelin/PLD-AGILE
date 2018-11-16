@@ -43,7 +43,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import modele.outils.GestionLivraison;
+import modele.GestionLivraison;
 
 /**
  * Classe principale/point d'entrée de l'application. Il s'agit de la fenetre principale de l'application.
@@ -102,7 +102,7 @@ public class Deliverif extends Application implements Observer{
     public final static int HAUTEUR_BOUTON = 65;
     
     private GestionLivraison gestionLivraison;
-    private EcouteurBoutons ecouteurBoutons;
+    private Ecouteur ecouteurBoutons;
     private Controleur controleur;
     private VueTextuelle vueTextuelle;
     private VueGraphique vueGraphique;
@@ -146,7 +146,7 @@ public class Deliverif extends Application implements Observer{
         gestionLivraison.addObserver(this);
         controleur = new Controleur(gestionLivraison,this);
         vueGraphique = new VueGraphique(this.gestionLivraison, this);
-        ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
+        ecouteurBoutons = new Ecouteur(this, controleur, vueGraphique);
         gestionLivraison.addObserver(this);
     }
     
@@ -481,7 +481,7 @@ public class Deliverif extends Application implements Observer{
     @Override
     public void update(Observable o, Object arg){
         if (o instanceof GestionLivraison){
-            if (arg instanceof modele.outils.Tournee[]){
+            if (arg instanceof modele.Tournee[]){
                 if (!((GestionLivraison)o).calculTSPEnCours()){
                     
                     this.informationEnCours(CALCUL_TERMINE);
@@ -627,7 +627,7 @@ public class Deliverif extends Application implements Observer{
     }
     
     public void estSelectionne(int tournee, int position){
-        DescriptifChemin dc = getVueTextuelle().getDescriptifChemin(tournee, position);
+        DescriptifLivraison dc = getVueTextuelle().getDescriptifChemin(tournee, position);
         getVueTextuelle().majVueTextuelle(dc);
         getVueTextuelle().changerDescription_Ter(tournee);
     }

@@ -10,8 +10,8 @@ package controleur;
 
 import deliverif.Deliverif;
 import java.io.IOException;
-import modele.outils.GestionLivraison;
-import modele.outils.PointPassage;
+import modele.GestionLivraison;
+import modele.PointPassage;
 import org.xml.sax.SAXException;
 
 /**
@@ -36,7 +36,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
       *  @see EtatCalculTournees
      */
     @Override
-    public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
+    public void calculerTournees(modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
         try{
             gestionLivraison.calculerTournees(nbLivreurs, Integer.MAX_VALUE);
@@ -57,7 +57,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
      *  @see EtatLivraisonsChargees
      */
     @Override
-    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
             gestionLivraison.effacerTournees();
             gestionLivraison.chargerDemandeLivraison(fichier);
@@ -82,7 +82,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
       *  @see EtatPlanCharge
      */
     @Override
-    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
+    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
         try{
             gestionLivraison.getDemande().effacerLivraisons();
             gestionLivraison.effacerTournees();

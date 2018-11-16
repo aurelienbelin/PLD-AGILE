@@ -10,10 +10,10 @@ package controleur;
 
 import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
-import deliverif.DescriptifChemin;
+import deliverif.DescriptifLivraison;
 import java.io.IOException;
-import modele.outils.GestionLivraison;
-import modele.outils.PointPassage;
+import modele.GestionLivraison;
+import modele.PointPassage;
 import org.xml.sax.SAXException;
 
 /** Classe mère de tous les états.
@@ -41,7 +41,7 @@ public class EtatDefaut implements Etat
      * @version 1
      */
     @Override
-    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception{
+    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception{
     }
     
     /**
@@ -54,7 +54,7 @@ public class EtatDefaut implements Etat
      * @version 1
      */
     @Override
-    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception{
+    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception{
     }
     
     /**
@@ -65,13 +65,13 @@ public class EtatDefaut implements Etat
      * @version 1
      */
     @Override
-    public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
+    public void calculerTournees(modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
     }
     
     //Test
     @Override
-    public void trouverLocalisation(modele.outils.GestionLivraison gestionLivraison, deliverif.DescriptifChemin point, deliverif.Deliverif fenetre){
-        modele.outils.PointPassage intersection = gestionLivraison.identifierPointPassage(point.getPoint());
+    public void trouverLocalisation(modele.GestionLivraison gestionLivraison, deliverif.DescriptifLivraison point, deliverif.Deliverif fenetre){
+        modele.PointPassage intersection = gestionLivraison.identifierPointPassage(point.getPoint());
         fenetre.getVueGraphique().identifierPtPassage(!point.estLocalise(), intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());
         fenetre.getVueTextuelle().majVueTextuelle(point);
     }
@@ -108,11 +108,11 @@ public class EtatDefaut implements Etat
     public void supprimerLivraison (Deliverif fenetre) {}
 
     @Override
-    public void arreterCalcul(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}
+    public void arreterCalcul(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}
 
     
     @Override
-    public void selectionnerPoint(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude){}
+    public void selectionnerPoint(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude){}
     
     @Override
     public void reorgTournees(deliverif.Deliverif fenetre){}
@@ -131,7 +131,7 @@ public class EtatDefaut implements Etat
     public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes){}
     
     @Override
-    public void clicDroit(DescriptifChemin livraisonCliquee){}
+    public void clicDroit(DescriptifLivraison livraisonCliquee){}
     
     @Override
     public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes){}

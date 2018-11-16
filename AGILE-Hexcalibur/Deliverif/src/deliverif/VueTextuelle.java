@@ -30,9 +30,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.VBox;
-import modele.outils.DemandeLivraison;
-import modele.outils.GestionLivraison;
-import modele.outils.Tournee;
+import modele.DemandeLivraison;
+import modele.GestionLivraison;
+import modele.Tournee;
 
 /**
  * Classe implémentant le composant de Vue Textuelle de l'IHM du projet ainsi que son comportement.
@@ -54,7 +54,7 @@ public class VueTextuelle extends VBox implements Observer {
     private ArrayList<String> descriptions;
     
     private ObservableList<String> contenu;
-    private EcouteurBoutons ecouteurBoutons;
+    private Ecouteur ecouteurBoutons;
     
     //Composants
     private ComboBox<String> choixTournee;
@@ -62,16 +62,16 @@ public class VueTextuelle extends VBox implements Observer {
     private ArrayList<VBox> tournees;
     private VBox demandeLivraisons;
     private ScrollPane panel;
-    private DescriptifChemin descriptifSelectionne;
+    private DescriptifLivraison descriptifSelectionne;
     
     /**
      * Constructeur de VueTextuelle
      * @param gl - point d'entrée du modèle observé
      * @param ec - Ecouteur sur la fenetre principale
      * @see GestionLivraison
-     * @see EcouteurBoutons
+     * @see Ecouteur
      */
-    public VueTextuelle(GestionLivraison gl, EcouteurBoutons ec){
+    public VueTextuelle(GestionLivraison gl, Ecouteur ec){
         super();
         
         this.ecouteurBoutons = ec;
@@ -143,10 +143,10 @@ public class VueTextuelle extends VBox implements Observer {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                if (arg instanceof modele.outils.DemandeLivraison){
+                if (arg instanceof modele.DemandeLivraison){
                     contenu.clear();
                     afficherDemandeLivraisons();
-                } else if (arg instanceof modele.outils.Tournee[]){
+                } else if (arg instanceof modele.Tournee[]){
                     //String c = contenu.get(0);
                     contenu.clear();
                     //contenu.add(c);
@@ -181,7 +181,7 @@ public class VueTextuelle extends VBox implements Observer {
             
             while(it.hasNext()){
                 List<String> s = it.next();
-                DescriptifChemin dc = new DescriptifChemin((int)(this.panel.getViewportBounds().getWidth()),j,s.get(0), s.get(1), this.ecouteurBoutons);
+                DescriptifLivraison dc = new DescriptifLivraison((int)(this.panel.getViewportBounds().getWidth()),j,s.get(0), s.get(1), this.ecouteurBoutons);
                 demandeLivraisons.getChildren().add(dc);
                 j++;
             }
@@ -211,7 +211,7 @@ public class VueTextuelle extends VBox implements Observer {
                     while(it.hasNext()){
                         List<String> s = it.next();
                         
-                        DescriptifChemin dc = new DescriptifChemin((int)(this.panel.getViewportBounds().getWidth()),i,j,s.get(0), s.get(1), s.get(2), s.size()>3?s.subList(4,s.size()):null,this.ecouteurBoutons);
+                        DescriptifLivraison dc = new DescriptifLivraison((int)(this.panel.getViewportBounds().getWidth()),i,j,s.get(0), s.get(1), s.get(2), s.size()>3?s.subList(4,s.size()):null,this.ecouteurBoutons);
                         vbox.getChildren().add(dc);
                         j++;
                     }
@@ -227,9 +227,9 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
-    public DescriptifChemin getDescriptifChemin(int tournee, int position)
+    public DescriptifLivraison getDescriptifChemin(int tournee, int position)
     {
-        return (DescriptifChemin) tournees.get(tournee).getChildren().get(position);
+        return (DescriptifLivraison) tournees.get(tournee).getChildren().get(position);
     }
     
     public void changerDescription_Ter(int tournee){
@@ -263,11 +263,11 @@ public class VueTextuelle extends VBox implements Observer {
     }
     
     /**
-     * Met à jour le DescriptifChemin sélectionné ou désélectionné dans la Vue Textuelle.
-     * @param nouveauDescriptif - DescriptifChemin à mettre à jour
-     * @see DescriptifChemin
+     * Met à jour le DescriptifLivraison sélectionné ou désélectionné dans la Vue Textuelle.
+     * @param nouveauDescriptif - DescriptifLivraison à mettre à jour
+     * @see DescriptifLivraison
      */
-    public void majVueTextuelle(DescriptifChemin nouveauDescriptif){
+    public void majVueTextuelle(DescriptifLivraison nouveauDescriptif){
         if(this.descriptifSelectionne!=null){
             this.descriptifSelectionne.setLocalise(false);
         }
@@ -342,8 +342,8 @@ public class VueTextuelle extends VBox implements Observer {
     public void remettreBoutonsDetails(){
         List<VBox> tournees = this.tournees;
         for(VBox tournee: tournees){ 
-            List<DescriptifChemin> livraisonsDeTournee= (ObservableList) tournee.getChildren();
-            for(DescriptifChemin livraison : livraisonsDeTournee){
+            List<DescriptifLivraison> livraisonsDeTournee= (ObservableList) tournee.getChildren();
+            for(DescriptifLivraison livraison : livraisonsDeTournee){
                 livraison.disableUpDown();
             }
         }
@@ -352,18 +352,18 @@ public class VueTextuelle extends VBox implements Observer {
     public void ajouterBoutonsReorg(){
 
         for(VBox tournee: tournees){ 
-            List<DescriptifChemin> livraisonsDeTournee= (ObservableList) tournee.getChildren();
+            List<DescriptifLivraison> livraisonsDeTournee= (ObservableList) tournee.getChildren();
             for(int indiceLivraison=0; indiceLivraison<(livraisonsDeTournee.size()-1);indiceLivraison++){
-                DescriptifChemin livraison = livraisonsDeTournee.get(indiceLivraison);
+                DescriptifLivraison livraison = livraisonsDeTournee.get(indiceLivraison);
                 livraison.enableUpDown();
             }
-            DescriptifChemin entrepot = livraisonsDeTournee.get(livraisonsDeTournee.size()-1);
+            DescriptifLivraison entrepot = livraisonsDeTournee.get(livraisonsDeTournee.size()-1);
             entrepot.enleverDetails();
             
-            DescriptifChemin debutTournee = livraisonsDeTournee.get(1);
+            DescriptifLivraison debutTournee = livraisonsDeTournee.get(1);
             debutTournee.disableUp();
             
-            DescriptifChemin finTournee = livraisonsDeTournee.get(livraisonsDeTournee.size()-2);
+            DescriptifLivraison finTournee = livraisonsDeTournee.get(livraisonsDeTournee.size()-2);
             finTournee.disableDown();
         }
     }
@@ -379,9 +379,9 @@ public class VueTextuelle extends VBox implements Observer {
             
             choixTournee.getItems().add(livreur);
             
-            List<DescriptifChemin> livraisonsDeLivreur= (ObservableList) tournees.get(indiceLivreur).getChildren();
+            List<DescriptifLivraison> livraisonsDeLivreur= (ObservableList) tournees.get(indiceLivreur).getChildren();
             for(int indiceLivraison=0; indiceLivraison<(livraisonsDeLivreur.size()-1);indiceLivraison++){
-                DescriptifChemin livraison = livraisonsDeLivreur.get(indiceLivraison);
+                DescriptifLivraison livraison = livraisonsDeLivreur.get(indiceLivraison);
                 livraison.setOnContextMenuRequested(e -> ecouteurBoutons.montrerMenuContextuel(e, choixTournee, livraison));
             }
         }
