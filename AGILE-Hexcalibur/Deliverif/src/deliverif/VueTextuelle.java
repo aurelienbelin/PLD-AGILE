@@ -344,7 +344,7 @@ public class VueTextuelle extends VBox implements Observer {
         for(VBox tournee: tournees){ 
             List<DescriptifLivraison> livraisonsDeTournee= (ObservableList) tournee.getChildren();
             for(DescriptifLivraison livraison : livraisonsDeTournee){
-                livraison.disableUpDown();
+                livraison.desactiverHautBas();
             }
         }
     }
@@ -355,16 +355,16 @@ public class VueTextuelle extends VBox implements Observer {
             List<DescriptifLivraison> livraisonsDeTournee= (ObservableList) tournee.getChildren();
             for(int indiceLivraison=0; indiceLivraison<(livraisonsDeTournee.size()-1);indiceLivraison++){
                 DescriptifLivraison livraison = livraisonsDeTournee.get(indiceLivraison);
-                livraison.enableUpDown();
+                livraison.activerHautBas();
             }
             DescriptifLivraison entrepot = livraisonsDeTournee.get(livraisonsDeTournee.size()-1);
             entrepot.enleverDetails();
             
             DescriptifLivraison debutTournee = livraisonsDeTournee.get(1);
-            debutTournee.disableUp();
+            debutTournee.desactiverHaut();
             
             DescriptifLivraison finTournee = livraisonsDeTournee.get(livraisonsDeTournee.size()-2);
-            finTournee.disableDown();
+            finTournee.desactiverBas();
         }
     }
     

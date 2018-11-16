@@ -61,7 +61,7 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
     }
     
     @Override
-    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indiceTourneeChoisi, ListeCommandes commandes){
+    public void selectionMenuLivreurs(GestionLivraison gestionLivraison, Deliverif fenetre, int indiceTourneeChoisi, ListeCommandes commandes){
         int nouvelIndice = gestionLivraison.getTournees()[indiceTourneeChoisi].getTrajet().size()-1;
         commandes.ajouterCde(new CdeChangerLivraisonTournee(gestionLivraison, tourneeLivraisonAChanger, indiceTourneeChoisi, indiceLivraisonAChanger, nouvelIndice));
         fenetre.changerVueTextuelle(indiceTourneeChoisi);
@@ -72,13 +72,13 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
      * @param fenetre
      */
     @Override
-    public void validerReorganisation(Deliverif fenetre){
-        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+    public void validerReorganisation(Deliverif fenetre, Controleur controleur){
+        controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
         fenetre.estReorgFinie();
     }
     
     @Override
-    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+    public void clicGauche(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
         fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
         int[] positionDansTournee = gestionLivraison.ouEstLePoint(pointClique);
@@ -90,9 +90,9 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
      * @param fenetre
      */
     @Override
-    public void annuler(Deliverif fenetre, ListeCommandes listeCdes){
+    public void boutonAnnuler(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes){
         fenetre.estReorgFinie();
-        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+        controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
     }
     
     @Override

@@ -36,8 +36,8 @@ public class EtatTourneesCalculees extends EtatDefaut{
       *  @see EtatCalculTournees
      */
     @Override
-    public void calculerTournees(modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
-        Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
+    public void boutonCalculerTournees(Controleur controleur, modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
+        controleur.setEtatCourant(Controleur.ETAT_CALCUL_TOURNEES);
         try{
             gestionLivraison.calculerTournees(nbLivreurs, Integer.MAX_VALUE);
             fenetre.activerBoutonArreterCalcul(false);
@@ -57,11 +57,11 @@ public class EtatTourneesCalculees extends EtatDefaut{
      *  @see EtatLivraisonsChargees
      */
     @Override
-    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+    public void boutonChargeLivraisons (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
             gestionLivraison.effacerTournees();
             gestionLivraison.chargerDemandeLivraison(fichier);
-            Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
+            controleur.setEtatCourant(Controleur.ETAT_LIVRAISONS_CHARGEES);
             fenetre.estDemandeLivraisonChargee(SUCCES);
         } catch (SAXException e){
             fenetre.estDemandeLivraisonChargee(e.getMessage());
@@ -82,12 +82,12 @@ public class EtatTourneesCalculees extends EtatDefaut{
       *  @see EtatPlanCharge
      */
     @Override
-    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
+    public void boutonChargePlan (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
         try{
             gestionLivraison.getDemande().effacerLivraisons();
             gestionLivraison.effacerTournees();
             gestionLivraison.chargerPlan(fichier);
-            Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
+            controleur.setEtatCourant(Controleur.ETAT_PLAN_CHARGE);
             fenetre.estPlanCharge(SUCCES);
         } catch (SAXException e) {
             fenetre.estPlanCharge(e.getMessage());
@@ -101,20 +101,20 @@ public class EtatTourneesCalculees extends EtatDefaut{
     }
     
     @Override
-    public void ajouterLivraison (Deliverif fenetre) {
-        Controleur.etatCourant = Controleur.ETAT_PLAN_CLIQUABLE;
+    public void boutonAjouterLivraison (Controleur controleur, Deliverif fenetre) {
+        controleur.setEtatCourant(Controleur.ETAT_PLAN_CLIQUABLE);
         fenetre.estPlanCliquable();
     }
     
     @Override
-    public void supprimerLivraison (Deliverif fenetre) {
-        Controleur.etatCourant = Controleur.ETAT_SUPPRIMER_LIVRAISON;
+    public void boutonSupprimerLivraison (Controleur controleur, Deliverif fenetre) {
+        controleur.setEtatCourant(Controleur.ETAT_SUPPRIMER_LIVRAISON);
         fenetre.ajouterSuppression();
     }
     
-    public void reorgTournees(Deliverif fenetre){
+    public void boutonReorgTournees(Controleur controleur, Deliverif fenetre){
         fenetre.estReorgTourneesDemandee();
-        Controleur.etatCourant = Controleur.ETAT_REORG_TOURNEES_DEMANDE;
+        controleur.setEtatCourant(Controleur.ETAT_REORG_TOURNEES_DEMANDE);
     }
     
     @Override

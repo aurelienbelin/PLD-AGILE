@@ -33,26 +33,26 @@ public class EtatSupprimerLivraison extends EtatDefaut{
      * @param longitude
      */
     @Override
-    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+    public void clicGauche(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
         fenetre.estPointPassageASupprimerSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
         Controleur.ETAT_LIVRAISON_SELECTIONNEE.actionEntree(pointClique);
-        Controleur.etatCourant = Controleur.ETAT_LIVRAISON_SELECTIONNEE;
+        controleur.setEtatCourant(Controleur.ETAT_LIVRAISON_SELECTIONNEE);
     }
     
     @Override
-    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes){
-        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+    public void boutonAnnuler(Controleur controleur, deliverif.Deliverif fenetre, ListeCommandes listeCdes){
+        controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
         fenetre.estSuppressionFinie();
     }
 
     @Override
-    public void trouverLocalisation(GestionLivraison gestionLivraison, DescriptifLivraison point, Deliverif fenetre) {
+    public void clicDescriptionLivraison(Controleur controleur, GestionLivraison gestionLivraison, DescriptifLivraison point, Deliverif fenetre) {
         modele.PointPassage intersection = gestionLivraison.identifierPointPassage(point.getPoint());
         fenetre.getVueGraphique().identifierPtPassageAModifier(!point.estLocalise(), intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());
         fenetre.getVueTextuelle().majVueTextuelle(point);
         fenetre.estPointPassageASupprimerSelectionne(intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());
         Controleur.ETAT_LIVRAISON_SELECTIONNEE.actionEntree(intersection);
-        Controleur.etatCourant = Controleur.ETAT_LIVRAISON_SELECTIONNEE;
+        controleur.setEtatCourant(Controleur.ETAT_LIVRAISON_SELECTIONNEE);
     }
 }
