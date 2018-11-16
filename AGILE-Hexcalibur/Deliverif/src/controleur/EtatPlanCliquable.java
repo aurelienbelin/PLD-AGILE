@@ -8,6 +8,8 @@
  */
 package controleur;
 
+import controleur.commandes.ListeCommandes;
+
 /**
  *
  * @author Hex'calibur
@@ -36,26 +38,8 @@ public class EtatPlanCliquable extends EtatDefaut{
     }
     
     @Override
-    public void annuler(deliverif.Deliverif fenetre){
+    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
-        fenetre.estAjoutLivraisonFini();
-    }
-    
-    @Override
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
-        fenetre.getVueGraphique().zoomPlus(lat,lon);
-        fenetre.getVueGraphique().dessinerPlan();
-        fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
-        fenetre.getVueGraphique().dessinerMarker();
-    }
-    @Override
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
-        fenetre.getVueGraphique().zoomMoins(lat,lon);
-        fenetre.getVueGraphique().dessinerPlan();
-        fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
-        fenetre.getVueGraphique().dessinerMarker();
-    }
-    
+        fenetre.estAjoutLivraisonFini(false, -1, -1);
+    } 
 }

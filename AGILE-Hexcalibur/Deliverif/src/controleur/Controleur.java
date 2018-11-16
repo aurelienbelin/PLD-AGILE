@@ -173,7 +173,7 @@ public class Controleur {
     }
     
     public void boutonAnnuler() {
-        etatCourant.annuler(this.fenetre);
+        etatCourant.annuler(this.fenetre, this.listeCde);
     }
     
     public void boutonValiderSelection() {
@@ -181,7 +181,7 @@ public class Controleur {
     }
     
     public void boutonRetour(){
-        etatCourant.retourSelection(this.fenetre);
+        etatCourant.retourSelection(this.fenetre, this.listeCde);
     }
 
     public void boutonArretCalcul(){

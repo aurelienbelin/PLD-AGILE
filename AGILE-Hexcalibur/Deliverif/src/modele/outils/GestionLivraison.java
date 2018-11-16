@@ -73,6 +73,9 @@ public class GestionLivraison extends Observable{
         if(this.plan==null || this.demande==null || (this.calculTSPEnCours())){
             return;
         }
+        if (nbLivreur<1 || tempsLimite<=0){
+            return;
+        }
         List<PointPassage> listePoints = new ArrayList<>();
         listePoints.add(this.demande.getEntrepot());
         listePoints.addAll(this.demande.getLivraisons());
@@ -203,9 +206,17 @@ public class GestionLivraison extends Observable{
      */
     public void ajouterLivraison(PointPassage livraison, int numeroTournee, 
             int pointPrecedent){
+        if (!this.aSolution()){
+            return;
+        }
+        if(livraison==null || numeroTournee<0 ||numeroTournee>=this.tournees.length ||
+                pointPrecedent<0 || pointPrecedent>=this.tournees[numeroTournee].nombrePoints()){
+            return;
+        }
         if (pointPrecedent>=this.tournees[numeroTournee].nombrePoints()){
             return;
         }
+        
         this.demande.ajouterLivraison(livraison);
         PointPassage derniereLivraison = this.tournees[numeroTournee].getPointPassage(
             pointPrecedent);
@@ -239,7 +250,12 @@ public class GestionLivraison extends Observable{
      * @param livraison - La livraison à supprimer
      */
     public void supprimerLivraison(PointPassage livraison){
-        //FIXME : à changer pour l'undo/redo
+        if(livraison==null){
+            return;
+        }
+        if(!this.aSolution()){
+            return;
+        }
         if (livraison.estEntrepot()){
             return;//Non monsieur, on ne supprime pas l'entrepôt
         }
@@ -346,19 +362,18 @@ public class GestionLivraison extends Observable{
                 tournee2>=this.tournees.length){
             return;
         }
-        if (indice1<1 || indice2<1 || 
-                indice1>this.tournees[tournee1].nombrePoints()-2 || 
-                indice2> this.tournees[tournee2].nombrePoints()-2){
+        if (indice1<0 || indice2<0 || 
+                indice1>this.tournees[tournee1].nombrePoints()-1 || 
+                indice2> this.tournees[tournee2].nombrePoints()-1){
             return;//IndexOutOfBoundsException quoi.
         }
         PointPassage livraison = 
                 this.tournees[tournee1].getPointPassage(indice1);
 
-
-
-
         this.supprimerLivraison(livraison);
         this.ajouterLivraison(livraison, tournee2, indice2);
+        setChanged();
+        notifyObservers(this.tournees);
     }
     
     /**
@@ -491,6 +506,11 @@ public class GestionLivraison extends Observable{
         return tournees;
     }
 
+    public void effacerTournees(){
+        for(Tournee tournee : tournees){
+            tournee.effacerTournee();
+        }
+    }
     /**
      *
      * @return La demande de livraison

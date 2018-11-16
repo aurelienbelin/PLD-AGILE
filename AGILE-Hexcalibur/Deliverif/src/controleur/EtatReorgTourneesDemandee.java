@@ -90,7 +90,7 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
      * @param fenetre
      */
     @Override
-    public void annuler(Deliverif fenetre){
+    public void annuler(Deliverif fenetre, ListeCommandes listeCdes){
         fenetre.estReorgFinie();
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
     }
@@ -101,7 +101,7 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
         fenetre.getVueGraphique().dessinerTournees();
-        fenetre.getVueGraphique().dessinerMarker();
+        fenetre.getVueGraphique().dessinerMarqueur();
     }
     
     @Override
@@ -110,6 +110,6 @@ public class EtatReorgTourneesDemandee extends EtatDefaut{
         fenetre.getVueGraphique().dessinerPlan();
         fenetre.getVueGraphique().dessinerPtLivraison();
         fenetre.getVueGraphique().dessinerTournees();
-        fenetre.getVueGraphique().dessinerMarker();
+        fenetre.getVueGraphique().dessinerMarqueur();
     }
 }

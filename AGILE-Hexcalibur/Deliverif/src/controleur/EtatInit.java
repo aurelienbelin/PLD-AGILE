@@ -8,7 +8,9 @@
  */
 package controleur;
 
+import deliverif.Deliverif;
 import java.io.IOException;
+import modele.outils.GestionLivraison;
 import org.xml.sax.SAXException;
 
 /** Etat dans lequel l'application se trouve à son ouverture
@@ -38,7 +40,7 @@ public class EtatInit extends EtatDefaut{
         try{
             gestionLivraison.chargerPlan(fichier);
             Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
-            fenetre.estPlanCharge("SUCCESS");
+            fenetre.estPlanCharge("SUCCES");
         } catch (SAXException e) {
             fenetre.estPlanCharge(e.getMessage());
             
@@ -50,4 +52,14 @@ public class EtatInit extends EtatDefaut{
             
         }
     }
+
+    @Override
+    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+    }
+    
+    @Override
+    public void zoomPlus(Deliverif fenetre, double lat, double lon){}
+    
+    @Override
+    public void zoomMoins(Deliverif fenetre, double lat, double lon){}
 }

@@ -275,7 +275,7 @@ public class DescriptifChemin extends VBox{
     
     public void enableUpDown(){
         
-        if(this.obtenirDetails!=null){
+        if(this.obtenirDetails!=null && !this.entete.getChildren().contains(this.upDown)){
             this.entete.getChildren().remove(this.obtenirDetails);
             this.entete.getChildren().add(this.upDown);
         }        
@@ -283,7 +283,7 @@ public class DescriptifChemin extends VBox{
     
     public void disableUpDown(){
         
-        if(this.obtenirDetails!=null){
+        if(this.obtenirDetails!=null && !this.entete.getChildren().contains(this.obtenirDetails)){
             this.entete.getChildren().add(this.obtenirDetails);
             this.entete.getChildren().remove(this.upDown);
         }     

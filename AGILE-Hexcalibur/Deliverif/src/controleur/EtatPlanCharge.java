@@ -8,7 +8,9 @@
  */
 package controleur;
 
+import deliverif.Deliverif;
 import java.io.IOException;
+import modele.outils.GestionLivraison;
 import org.xml.sax.SAXException;
 
 /** Etat dans lequel se trouve l'application après le chargement du plan
@@ -39,7 +41,7 @@ public class EtatPlanCharge extends EtatDefaut{
         try{
             gestionLivraison.chargerDemandeLivraison(fichier);
             Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
-            fenetre.estDemandeLivraisonChargee("SUCCESS");
+            fenetre.estDemandeLivraisonChargee("SUCCES");
         } catch (SAXException e){
             fenetre.estDemandeLivraisonChargee(e.getMessage());
         } catch (IOException e) {
@@ -62,7 +64,7 @@ public class EtatPlanCharge extends EtatDefaut{
     public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
         try{
             gestionLivraison.chargerPlan(fichier);
-            fenetre.estPlanCharge("SUCCESS");
+            fenetre.estPlanCharge("SUCCES");
         } catch (SAXException e) {
             fenetre.estPlanCharge(e.getMessage());
             
@@ -73,16 +75,8 @@ public class EtatPlanCharge extends EtatDefaut{
             fenetre.estPlanCharge(e.getMessage());
         }
     }
-   
-    @Override
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
-        fenetre.getVueGraphique().zoomPlus(lat,lon);
-        fenetre.getVueGraphique().dessinerPlan();
-    }
     
     @Override
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
-        fenetre.getVueGraphique().zoomMoins(lat,lon);
-        fenetre.getVueGraphique().dessinerPlan();
+    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
     }
 }

@@ -8,6 +8,7 @@
  */
 package controleur;
 
+import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
 import deliverif.DescriptifChemin;
 import modele.outils.GestionLivraison;
@@ -40,7 +41,7 @@ public class EtatSupprimerLivraison extends EtatDefaut{
     }
     
     @Override
-    public void annuler(deliverif.Deliverif fenetre){
+    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
         fenetre.estSuppressionFinie();
     }
@@ -54,6 +55,4 @@ public class EtatSupprimerLivraison extends EtatDefaut{
         Controleur.ETAT_LIVRAISON_SELECTIONNEE.actionEntree(intersection);
         Controleur.etatCourant = Controleur.ETAT_LIVRAISON_SELECTIONNEE;
     }
-    
-    
 }

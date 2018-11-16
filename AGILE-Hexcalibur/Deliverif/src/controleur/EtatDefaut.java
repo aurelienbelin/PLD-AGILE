@@ -13,6 +13,7 @@ import deliverif.Deliverif;
 import deliverif.DescriptifChemin;
 import java.io.IOException;
 import modele.outils.GestionLivraison;
+import modele.outils.PointPassage;
 import org.xml.sax.SAXException;
 
 /** Classe mère de tous les états.
@@ -82,16 +83,21 @@ public class EtatDefaut implements Etat
     public void validerSuppression(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, ListeCommandes listeCde) {}
     
     @Override
-    public void clicGauche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {}
+    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+        PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
+        fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
+        int[] positionDansTournee = gestionLivraison.ouEstLePoint(pointClique);
+        fenetre.estSelectionne(positionDansTournee[0], positionDansTournee[1]);
+    }
     
     @Override
-    public void annuler(deliverif.Deliverif fenetre){}
+    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes){}
     
     @Override
     public void validerSelection(deliverif.Deliverif fenetre){}
     
     @Override
-    public void retourSelection(deliverif.Deliverif fenetre){}
+    public void retourSelection(deliverif.Deliverif fenetre, ListeCommandes listeCdes){}
     
     @Override
     public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {}
@@ -112,9 +118,13 @@ public class EtatDefaut implements Etat
     public void reorgTournees(deliverif.Deliverif fenetre){}
     
     @Override
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){}
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);      
+    }
     @Override
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){}
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+    }
     
     @Override
 

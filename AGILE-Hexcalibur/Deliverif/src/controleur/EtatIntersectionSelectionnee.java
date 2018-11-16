@@ -8,6 +8,7 @@
  */
 package controleur;
 
+import controleur.commandes.ListeCommandes;
 import modele.outils.GestionLivraison;
 import modele.outils.Intersection;
 
@@ -30,7 +31,7 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
     public void clicGauche(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double  latitude, double longitude) {
         Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
         intersectionSelectionnee = pointClique;
-        fenetre.changerIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
+        fenetre.estIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
     }
     
     /**
@@ -38,9 +39,9 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
      * @param fenetre
      */
     @Override
-    public void annuler(deliverif.Deliverif fenetre){
+    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
-        fenetre.estAjoutLivraisonFini();
+        fenetre.estAjoutLivraisonFini(false, -1,-1);
     }
     
     @Override
@@ -48,23 +49,5 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
         Controleur.ETAT_INTERSECTION_VALIDEE.actionEntree(intersectionSelectionnee);
         Controleur.etatCourant = Controleur.ETAT_INTERSECTION_VALIDEE;
         fenetre.estIntersectionValidee();
-    }
-    
-    @Override
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
-        fenetre.getVueGraphique().zoomPlus(lat,lon);
-        fenetre.getVueGraphique().dessinerPlan();
-        fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
-        fenetre.getVueGraphique().dessinerMarker();
-    }
-    
-    @Override
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
-        fenetre.getVueGraphique().zoomMoins(lat,lon);
-        fenetre.getVueGraphique().dessinerPlan();
-        fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
-        fenetre.getVueGraphique().dessinerMarker();
     }
 }

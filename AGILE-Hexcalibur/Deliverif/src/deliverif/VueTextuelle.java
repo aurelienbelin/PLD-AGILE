@@ -147,9 +147,11 @@ public class VueTextuelle extends VBox implements Observer {
                     contenu.clear();
                     afficherDemandeLivraisons();
                 } else if (arg instanceof modele.outils.Tournee[]){
-                    String c = contenu.get(0);
+                    //String c = contenu.get(0);
                     contenu.clear();
-                    contenu.add(c);
+                    //contenu.add(c);
+                    
+                    afficherDemandeLivraisons();
                     
                     tournees.clear();
                     afficherTournees();
@@ -203,7 +205,6 @@ public class VueTextuelle extends VBox implements Observer {
                     int j = 1;
                     VBox vbox = new VBox();
                     vbox.setMinWidth(this.panel.getViewportBounds().getWidth());
-                    //contenu.add("Livreur "+i);
                     contenu.add("Livreur "+NOMS_COULEURS[i-1]);
                     Iterator<List<String>> it = t.getDescription();
                     
@@ -271,7 +272,7 @@ public class VueTextuelle extends VBox implements Observer {
             this.descriptifSelectionne.setLocalise(false);
         }
         
-        if(this.descriptifSelectionne != nouveauDescriptif){
+        if(nouveauDescriptif!=null && this.descriptifSelectionne != nouveauDescriptif){
             this.descriptifSelectionne = nouveauDescriptif;
             this.descriptifSelectionne.setLocalise(true);
         }else{
@@ -297,28 +298,21 @@ public class VueTextuelle extends VBox implements Observer {
      * 
      */
     public void ajouterBoutonAjout(){
-        Platform.runLater(new Runnable(){
-            @Override
-            public void run(){
-                for(int parcoursConteneur=0;parcoursConteneur<tournees.size();parcoursConteneur++){
-                    List <Node> tournee = tournees.get(parcoursConteneur).getChildren();
-                    int taille = tournee.size();
-                    for(int parcoursTournee=1; parcoursTournee<taille; parcoursTournee++){
-                        Button plus = new Button("+");
-                        plus.setAlignment(Pos.CENTER);
-                        plus.setPrefWidth((int)panel.getViewportBounds().getWidth());
+        for(int parcoursConteneur=0;parcoursConteneur<tournees.size();parcoursConteneur++){
+            List <Node> tournee = tournees.get(parcoursConteneur).getChildren();
+            int taille = tournee.size();
+            for(int parcoursTournee=1; parcoursTournee<taille; parcoursTournee++){
+                Button plus = new Button("+");
+                plus.setAlignment(Pos.CENTER);
+                plus.setPrefWidth((int)panel.getViewportBounds().getWidth());
 
-                        tournees.get(parcoursConteneur).getChildren().add(2*parcoursTournee-1, plus);
+                tournees.get(parcoursConteneur).getChildren().add(2*parcoursTournee-1, plus);
 
-                        int indexPlus = 2*parcoursTournee-1;
-                        int indexTournee = parcoursConteneur;
-                        plus.setOnAction(e -> ecouteurBoutons.clicPlus(e, indexPlus, indexTournee));
-                    }
-                }
+                int indexPlus = 2*parcoursTournee-1;
+                int indexTournee = parcoursConteneur;
+                plus.setOnAction(e -> ecouteurBoutons.clicPlus(e, indexPlus, indexTournee));
             }
-        });
-        
-        
+        }
     }
     
     public void supprimerBoutonAjout(){
@@ -336,10 +330,13 @@ public class VueTextuelle extends VBox implements Observer {
         this.panel.setContent(this.tournees.get(indexTournee));
     }
     
-    public void changerPlusEntoure(int indexPlusPreced, int indexTourneePreced, int indexPlus, int indexTournee){
+    public void changerPlusEntoure(int indexPlusPreced, int indexTourneePreced){
         this.tournees.get(indexTourneePreced).getChildren().get(indexPlusPreced).setStyle("-fx-border-color:black;-fx-border-width:2px;");
-        this.tournees.get(indexTournee).getChildren().get(indexPlus).setStyle("-fx-border-color:blue;-fx-border-width:4px;");
-        this.panel.setContent(this.tournees.get(indexTournee));
+    }
+    
+    public void desactiverPlus(int indexPlus, int indexTournee){
+        this.tournees.get(indexTournee).getChildren().get(indexPlus).setDisable(true);
+        this.tournees.get(indexTournee).getChildren().get(indexPlus+2).setDisable(true);
     }
     
     public void remettreBoutonsDetails(){
@@ -351,6 +348,7 @@ public class VueTextuelle extends VBox implements Observer {
             }
         }
     }
+    
     public void ajouterBoutonsReorg(){
 
         for(VBox tournee: tournees){ 

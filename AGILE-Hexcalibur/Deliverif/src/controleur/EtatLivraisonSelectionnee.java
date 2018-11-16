@@ -40,12 +40,12 @@ public class EtatLivraisonSelectionnee extends EtatDefaut {
     @Override
     public void clicGauche (GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
+        this.livraisonASupprimer = pointClique;
         fenetre.estPointPassageASupprimerSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
-        Controleur.etatCourant = Controleur.ETAT_LIVRAISON_SELECTIONNEE;
     }
     
     @Override
-    public void annuler(deliverif.Deliverif fenetre){
+    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
         fenetre.estSuppressionFinie();
     }

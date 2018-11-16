@@ -31,13 +31,13 @@ public class EtatIntersectionValidee extends EtatDefaut{
     }
     
     @Override
-    public void annuler(Deliverif fenetre){
+    public void annuler(Deliverif fenetre, ListeCommandes listeCdes){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
-        fenetre.estAjoutLivraisonFini();
+        fenetre.estAjoutLivraisonFini(true, -1,-1);
     }
     
     @Override
-    public void retourSelection(Deliverif fenetre){
+    public void retourSelection(Deliverif fenetre, ListeCommandes listeCdes){
         Controleur.etatCourant = Controleur.ETAT_INTERSECTION_SELECTIONNEE;
         fenetre.estRetourSelection();
     }
@@ -52,21 +52,4 @@ public class EtatIntersectionValidee extends EtatDefaut{
         fenetre.estPlusClique(indexPlus, indexTournee);
         Controleur.etatCourant=Controleur.ETAT_AJOUT_LIVRAISON;
     }
-    @Override
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
-        fenetre.getVueGraphique().zoomPlus(lat,lon);
-        fenetre.getVueGraphique().dessinerPlan();
-        fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
-        fenetre.getVueGraphique().dessinerMarker();
-    }
-    @Override
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
-        fenetre.getVueGraphique().zoomMoins(lat,lon);
-        fenetre.getVueGraphique().dessinerPlan();
-        fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
-        fenetre.getVueGraphique().dessinerMarker();
-    }
-    
 }
