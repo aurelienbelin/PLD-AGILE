@@ -121,7 +121,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
     @Override
     public void boutonSupprimerLivraison (Controleur controleur, Deliverif fenetre) {
         controleur.setEtatCourant(Controleur.ETAT_SUPPRIMER_LIVRAISON);
-        fenetre.ajouterSuppression();
+        fenetre.estSupprimerLivraisonDemande();
     }
     
     /**Fait entrer dans le processus de réorganisation des tournées
