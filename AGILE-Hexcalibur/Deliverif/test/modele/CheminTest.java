@@ -77,65 +77,65 @@ public class CheminTest {
     }
     
     /**
-     * test de getDuree
+     * test de calculerDureeChemin
      * - Chemin normal
      * - Chemin sans debut ni fin ni troncons
      */
     @Test
-    public void testGetDuree(){
-        System.out.println("-- getDuree");
+    public void testCalculerDureeChemin(){
+        System.out.println("-- calculerDureeChemin");
         
         Chemin chemin = new Chemin(this.trajet, this.p1, this.p2);
-        assertEquals(240, chemin.getDuree(),0.1f);
+        assertEquals(240, chemin.calculerDureeChemin(),0.1f);
         
         chemin = new Chemin(null,null,null);
-        assertEquals(0, chemin.getDuree(),0.1f);
+        assertEquals(0, chemin.calculerDureeChemin(),0.1f);
     }
     
     /**
-     * Test de getDescription
+     * Test de getDescriptionChemin
      * - Chemin normal
      * - Chemin sans debut ni fin ni troncons
      */
     @Test
-    public void testGetDescription(){
-        System.out.println("-- getDescription");
+    public void testGetDescriptionChemin(){
+        System.out.println("-- getDescriptionChemin");
         
         Chemin chemin = new Chemin(this.trajet, this.p1, this.p2);
-        assertEquals(9, chemin.getDescription(Calendar.getInstance()).size());
+        assertEquals(9, chemin.getDescriptionChemin(Calendar.getInstance()).size());
         
-        assertEquals(9, chemin.getDescription(null).size());
+        assertEquals(9, chemin.getDescriptionChemin(null).size());
         
         chemin = new Chemin(null,null,null);
-        assertEquals(0, chemin.getDescription(Calendar.getInstance()).size());
+        assertEquals(0, chemin.getDescriptionChemin(Calendar.getInstance()).size());
     }
     
     /**
-     * Test de getLongueur
+     * Test de calculerLongueurChemin
      * - Chemin normal
      * - Chemin sans troncon
      * - Chemin sans debut
      * - Chemin sans fin
      */
     @Test
-    public void testGetLongueur(){
-        System.out.println("-- getLongueur");
+    public void testCalculerLongueurChemin(){
+        System.out.println("-- calculerLongueurChemin");
         
         //Normal
         Chemin chemin = new Chemin(this.trajet, this.p1, this.p2);
-        assertEquals(500, chemin.getLongueur(),0.1f);
+        assertEquals(500, chemin.calculerLongueurChemin(),0.1f);
         
         //Pas de troncon
         chemin = new Chemin(null,this.p1, this.p2);
-        assertEquals(0, chemin.getLongueur(),0.1f);
+        assertEquals(0, chemin.calculerLongueurChemin(),0.1f);
         
         //Pas de debut
         chemin = new Chemin(this.trajet, null, this.p2);
-        assertEquals(0, chemin.getLongueur(), 0.1f);
+        assertEquals(0, chemin.calculerLongueurChemin(), 0.1f);
         
         //Pas de fin
         chemin = new Chemin(this.trajet, this.p1, null);
-        assertEquals(0, chemin.getLongueur(),0.1f);
+        assertEquals(0, chemin.calculerLongueurChemin(),0.1f);
         
     }
     
