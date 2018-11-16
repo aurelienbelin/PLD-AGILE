@@ -24,7 +24,6 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -62,14 +61,8 @@ public class Deliverif extends Application implements Observer{
     public final static String SUPPRIMER_LIVRAISON = "Supprimer une livraison";
     public final static String REORGANISER_TOURNEE = "Réorganiser tournée";
     public final static String CALCULER_TOURNEES = "Calculer les tournées";
-    
-    /**
-     * 
-     */
     public final static String VALIDER_MODIF = "Valider modifications";
-    
     public final static String ZOOM_AVANT = "+";
-
     public final static String ARRETER_CALCUL_TOURNEES = "Stop";
     public final static String TITRE = "Deliver'IF";
     public final static String VALIDER_SELECTION = "Valider la sélection";
@@ -157,33 +150,19 @@ public class Deliverif extends Application implements Observer{
         scene = new Scene(root,LARGEUR,HAUTEUR);
         
         bord = new BorderPane();
-        
-        boutonsActionsPrincipales = new HBox();
-        boutonsActionsPrincipales.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
-        boutonsActionsPrincipales.setSpacing(SPACING);
-        
+
         creerBoutonsActionsPrincipales();
         creerBoutonsActionsModifications();
         
-        boutonsActionsPrincipales.getChildren().addAll(boutonChargerPlan, boutonChargerDL, boutonAjouterLivraison,boutonSupprimerLivraison, boutonReorganiserTournee);
+        boutonsActionsPrincipales = templateBoiteBouton();
+        boutonsActionsPrincipales.getChildren().addAll(boutonChargerPlan, boutonChargerDL, boutonAjouterLivraison,boutonSupprimerLivraison, boutonReorganiserTournee);        
         
-        boutonsAjoutLivraison = new HBox();
-        boutonsAjoutLivraison.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
-        boutonsAjoutLivraison.setSpacing(SPACING);
+        boutonsAjoutLivraison = templateBoiteBouton();
         
-        //boutonsAjoutLivraison.getChildren().addAll(boutonRetourAuMenu, boutonValiderSelection, boutonRetourSelection);
-        
-        boutonsSuppressionLivraison = new HBox();
-        boutonsSuppressionLivraison.setPadding(new Insets(PADDING,PADDING,PADDING,PADDING));
-        boutonsSuppressionLivraison.setSpacing(5);
-        
+        boutonsSuppressionLivraison = templateBoiteBouton();
         boutonsSuppressionLivraison.getChildren().addAll(boutonAnnulerSuppression, boutonValiderSuppression);
         
-        boutonsReorgLivraison = new HBox();
-        boutonsReorgLivraison.setPadding(new Insets(15, 15, 15, 15));
-        boutonsReorgLivraison.setSpacing(5);
-        
-        //boutonsReorgLivraison.getChildren().addAll(boutonAnnuler, boutonValiderReorg);
+        boutonsReorgLivraison = templateBoiteBouton();
         
         Separator sv = new Separator();
         sv.setOrientation(Orientation.VERTICAL);
@@ -192,7 +171,6 @@ public class Deliverif extends Application implements Observer{
         
         creerPanelDroit();   
         
-        //Il faudra ajouter la vue graphique
         vueGraphique.setLayoutX(0);
         vueGraphique.setLayoutY(LARGEUR_GRAPHIQUE);
         
@@ -241,6 +219,13 @@ public class Deliverif extends Application implements Observer{
         stage.show();
         
         creerBoxAjoutLivraison();
+    }
+    
+    private HBox templateBoiteBouton(){
+        HBox hbox = new HBox();
+        hbox.setPadding(new Insets(PADDING,PADDING,PADDING,PADDING));
+        hbox.setSpacing(SPACING);
+        return hbox;
     }
     
     private Button templateBoutonAction(String titre, Boolean isDisable){
