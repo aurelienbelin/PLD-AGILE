@@ -39,7 +39,7 @@ public class EtatPlanCharge extends EtatDefaut{
         try{
             gestionLivraison.chargerDemandeLivraison(fichier);
             Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
-            fenetre.estDemandeLivraisonChargee("SUCCES");
+            fenetre.estDemandeLivraisonChargee("SUCCESS");
         } catch (SAXException e){
             fenetre.estDemandeLivraisonChargee(e.getMessage());
         } catch (IOException e) {
@@ -62,7 +62,7 @@ public class EtatPlanCharge extends EtatDefaut{
     public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
         try{
             gestionLivraison.chargerPlan(fichier);
-            fenetre.estPlanCharge("SUCCES");
+            fenetre.estPlanCharge("SUCCESS");
         } catch (SAXException e) {
             fenetre.estPlanCharge(e.getMessage());
             
@@ -72,5 +72,17 @@ public class EtatPlanCharge extends EtatDefaut{
         } catch (Exception e) {
             fenetre.estPlanCharge(e.getMessage());
         }
+    }
+   
+    @Override
+    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomPlus(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
+    }
+    
+    @Override
+    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+        fenetre.getVueGraphique().zoomMoins(lat,lon);
+        fenetre.getVueGraphique().dessinerPlan();
     }
 }

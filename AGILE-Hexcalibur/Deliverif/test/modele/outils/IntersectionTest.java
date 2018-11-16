@@ -101,22 +101,4 @@ public class IntersectionTest {
         assertFalse(inter2.equals(inter));
         assertFalse(inter.equals("banane"));
     }
-    
-    /**
-     * Test de getTroncon
-     * -indice normal
-     * - indice out of bounds
-     */
-    @Test
-    public void testGetTroncon(){
-        System.out.println("-- getTroncon");
-        
-        Intersection inter = new Intersection(0,0,0);
-        Intersection inter2 = new Intersection(1,1,1);
-        Troncon t = new Troncon("Rue chocolat", inter, inter2, 100);
-        
-        assertSame(t, inter.getTroncon(0));
-        assertNull(inter.getTroncon(-1));
-        assertNull(inter.getTroncon(1));
-    }
 }
