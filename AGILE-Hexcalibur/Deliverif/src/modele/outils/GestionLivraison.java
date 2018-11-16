@@ -73,9 +73,6 @@ public class GestionLivraison extends Observable{
         if(this.plan==null || this.demande==null || (this.calculTSPEnCours())){
             return;
         }
-        if (nbLivreur<1 || tempsLimite<=0){
-            return;
-        }
         List<PointPassage> listePoints = new ArrayList<>();
         listePoints.add(this.demande.getEntrepot());
         listePoints.addAll(this.demande.getLivraisons());
@@ -206,17 +203,9 @@ public class GestionLivraison extends Observable{
      */
     public void ajouterLivraison(PointPassage livraison, int numeroTournee, 
             int pointPrecedent){
-        if (!this.aSolution()){
-            return;
-        }
-        if(livraison==null || numeroTournee<0 ||numeroTournee>=this.tournees.length ||
-                pointPrecedent<0 || pointPrecedent>=this.tournees[numeroTournee].nombrePoints()){
-            return;
-        }
         if (pointPrecedent>=this.tournees[numeroTournee].nombrePoints()){
             return;
         }
-        
         this.demande.ajouterLivraison(livraison);
         PointPassage derniereLivraison = this.tournees[numeroTournee].getPointPassage(
             pointPrecedent);
@@ -250,12 +239,7 @@ public class GestionLivraison extends Observable{
      * @param livraison - La livraison à supprimer
      */
     public void supprimerLivraison(PointPassage livraison){
-        if(livraison==null){
-            return;
-        }
-        if(!this.aSolution()){
-            return;
-        }
+        //FIXME : à changer pour l'undo/redo
         if (livraison.estEntrepot()){
             return;//Non monsieur, on ne supprime pas l'entrepôt
         }
