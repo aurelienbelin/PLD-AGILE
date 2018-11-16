@@ -6,8 +6,11 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele;
 
+import modele.Intersection;
+import modele.PointPassage;
+import modele.DemandeLivraison;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;

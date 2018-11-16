@@ -6,7 +6,7 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele;
 
 import java.util.ArrayList;
 import java.util.List;

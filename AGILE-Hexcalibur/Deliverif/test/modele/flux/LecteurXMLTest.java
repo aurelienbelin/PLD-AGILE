@@ -9,8 +9,8 @@
 package modele.flux;
 
 import java.io.IOException;
-import modele.outils.DemandeLivraison;
-import modele.outils.PlanVille;
+import modele.DemandeLivraison;
+import modele.PlanVille;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

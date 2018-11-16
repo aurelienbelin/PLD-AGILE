@@ -6,8 +6,10 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele.tsp;
 
+import modele.Troncon;
+import modele.Intersection;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

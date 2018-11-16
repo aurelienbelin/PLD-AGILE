@@ -9,7 +9,7 @@
 package controleur;
 
 import controleur.commandes.ListeCommandes;
-import deliverif.DescriptifChemin;
+import deliverif.DescriptifLivraison;
 import java.io.IOException;
 import org.xml.sax.SAXException;
 
@@ -49,7 +49,7 @@ public class Controleur {
     /**
      * 
      */
-    protected static final EtatPlanCliquable ETAT_PLAN_CLIQUABLE = new EtatPlanCliquable();
+    protected static final EtatIntersectionCliquable ETAT_PLAN_CLIQUABLE = new EtatIntersectionCliquable();
     
     /**
      * 
@@ -91,7 +91,7 @@ public class Controleur {
      *  C'est avec cette classe que le controleur communique pour intéragir 
      * avec les classes du modèle.
      */
-    private final modele.outils.GestionLivraison gestionLivraison;
+    private final modele.GestionLivraison gestionLivraison;
     
     private final deliverif.Deliverif fenetre;
     
@@ -107,7 +107,7 @@ public class Controleur {
      * @see modele.GestionLivraison
      * @version 1
      */
-    public Controleur (modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre){
+    public Controleur (modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre){
         this.gestionLivraison = gestionLivraison;
         Controleur.etatCourant = ETAT_INIT;
         this.fenetre = fenetre;
@@ -143,7 +143,7 @@ public class Controleur {
     }
     
     //Test
-    public void afficherMarqueur(deliverif.DescriptifChemin point) {
+    public void afficherMarqueur(deliverif.DescriptifLivraison point) {
         etatCourant.trouverLocalisation(this.gestionLivraison, point, this.fenetre);
     }
     
@@ -173,7 +173,7 @@ public class Controleur {
     }
     
     public void boutonAnnuler() {
-        etatCourant.annuler(this.fenetre);
+        etatCourant.annuler(this.fenetre, this.listeCde);
     }
     
     public void boutonValiderSelection() {
@@ -181,7 +181,7 @@ public class Controleur {
     }
     
     public void boutonRetour(){
-        etatCourant.retourSelection(this.fenetre);
+        etatCourant.retourSelection(this.fenetre, this.listeCde);
     }
 
     public void boutonArretCalcul(){
@@ -215,7 +215,7 @@ public class Controleur {
         etatCourant.clicFleche(gestionLivraison, fenetre, haut, indiceLivraison, indiceTournee, this.listeCde);
     }
     
-    public void clicDroit(DescriptifChemin livraisonCliquee){
+    public void clicDroit(DescriptifLivraison livraisonCliquee){
         etatCourant.clicDroit(livraisonCliquee);
     }
     

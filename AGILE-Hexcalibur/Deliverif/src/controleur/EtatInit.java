@@ -10,6 +10,7 @@ package controleur;
 
 import deliverif.Deliverif;
 import java.io.IOException;
+import modele.GestionLivraison;
 import org.xml.sax.SAXException;
 
 /** Etat dans lequel l'application se trouve à son ouverture
@@ -35,7 +36,7 @@ public class EtatInit extends EtatDefaut{
       *  @see EtatPlanCharge
      */
     @Override
-    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
             gestionLivraison.chargerPlan(fichier);
             Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
@@ -50,6 +51,10 @@ public class EtatInit extends EtatDefaut{
             fenetre.estPlanCharge(e.getMessage());
             
         }
+    }
+
+    @Override
+    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
     }
     
     @Override

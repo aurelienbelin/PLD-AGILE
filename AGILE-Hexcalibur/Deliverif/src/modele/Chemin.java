@@ -6,7 +6,7 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class Chemin {
      * @param troncons - La liste de tronçons composant ce chemin
      * @param debut - Le point de passage par lequel commence ce chemin
      * @param fin - Le point de passage par lequel se termine ce chemin
-     * @see modele.outils.PointPassage
+     * @see modele.PointPassage
      */
     public Chemin(List<Troncon> troncons, PointPassage debut, PointPassage fin) {
         if (troncons==null){

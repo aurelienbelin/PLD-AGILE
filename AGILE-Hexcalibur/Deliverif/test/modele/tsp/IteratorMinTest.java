@@ -6,8 +6,9 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele.tsp;
 
+import modele.tsp.IteratorMin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

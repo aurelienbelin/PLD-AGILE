@@ -6,8 +6,10 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele;
 
+import modele.tsp.TSPMinCFC;
+import modele.tsp.TemplateTSP;
 import java.io.IOException;
 import java.lang.Thread.State;
 import java.util.ArrayList;
@@ -362,19 +364,18 @@ public class GestionLivraison extends Observable{
                 tournee2>=this.tournees.length){
             return;
         }
-        if (indice1<1 || indice2<1 || 
-                indice1>this.tournees[tournee1].nombrePoints()-2 || 
-                indice2> this.tournees[tournee2].nombrePoints()-2){
+        if (indice1<0 || indice2<0 || 
+                indice1>this.tournees[tournee1].nombrePoints()-1 || 
+                indice2> this.tournees[tournee2].nombrePoints()-1){
             return;//IndexOutOfBoundsException quoi.
         }
         PointPassage livraison = 
                 this.tournees[tournee1].getPointPassage(indice1);
 
-
-
-
         this.supprimerLivraison(livraison);
         this.ajouterLivraison(livraison, tournee2, indice2);
+        setChanged();
+        notifyObservers(this.tournees);
     }
     
     /**

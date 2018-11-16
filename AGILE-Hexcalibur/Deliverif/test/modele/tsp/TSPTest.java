@@ -6,8 +6,11 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele.tsp;
 
+import modele.tsp.TSPSimple;
+import modele.tsp.TSPMinCFC;
+import modele.tsp.TSP;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.AfterClass;

@@ -6,7 +6,7 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -179,18 +179,13 @@ public class PlanVille {
             //retrouver troncon entre ces 2 points
             List<Troncon> trPossibles = ptInter1.getTroncons();
             ListIterator<Troncon> it = trPossibles.listIterator();
-            boolean suite=false;
             while(it.hasNext()){
                 Troncon tr = it.next();
                 if(tr.getFin()==ptInter2){
                     //l'ajouter en tête de liste
                     trChemin.add(0,tr);
-                    suite=true;
                     break;
                 }
-            }
-            if(!suite){
-                return null;
             }
             //remonter d'un troncon
             ptInter2=ptInter1;

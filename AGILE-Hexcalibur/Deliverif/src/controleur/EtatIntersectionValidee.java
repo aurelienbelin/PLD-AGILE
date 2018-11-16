@@ -12,8 +12,8 @@ import controleur.commandes.CdeAjoutLivraison;
 import controleur.commandes.Commande;
 import controleur.commandes.ListeCommandes;
 import deliverif.Deliverif;
-import modele.outils.GestionLivraison;
-import modele.outils.Intersection;
+import modele.GestionLivraison;
+import modele.Intersection;
 
 /**
  *
@@ -31,13 +31,13 @@ public class EtatIntersectionValidee extends EtatDefaut{
     }
     
     @Override
-    public void annuler(Deliverif fenetre){
+    public void annuler(Deliverif fenetre, ListeCommandes listeCdes){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
-        fenetre.estAjoutLivraisonFini();
+        fenetre.estAjoutLivraisonFini(true, -1,-1);
     }
     
     @Override
-    public void retourSelection(Deliverif fenetre){
+    public void retourSelection(Deliverif fenetre, ListeCommandes listeCdes){
         Controleur.etatCourant = Controleur.ETAT_INTERSECTION_SELECTIONNEE;
         fenetre.estRetourSelection();
     }

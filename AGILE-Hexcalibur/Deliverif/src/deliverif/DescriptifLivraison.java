@@ -20,9 +20,9 @@ import javafx.scene.text.TextAlignment;
  * Composant décrivant le point de départ d'un chemin, ainsi que le chemin associé pour aller au prochain point de passage de la tournée considérée.
  * @author Aurelien Belin
  */
-public class DescriptifChemin extends VBox{
+public class DescriptifLivraison extends VBox{
     
-    private EcouteurBoutons ecouteurBoutons;
+    private Ecouteur ecouteurBoutons;
     
     private int largeur;
     private int hauteur;
@@ -54,7 +54,7 @@ public class DescriptifChemin extends VBox{
      * @param description
      * @param ecouteurBoutons 
      */
-    public DescriptifChemin(int largeur, int numTournee, int numLivraison, String horaire, String duree, String nomLivraison, List<String> description, EcouteurBoutons ecouteurBoutons){
+    public DescriptifLivraison(int largeur, int numTournee, int numLivraison, String horaire, String duree, String nomLivraison, List<String> description, Ecouteur ecouteurBoutons){
         super();
         
         //System.out.println(largeur);
@@ -85,7 +85,7 @@ public class DescriptifChemin extends VBox{
 
     }
     
-    public DescriptifChemin(int largeur, int numLivraison, String duree, String nomLivraison, EcouteurBoutons ecouteurBoutons){
+    public DescriptifLivraison(int largeur, int numLivraison, String duree, String nomLivraison, Ecouteur ecouteurBoutons){
         super();
         
         this.identifiantPoint = "-1_"+numLivraison;
@@ -275,7 +275,7 @@ public class DescriptifChemin extends VBox{
     
     public void enableUpDown(){
         
-        if(this.obtenirDetails!=null){
+        if(this.obtenirDetails!=null && !this.entete.getChildren().contains(this.upDown)){
             this.entete.getChildren().remove(this.obtenirDetails);
             this.entete.getChildren().add(this.upDown);
         }        
@@ -283,7 +283,7 @@ public class DescriptifChemin extends VBox{
     
     public void disableUpDown(){
         
-        if(this.obtenirDetails!=null){
+        if(this.obtenirDetails!=null && !this.entete.getChildren().contains(this.obtenirDetails)){
             this.entete.getChildren().add(this.obtenirDetails);
             this.entete.getChildren().remove(this.upDown);
         }     

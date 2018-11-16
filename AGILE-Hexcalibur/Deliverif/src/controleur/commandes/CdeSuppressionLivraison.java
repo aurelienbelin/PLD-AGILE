@@ -8,9 +8,9 @@
  */
 package controleur.commandes;
 
-import modele.outils.GestionLivraison;
-import modele.outils.PointPassage;
-import modele.outils.Tournee;
+import modele.GestionLivraison;
+import modele.PointPassage;
+import modele.Tournee;
 
 /**
  * Cette commande permet de supprimer une livraison au sein d'une tournée.
