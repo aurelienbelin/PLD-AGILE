@@ -39,7 +39,7 @@ public class EtatAjoutLivraison extends EtatDefaut{
     }
     
     @Override
-    public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {
+    public void clicPlus(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {
         listeCde.undo();
         if (this.indexPlus<indexPlus){
             indexPlus-=2;
@@ -54,22 +54,22 @@ public class EtatAjoutLivraison extends EtatDefaut{
     }
     
     @Override
-    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde){
-        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+    public void validerAjout(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde){
+        controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
         fenetre.estAjoutLivraisonFini(true, indexTournee, indexPlus);
     }
     
      @Override
-    public void retourSelection(Deliverif fenetre, ListeCommandes listeCdes){
-        Controleur.etatCourant = Controleur.ETAT_INTERSECTION_SELECTIONNEE;
+    public void boutonRetourSelection(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes){
+        controleur.setEtatCourant(Controleur.ETAT_INTERSECTION_SELECTIONNEE);
         fenetre.estRetourSelection();
         listeCdes.undo();
         fenetre.getVueTextuelle().majVueTextuelle(null);
     }
     
     @Override
-    public void annuler(Deliverif fenetre, ListeCommandes listeCdes){
-        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+    public void boutonAnnuler(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes){
+        controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
         fenetre.estAjoutLivraisonFini(true, indexTournee, indexPlus);
         listeCdes.undo();
     }

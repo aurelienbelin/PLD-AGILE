@@ -28,62 +28,61 @@ interface Etat
      /** 
       *  @param gestionLivraison
       *  @param fichier
-      *  @see modele.GestionLivraison
+      *  @see GestionLivraison
      */
-    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception;
+    public void boutonChargePlan (Controleur controleur, GestionLivraison gestionLivraison, String fichier, Deliverif fenetre) throws SAXException, IOException, Exception;
     
     /** 
       *  @param gestionLivraison
       *  @param fichier
-      *  @see modele.GestionLivraison
+      *  @see GestionLivraison
      */
-    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception;
+    public void boutonChargeLivraisons (Controleur controleur, GestionLivraison gestionLivraison, String fichier, Deliverif fenetre) throws SAXException, IOException, Exception;
     
     /** 
       *  @param gestionLivraison
       *  @param nbLivreurs
-      *  @see modele.GestionLivraison
+      *  @see GestionLivraison
      */
-    public void calculerTournees(modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre);
+    public void boutonCalculerTournees(Controleur controleur, GestionLivraison gestionLivraison, int nbLivreurs, Deliverif fenetre);
+    
+    public void boutonArreterCalcul(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre);
     
     //Test
-    public void trouverLocalisation(modele.GestionLivraison gestionLivraison, deliverif.DescriptifLivraison point, deliverif.Deliverif fenetre);
+    public void clicDescriptionLivraison(Controleur controleur, GestionLivraison gestionLivraison, DescriptifLivraison point, Deliverif fenetre);
     
-    public void ajouterLivraison(deliverif.Deliverif fenetre);
+    public void boutonAjouterLivraison(Controleur controleur, Deliverif fenetre);
     
-    public void validerSuppression(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, ListeCommandes listeCde);
+    public void validerSuppression(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, ListeCommandes listeCde);
     
-    public void clicGauche(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
+    public void clicGauche(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude);
     
-    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes);
+    public void boutonAnnuler(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes);
     
-    public void validerSelection(deliverif.Deliverif fenetre);
+    public void validerSelection(Controleur controleur, Deliverif fenetre);
     
-    public void retourSelection(deliverif.Deliverif fenetre, ListeCommandes listeCdes);
+    public void boutonRetourSelection(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes);
     
-    public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde);
+    public void clicPlus(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde);
     
-    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde);
+    public void validerAjout(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde);
 
-    public void supprimerLivraison (Deliverif fenetre);
+    public void boutonSupprimerLivraison (Controleur controleur, Deliverif fenetre);
 
-    public void arreterCalcul(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre);
-
-    public void selectionnerPoint(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude);
-
-    public void reorgTournees(deliverif.Deliverif fenetre);
+    
+    public void boutonReorgTournees(Controleur controleur, Deliverif fenetre);
     
     public void clicFleche(GestionLivraison gestionLivraison, Deliverif fenetre, boolean haut, int indexLivraison, int indexTournee, ListeCommandes commandes);
     
     public void clicDroit(DescriptifLivraison livraisonCliquee);
     
-    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes);
+    public void selectionMenuLivreurs(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes);
     
-    public void validerReorganisation(Deliverif fenetre);
+    public void validerReorganisation(Deliverif fenetre, Controleur controleur);
     
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon);
+    public void zoomPlus(Deliverif fenetre, double lat, double lon);
     
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon);
+    public void zoomMoins(Deliverif fenetre, double lat, double lon);
 
     public void undo(ListeCommandes listeCdes);
     public void redo(ListeCommandes listeCdes);
