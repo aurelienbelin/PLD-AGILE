@@ -23,8 +23,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.CubicCurve;
 import javafx.util.Pair;
 import modele.Chemin;
 import modele.DemandeLivraison;
@@ -156,7 +154,7 @@ public class VueGraphique extends StackPane implements Observer {
         }
         
         echelleLat = (640-95)/(maxLatitude-minLatitude);
-        echelleLong = (640)/(maxLongitude-minLongitude); //longueur fenetre
+        echelleLong = (640)/(maxLongitude-minLongitude);
         
         echelleLatitudeMin = echelleLat;
         echelleLongitudeMin = echelleLong;
@@ -177,9 +175,6 @@ public class VueGraphique extends StackPane implements Observer {
             
         GraphicsContext gc1 = this.dl.getGraphicsContext2D();
         gc1.clearRect(0, 0, dl.getWidth(), dl.getHeight());
-        
-        //this.tournees.clear();
-        
         Iterator<Node> iter = this.getChildren().iterator();
         while(iter.hasNext()) {
             Node n = iter.next();
@@ -266,29 +261,12 @@ public class VueGraphique extends StackPane implements Observer {
                     for(Chemin chemin : chemins){
                         List<Troncon> troncons = chemin.getTroncons();
                         Color[] degradeChemin = calculDegrade(degradeTournee[numChemin], degradeTournee[numChemin+1], 1.0, troncons.size()+1);
-                        
                         int numTroncon=0;
                         for(Troncon troncon : troncons){
                            int absDebutTroncon =(int) ((troncon.getDebut().getLongitude() - origineLongitude) * echelleLong); 
                            int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
                            int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
                            int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
-                           
-                           //Test
-                           /*int t;
-                           if(absFinTroncon-absDebutTroncon>0){
-                               t = 1;
-                           }else
-                               t = -1;
-                           
-                           int longueurY = ordFinTroncon-ordDebutTroncon;
-                           
-                           ordDebutTroncon = (int)(ordDebutTroncon-((double)t*(absFinTroncon-absDebutTroncon))/(ordFinTroncon-ordDebutTroncon));
-                           ordFinTroncon = ordDebutTroncon + longueurY;
-                           absDebutTroncon += t;
-                           absFinTroncon += t;*/
-                           
-                           //faire un gc.setStroke() du gradient à faire sur la ligne uniquement :) (ce qui implique de recalculer à chaque fois la prochaine couleur).
                            Stop[] stops = new Stop[] { new Stop(0, degradeChemin[numTroncon]), new Stop(1, degradeChemin[numTroncon+1])};
                            gc.setStroke(new LinearGradient(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon, true, CycleMethod.NO_CYCLE, stops));
                            gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
@@ -303,25 +281,6 @@ public class VueGraphique extends StackPane implements Observer {
 
                 numTournee++;
             }
-        }
-    }
-    
-    //test
-    protected void calculCouleursFin(){
-        int i=0;
-        
-        Color bl = Color.WHITE;
-        
-        for(Color c : couleursDbt){
-            System.out.println("Couleur n° "+i);
-            
-            double red = c.getRed() + 2*Math.abs(c.getRed() - bl.getRed())/3;
-            double green = c.getGreen() + 2*Math.abs(c.getGreen() - bl.getGreen())/3;
-            double blue = c.getBlue() + 2*Math.abs(c.getBlue() - bl.getBlue())/3;
-            
-            System.out.println(red+" ; "+green+" ; "+blue);
-            System.out.println();
-            i++;
         }
     }
     
@@ -357,7 +316,6 @@ public class VueGraphique extends StackPane implements Observer {
      */
     public void dessinerTournees(int indexTournee){
         Tournee[] listeTournees = this.gestionLivraison.getTournees();
-        int nCouleur=0;
         int numTournee=0;
         
         Color[] degradeTournee;
@@ -406,7 +364,6 @@ public class VueGraphique extends StackPane implements Observer {
                 }
                 
                 numTournee++;
-                nCouleur++;
             }
 
             if(indexTournee>0){
@@ -418,7 +375,7 @@ public class VueGraphique extends StackPane implements Observer {
     }
     
     /**
-     * 
+     * crée les claques de tournées
      * @param nb 
      */
     public void creerCalques(int nb){
@@ -455,7 +412,12 @@ public class VueGraphique extends StackPane implements Observer {
                 this.tournees.get(i).setVisible(false);
         }
     }
-    
+    /**
+     * Conversion entre coordonnées fenetres et géographique
+     * @param pointAMAJ
+     * @param estCoordonneesVueGraphique
+     * @return 
+     */
     public double[] mettreCoordonneesALechelle(double[] pointAMAJ, boolean estCoordonneesVueGraphique){
         double[] pointAJour = new double[2];
         if(estCoordonneesVueGraphique){
@@ -469,12 +431,18 @@ public class VueGraphique extends StackPane implements Observer {
         }
         return pointAJour;
     }
-    
+    /**
+     * efface le marqueur après modification d'une tournée
+     */
     public void effacerMarqueurModif() {
         this.marqueurModif.getGraphicsContext2D().clearRect(0, 0, this.marqueurModif.getWidth(), this.marqueurModif.getHeight());
         positionMarqueurAModifier = null;
     }
-    
+    /**
+     * ajoute un marqueur lors de la modification d'une tournée
+     * @param lat
+     * @param lon 
+     */
     public void ajouterMarqueurModif(double lat, double lon) {
         int x = (int)((lon - origineLongitude)*echelleLong);
         int y = (int)(this.getHeight() - (lat - origineLatitude)*echelleLat);
@@ -485,13 +453,20 @@ public class VueGraphique extends StackPane implements Observer {
         gc.drawImage(imageMarqueurModif, x - this.imageMarqueurModif.getWidth()/2.0, y - this.imageMarqueurModif.getHeight());
     }
     
-    //Test
+    
+    /**
+     * efface le marqueur de la vue graphique
+     */
     public void effacerMarqueur() {
         this.positionMarqueur = null;
         this.marqueurSelectionLivraison.getGraphicsContext2D().clearRect(0,0,this.marqueurSelectionLivraison.getWidth(), this.marqueurSelectionLivraison.getHeight());
     }
     
-    //Test
+    /**
+     * ajoute le marqueur dans la vue graphique
+     * @param lat
+     * @param lon 
+     */
     public void ajouterMarqueur(double lat, double lon){
         int x = (int)((lon - origineLongitude)*echelleLong);
         int y = (int)(getHeight() - (lat - origineLatitude)*echelleLat);
@@ -505,32 +480,49 @@ public class VueGraphique extends StackPane implements Observer {
         this.getChildren().add(this.marqueurSelectionLivraison);
     }
     
-    //Test
+    
+    /** 
+     * affiche le marqueur sur la tournée selectionnée
+     */
     public void dessinerMarqueur(){
         this.marqueurSelectionLivraison.getGraphicsContext2D().clearRect(0,0,this.marqueurSelectionLivraison.getWidth(), this.marqueurSelectionLivraison.getHeight());
         
         if(this.positionMarqueur != null)
             ajouterMarqueur(this.positionMarqueur.getKey(),this.positionMarqueur.getValue());
     }
-    
+    /**
+     * supprimme/ déplace le marqueur aux coordonnées 
+     * @param aAjouter
+     * @param lat
+     * @param lon 
+     */
     public void identifierPtPassage(boolean aAjouter, double lat, double lon){
         this.effacerMarqueur();
         
         if(aAjouter)
             this.ajouterMarqueur(lat,lon);
     }
-    
+    /**
+     * supprime/ déplace le marqueur de modifications aux coordonnées
+     * @param aAjouter
+     * @param lat
+     * @param lon 
+     */
     public void identifierPtPassageAModifier(boolean aAjouter, double lat, double lon){
         this.effacerMarqueurModif();
         
         if(aAjouter)
             this.ajouterMarqueurModif(lat,lon);
     }
-
+    /**
+     * efface toutes les tournées calculées 
+     */
     public void effacerTournees(){
         tournees.clear();
     }
-    
+    /**
+     * efface la demande de livraison
+     */
     public void effacerDl(){
         Iterator<Node> iter = this.getChildren().iterator();
         while(iter.hasNext()) {
@@ -540,7 +532,11 @@ public class VueGraphique extends StackPane implements Observer {
             }
         }
     }
-    
+    /**
+     * zoom avant sur le plan
+     * @param lat
+     * @param lon 
+     */
     public void zoomPlus(double lat, double lon){
         origineLongitude+=(lon-origineLongitude)*coefMultiplicateurZoom/coefDiviseurZoom;
         origineLatitude+= (lat-origineLatitude)*coefMultiplicateurZoom/coefDiviseurZoom;
@@ -553,7 +549,11 @@ public class VueGraphique extends StackPane implements Observer {
         if(positionMarqueurAModifier!=null)
             identifierPtPassageAModifier(true,positionMarqueurAModifier.getKey(),positionMarqueurAModifier.getValue());
     }
-    
+    /**
+     * zoom arrière sur le plan
+     * @param lat
+     * @param lon 
+     */
     public void zoomMoins(double lat, double lon){
         echelleLong = echelleLong /coefDiviseurZoom;
         echelleLat=echelleLat/coefDiviseurZoom;
