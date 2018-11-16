@@ -53,7 +53,5 @@ public class EtatSupprimerLivraison extends EtatDefaut{
         fenetre.estPointPassageASupprimerSelectionne(intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());
         Controleur.ETAT_LIVRAISON_SELECTIONNEE.actionEntree(intersection);
         Controleur.etatCourant = Controleur.ETAT_LIVRAISON_SELECTIONNEE;
-    }
-    
-    
+    }  
 }
