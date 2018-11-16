@@ -119,11 +119,6 @@ public class Ecouteur{
             }
         }
     }
-    /**
-     * Actualise le plan en fonction du zoom
-     * @param e
-     * @throws InterruptedException
-     */
     
     /**
      * Envoie une requête au controleur pour connaitre la localisation du point de livraison associé au composant DescriptifLivraison.
@@ -189,15 +184,25 @@ public class Ecouteur{
             return null;
         }
     }
-    
+    /**
+     * ajoute déclenche la procédure d'ajout d'une livraison
+     * @param e 
+     */
     public void ajouterLivraison (ActionEvent e) {
         controleur.boutonAjouterLivraison();
     }
-    
+    /**
+     * supprimme la livraison sélectionnée dans la vue graphique et textuelle
+     * @param e 
+     */
     public void supprimerLivraison (ActionEvent e) {
         controleur.boutonSupprimerLivraison();
     }
-    
+    /**
+     * transmet au controleur les coordonnées (latitude, longitude) du points cliqué
+     * @param e
+     * @throws InterruptedException 
+     */
     public void recupererCoordonneesSouris(MouseEvent e) throws InterruptedException{
         double[] point = new double[2];
         point[0] = e.getX();;
@@ -205,36 +210,62 @@ public class Ecouteur{
         point = vueGraphique.mettreCoordonneesALechelle(point, true);
         controleur.clicGauche(point[1], point[0]);
     }
-    
+    /**
+     * retour au menu sans validation
+     * @param e 
+     */
     public void boutonRetourAuMenu(ActionEvent e){
         controleur.boutonAnnuler();
     }
-    
+    /**
+     * Valide la selection graphique  d'un point de livraison livraison pour ajout
+     * @param e 
+     */
     public void boutonValiderSelection(ActionEvent e) {
         controleur.boutonValiderSelection();
     }
-    
+    /**
+     * annule la procedure en cours (ajout/suppression)
+     * @param e 
+     */
     public void boutonRetour(ActionEvent e){
         controleur.boutonRetour();
     }
-    
+    /**
+     * développe les details d'une tournée
+     * @param e
+     * @param indexPlus
+     * @param indexTournee 
+     */
     public void clicPlus (ActionEvent e, int indexPlus, int indexTournee){
         controleur.clicPlus(indexPlus, indexTournee);
     }
-    
+    /**
+     * valide l'ajout d'une livraison dans la tournée choisie
+     * @param e 
+     */
     public void boutonValiderAjout(ActionEvent e){
         float duree = fenetrePrincipale.getDuree();
         controleur.boutonValiderAjout(duree);
     }
-    
+    /**
+     * déclenche la procédure de suppression d'une livraison
+     * @param e 
+     */
     public void boutonSupprimerLivraison(ActionEvent e){
         controleur.boutonValiderSupprimerLivraison();
     }
-    
+    /**
+     * valide la suppression d'une livraison
+     * @param e 
+     */
     public void boutonSupprimer(ActionEvent e){
         controleur.boutonSupprimerLivraison();
     }
-    
+    /**
+     * Zoom le plan autour de la souris
+     * @param e 
+     */
     public void scrollZoomPlus(ScrollEvent e){
         double[] point = new double[2];
         point[0] = e.getX();;
@@ -242,7 +273,10 @@ public class Ecouteur{
         point = vueGraphique.mettreCoordonneesALechelle(point, true);
         controleur.scrollZoomPlus(point[1], point[0]);
     }
-    
+    /**
+     * Dézoom le plan autour de la souris
+     * @param e 
+     */
     public void scrollZoomMoins(ScrollEvent e){
         double[] point = new double[2];
         point[0] = e.getX();;
@@ -250,7 +284,10 @@ public class Ecouteur{
         point = vueGraphique.mettreCoordonneesALechelle(point, true);
         controleur.scrollZoomMoins(point[1], point[0]);
     }
-    
+    /**
+     * Undo/Redo
+     * @param e 
+     */
     public void actionClavier(KeyEvent e){
         if (e.getCode()==KeyCode.Z){
             this.controleur.undo();
@@ -258,15 +295,26 @@ public class Ecouteur{
             this.controleur.redo();
         }
     }
-    
+    /**
+     * Déclenche la procédure de reorganisation des livraisons
+     * @param e 
+     */
    public void boutonReorgLivraisons(ActionEvent e){
        controleur.boutonReorgTournees();
    }
-   
+   /**
+    * valide la réorganisation d'une tournée
+    * @param e 
+    */
    public void boutonValiderReorg(ActionEvent e){
        controleur.validerReorganisation();
    }
-   
+   /**
+    * Affiche le menu contextuel pour changer une tournée de livraison
+    * @param event
+    * @param choixLivreurs
+    * @param livraisonCliquee 
+    */
     public void montrerMenuContextuel(ContextMenuEvent event, ContextMenu choixLivreurs, DescriptifLivraison livraisonCliquee){
         controleur.clicDroit(livraisonCliquee);
         
@@ -279,7 +327,11 @@ public class Ecouteur{
         choixLivreurs.getItems().get(indiceTournee).setVisible(false);
         choixLivreurs.show(livraisonCliquee, event.getScreenX(), event.getScreenY());
     }
-    
+    /**
+     * déplace la tournée qui a été cliquée dans le menu contextuel
+     * @param e
+     * @param indexTourneeChoisi 
+     */
     public void reorgSelectionTournee(ActionEvent e, int indexTourneeChoisi) {
         controleur.selectionMenuChangerTournee(indexTourneeChoisi);
     }

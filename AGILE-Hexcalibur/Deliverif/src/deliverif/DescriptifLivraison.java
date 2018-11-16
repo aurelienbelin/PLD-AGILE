@@ -18,16 +18,23 @@ import javafx.scene.text.TextAlignment;
 
 /**
  * Composant décrivant le point de départ d'un chemin, ainsi que le chemin associé pour aller au prochain point de passage de la tournée considérée.
- * @author Aurelien Belin
+ * @author H4102
  */
 public class DescriptifLivraison extends VBox{
     
-    private Ecouteur ecouteurBoutons;
     
+    private Ecouteur ecouteurBoutons;    
     private int largeur;
-    private int hauteur;
-    
+    private int hauteur;    
     private String identifiantPoint;
+    
+    //labels
+    
+    public final static String DEVELOPPER_PANNEAU = "+";
+    public final static String REDUIRE_PANNEAU = "-";
+    public final static String FLECHE_HAUT = "▲";
+    public final static String FLECHE_BAS ="▼";
+
     
     //Composants
     private HBox entete;
@@ -35,10 +42,10 @@ public class DescriptifLivraison extends VBox{
     private Label duree;
     private Label livraison;
     private Button obtenirDetails;
-    private Button up;
-    private Button down;
+    private Button haut;
+    private Button bas;
     private VBox details;
-    private VBox upDown;
+    private VBox hautBas;
     private boolean developpe;
     
     private boolean localise;
@@ -64,7 +71,7 @@ public class DescriptifLivraison extends VBox{
         this.ecouteurBoutons = ecouteurBoutons;
         
         this.largeur = largeur;
-        this.upDown = new VBox(2);
+        this.hautBas = new VBox(2);
         
         this.setSpacing(0);
         this.setMaxWidth(largeur);
@@ -84,6 +91,14 @@ public class DescriptifLivraison extends VBox{
        
 
     }
+    /**
+     * 
+     * @param largeur
+     * @param numLivraison
+     * @param duree
+     * @param nomLivraison
+     * @param ecouteurBoutons 
+     */
     
     public DescriptifLivraison(int largeur, int numLivraison, String duree, String nomLivraison, Ecouteur ecouteurBoutons){
         super();
@@ -185,21 +200,21 @@ public class DescriptifLivraison extends VBox{
             this.entete.getChildren().add(this.obtenirDetails);
          
              
-            this.up = new Button("▲");
-            this.down = new Button ("▼");
-            this.upDown.setMaxHeight(50);
+            this.haut = new Button(FLECHE_HAUT);
+            this.bas = new Button (FLECHE_BAS);
+            this.hautBas.setMaxHeight(50);
 
-            this.up.setOnAction(e->ecouteurBoutons.avancerLivraison(this));
-            this.down.setOnAction(e->ecouteurBoutons.reculerLivraison(this));
-            this.up.setMaxHeight(15);
-            this.down.setMaxHeight(15);
-            this.up.setMinWidth(largeur/10.0);
-            this.down.setMinWidth(largeur/10.0);
-            this.up.setAlignment(Pos.TOP_RIGHT);
-            this.down.setAlignment(Pos.BOTTOM_RIGHT);
+            this.haut.setOnAction(e->ecouteurBoutons.avancerLivraison(this));
+            this.bas.setOnAction(e->ecouteurBoutons.reculerLivraison(this));
+            this.haut.setMaxHeight(15);
+            this.bas.setMaxHeight(15);
+            this.haut.setMinWidth(largeur/10.0);
+            this.bas.setMinWidth(largeur/10.0);
+            this.haut.setAlignment(Pos.TOP_RIGHT);
+            this.bas.setAlignment(Pos.BOTTOM_RIGHT);
             
 
-            this.upDown.getChildren().addAll(this.up,this.down);
+            this.hautBas.getChildren().addAll(this.haut,this.bas);
         }
     }
     
@@ -228,10 +243,10 @@ public class DescriptifLivraison extends VBox{
      */
     public void developperDetails(){
         if(this.developpe){
-            this.obtenirDetails.setText("+");
+            this.obtenirDetails.setText(DEVELOPPER_PANNEAU);
             this.getChildren().remove(1);
         }else{
-            this.obtenirDetails.setText("-");
+            this.obtenirDetails.setText(REDUIRE_PANNEAU);
             this.getChildren().add(details);
         }
         
@@ -248,7 +263,7 @@ public class DescriptifLivraison extends VBox{
     }
 
     /**
-     * 
+     * définit la localisation d'un composant
      * @param b - valeur à donner à la localisation du composant.
      */
     public void setLocalise(boolean b) {
@@ -268,38 +283,51 @@ public class DescriptifLivraison extends VBox{
     public String getPoint(){
         return this.identifiantPoint;
     }
-    
+    /**
+     * définit l'identifiant d'un point
+     * @param id 
+     */
     public void setIdentifiantPoint(String id){
         this.identifiantPoint=id;
     }
-    
-    public void enableUpDown(){
+    /**
+     * remplace les boutons de détails par les boutons monter - descendre une tournée dans la liste des tournées
+     */
+    public void activerHautBas(){
         
-        if(this.obtenirDetails!=null && !this.entete.getChildren().contains(this.upDown)){
+        if(this.obtenirDetails!=null && !this.entete.getChildren().contains(this.hautBas)){
             this.entete.getChildren().remove(this.obtenirDetails);
-            this.entete.getChildren().add(this.upDown);
+            this.entete.getChildren().add(this.hautBas);
         }        
     }
-    
-    public void disableUpDown(){
+    /**
+     * remplace les boutons monter - descendre une tournée dans la liste des tournées par  les boutons de détails
+     */
+    public void desactiverHautBas(){
         
         if(this.obtenirDetails!=null && !this.entete.getChildren().contains(this.obtenirDetails)){
             this.entete.getChildren().add(this.obtenirDetails);
-            this.entete.getChildren().remove(this.upDown);
+            this.entete.getChildren().remove(this.hautBas);
         }     
     }
-    
+    /**
+     * enleve les boutons détails
+     */
     public void enleverDetails(){
         if(this.obtenirDetails!=null){
             this.entete.getChildren().remove(this.obtenirDetails);
         }            
     }
-    
-    public void disableUp(){
-        this.up.setDisable(true);
+    /**
+     * désactive le boutons pour monter une tournée dans la liste
+     */
+    public void desactiverHaut(){
+        this.haut.setDisable(true);
     }
-    
-    public void disableDown(){
-        this.down.setDisable(true);
+    /**
+     * désactive le bouton pour descendre une tournée dans la liste
+     */
+    public void desactiverBas(){
+        this.bas.setDisable(true);
     }
 }
