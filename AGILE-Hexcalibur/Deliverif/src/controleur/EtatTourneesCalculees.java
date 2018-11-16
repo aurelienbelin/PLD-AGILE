@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
 
 public class EtatTourneesCalculees extends EtatDefaut{
     
+    private final String SUCCES = "SUCCES";
     /**
      * Constructeur EtatLivraisonsChargees
      */
@@ -40,7 +41,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
         try{
             gestionLivraison.calculerTournees(nbLivreurs, Integer.MAX_VALUE);
             fenetre.activerBoutonArreterCalcul(false);
-            fenetre.estTourneesCalculees("SUCCESS");
+            fenetre.estTourneesCalculees(SUCCES);
         } catch(Exception e){
             
         }
@@ -58,9 +59,10 @@ public class EtatTourneesCalculees extends EtatDefaut{
     @Override
     public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
+            gestionLivraison.effacerTournees();
             gestionLivraison.chargerDemandeLivraison(fichier);
             Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
-            fenetre.estDemandeLivraisonChargee("SUCCESS");
+            fenetre.estDemandeLivraisonChargee(SUCCES);
         } catch (SAXException e){
             fenetre.estDemandeLivraisonChargee(e.getMessage());
         } catch (IOException e) {
@@ -82,9 +84,11 @@ public class EtatTourneesCalculees extends EtatDefaut{
     @Override
     public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
         try{
+            gestionLivraison.getDemande().effacerLivraisons();
+            gestionLivraison.effacerTournees();
             gestionLivraison.chargerPlan(fichier);
             Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
-            fenetre.estPlanCharge("SUCCESS");
+            fenetre.estPlanCharge(SUCCES);
         } catch (SAXException e) {
             fenetre.estPlanCharge(e.getMessage());
             
@@ -137,5 +141,4 @@ public class EtatTourneesCalculees extends EtatDefaut{
         fenetre.getVueGraphique().dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
         fenetre.getVueGraphique().dessinerMarker();
     }
-
 }
