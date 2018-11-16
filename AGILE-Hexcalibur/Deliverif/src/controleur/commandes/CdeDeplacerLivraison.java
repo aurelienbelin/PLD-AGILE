@@ -8,8 +8,8 @@
  */
 package controleur.commandes;
 
-import modele.outils.GestionLivraison;
-import modele.outils.PointPassage;
+import modele.GestionLivraison;
+import modele.PointPassage;
 
 /**
  *

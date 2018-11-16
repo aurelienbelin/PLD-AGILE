@@ -10,7 +10,7 @@ package controleur.commandes;
 
 import java.util.ArrayList;
 import java.util.List;
-import modele.outils.GestionLivraison;
+import modele.GestionLivraison;
 
 /**
  * Ceci est une sur-commande de réorganisation. Elle permet
