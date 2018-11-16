@@ -27,8 +27,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 /**
- *
- * @author romain
+ * @author Hex'calibur
  */
 public class PlanVilleTest {
     
@@ -82,12 +81,12 @@ public class PlanVilleTest {
     
      @BeforeClass
     public static void setUpClass() {
-        System.out.println("JUNIT - PlanVille TEST ------------------------");
+        System.out.println("JUNIT - PLANVILLE TEST ------------------------");
     }
     
     @AfterClass
     public static void tearDownClass() {
-        System.out.println("JUNIT - PlanVille TEST ----- FIN --------------");
+        System.out.println("JUNIT - PLANVILLE TEST ----- FIN --------------");
     }
     
      /**
