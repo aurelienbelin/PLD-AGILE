@@ -8,7 +8,9 @@
  */
 package controleur;
 
+import deliverif.Deliverif;
 import java.io.IOException;
+import modele.GestionLivraison;
 import org.xml.sax.SAXException;
 
 /** Etat dans lequel se trouve l'application une fois le fichier de livraisons 
@@ -26,15 +28,16 @@ public class EtatLivraisonsChargees extends EtatDefaut{
     public EtatLivraisonsChargees() {
     }
     
-    /** 
-      *  @param gestionLivraison
-      *  @param nbLivreurs
-      * @param fenetre
-      *  @see modele.GestionLivraison
-      *  @see EtatCalculTournees
+    /**Demande au modèle de lancer le calcul
+     * @param controleur
+     * @param gestionLivraison
+     * @param nbLivreurs
+     * @param fenetre
+     * @see GestionLivraison
+     * @see EtatCalculTournees
      */
     @Override
-    public void boutonCalculerTournees(Controleur controleur, modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
+    public void boutonCalculerTournees(Controleur controleur, GestionLivraison gestionLivraison, int nbLivreurs, Deliverif fenetre){
         controleur.setEtatCourant(Controleur.ETAT_CALCUL_TOURNEES);
         try{
             gestionLivraison.calculerTournees(nbLivreurs, Integer.MAX_VALUE);
@@ -45,17 +48,17 @@ public class EtatLivraisonsChargees extends EtatDefaut{
         }
     }
     
-    /**  Cette méthode délègue la chargement des livraisons au modèle
-     *   Si le chargement s'est bien passé on passe dans 
-     *   l'EtatLivraisonsChargees   
-     *  @param gestionLivraison
-     *  @param fichier
+    /**Cette méthode délègue la chargement des livraisons au modèle
+     * Si le chargement s'est bien passé on passe dans l'EtatLivraisonsChargees 
+     * @param controleur
+     * @param gestionLivraison
+     * @param fichier
      * @param fenetre
-     *  @see modele.GestionLivraison
-     *  @see EtatLivraisonsChargees
+     * @see GestionLivraison
+     * @see EtatLivraisonsChargees
      */
     @Override
-    public void boutonChargeLivraisons (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+    public void boutonChargeLivraisons (Controleur controleur, GestionLivraison gestionLivraison, String fichier, Deliverif fenetre) {
         try{
             gestionLivraison.chargerDemandeLivraison(fichier);
             fenetre.estDemandeLivraisonChargee(SUCCES);
@@ -68,17 +71,17 @@ public class EtatLivraisonsChargees extends EtatDefaut{
         }
     }
     
-    /**  Cette méthode délègue la chargement du plan au modèle
-      *  Si le chargement s'est bien passé on passe dans 
-      *  l'EtatPlanCharge 
-      *  @param gestionLivraison
-      *  @param fichier
-     * @param fenetre
-      *  @see modele.GestionLivraison
-      *  @see EtatPlanCharge
+    /**Cette méthode délègue la chargement du plan au modèle
+      *Si le chargement s'est bien passé on passe dans l'EtatPlanCharge 
+     * @param controleur
+      *@param gestionLivraison
+      *@param fichier
+      *@param fenetre
+      *@see GestionLivraison
+      *@see EtatPlanCharge
      */
     @Override
-    public void boutonChargePlan (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
+    public void boutonChargePlan (Controleur controleur, GestionLivraison gestionLivraison, String fichier, Deliverif fenetre){
         try{
             gestionLivraison.getDemande().effacerLivraisons();
             gestionLivraison.chargerPlan(fichier);

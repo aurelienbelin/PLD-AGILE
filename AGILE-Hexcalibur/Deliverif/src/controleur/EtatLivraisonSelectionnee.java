@@ -58,7 +58,7 @@ public class EtatLivraisonSelectionnee extends EtatDefaut {
      * @param fenetre 
      */
     @Override
-    public void boutonAnnuler(Controleur controleur, deliverif.Deliverif fenetre, ListeCommandes listeCdes){
+    public void boutonAnnuler(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes){
         controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
         fenetre.estSuppressionFinie();
     }
@@ -70,7 +70,7 @@ public class EtatLivraisonSelectionnee extends EtatDefaut {
      * @param listeCde 
      */
     @Override
-    public void validerSuppression (Controleur controleur, GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, ListeCommandes listeCde) {
+    public void validerSuppression (Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, ListeCommandes listeCde) {
         listeCde.ajouterCde(new CdeSuppressionLivraison(gestionLivraison, livraisonASupprimer));
         controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
         fenetre.estSuppressionFinie();
@@ -84,7 +84,7 @@ public class EtatLivraisonSelectionnee extends EtatDefaut {
      */
     @Override
     public void clicDescriptionLivraison(Controleur controleur, GestionLivraison gestionLivraison, DescriptifLivraison point, Deliverif fenetre) {
-        modele.PointPassage intersection = gestionLivraison.identifierPointPassage(point.getPoint());
+        PointPassage intersection = gestionLivraison.identifierPointPassage(point.getPoint());
         fenetre.getVueGraphique().identifierPtPassageAModifier(!point.estLocalise(), intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());
         fenetre.getVueTextuelle().majVueTextuelle(point);
         fenetre.estPointPassageASupprimerSelectionne(intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());

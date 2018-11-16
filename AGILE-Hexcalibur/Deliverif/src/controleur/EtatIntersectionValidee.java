@@ -16,8 +16,8 @@ import modele.GestionLivraison;
 import modele.Intersection;
 
 /**Etat dans lequel se trouve l'application lorsqu'une intersection a été 
- * sélectionnée et validée. Point d'entrée de la phase d'attribution de la
- * livraison à un livreur.
+ * sélectionnée et validée pour l'ajout de livraison. 
+ * Point d'entrée de la phase d'attribution de la livraison à un livreur.
  *
  * @author Hex'calibur
  */
