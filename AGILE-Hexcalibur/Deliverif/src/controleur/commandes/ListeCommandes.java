@@ -14,13 +14,16 @@ import java.util.ArrayList;
 /**
  * Récapitule l'ensemble des commandes exécutées lors de la gestion des livraisons.
  * Merci à C. Solnon pour son exemple dans PlaCo.
- * @author Louis
+ * @author Hex'calibur
  */
 public class ListeCommandes {
     
     private List<Commande> liste;
     private int indiceCommande;
     
+    /**
+     * Constructeur de la listeCommandes.
+     */
     public ListeCommandes(){
         liste = new ArrayList<Commande>();
         indiceCommande=-1;

@@ -28,8 +28,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *
- * @author Louis
+ * @author Hex'calibur
  */
 public class TourneeTest {
     
