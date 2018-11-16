@@ -19,7 +19,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -37,7 +36,7 @@ import modele.Tournee;
 /**
  * Classe implémentant le composant de Vue Textuelle de l'IHM du projet ainsi que son comportement.
  * La Vue Textuelle représente la description textuelle des tournées de livraison à effectuer par les livreurs.
- * @author Aurelien Belin
+ * @author Hex'Calibur
  * @see VBox
  * @see Observer
  * @see Deliverif
@@ -160,6 +159,9 @@ public class VueTextuelle extends VBox implements Observer {
         });
     }
     
+    /**
+     * Efface les éléments présents dans la tournée
+     */
     public void effacer(){
         contenu.clear();
         tournees.clear();
@@ -168,6 +170,9 @@ public class VueTextuelle extends VBox implements Observer {
         this.panel.setContent(null);
     }
     
+    /**
+     * Affiche la demande de livraison
+     */
     private void afficherDemandeLivraisons(){
         if(this.gestionLivraison.getDemande()!=null && !this.gestionLivraison.calculTSPEnCours()){
             DemandeLivraison demande = this.gestionLivraison.getDemande();
@@ -192,6 +197,9 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
+    /**
+     * Permets de visualiser textuellement les tournées.
+     */
     private void afficherTournees(){
         if(this.gestionLivraison.getTournees()!=null && !this.gestionLivraison.calculTSPEnCours()){
             Tournee[] listeTournees = this.gestionLivraison.getTournees();
@@ -227,11 +235,21 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
+    /**
+     * Permets pour une livraison donnée de récupérer le descriptif du chemin à parcourir pour atteindre le point de livraison.
+     * @param tournee
+     * @param position
+     * @return 
+     */
     public DescriptifLivraison getDescriptifChemin(int tournee, int position)
     {
         return (DescriptifLivraison) tournees.get(tournee).getChildren().get(position);
     }
     
+    /**
+     * Change la description affichée en fonction du paramètre tournée (attribut choixTournee).
+     * @param tournee - identifiant de la tournée vers laquelle on se déplace
+     */
     public void changerDescription_Ter(int tournee){
         this.panel.setContent(this.tournees.get(tournee));
         choixTournee.setValue(contenu.get(tournee+1));
@@ -239,7 +257,7 @@ public class VueTextuelle extends VBox implements Observer {
     
     /**
      * Change la description affichée en fonction de l'option choisie dans le ComboBox (attribut choixTournee).
-     * @return l'indice de la description affichée 
+     * @return - l'indice de la description affichée 
      */
     public int changerDescription_Bis(){
         String s = choixTournee.getSelectionModel().getSelectedItem();
@@ -280,12 +298,16 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
        
+    /**
+     * Permet de savoir quelle livrison est sélectionnée actuellement.
+     * @return - l'indice de la livraison sélectionnée
+     */
     public int affichageActuel(){
-        String selec = this.choixTournee.getSelectionModel().getSelectedItem();
+        String select = this.choixTournee.getSelectionModel().getSelectedItem();
         
-        if(selec!=null || "".equals(selec)){
+        if(select!=null || "".equals(select)){
             for(int i=0;i<contenu.size();i++){
-                if(contenu.get(i).equals(selec)){
+                if(contenu.get(i).equals(select)){
                     return i;
                 }
             }
@@ -295,7 +317,7 @@ public class VueTextuelle extends VBox implements Observer {
     }
     
     /**
-     * 
+     * Ajoute les boutons entre les livraisons dans la vue textuelle afin de sélectionner avant quelle livraison on souhaite insérer la livraison à ajouter.
      */
     public void ajouterBoutonAjout(){
         for(int parcoursConteneur=0;parcoursConteneur<tournees.size();parcoursConteneur++){
@@ -315,6 +337,9 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
+    /**
+     * Enlève les boutons plus permettant de choisir avant quelle livraison on souhaite insérer la nouvelle livraison. 
+     */
     public void supprimerBoutonAjout(){
         for(int parcoursConteneur=0;parcoursConteneur<this.tournees.size();parcoursConteneur++){
             List <Node> tournee = this.tournees.get(parcoursConteneur).getChildren();
@@ -324,21 +349,39 @@ public class VueTextuelle extends VBox implements Observer {
             }
         }
     }
-    
+ 
+    /**
+     * Entoure le plus cliqué
+     * @param indexPlus - index du plus cliqué
+     * @param indexTournee - index de la tournée à laquelle appartient ce plus
+     */
     public void entourerPlusClique(int indexPlus, int indexTournee){
         this.tournees.get(indexTournee).getChildren().get(indexPlus).setStyle("-fx-border-color:blue;-fx-border-width:4px;");
         this.panel.setContent(this.tournees.get(indexTournee));
     }
     
+    /**
+     * Permets de changer le plus entouré
+     * @param indexPlusPreced - index du plus cliqué précedemment
+     * @param indexTourneePreced - index de la tournée à laquelle appartient ce plus
+     */
     public void changerPlusEntoure(int indexPlusPreced, int indexTourneePreced){
         this.tournees.get(indexTourneePreced).getChildren().get(indexPlusPreced).setStyle("-fx-border-color:black;-fx-border-width:2px;");
     }
     
+    /**
+     * Désactive le bouton plus 
+     * @param indexPlus - index du bouton plus à désactiver
+     * @param indexTournee  - index de la tournée à laquelle appartient ce plus
+     */
     public void desactiverPlus(int indexPlus, int indexTournee){
         this.tournees.get(indexTournee).getChildren().get(indexPlus).setDisable(true);
         this.tournees.get(indexTournee).getChildren().get(indexPlus+2).setDisable(true);
     }
     
+    /**
+     * Permets d'afficher les détails d'une livraison
+     */
     public void remettreBoutonsDetails(){
         List<VBox> tournees = this.tournees;
         for(VBox tournee: tournees){ 
@@ -349,6 +392,9 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
+    /**
+     * Ajoute les boutons permettant de réorganiser une tournée.
+     */
     public void ajouterBoutonsReorg(){
 
         for(VBox tournee: tournees){ 
@@ -368,6 +414,9 @@ public class VueTextuelle extends VBox implements Observer {
         }
     }
     
+    /**
+     * Ajoute le menu contextuel permettant de changer de tournée pendant la réorganisation.
+     */
     public void ajouterMenuChangerTournee(){
         
         ContextMenu choixTournee = new ContextMenu();
