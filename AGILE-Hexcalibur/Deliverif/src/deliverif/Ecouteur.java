@@ -27,7 +27,7 @@ import javafx.stage.FileChooser;
  * @see Deliverif
  * @see Controleur
  */
-public class EcouteurBoutons{
+public class Ecouteur{
     
     private final Deliverif fenetrePrincipale;
     private final VueGraphique vueGraphique;
@@ -41,7 +41,7 @@ public class EcouteurBoutons{
      * @see Deliverif
      * @see Controleur
      */
-    public EcouteurBoutons(Deliverif f, Controleur c, VueGraphique v){
+    public Ecouteur(Deliverif f, Controleur c, VueGraphique v){
         this.fenetrePrincipale = f;
         this.controleur = c;
         this.vueGraphique = v;
@@ -112,7 +112,6 @@ public class EcouteurBoutons{
         int i = this.fenetrePrincipale.getVueTextuelle().changerDescription_Bis();
         
         if(i!=-1){
-            //this.fenetrePrincipale.getVueGraphique().changerTourneeAffichee(i);
             if(i==0){
                 this.fenetrePrincipale.getVueGraphique().dessinerTournees();
             }else{
@@ -127,25 +126,25 @@ public class EcouteurBoutons{
      */
     
     /**
-     * Envoie une requête au controleur pour connaitre la localisation du point de livraison associé au composant DescriptifChemin.
+     * Envoie une requête au controleur pour connaitre la localisation du point de livraison associé au composant DescriptifLivraison.
      * @param dc 
      */
-    public void localiserPointVueGraphique(DescriptifChemin dc){
+    public void localiserPointVueGraphique(DescriptifLivraison dc){
         controleur.afficherMarqueur(dc);
     }
     
     /**
-     * Devellope les détails du DescriptifChemin passé en paramètre.
+     * Devellope les détails du DescriptifLivraison passé en paramètre.
      * @param dc 
      */
-    public void obtenirDetailsVueTextuelle(DescriptifChemin dc){
+    public void obtenirDetailsVueTextuelle(DescriptifLivraison dc){
         dc.developperDetails();
     }
     /**
      * Remonte la livraison dans la liste
      * @param dc 
      */
-     public void avancerLivraison(DescriptifChemin dc){
+     public void avancerLivraison(DescriptifLivraison dc){
         String[] identifiants = dc.getPoint().split("_");
         
         int indexTournee = Integer.parseInt(identifiants[0]);
@@ -156,7 +155,7 @@ public class EcouteurBoutons{
       * Descend la livraison dans la liste
       * @param dc 
       */
-    public void reculerLivraison(DescriptifChemin dc){
+    public void reculerLivraison(DescriptifLivraison dc){
         String[] identifiants = dc.getPoint().split("_");
         
         int indexTournee = Integer.parseInt(identifiants[0]);
@@ -268,7 +267,7 @@ public class EcouteurBoutons{
        controleur.validerReorganisation();
    }
    
-    public void montrerMenuContextuel(ContextMenuEvent event, ContextMenu choixLivreurs, DescriptifChemin livraisonCliquee){
+    public void montrerMenuContextuel(ContextMenuEvent event, ContextMenu choixLivreurs, DescriptifLivraison livraisonCliquee){
         controleur.clicDroit(livraisonCliquee);
         
         String[] identifiants = livraisonCliquee.getPoint().split("_");

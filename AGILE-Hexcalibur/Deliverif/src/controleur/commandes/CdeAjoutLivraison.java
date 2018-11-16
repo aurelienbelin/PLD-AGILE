@@ -8,9 +8,9 @@
  */
 package controleur.commandes;
 
-import modele.outils.GestionLivraison;
-import modele.outils.Intersection;
-import modele.outils.PointPassage;
+import modele.GestionLivraison;
+import modele.Intersection;
+import modele.PointPassage;
 
 /**
  * Commande permettant d'ajouter une livraison à une tournée dans la GestionLivraison.
