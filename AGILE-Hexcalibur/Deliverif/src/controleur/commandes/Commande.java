@@ -11,14 +11,14 @@ package controleur.commandes;
 import modele.GestionLivraison;
 
 /**
- *
- * @author Louis
+ * Définit le comportement par défaut d'une Commande.
+ * Une commande doit être capable d'exécuter une action et son inverse.
+ * @author Hex'calibur
  */
 public abstract class Commande {
     
+    //Le point d'entrée du modèle.
     protected GestionLivraison gestion;
-    //Décrit l'état dans lequel se trouve la commande.
-    protected EtatCommande etatCommande;
     
     /**
     * Construit une nouvelle Commande
@@ -26,7 +26,6 @@ public abstract class Commande {
     */
     public Commande(GestionLivraison gestion){
         this.gestion=gestion;
-        this.etatCommande=EtatCommande.INACTIVE;
     }
     
     /**

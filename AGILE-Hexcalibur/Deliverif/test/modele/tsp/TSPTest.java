@@ -59,13 +59,12 @@ public class TSPTest {
      * Test de la validité du branch and bound d'un tsp personnalisé
      * par rapport à une référence.
      */
-    @Test(timeout=10*60*1000)
+    @Test(timeout=60*1000)
     public void testChercheSolution(){
         System.out.println("-- chercheSolution");
         TSP reference;
         TSP algoTest;
-        for(int nbLivreur=1; nbLivreur<5; nbLivreur++){//Pas plus que 18! possiblité
-            System.out.println("\nnombre livreur : "+nbLivreur);
+        for(int nbLivreur=1; nbLivreur<5; nbLivreur++){//On va éviter de prendre trop de temps
             reference = new TSPSimple(nbLivreur);
             algoTest = new TSPMinCFC(nbLivreur);
             reference.chercheSolution(Integer.MAX_VALUE, cout.length, nbLivreur, cout);

@@ -29,10 +29,12 @@ public class LecteurXMLTest {
     
     @BeforeClass
     public static void setUpClass() {
+        System.out.println("JUNIT - LECTEURXML TEST ------------------------");
     }
     
     @AfterClass
     public static void tearDownClass() {
+        System.out.println("JUNIT - LECTEURXML TEST ----- FIN --------------");
     }
 
     /**
@@ -40,7 +42,7 @@ public class LecteurXMLTest {
      */
     @Test
     public void testChargerXML() throws Exception {
-        System.out.println("chargerXML");
+        System.out.println("-- chargerXML");
         String urlFichierXML = "test/modele/flux/petitPlan.xml";
         LecteurXML instance = new LecteurXML();
         String expResult = "reseau";
@@ -53,7 +55,7 @@ public class LecteurXMLTest {
      */
     @Test
     public void testCreerPlanVille() throws IOException, Exception {
-        System.out.println("creerPlanVille");
+        System.out.println("-- creerPlanVille");
         String urlFichierXML = "test/modele/flux/moyenPlan.xml";
         LecteurXML instance = new LecteurXML();
         PlanVille pv = instance.creerPlanVille(urlFichierXML);
@@ -95,7 +97,7 @@ public class LecteurXMLTest {
      */
     @Test
     public void testPlanCasse(){
-        System.out.println("-- test plan cassé");
+        System.out.println("-- plan cassé");
         String[] fichiers = {url+"planCasse0.xml", url+"planCasse1.xml", url+"planCasse2.xml",
         url+"planCasse3.xml", url+"planCasse4.xml", url+"dl-petit3.xml", "src/modele/outils/TemplateTSP.java"};
         LecteurXML lecteur = new LecteurXML();
@@ -126,7 +128,7 @@ public class LecteurXMLTest {
      */
     @Test
     public void testDemandeLivraisonCassee(){
-        System.out.println("-- test dl cassé");
+        System.out.println("-- dl cassé");
         LecteurXML lecteur = new LecteurXML();
         try{
             DemandeLivraison dl = lecteur.creerDemandeLivraison(url+"dl-petit3.xml", null);
