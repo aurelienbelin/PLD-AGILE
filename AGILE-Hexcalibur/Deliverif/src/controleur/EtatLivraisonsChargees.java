@@ -34,14 +34,14 @@ public class EtatLivraisonsChargees extends EtatDefaut{
       *  @see EtatCalculTournees
      */
     @Override
-    public void calculerTournees(modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
-        Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
+    public void boutonCalculerTournees(Controleur controleur, modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
+        controleur.setEtatCourant(Controleur.ETAT_CALCUL_TOURNEES);
         try{
             gestionLivraison.calculerTournees(nbLivreurs, Integer.MAX_VALUE);
             fenetre.activerBoutonArreterCalcul(false);
         } catch(Exception e){
             e.printStackTrace();
-            Controleur.etatCourant = Controleur.ETAT_LIVRAISONS_CHARGEES;
+            controleur.setEtatCourant(Controleur.ETAT_LIVRAISONS_CHARGEES);
         }
     }
     
@@ -55,7 +55,7 @@ public class EtatLivraisonsChargees extends EtatDefaut{
      *  @see EtatLivraisonsChargees
      */
     @Override
-    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+    public void boutonChargeLivraisons (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
             gestionLivraison.chargerDemandeLivraison(fichier);
             fenetre.estDemandeLivraisonChargee(SUCCES);
@@ -78,11 +78,11 @@ public class EtatLivraisonsChargees extends EtatDefaut{
       *  @see EtatPlanCharge
      */
     @Override
-    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
+    public void boutonChargePlan (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
         try{
             gestionLivraison.getDemande().effacerLivraisons();
             gestionLivraison.chargerPlan(fichier);
-            Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
+            controleur.setEtatCourant(Controleur.ETAT_PLAN_CHARGE);
             fenetre.estPlanCharge(SUCCES);
         } catch (SAXException e) {
             fenetre.estPlanCharge(e.getMessage());

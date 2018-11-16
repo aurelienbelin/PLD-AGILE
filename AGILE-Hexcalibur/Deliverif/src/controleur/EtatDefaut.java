@@ -37,11 +37,11 @@ public class EtatDefaut implements Etat
      * @param fenetre
      * @throws org.xml.sax.SAXException
      * @throws java.io.IOException
-     * @see modele.GestionLivraison
+     * @see GestionLivraison
      * @version 1
      */
     @Override
-    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception{
+    public void boutonChargePlan (Controleur controleur, GestionLivraison gestionLivraison, String fichier, Deliverif fenetre) throws SAXException, IOException, Exception{
     }
     
     /**
@@ -50,40 +50,40 @@ public class EtatDefaut implements Etat
      * @param fenetre
      * @throws org.xml.sax.SAXException
      * @throws java.io.IOException
-     * @see modele.GestionLivraison
+     * @see GestionLivraison
      * @version 1
      */
     @Override
-    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) throws SAXException, IOException, Exception{
+    public void boutonChargeLivraisons (Controleur controleur, GestionLivraison gestionLivraison, String fichier, Deliverif fenetre) throws SAXException, IOException, Exception{
     }
     
     /**
      * @param gestionLivraison
      * @param nbLivreurs
      * @param fenetre
-     * @see modele.GestionLivraison
+     * @see GestionLivraison
      * @version 1
      */
     @Override
-    public void calculerTournees(modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
+    public void boutonCalculerTournees(Controleur controleur, GestionLivraison gestionLivraison, int nbLivreurs, Deliverif fenetre){
     }
     
     //Test
     @Override
-    public void trouverLocalisation(modele.GestionLivraison gestionLivraison, deliverif.DescriptifLivraison point, deliverif.Deliverif fenetre){
-        modele.PointPassage intersection = gestionLivraison.identifierPointPassage(point.getPoint());
+    public void clicDescriptionLivraison(Controleur controleur, GestionLivraison gestionLivraison, DescriptifLivraison point, Deliverif fenetre){
+        PointPassage intersection = gestionLivraison.identifierPointPassage(point.getPoint());
         fenetre.getVueGraphique().identifierPtPassage(!point.estLocalise(), intersection.getPosition().getLatitude(), intersection.getPosition().getLongitude());
         fenetre.getVueTextuelle().majVueTextuelle(point);
     }
     
     @Override
-    public void ajouterLivraison(deliverif.Deliverif fenetre) {}
+    public void boutonAjouterLivraison(Controleur controleur, Deliverif fenetre) {}
     
     @Override
-    public void validerSuppression(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, ListeCommandes listeCde) {}
+    public void validerSuppression(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, ListeCommandes listeCde) {}
     
     @Override
-    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+    public void clicGauche(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
         PointPassage pointClique = gestionLivraison.pointPassagePlusProche(latitude, longitude);
         fenetre.estPointPassageSelectionne(pointClique.getPosition().getLatitude(), pointClique.getPosition().getLongitude());
         int[] positionDansTournee = gestionLivraison.ouEstLePoint(pointClique);
@@ -91,38 +91,34 @@ public class EtatDefaut implements Etat
     }
     
     @Override
-    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes){}
+    public void boutonAnnuler(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes){}
     
     @Override
-    public void validerSelection(deliverif.Deliverif fenetre){}
+    public void validerSelection(Controleur controleur, Deliverif fenetre){}
     
     @Override
-    public void retourSelection(deliverif.Deliverif fenetre, ListeCommandes listeCdes){}
+    public void boutonRetourSelection(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes){}
     
     @Override
-    public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {}
+    public void clicPlus(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {}
     
-    public void validerAjout(GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde){}
+    public void validerAjout(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, float duree, ListeCommandes listeCde){}
     
     @Override
-    public void supprimerLivraison (Deliverif fenetre) {}
+    public void boutonSupprimerLivraison (Controleur controleur, Deliverif fenetre) {}
 
     @Override
-    public void arreterCalcul(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre) {}
+    public void boutonArreterCalcul(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre) {}
 
+    @Override
+    public void boutonReorgTournees(Controleur controleur, Deliverif fenetre){}
     
     @Override
-    public void selectionnerPoint(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude){}
-    
-    @Override
-    public void reorgTournees(deliverif.Deliverif fenetre){}
-    
-    @Override
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
+    public void zoomPlus(Deliverif fenetre, double lat, double lon){
         fenetre.getVueGraphique().zoomPlus(lat,lon);      
     }
     @Override
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
+    public void zoomMoins(Deliverif fenetre, double lat, double lon){
         fenetre.getVueGraphique().zoomMoins(lat,lon);
     }
     
@@ -134,11 +130,12 @@ public class EtatDefaut implements Etat
     public void clicDroit(DescriptifLivraison livraisonCliquee){}
     
     @Override
-    public void changerLivraisonDeTournee(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes){}
+    public void selectionMenuLivreurs(GestionLivraison gestionLivraison, Deliverif fenetre, int indexTourneeChoisi, ListeCommandes commandes){}
     
     @Override
-    public void validerReorganisation(Deliverif fenetre){}
+    public void validerReorganisation(Deliverif fenetre, Controleur controleur){}
 
+    @Override
     public void undo(ListeCommandes listeCde){
         listeCde.undo();//Par défaut
     }

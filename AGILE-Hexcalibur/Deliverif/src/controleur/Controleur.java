@@ -9,8 +9,10 @@
 package controleur;
 
 import controleur.commandes.ListeCommandes;
+import deliverif.Deliverif;
 import deliverif.DescriptifLivraison;
 import java.io.IOException;
+import modele.GestionLivraison;
 import org.xml.sax.SAXException;
 
 /**En réaction aux actions de l'utilisateur, l'IHM envoie des notifications au 
@@ -85,15 +87,15 @@ public class Controleur {
     /** etatCourant prendra successivement les états définis ci-dessus comme 
      * valeurs
      */
-    protected static Etat etatCourant;
+    private static Etat etatCourant;
     
     /** La classe GestionLivraison est le point d'entrée du modèle.
      *  C'est avec cette classe que le controleur communique pour intéragir 
      * avec les classes du modèle.
      */
-    private final modele.GestionLivraison gestionLivraison;
+    private final GestionLivraison gestionLivraison;
     
-    private final deliverif.Deliverif fenetre;
+    private final Deliverif fenetre;
     
     /**
      * Stocke l'ensemble des commandes réalisées au cours de l'application.
@@ -104,14 +106,22 @@ public class Controleur {
     
     /** * @param gestionLivraison
      * @param fenetre
-     * @see modele.GestionLivraison
+     * @see GestionLivraison
      * @version 1
      */
-    public Controleur (modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre){
+    public Controleur (GestionLivraison gestionLivraison, Deliverif fenetre){
         this.gestionLivraison = gestionLivraison;
         Controleur.etatCourant = ETAT_INIT;
         this.fenetre = fenetre;
         this.listeCde = new ListeCommandes();
+    }
+    
+    /**
+    * Change l'etat courant du controleur
+    * @param etat le nouvel etat courant
+    */
+    protected void setEtatCourant(Etat etat){
+            etatCourant = etat;
     }
     
     /** * @param fichier
@@ -121,7 +131,7 @@ public class Controleur {
      * @version 1
      */
     public void boutonChargePlan (String fichier) throws SAXException, IOException, Exception{
-        etatCourant.chargePlan(gestionLivraison, fichier, fenetre);
+        etatCourant.boutonChargePlan(this, gestionLivraison, fichier, fenetre);
     }
     
     /** * @param fichier
@@ -131,7 +141,7 @@ public class Controleur {
      * @version 1
      */
     public void boutonChargeLivraisons (String fichier) throws SAXException, IOException, Exception{
-        etatCourant.chargeLivraisons(gestionLivraison, fichier, fenetre);
+        etatCourant.boutonChargeLivraisons(this, gestionLivraison, fichier, fenetre);
     }
     
     /**@param nbLivreurs
@@ -139,27 +149,31 @@ public class Controleur {
      * @version 1
      */
     public void boutonCalculerTournees (int nbLivreurs){
-        etatCourant.calculerTournees(gestionLivraison, nbLivreurs, fenetre);
+        etatCourant.boutonCalculerTournees(this, gestionLivraison, nbLivreurs, fenetre);
+    }
+    
+    public void boutonArretCalcul(){
+        etatCourant.boutonArreterCalcul(this, this.gestionLivraison, this.fenetre);
     }
     
     //Test
-    public void afficherMarqueur(deliverif.DescriptifLivraison point) {
-        etatCourant.trouverLocalisation(this.gestionLivraison, point, this.fenetre);
+    public void afficherMarqueur(DescriptifLivraison point) {
+        etatCourant.clicDescriptionLivraison(this, this.gestionLivraison, point, this.fenetre);
     }
     
     /**@see Etat
      * @version 2.1
      */
     public void boutonAjouterLivraison() {
-        etatCourant.ajouterLivraison(this.fenetre);
+        etatCourant.boutonAjouterLivraison(this, this.fenetre);
     }
     
     public void boutonSupprimerLivraison(){
-        etatCourant.supprimerLivraison(fenetre);
+        etatCourant.boutonSupprimerLivraison(this, fenetre);
     }
     
     public void boutonValiderSupprimerLivraison() {
-        etatCourant.validerSuppression(this.gestionLivraison, this.fenetre, this.listeCde);
+        etatCourant.validerSuppression(this, this.gestionLivraison, this.fenetre, this.listeCde);
     }
     
     /**@param latitude
@@ -169,24 +183,22 @@ public class Controleur {
      * @version 2.1
      */
     public void clicGauche(double latitude, double longitude) {
-        etatCourant.clicGauche(this.gestionLivraison, this.fenetre, latitude, longitude);
+        etatCourant.clicGauche(this, this.gestionLivraison, this.fenetre, latitude, longitude);
     }
     
     public void boutonAnnuler() {
-        etatCourant.annuler(this.fenetre, this.listeCde);
+        etatCourant.boutonAnnuler(this, this.fenetre, this.listeCde);
     }
     
     public void boutonValiderSelection() {
-        etatCourant.validerSelection(this.fenetre);
+        etatCourant.validerSelection(this, this.fenetre);
     }
     
     public void boutonRetour(){
-        etatCourant.retourSelection(this.fenetre, this.listeCde);
+        etatCourant.boutonRetourSelection(this, this.fenetre, this.listeCde);
     }
 
-    public void boutonArretCalcul(){
-        etatCourant.arreterCalcul(this.gestionLivraison, this.fenetre);
-    }
+    
     
     /** @see Etat
      * @version 1
@@ -200,15 +212,15 @@ public class Controleur {
     }
     
     public void clicPlus(int indexPlus, int indexTournee){
-        etatCourant.clicPlus(this.gestionLivraison, this.fenetre, indexPlus, indexTournee, fenetre.getDuree(), this.listeCde);
+        etatCourant.clicPlus(this, this.gestionLivraison, this.fenetre, indexPlus, indexTournee, fenetre.getDuree(), this.listeCde);
     }
     
     public void boutonValiderAjout(float duree){
-        etatCourant.validerAjout(gestionLivraison, fenetre, duree, this.listeCde);
+        etatCourant.validerAjout(this, gestionLivraison, fenetre, duree, this.listeCde);
     }
     
     public void boutonReorgTournees(){
-        etatCourant.reorgTournees(fenetre);
+        etatCourant.boutonReorgTournees(this, fenetre);
     }
     
     public void clicFleche(boolean haut, int indiceLivraison, int indiceTournee){
@@ -220,11 +232,11 @@ public class Controleur {
     }
     
     public void selectionMenuChangerTournee(int indiceTourneeChoisi){
-        etatCourant.changerLivraisonDeTournee(gestionLivraison, fenetre, indiceTourneeChoisi, listeCde);
+        etatCourant.selectionMenuLivreurs(gestionLivraison, fenetre, indiceTourneeChoisi, listeCde);
     }
     
     public void validerReorganisation(){
-        etatCourant.validerReorganisation(fenetre);
+        etatCourant.validerReorganisation(fenetre, null);
     }
     
     public void undo(){
