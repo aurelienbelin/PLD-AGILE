@@ -23,8 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *
- * @author lohl
+ * @author Hex'calibur
  */
 public class TSPTest {
     

@@ -17,8 +17,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author Amine Nahid
+ * @author Hex'calibur
  */
 public class LecteurXMLTest {
     

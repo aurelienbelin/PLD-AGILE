@@ -27,8 +27,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 /**
- *
- * @author romain
+ * @author Hex'calibur
  */
 public class PlanVilleTest {
     
