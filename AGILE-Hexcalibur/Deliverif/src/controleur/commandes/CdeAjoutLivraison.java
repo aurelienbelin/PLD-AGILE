@@ -14,12 +14,15 @@ import modele.PointPassage;
 
 /**
  * Commande permettant d'ajouter une livraison à une tournée dans la GestionLivraison.
- * @author Louis
+ * @author Hex'calibur
  */
 public class CdeAjoutLivraison extends Commande{
     
+    //La tournée où est insérée la livraison
     private int numeroTournee;
+    //L'indice après lequel la livraison doit s'insérer
     private int positionTournee;
+    //La livraison à insérer
     private PointPassage livraison;
     
     /**
@@ -40,20 +43,12 @@ public class CdeAjoutLivraison extends Commande{
     
     @Override
     public void doCde(){
-        if(this.etatCommande==EtatCommande.EXECUTEE){
-            return;
-        }
         gestion.ajouterLivraison(this.livraison, numeroTournee, positionTournee);
-        this.etatCommande=EtatCommande.EXECUTEE;
     }
     
     @Override
     public void undoCde(){
-        if(this.etatCommande==EtatCommande.ANNULEE){
-            return;
-        }
         gestion.supprimerLivraison(livraison);
-        this.etatCommande=EtatCommande.ANNULEE;
     }
     
 }

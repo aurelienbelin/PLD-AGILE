@@ -71,39 +71,49 @@ public class GestionLivraison extends Observable{
      * @param tempsLimite - Le temps maximal (en s) alloué au calcul de tournée.
      * @throws Exception 
      */
-    public void calculerTournees(int nbLivreur, int tempsLimite) throws Exception{
+    public void calculerTournees(int nbLivreur, int tempsLimite) 
+            throws Exception{
+        //Eviter les problèmes de paramètres
         if(this.plan==null || this.demande==null || (this.calculTSPEnCours())){
             return;
         }
         if (nbLivreur<1 || tempsLimite<=0){
             return;
         }
+        //Prendre tous les points de passages, entrepot compris
+        //L'entrepot est à l'indice 0 pour faciliter le fonctionnement du calcul.
         List<PointPassage> listePoints = new ArrayList<>();
         listePoints.add(this.demande.getEntrepot());
         listePoints.addAll(this.demande.getLivraisons());
+        //Obtenir l'ensemble des chemins d'un point i à un point j
         List<Chemin> graphe = this.plan.dijkstraTousPoints(listePoints);
-        //Nous sommes déjà sûrs que l'entrepot est à l'indice 0
+        
+        //Construire le cout des chemins
         int[][] cout = new int[listePoints.size()][listePoints.size()];
         for(Chemin c : graphe){
             int i = listePoints.indexOf(c.getDebut());
             int j = listePoints.indexOf(c.getFin());
-            cout[i][j]=(int)c.getDuree();
+            cout[i][j]=(int)c.calculerDureeChemin();
         }
+        //Préparer le TSP
         tsp = new TSPMinCFC(nbLivreur);
         ObservateurTSP observateur = new ObservateurTSP(graphe, listePoints,
                 nbLivreur);
         tsp.addObserver(observateur);
+        //Lancer le calcul dans un processus parallèle.
         threadTSP = new Thread(new Runnable(){
             @Override
             public void run(){
                 tsp.chercheSolution(tempsLimite, listePoints.size(), nbLivreur,
-                        cout); //*1000
+                        cout);
                 if (tsp.getCoutMeilleureSolution()!=Integer.MAX_VALUE){
                     genererTournee(graphe, listePoints, nbLivreur);
                 }
             }
         });
+        //L'arrêt de l'application doit couper net ce calcul.
         threadTSP.setDaemon(true);
+        //C'est parti
         threadTSP.start();
     }
     
@@ -133,7 +143,8 @@ public class GestionLivraison extends Observable{
             }
             if (fin==0){
                 //On revient vers l'entrepot, on change de tournée !
-                listeTournee.add(new Tournee(trajets, demande.getHeureDepart()));
+                listeTournee.add(new Tournee(trajets, 
+                        demande.getHeureDepart()));
                 trajets = new ArrayList<>();
             }
         }
@@ -176,8 +187,7 @@ public class GestionLivraison extends Observable{
     }
     
     /**
-     * @return true si le tsp a actuellement trouvé une solution. 
-     * false s'il n'a toujours rien trouvé.
+     * @return True si le tsp a actuellement trouvé une solution. False sinon.
      */
     public boolean aSolution(){
         if (tsp==null){
@@ -187,7 +197,7 @@ public class GestionLivraison extends Observable{
     }
     
     /**
-     * @return False si le thread du tsp est dans l'état terminé. False sinon.
+     * @return False si le thread du tsp est dans l'état terminé. True sinon.
      */
     public boolean threadAlive(){
         if (threadTSP!=null){
@@ -208,31 +218,38 @@ public class GestionLivraison extends Observable{
      */
     public void ajouterLivraison(PointPassage livraison, int numeroTournee, 
             int pointPrecedent){
+        //Vérifier que les paramètres sont bon et qu'on a bien des tournées existantes.
         if (!this.aSolution()){
             return;
         }
-        if(livraison==null || numeroTournee<0 ||numeroTournee>=this.tournees.length ||
-                pointPrecedent<0 || pointPrecedent>=this.tournees[numeroTournee].nombrePoints()){
+        if(livraison==null || 
+                numeroTournee<0 ||
+                numeroTournee>=this.tournees.length ||
+                pointPrecedent<0 || 
+                pointPrecedent>=this.tournees[numeroTournee].nombrePoints()){
             return;
         }
         if (pointPrecedent>=this.tournees[numeroTournee].nombrePoints()){
             return;
         }
-        
+        //Ajout dans la demande de livraison
         this.demande.ajouterLivraison(livraison);
-        PointPassage derniereLivraison = this.tournees[numeroTournee].getPointPassage(
-            pointPrecedent);
+        //Retracer le chemin allant vers le nouveau point et celui du nouveau
+        //point vers le suivant
+        PointPassage derniereLivraison = 
+                this.tournees[numeroTournee].getPointPassage(pointPrecedent);
         Map depuisLivraison = this.plan.dijkstra(livraison);
         Map depuisPrecedent = this.plan.dijkstra(derniereLivraison);
-        Chemin finVersLivraison = this.plan.reconstruireChemin(derniereLivraison,
-                livraison, depuisPrecedent);
+        Chemin finVersLivraison = this.plan.reconstruireChemin(
+                derniereLivraison, livraison, depuisPrecedent);
         
         Chemin livraisonVersSuivant = this.plan.reconstruireChemin(livraison, 
-                this.tournees[numeroTournee].getTrajet().get(pointPrecedent).getFin(),
+                this.tournees[numeroTournee].getTrajet().get(pointPrecedent).
+                        getFin(),
                 depuisLivraison);
-        //Modifications sur la référence, rien d'autre à faire.
+        //Regénérer la tournée avec une nouvelle liste de chemins.
         List<Chemin> ancienneTournee = this.tournees[numeroTournee].getTrajet();
-        List<Chemin> nouvelleTournee = new ArrayList<Chemin>();
+        List<Chemin> nouvelleTournee = new ArrayList<>();
         for(int i=0; i<ancienneTournee.size(); i++){
             if (i==pointPrecedent){
                 nouvelleTournee.add(finVersLivraison);
@@ -248,9 +265,10 @@ public class GestionLivraison extends Observable{
     }
     
     /**
-     * Permet de supprimer une livraison connue
+     * Suppression d'une livraison
      * @param livraison - La livraison à supprimer
      */
+    @SuppressWarnings("empty-statement")
     public void supprimerLivraison(PointPassage livraison){
         if(livraison==null){
             return;
@@ -261,6 +279,7 @@ public class GestionLivraison extends Observable{
         if (livraison.estEntrepot()){
             return;//Non monsieur, on ne supprime pas l'entrepôt
         }
+        //Eliminer la livraison de la demande
         this.demande.annulerLivraison(livraison);
         //Récupérer la tournée à laquelle appartient ce point, ainsi que sa 
         //place dans la tournée.
@@ -270,7 +289,6 @@ public class GestionLivraison extends Observable{
                 !this.tournees[numero].contientPointPassage(livraison);
                 numero++);
         if (numero>=this.tournees.length){
-            System.out.println("Non, pas de suppression !");
             return;
         }
         int place;
@@ -278,9 +296,11 @@ public class GestionLivraison extends Observable{
                 place<this.tournees[numero].nombrePoints() && 
                 this.tournees[numero].getPointPassage(place)!=livraison; 
                 place++);
-        //Remplacement de : precedent => suppression => suivant, par precedent => suivant
-        Map res = this.plan.dijkstra(this.tournees[numero].getPointPassage(place-1));
-        PointPassage suivant=null;
+        //Remplacement de : precedent => suppression => suivant, 
+        //par precedent => suivant
+        Map res = this.plan.dijkstra(
+                this.tournees[numero].getPointPassage(place-1));
+        PointPassage suivant;
         if (place==this.tournees[numero].nombrePoints()-1){
             suivant=this.demande.getEntrepot();
         } else {
@@ -288,6 +308,7 @@ public class GestionLivraison extends Observable{
         }
         Chemin nouveauChemin = this.plan.reconstruireChemin(
                 this.tournees[numero].getPointPassage(place-1), suivant, res);
+        //Reconstruire la suite des chemins
         List<Chemin> ancienneTournee = this.tournees[numero].getTrajet();
         List<Chemin> nouvelleTournee = new ArrayList<>();
         for(Chemin chemin : ancienneTournee){
@@ -300,49 +321,12 @@ public class GestionLivraison extends Observable{
                 nouvelleTournee.add(nouveauChemin);
             }
         }
+        //Nouvelles tournées
         this.tournees[numero] = new Tournee(nouvelleTournee, 
                 this.demande.getHeureDepart());
         
         setChanged();
         notifyObservers(this.tournees);
-    }
-    
-    /**
-     * Change l'ordre des points de passage d'une tournée.
-     * @param numeroTournee - La tournée sur laquelle l'opération de changement
-     * doit avoir lieu.
-     * @param nouvelOrdre - Une liste d'entier décrivant dans l'ordre les points
-     * de passages à placer,cet ordre étant indiqué par l'indice. 
-     * Par ex : 2, 3, 1 veut dire "le deuxième sommet, puis le troisième 
-     * et enfin le premier".
-     */
-    public void changerOrdreTournee(int numeroTournee, List<Integer> nouvelOrdre){
-        if (this.tournees==null || this.tournees.length<=numeroTournee || 
-                numeroTournee <0){
-            return;
-        }
-        if (this.tournees[numeroTournee].nombrePoints()-1!=nouvelOrdre.size()){
-            return;
-        }
-        List<Chemin> nouveauTrajet = new ArrayList<Chemin>();
-        PointPassage precedent=this.tournees[numeroTournee].getPointPassage(0);
-        for(Integer i : nouvelOrdre){
-            PointPassage suivant=this.tournees[numeroTournee].getPointPassage(i);
-            Map coutChemins = this.plan.dijkstra(precedent);
-            Chemin chemin = this.plan.reconstruireChemin(precedent, suivant, 
-                    coutChemins);
-            nouveauTrajet.add(chemin);
-            suivant=precedent;
-        }
-        //Une fois que tout est mis, il reste le chemin de la dernière livraison
-        //vers l'entrepot.
-        Map coutChemins = this.plan.dijkstra(precedent);
-        Chemin chemin = this.plan.reconstruireChemin(precedent, 
-                this.demande.getEntrepot(), coutChemins);
-        nouveauTrajet.add(chemin);
-        
-        this.tournees[numeroTournee] = new Tournee(nouveauTrajet, 
-                this.demande.getHeureDepart());
     }
     
     /**
@@ -354,7 +338,6 @@ public class GestionLivraison extends Observable{
      * @param indice2 - L'indice où ajouter le point de passage dans la nouvelle
      * tournée.
      */
-
     public void intervertirPoint(int tournee1, int tournee2, int indice1, 
             int indice2){
         if (this.tournees==null || 
@@ -362,12 +345,12 @@ public class GestionLivraison extends Observable{
                 tournee2 <0 || 
                 tournee1>=this.tournees.length || 
                 tournee2>=this.tournees.length){
-            return;
+            return; //sinon on aurait un IndexOutOfBoundsException
         }
         if (indice1<0 || indice2<0 || 
                 indice1>this.tournees[tournee1].nombrePoints()-1 || 
                 indice2> this.tournees[tournee2].nombrePoints()-1){
-            return;//IndexOutOfBoundsException quoi.
+            return; //idem
         }
         PointPassage livraison = 
                 this.tournees[tournee1].getPointPassage(indice1);
@@ -401,7 +384,8 @@ public class GestionLivraison extends Observable{
     /**
      * 
      * @param p
-     * @return 
+     * @return {numeroTournee, indicePointDansTournee}, 
+     * si le point est absent : {nbreTournee+1, -1}
      */
     public int[] ouEstLePoint(PointPassage p){
         int numTournee = -1;
@@ -446,7 +430,8 @@ public class GestionLivraison extends Observable{
      * @param longitude
      * @return 
      */
-    public PointPassage pointPassagePlusProche(double latitude, double longitude) {
+    public PointPassage pointPassagePlusProche(double latitude, 
+            double longitude) {
         
         PointPassage resultat = this.demande.getLivraisons().get(0);
         double minDistance = Math.sqrt(Math.pow(
@@ -482,14 +467,22 @@ public class GestionLivraison extends Observable{
         else
             return this.demande.getLivraisons().get(numLivraison-1);
     }
+
+    /**
+     * vide le contenu de Tournees
+     */
+    public void effacerTournees(){
+        for(Tournee tournee : tournees){
+            tournee.effacerTournee();
+        }
+    }
     
     /**
      *
+     * @return Les tournées calculées précédemment
      */
-    public GestionLivraison(){
-        this.tournees=null;
-        this.plan=null;
-        this.demande=null;
+    public Tournee[] getTournees() {
+        return tournees;
     }
     
     /**
@@ -502,23 +495,19 @@ public class GestionLivraison extends Observable{
 
     /**
      *
-     * @return Les tournées calculées précédemment
-     */
-    public Tournee[] getTournees() {
-        return tournees;
-    }
-
-    public void effacerTournees(){
-        for(Tournee tournee : tournees){
-            tournee.effacerTournee();
-        }
-    }
-    /**
-     *
      * @return La demande de livraison
      */
     public DemandeLivraison getDemande() {
         return demande;
+    }
+    
+    /**
+     * Constructeur de la classe
+     */
+    public GestionLivraison(){
+        this.tournees=null;
+        this.plan=null;
+        this.demande=null;
     }
     
     /**

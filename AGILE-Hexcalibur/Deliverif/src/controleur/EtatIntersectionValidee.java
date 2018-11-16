@@ -31,25 +31,25 @@ public class EtatIntersectionValidee extends EtatDefaut{
     }
     
     @Override
-    public void annuler(Deliverif fenetre, ListeCommandes listeCdes){
-        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+    public void boutonAnnuler(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes){
+        controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
         fenetre.estAjoutLivraisonFini(true, -1,-1);
     }
     
     @Override
-    public void retourSelection(Deliverif fenetre, ListeCommandes listeCdes){
-        Controleur.etatCourant = Controleur.ETAT_INTERSECTION_SELECTIONNEE;
+    public void boutonRetourSelection(Controleur controleur, Deliverif fenetre, ListeCommandes listeCdes){
+        controleur.setEtatCourant(Controleur.ETAT_INTERSECTION_SELECTIONNEE);
         fenetre.estRetourSelection();
     }
     
     @Override
-    public void clicPlus(GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {
+    public void clicPlus(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, int indexPlus, int indexTournee, int duree, ListeCommandes listeCde) {
         Controleur.ETAT_AJOUT_LIVRAISON.actionEntree(intersectionValidee, indexPlus, indexTournee);
         int indexLivraisonPreced = indexPlus/2;
         duree = duree * 60;
         Commande cde = new CdeAjoutLivraison(gestionLivraison, intersectionValidee, indexTournee, indexLivraisonPreced, duree);
         listeCde.ajouterCde(cde);
         fenetre.estPlusClique(indexPlus, indexTournee);
-        Controleur.etatCourant=Controleur.ETAT_AJOUT_LIVRAISON;
+        controleur.setEtatCourant(Controleur.ETAT_AJOUT_LIVRAISON);
     }
 }

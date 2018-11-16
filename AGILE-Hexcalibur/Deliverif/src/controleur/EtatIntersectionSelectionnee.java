@@ -28,7 +28,7 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
     }
     
     @Override
-    public void clicGauche(GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double  latitude, double longitude) {
+    public void clicGauche(Controleur controleur, GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
         Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
         intersectionSelectionnee = pointClique;
         fenetre.estIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
@@ -39,15 +39,15 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
      * @param fenetre
      */
     @Override
-    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes){
-        Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
+    public void boutonAnnuler(Controleur controleur, deliverif.Deliverif fenetre, ListeCommandes listeCdes){
+        controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
         fenetre.estAjoutLivraisonFini(false, -1,-1);
     }
     
     @Override
-    public void validerSelection(deliverif.Deliverif fenetre){
+    public void validerSelection(Controleur controleur, deliverif.Deliverif fenetre){
         Controleur.ETAT_INTERSECTION_VALIDEE.actionEntree(intersectionSelectionnee);
-        Controleur.etatCourant = Controleur.ETAT_INTERSECTION_VALIDEE;
+        controleur.setEtatCourant(Controleur.ETAT_INTERSECTION_VALIDEE);
         fenetre.estIntersectionValidee();
     }
 }
