@@ -13,31 +13,17 @@ import java.util.List;
 
 /**
  * Une Intersection représente un carrefour dans notre plan de ville.
- * Elle fait le lien (jointure) entre plusieurs troncons.
- * @version 1.0 23/10/2018
- * @author Louis Ohl
+ * Elle fait le lien entre plusieurs troncons.
+ * @author Hex'calibur
  */
 public class Intersection {
-
+    //les troncons partant de l'intersection en question
     private List<Troncon> troncons;
-    
+    //coordonnées de l'intersections
     private float latitude;
     private float longitude;
-    
+    //id de l'intersection selon le XML
     private long idXML;
-    
-    /**
-     * Crée une nouvelle intersection.
-     * @param idXML -  l'id de l'intersection dans le fichier xml.
-     * @param latitude - La latitude de l'intersection.
-     * @param longitude  -  La longitude de l'intersection.
-     */
-    public Intersection(long idXML, float latitude, float longitude) {
-        this.latitude=latitude;
-        this.longitude=longitude;
-        this.idXML=idXML;
-        troncons = new ArrayList<Troncon>();
-    }
     
     /**
      * Ajoute un nouvel element parmi l'ensemble des troncons
@@ -53,13 +39,13 @@ public class Intersection {
     /**
      * Renvoie le ième troncon partant de cette intersection.
      * @param i - La position du tronçon. 
-     * @return - le tronçon situé à la position i dans la liste de tronçon.
+     * @return - le tronçon situé à la position i dans la liste de tronçon, null
+     * si problème.
      */
     public Troncon getTroncon(int i){
         try{
             return this.troncons.get(i);
         } catch(Exception e){
-            e.printStackTrace();
             return null;
         }
     }
@@ -68,13 +54,8 @@ public class Intersection {
      * @return - La liste des tronçons de l'intersection
      */
     public List<Troncon> getTroncons(){
-        return this.troncons;
+        return troncons;
     }
-    
-    /**
-     * @return - L'id de l'intersection dans son fichier xml d'origine.
-     */
-    public long getIdXML() { return this.idXML; }
     
     /**
      * @return - La latitude de l'intersection.
@@ -90,6 +71,26 @@ public class Intersection {
         return longitude;
     }
     
+    /**
+     * @return - L'id de l'intersection dans son fichier xml d'origine.
+     */
+    public long getIdXML() { 
+        return idXML; 
+    }
+    
+    /**
+     * Crée une nouvelle intersection.
+     * @param idXML -  l'id de l'intersection dans le fichier xml.
+     * @param latitude - La latitude de l'intersection.
+     * @param longitude  -  La longitude de l'intersection.
+     */
+    public Intersection(long idXML, float latitude, float longitude) {
+        this.latitude=latitude;
+        this.longitude=longitude;
+        this.idXML=idXML;
+        troncons = new ArrayList<>();
+    }
+    
     @Override
     public String toString(){
         return "("+this.longitude+","+this.latitude+")";
@@ -99,7 +100,8 @@ public class Intersection {
     public boolean equals(Object o){
         if (o instanceof Intersection){
             Intersection i =(Intersection)o;
-            return i.getLatitude()==this.latitude && i.getLongitude()==this.longitude;
+            return i.getLatitude()==this.latitude && 
+                    i.getLongitude()==this.longitude;
         }
         return false;
     }
