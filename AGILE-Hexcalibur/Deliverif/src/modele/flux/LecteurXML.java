@@ -27,11 +27,11 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import javax.xml.parsers.ParserConfigurationException;
-import modele.outils.DemandeLivraison;
-import modele.outils.Intersection;
-import modele.outils.PlanVille;
-import modele.outils.PointPassage;
-import modele.outils.Troncon;
+import modele.DemandeLivraison;
+import modele.Intersection;
+import modele.PlanVille;
+import modele.PointPassage;
+import modele.Troncon;
 import org.xml.sax.SAXException;
 /**
  * Classe chargé de la lecture des fichier XML et de charger ainsi les plans de ville et les demandes de livraisons
@@ -152,52 +152,52 @@ public class LecteurXML {
         try {
             documentXML = this.chargerXML(urlFichierXML);
             if(planVille == null) throw new Exception ("le plan de la ville n'est pas chargé !");
-            if (documentXML != null && documentXML.getDocumentElement().getNodeName().equals("demandeDeLivraisons")){
-            DemandeLivraison demande = new DemandeLivraison(null, null, null);
-            
-            //Intégration de l'entrepot à l'instance demande de lobjet DemandeLivraison
-            NodeList noeudEntrepotXML = documentXML.getElementsByTagName("entrepot");
-            Node noeudEntrepot = noeudEntrepotXML.item(0);
-            if (noeudEntrepot.getNodeType() == Node.ELEMENT_NODE) {
-                Element eNoeud = (Element) noeudEntrepot;
-                //TODO : corriger création de l'entrepôt
-                Intersection position = planVille.getIntersections().stream()
-                        .filter(a -> Objects.equals(a.getIdXML(), Long.parseLong(eNoeud.getAttribute("adresse"))))
-                        .collect(Collectors.toList()).get(0);
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                Date date = sdf.parse(eNoeud.getAttribute("heureDepart"));
-                Calendar temps = Calendar.getInstance();
-                temps.setTime(date);
-                PointPassage entrepot = new PointPassage(true, position, 0);
-                demande.setEntrepot(entrepot);
-                demande.setHeureDepart(temps);
-            } else throw new Exception("L'entrepot n'est pas défini !");
-            
-            //Intégration des livraisons à l'instance demande de lobjet DemandeLivraison
-            NodeList listeNoeudsXML = documentXML.getElementsByTagName("livraison");
-            if (listeNoeudsXML.getLength()==0){
-                throw new IndexOutOfBoundsException("Pas de livraison dans cette demande !");
-            }
-            List<PointPassage> listeLivraisons = new ArrayList<>();
-            for (int temp = 0; temp < listeNoeudsXML.getLength(); temp++) {
-                Node noeud = listeNoeudsXML.item(temp);
-                if (noeud.getNodeType() == Node.ELEMENT_NODE) {
-                   Element eNoeud = (Element) noeud;
-                   //création d'un object intersection
-                   Intersection position = planVille.getIntersections().stream()
-                        .filter(a -> Objects.equals(a.getIdXML(), Long.parseLong(eNoeud.getAttribute("adresse"))))
-                        .collect(Collectors.toList()).get(0);
-                   int duree = Integer.parseInt(eNoeud.getAttribute("duree"));
-                   PointPassage livraison = new PointPassage(false, position, duree);
-                   
-                   //ajout du tronçon à la liste des intersections du plan de la ville
-                   listeLivraisons.add(livraison);
+                if (documentXML != null && documentXML.getDocumentElement().getNodeName().equals("demandeDeLivraisons")){
+                DemandeLivraison demande = new DemandeLivraison(null, null, null);
+
+                //Intégration de l'entrepot à l'instance demande de lobjet DemandeLivraison
+                NodeList noeudEntrepotXML = documentXML.getElementsByTagName("entrepot");
+                Node noeudEntrepot = noeudEntrepotXML.item(0);
+                if (noeudEntrepot.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eNoeud = (Element) noeudEntrepot;
+                    //TODO : corriger création de l'entrepôt
+                    Intersection position = planVille.getIntersections().stream()
+                            .filter(a -> Objects.equals(a.getIdXML(), Long.parseLong(eNoeud.getAttribute("adresse"))))
+                            .collect(Collectors.toList()).get(0);
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                    Date date = sdf.parse(eNoeud.getAttribute("heureDepart"));
+                    Calendar temps = Calendar.getInstance();
+                    temps.setTime(date);
+                    PointPassage entrepot = new PointPassage(true, position, 0);
+                    demande.setEntrepot(entrepot);
+                    demande.setHeureDepart(temps);
+                } else throw new Exception("L'entrepot n'est pas défini !");
+
+                //Intégration des livraisons à l'instance demande de lobjet DemandeLivraison
+                NodeList listeNoeudsXML = documentXML.getElementsByTagName("livraison");
+                if (listeNoeudsXML.getLength()==0){
+                    throw new IndexOutOfBoundsException("Pas de livraison dans cette demande !");
                 }
+                List<PointPassage> listeLivraisons = new ArrayList<>();
+                for (int temp = 0; temp < listeNoeudsXML.getLength(); temp++) {
+                    Node noeud = listeNoeudsXML.item(temp);
+                    if (noeud.getNodeType() == Node.ELEMENT_NODE) {
+                       Element eNoeud = (Element) noeud;
+                       //création d'un object intersection
+                       Intersection position = planVille.getIntersections().stream()
+                            .filter(a -> Objects.equals(a.getIdXML(), Long.parseLong(eNoeud.getAttribute("adresse"))))
+                            .collect(Collectors.toList()).get(0);
+                       int duree = Integer.parseInt(eNoeud.getAttribute("duree"));
+                       PointPassage livraison = new PointPassage(false, position, duree);
+
+                       //ajout du tronçon à la liste des intersections du plan de la ville
+                       listeLivraisons.add(livraison);
+                    }
+                }
+
+                demande.setLivraisons(listeLivraisons);
+                return demande;
             }
-            
-            demande.setLivraisons(listeLivraisons);
-            return demande;
-        }
         } catch (SAXException ex) {
             Logger.getLogger(LecteurXML.class.getName()).log(Level.SEVERE, null, ex);
             throw new Exception("Le fichier en entrée ne correspond pas à une demande de livraison");

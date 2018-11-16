@@ -8,7 +8,7 @@
  */
 package controleur.commandes;
 
-import modele.outils.GestionLivraison;
+import modele.GestionLivraison;
 
 /**
  *
