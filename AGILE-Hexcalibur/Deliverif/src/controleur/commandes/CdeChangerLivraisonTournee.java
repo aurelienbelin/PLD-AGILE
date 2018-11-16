@@ -12,7 +12,8 @@ import modele.GestionLivraison;
 
 /**
  * Cette commande permet de passer une livraison d'une tournée vers une autre.
- * @author Louis
+ * L'insertion dans la nouvelle tournée se fait à un indice précisé.
+ * @author Hex'calibur
  */
 public class CdeChangerLivraisonTournee extends Commande{
     
@@ -39,20 +40,12 @@ public class CdeChangerLivraisonTournee extends Commande{
     
     @Override
     protected void doCde(){
-        if (this.etatCommande==EtatCommande.EXECUTEE){
-            return;
-        }
         this.gestion.intervertirPoint(this.numeroTournee1, this.numeroTournee2, this.positionPoint1, this.positionPoint2);
-        this.etatCommande=EtatCommande.EXECUTEE;
     }
     
     @Override
     protected void undoCde(){
-        if (this.etatCommande==EtatCommande.ANNULEE){
-            return;
-        }
         this.gestion.intervertirPoint(this.numeroTournee2, this.numeroTournee1, this.positionPoint2+1, this.positionPoint1-1);
-        this.etatCommande=EtatCommande.ANNULEE;
     }
     
 }
