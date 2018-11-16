@@ -6,9 +6,14 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele;
 
 
+import modele.Troncon;
+import modele.Chemin;
+import modele.PlanVille;
+import modele.PointPassage;
+import modele.Intersection;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;

@@ -8,7 +8,7 @@
  */
 package controleur.commandes;
 
-import modele.outils.GestionLivraison;
+import modele.GestionLivraison;
 
 /**
  * Cette commande permet de passer une livraison d'une tournée vers une autre.

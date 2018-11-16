@@ -6,14 +6,12 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Une DemandeLivraison liste l'ensemble des points que l'on aimerait livrer,
@@ -116,6 +114,11 @@ public class DemandeLivraison {
         if(livraisonAnnulee!=null){
             this.livraisons.remove(livraisonAnnulee);
         }
+    }
+    
+    public void effacerLivraisons(){
+        this.livraisons.clear();
+        this.entrepot = null;
     }
     
     /**

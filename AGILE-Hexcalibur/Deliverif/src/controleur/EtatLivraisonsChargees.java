@@ -18,6 +18,8 @@ import org.xml.sax.SAXException;
 
 public class EtatLivraisonsChargees extends EtatDefaut{
 
+    private final String SUCCES = "SUCCES";
+    
     /**
      * Constructeur EtatLivraisonsChargees
      */
@@ -32,7 +34,7 @@ public class EtatLivraisonsChargees extends EtatDefaut{
       *  @see EtatCalculTournees
      */
     @Override
-    public void calculerTournees(modele.outils.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
+    public void calculerTournees(modele.GestionLivraison gestionLivraison, int nbLivreurs, deliverif.Deliverif fenetre){
         Controleur.etatCourant = Controleur.ETAT_CALCUL_TOURNEES;
         try{
             gestionLivraison.calculerTournees(nbLivreurs, Integer.MAX_VALUE);
@@ -53,10 +55,10 @@ public class EtatLivraisonsChargees extends EtatDefaut{
      *  @see EtatLivraisonsChargees
      */
     @Override
-    public void chargeLivraisons (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+    public void chargeLivraisons (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
             gestionLivraison.chargerDemandeLivraison(fichier);
-            fenetre.estDemandeLivraisonChargee("SUCCESS");
+            fenetre.estDemandeLivraisonChargee(SUCCES);
         } catch (SAXException e){
             fenetre.estDemandeLivraisonChargee(e.getMessage());
         } catch (IOException e) {
@@ -76,11 +78,12 @@ public class EtatLivraisonsChargees extends EtatDefaut{
       *  @see EtatPlanCharge
      */
     @Override
-    public void chargePlan (modele.outils.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
+    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre){
         try{
+            gestionLivraison.getDemande().effacerLivraisons();
             gestionLivraison.chargerPlan(fichier);
             Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
-            fenetre.estPlanCharge("SUCCESS");
+            fenetre.estPlanCharge(SUCCES);
         } catch (SAXException e) {
             fenetre.estPlanCharge(e.getMessage());
             
@@ -91,21 +94,4 @@ public class EtatLivraisonsChargees extends EtatDefaut{
             fenetre.estPlanCharge(e.getMessage());
         }
     }
-    @Override
-    public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon){
-        fenetre.getVueGraphique().zoomPlus(lat,lon);
-        fenetre.getVueGraphique().dessinerPlan();
-        fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerMarker();
-    }
-    
-    @Override
-    public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon){
-        fenetre.getVueGraphique().zoomMoins(lat,lon);
-        fenetre.getVueGraphique().dessinerPlan();
-        fenetre.getVueGraphique().dessinerPtLivraison();
-        fenetre.getVueGraphique().dessinerMarker();
-    }
 }
-
-
