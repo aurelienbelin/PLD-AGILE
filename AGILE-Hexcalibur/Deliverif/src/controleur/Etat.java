@@ -82,7 +82,6 @@ interface Etat
     public void validerReorganisation(Deliverif fenetre);
     
     public void zoomPlus(deliverif.Deliverif fenetre, double lat, double lon);
-    
     public void zoomMoins(deliverif.Deliverif fenetre, double lat, double lon);
 
     public void undo(ListeCommandes listeCdes);
