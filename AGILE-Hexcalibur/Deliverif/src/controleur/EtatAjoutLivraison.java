@@ -37,7 +37,7 @@ public class EtatAjoutLivraison extends EtatDefaut{
      * qui avait été sélectionnée et la tournée et l'endroit dans la tournée où
      * a été attribuée la livraison en mémoire
      * @param intersectionValidee Emplacement de la nouvelle livraison sur le plan
-     * @param indexPlus Indice de la place dans la tournée choisie, en comptant les boutons + entre les livraisons
+     * @param indexPlus Indice de la livraison précédant l'emplacement dans la tournée choisi, en comptant les boutons + entre les livraisons
      * @param indexTournee Indice de la tournée choisie
      */
     public void actionEntree(Intersection intersectionValidee, int indexPlus, int indexTournee){
