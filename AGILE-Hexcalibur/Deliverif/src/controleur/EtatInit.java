@@ -36,10 +36,10 @@ public class EtatInit extends EtatDefaut{
       *  @see EtatPlanCharge
      */
     @Override
-    public void chargePlan (modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
+    public void boutonChargePlan (Controleur controleur, modele.GestionLivraison gestionLivraison, String fichier, deliverif.Deliverif fenetre) {
         try{
             gestionLivraison.chargerPlan(fichier);
-            Controleur.etatCourant = Controleur.ETAT_PLAN_CHARGE;
+            controleur.setEtatCourant(Controleur.ETAT_PLAN_CHARGE);
             fenetre.estPlanCharge("SUCCES");
         } catch (SAXException e) {
             fenetre.estPlanCharge(e.getMessage());
@@ -54,7 +54,7 @@ public class EtatInit extends EtatDefaut{
     }
 
     @Override
-    public void clicGauche(GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
+    public void clicGauche(Controleur controleur, GestionLivraison gestionLivraison, Deliverif fenetre, double latitude, double longitude) {
     }
     
     @Override

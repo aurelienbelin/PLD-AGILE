@@ -28,15 +28,15 @@ public class EtatCalculTournees extends EtatDefaut{
     }
         
     @Override
-    public void arreterCalcul(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre){
+    public void boutonArreterCalcul(Controleur controleur, modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre){
         if(gestionLivraison.calculTSPEnCours()){
             gestionLivraison.arreterCalculTournee();
         }
         if (gestionLivraison.aSolution()){
-            Controleur.etatCourant=Controleur.ETAT_TOURNEES_CALCULEES;
+            controleur.setEtatCourant(Controleur.ETAT_TOURNEES_CALCULEES);
             fenetre.estTourneesCalculees("SUCCES");
         } else {
-            Controleur.etatCourant=Controleur.ETAT_LIVRAISONS_CHARGEES;
+            controleur.setEtatCourant(Controleur.ETAT_LIVRAISONS_CHARGEES);
         }
         fenetre.activerBoutonArreterCalcul(true);
     }

@@ -8,12 +8,10 @@
  */
 package modele;
 
-
 /**
- * Un Troncon représente une rue sur notre plan. Il est caractérisé
+ * Un Troncon représente une rue sur notre plan; il est caractérisé
  * par ses extrémités, sa longueur.
- * @version 1.0 23/10/2018
- * @author Louis Ohl
+ * @author Hex'calibur
  */
 public class Troncon {
     private String nom;
@@ -21,7 +19,35 @@ public class Troncon {
     private float longueur;
     
     /**
-     * Créer un nouveau troncon
+     * @return Le nom du troncon (ex : "Rue Rivoli")
+     */
+    public String getNom() {
+        return nom;
+    }
+    
+    /**
+     * @return L'intersection à la première extrémité de ce troncon
+     */
+    public Intersection getDebut(){
+        return this.debut;
+    }
+    
+    /**
+     * @return L'intersection à la seconde extrémité de ce troncon
+     */
+    public Intersection getFin(){
+        return this.fin;
+    }
+    
+    /**
+     * @return La longueur du troncon en mètres
+     */
+    public float getLongueur(){ 
+        return this.longueur; 
+    }
+    
+    /**
+     * Construit un nouveau troncon
      * @param nom - Le nom associé à ce troncon.
      * @param debut - L'intersection à la première extrémité du troncon.
      * @param fin - L'intersection à la seconde extrémité du troncon.
@@ -49,37 +75,12 @@ public class Troncon {
         }
     }
     
-    /**
-     * @return L'intersection à la première extrémité de ce troncon
-     */
-    public Intersection getDebut(){
-        return this.debut;
-    }
-    
-    /**
-     * @return L'intersection à la seconde extrémité de ce troncon
-     */
-    public Intersection getFin(){
-        return this.fin;
-    }
-    
-    /**
-     * @return La longueur du troncon (en m)
-     */
-    public float getLongueur(){ return this.longueur; }
-
-    /**
-     * @return Le nom du troncon (ex : "Rue Rivoli")
-     */
-    public String getNom() {
-        return nom;
-    }
-    
     @Override
     public boolean equals(Object o){
         if (o instanceof Troncon){
             Troncon t = (Troncon)o;
-            return this.nom.equals(t.getNom()) && this.debut.equals(t.getDebut()) &&
+            return this.nom.equals(t.getNom()) && 
+                    this.debut.equals(t.getDebut()) &&
                     this.fin.equals(t.getFin());
         }
         return false;

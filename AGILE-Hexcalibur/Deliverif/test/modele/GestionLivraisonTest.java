@@ -27,8 +27,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
 /**
- *
- * @author lohl
+ * @author Hex'calibur
  */
 public class GestionLivraisonTest {
     
