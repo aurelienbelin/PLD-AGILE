@@ -6,8 +6,11 @@
  * Projet développé dans le cadre du cours "Conception Orientée Objet
  * et développement logiciel AGILE".
  */
-package modele.outils;
+package modele;
 
+import modele.GestionLivraison;
+import modele.PointPassage;
+import modele.Intersection;
 import javafx.util.Pair;
 import modele.flux.LecteurXML;
 import org.junit.After;

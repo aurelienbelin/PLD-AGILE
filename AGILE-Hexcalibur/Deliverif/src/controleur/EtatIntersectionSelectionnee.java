@@ -8,8 +8,9 @@
  */
 package controleur;
 
-import modele.outils.GestionLivraison;
-import modele.outils.Intersection;
+import controleur.commandes.ListeCommandes;
+import modele.GestionLivraison;
+import modele.Intersection;
 
 /**
  *
@@ -38,9 +39,9 @@ public class EtatIntersectionSelectionnee extends EtatDefaut{
      * @param fenetre
      */
     @Override
-    public void annuler(deliverif.Deliverif fenetre){
+    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
-        fenetre.estAjoutLivraisonFini();
+        fenetre.estAjoutLivraisonFini(false, -1,-1);
     }
     
     @Override

@@ -24,6 +24,7 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -42,7 +43,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import modele.outils.GestionLivraison;
+import modele.GestionLivraison;
 
 /**
  * Classe principale/point d'entrée de l'application. Il s'agit de la fenetre principale de l'application.
@@ -79,7 +80,7 @@ public class Deliverif extends Application implements Observer{
     public final static String DUREE = "Durée : ";
     public final static String OK = "Ok";
     public final static String SUCCES = "SUCCES";
-    public final static String CALCUL_TERMINE = "Calcul terminé";
+    public final static String CALCUL_TERMINE = "";
     public final static String SYSTEM = "System";
     public final static String MESSAGE = "Message";
     public final static String SUPPRESSION_LIVRAISON = "Supprimer la livraison";
@@ -101,7 +102,7 @@ public class Deliverif extends Application implements Observer{
     public final static int HAUTEUR_BOUTON = 65;
     
     private GestionLivraison gestionLivraison;
-    private EcouteurBoutons ecouteurBoutons;
+    private Ecouteur ecouteurBoutons;
     private Controleur controleur;
     private VueTextuelle vueTextuelle;
     private VueGraphique vueGraphique;
@@ -145,7 +146,7 @@ public class Deliverif extends Application implements Observer{
         gestionLivraison.addObserver(this);
         controleur = new Controleur(gestionLivraison,this);
         vueGraphique = new VueGraphique(this.gestionLivraison, this);
-        ecouteurBoutons = new EcouteurBoutons(this, controleur, vueGraphique);
+        ecouteurBoutons = new Ecouteur(this, controleur, vueGraphique);
         gestionLivraison.addObserver(this);
     }
     
@@ -170,7 +171,7 @@ public class Deliverif extends Application implements Observer{
         boutonsAjoutLivraison.setPadding(new Insets(PADDING, PADDING, PADDING, PADDING));
         boutonsAjoutLivraison.setSpacing(SPACING);
         
-        boutonsAjoutLivraison.getChildren().addAll(boutonRetourAuMenu, boutonValiderSelection, boutonRetourSelection);
+        //boutonsAjoutLivraison.getChildren().addAll(boutonRetourAuMenu, boutonValiderSelection, boutonRetourSelection);
         
         boutonsSuppressionLivraison = new HBox();
         boutonsSuppressionLivraison.setPadding(new Insets(PADDING,PADDING,PADDING,PADDING));
@@ -182,7 +183,7 @@ public class Deliverif extends Application implements Observer{
         boutonsReorgLivraison.setPadding(new Insets(15, 15, 15, 15));
         boutonsReorgLivraison.setSpacing(5);
         
-        boutonsReorgLivraison.getChildren().addAll(boutonAnnuler, boutonValiderReorg);
+        //boutonsReorgLivraison.getChildren().addAll(boutonAnnuler, boutonValiderReorg);
         
         Separator sv = new Separator();
         sv.setOrientation(Orientation.VERTICAL);
@@ -480,7 +481,7 @@ public class Deliverif extends Application implements Observer{
     @Override
     public void update(Observable o, Object arg){
         if (o instanceof GestionLivraison){
-            if (arg instanceof modele.outils.Tournee[]){
+            if (arg instanceof modele.Tournee[]){
                 if (!((GestionLivraison)o).calculTSPEnCours()){
                     
                     this.informationEnCours(CALCUL_TERMINE);
@@ -620,13 +621,13 @@ public class Deliverif extends Application implements Observer{
         getVueGraphique().ajouterMarqueur(latitude, longitude);
     }
     
-     public void estPointPassageASupprimerSelectionne(double latitude, double longitude){
+    public void estPointPassageASupprimerSelectionne(double latitude, double longitude){
         vueGraphique.effacerMarqueurModif();
         vueGraphique.ajouterMarqueurModif(latitude, longitude);
     }
     
     public void estSelectionne(int tournee, int position){
-        DescriptifChemin dc = getVueTextuelle().getDescriptifChemin(tournee, position);
+        DescriptifLivraison dc = getVueTextuelle().getDescriptifChemin(tournee, position);
         getVueTextuelle().majVueTextuelle(dc);
         getVueTextuelle().changerDescription_Ter(tournee);
     }
@@ -688,10 +689,13 @@ public class Deliverif extends Application implements Observer{
         }else{
             avertir(CALCUL_NON_TERMINE);
         }
-       
     }
     
     public void estPlanCliquable(){
+        this.vueTextuelle.majVueTextuelle(null);
+        this.vueGraphique.effacerMarqueur();
+        boutonsAjoutLivraison.getChildren().clear();
+        boutonsAjoutLivraison.getChildren().addAll(boutonRetourAuMenu, boutonValiderSelection, boutonRetourSelection);
         bord.setTop(boutonsAjoutLivraison);
         panelDroit.getChildren().remove(boxCalculTournees);
         panelDroit.getChildren().add(0, boxAjoutLivraison);
@@ -726,25 +730,45 @@ public class Deliverif extends Application implements Observer{
     }
     
     public void estPlusClique(int indexPlus, int indexTournee){
-        boutonValiderAjout.setDisable(false);
-        vueTextuelle.entourerPlusClique(indexPlus, indexTournee);
-        vueTextuelle.ajouterBoutonAjout();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                boutonValiderAjout.setDisable(false);
+                //vueTextuelle.entourerPlusClique(indexPlus, indexTournee);
+                vueTextuelle.ajouterBoutonAjout();
+                vueTextuelle.desactiverPlus(indexPlus, indexTournee);
+                vueTextuelle.changerDescription_Ter(indexTournee);
+            }
+        });
     }
     
     public void changePlusClique(int indexPlusPreced,int indexTourneePreced, int indexPlus, int indexTournee){
-        vueTextuelle.ajouterBoutonAjout();
-        vueTextuelle.entourerPlusClique(indexPlus, indexTournee);
-        //vueTextuelle.changerPlusEntoure(indexPlusPreced, indexTourneePreced, indexPlus, indexTournee);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                //vueTextuelle.entourerPlusClique(indexPlus-2, indexTournee);
+                vueTextuelle.ajouterBoutonAjout();
+                vueTextuelle.desactiverPlus(indexPlus, indexTournee);
+                vueTextuelle.changerDescription_Ter(indexTournee);
+                //vueTextuelle.changerPlusEntoure(indexPlusPreced, indexTourneePreced, indexPlus, indexTournee);
+            }
+        });
     }
     
-    public void estAjoutLivraisonFini(){
+    public void estAjoutLivraisonFini(boolean supprimerBoutons, int indexTournee, int indexPlus){
         bord.setTop(boutonsActionsPrincipales);
         
         panelDroit.getChildren().remove(boxAjoutLivraison);
         panelDroit.getChildren().add(0, boxCalculTournees);
         
-        vueTextuelle.supprimerBoutonAjout();
+        if(supprimerBoutons){
+            vueTextuelle.supprimerBoutonAjout();
+        }
+        
         vueGraphique.effacerMarqueurModif();
+        
+        /*if(indexTournee!=-1)
+            vueTextuelle.changerPlusEntoure(indexPlus, indexTournee);*/
         
         estTourneesCalculees(SUCCES);
     }
@@ -754,8 +778,7 @@ public class Deliverif extends Application implements Observer{
         this.boutonCalculerTournees.setDisable(!activation);
     }
 
-
-public void estSuppressionFinie(){
+    public void estSuppressionFinie(){
         bord.setTop(boutonsActionsPrincipales);
         
         boxCalculTournees.setDisable(false);
@@ -766,6 +789,8 @@ public void estSuppressionFinie(){
     }
       
     public void estReorgTourneesDemandee(){
+        boutonsReorgLivraison.getChildren().clear();
+        boutonsReorgLivraison.getChildren().addAll(boutonRetourAuMenu, boutonValiderReorg);
         bord.setTop(boutonsReorgLivraison);
         //panelDroit.getChildren().remove(boxCalculTournees);
         boxCalculTournees.setDisable(true);
@@ -779,25 +804,27 @@ public void estSuppressionFinie(){
             @Override
             public void run(){
                 vueTextuelle.ajouterBoutonsReorg();
+                vueTextuelle.ajouterMenuChangerTournee();
                 vueTextuelle.changerDescription_Ter(indexTournee);
             }
         });
     }
     
     public void estReorgFinie(){
-        bord.setTop(boutons);
-        //panelDroit.getChildren().add(0, boxCalculTournees);
+        bord.setTop(boutonsActionsPrincipales);
         boxCalculTournees.setDisable(false);
         vueTextuelle.remettreBoutonsDetails();
         
     }
 
     public void ajouterSuppression(){
+        this.vueTextuelle.majVueTextuelle(null);
+        this.vueGraphique.effacerMarqueur();
+        
         bord.setTop(boutonsSuppressionLivraison);
         boutonValiderSuppression.setDisable(false);
         boutonAnnulerSuppression.setDisable(false);
         
         boxCalculTournees.setDisable(true);
     }
-
 }

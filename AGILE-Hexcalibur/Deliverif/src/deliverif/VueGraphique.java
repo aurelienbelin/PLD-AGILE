@@ -23,14 +23,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.CubicCurve;
 import javafx.util.Pair;
-import modele.outils.Chemin;
-import modele.outils.DemandeLivraison;
-import modele.outils.GestionLivraison;
-import modele.outils.PlanVille;
-import modele.outils.PointPassage;
-import modele.outils.Tournee;
-import modele.outils.Troncon;
+import modele.Chemin;
+import modele.DemandeLivraison;
+import modele.GestionLivraison;
+import modele.PlanVille;
+import modele.PointPassage;
+import modele.Tournee;
+import modele.Troncon;
 
 /**
  * Classe implémentant le composant de Vue Graphique de l'IHM du projet ainsi que son comportement.
@@ -77,6 +79,7 @@ public class VueGraphique extends StackPane implements Observer {
     private Image imageMarqueurSelection;
     private Image imageMarqueurModif;
     private Pair<Double, Double> positionMarqueur;
+    private Pair<Double, Double> positionMarqueurAModifier;
     
     
     /**
@@ -133,13 +136,13 @@ public class VueGraphique extends StackPane implements Observer {
      * Calcule l'échelle d'affichage du plan de la ville à afficher.
      * @param intersections - liste des intersections contenues dans le plan à afficher.
      */
-    public void calculEchelle (List <modele.outils.Intersection> intersections) {
+    public void calculEchelle (List <modele.Intersection> intersections) {
         float maxLatitude = -90;
         float minLatitude = 90;
         float maxLongitude = -180;
         float minLongitude = 180;
         
-        for(modele.outils.Intersection i: intersections){
+        for(modele.Intersection i: intersections){
             if(i.getLatitude() > maxLatitude){
                 maxLatitude = i.getLatitude();
             }else if(i.getLatitude() < minLatitude){
@@ -197,7 +200,6 @@ public class VueGraphique extends StackPane implements Observer {
             //Dessin des traits
             gc.strokeLine(absDebutTroncon,ordDebutTroncon,absFinTroncon,ordFinTroncon);
         }
-        
     }
     
     /**
@@ -271,6 +273,20 @@ public class VueGraphique extends StackPane implements Observer {
                            int ordDebutTroncon =(int) (this.getHeight() - (troncon.getDebut().getLatitude() - origineLatitude) * echelleLat); 
                            int absFinTroncon = (int)((troncon.getFin().getLongitude() - origineLongitude) * echelleLong); 
                            int ordFinTroncon = (int)(this.getHeight()- (troncon.getFin().getLatitude() - origineLatitude) * echelleLat);
+                           
+                           //Test
+                           /*int t;
+                           if(absFinTroncon-absDebutTroncon>0){
+                               t = 1;
+                           }else
+                               t = -1;
+                           
+                           int longueurY = ordFinTroncon-ordDebutTroncon;
+                           
+                           ordDebutTroncon = (int)(ordDebutTroncon-((double)t*(absFinTroncon-absDebutTroncon))/(ordFinTroncon-ordDebutTroncon));
+                           ordFinTroncon = ordDebutTroncon + longueurY;
+                           absDebutTroncon += t;
+                           absFinTroncon += t;*/
                            
                            //faire un gc.setStroke() du gradient à faire sur la ligne uniquement :) (ce qui implique de recalculer à chaque fois la prochaine couleur).
                            Stop[] stops = new Stop[] { new Stop(0, degradeChemin[numTroncon]), new Stop(1, degradeChemin[numTroncon+1])};
@@ -456,11 +472,14 @@ public class VueGraphique extends StackPane implements Observer {
     
     public void effacerMarqueurModif() {
         this.marqueurModif.getGraphicsContext2D().clearRect(0, 0, this.marqueurModif.getWidth(), this.marqueurModif.getHeight());
+        positionMarqueurAModifier = null;
     }
     
     public void ajouterMarqueurModif(double lat, double lon) {
         int x = (int)((lon - origineLongitude)*echelleLong);
         int y = (int)(this.getHeight() - (lat - origineLatitude)*echelleLat);
+        
+        positionMarqueurAModifier = new Pair(lat,lon);
         
         GraphicsContext gc = this.marqueurModif.getGraphicsContext2D();
         gc.drawImage(imageMarqueurModif, x - this.imageMarqueurModif.getWidth()/2.0, y - this.imageMarqueurModif.getHeight());
@@ -531,6 +550,8 @@ public class VueGraphique extends StackPane implements Observer {
         dessinerPtLivraison();
         dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
         dessinerMarqueur();
+        if(positionMarqueurAModifier!=null)
+            identifierPtPassageAModifier(true,positionMarqueurAModifier.getKey(),positionMarqueurAModifier.getValue());
     }
     
     public void zoomMoins(double lat, double lon){
@@ -550,5 +571,7 @@ public class VueGraphique extends StackPane implements Observer {
         dessinerPtLivraison();
         dessinerTournees(fenetre.getVueTextuelle().affichageActuel());
         dessinerMarqueur();
+        if(positionMarqueurAModifier!=null)
+            identifierPtPassageAModifier(true,positionMarqueurAModifier.getKey(),positionMarqueurAModifier.getValue());
     }
 }

@@ -10,7 +10,7 @@ package controleur.commandes;
 
 import java.util.ArrayList;
 import java.util.List;
-import modele.outils.GestionLivraison;
+import modele.GestionLivraison;
 
 /**
  * Cette commande permet de changer l'ordre de visite des points de passage

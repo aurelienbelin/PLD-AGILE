@@ -8,16 +8,18 @@
  */
 package controleur;
 
+import controleur.commandes.ListeCommandes;
+
 /**
  *
  * @author Hex'calibur
  */
-public class EtatPlanCliquable extends EtatDefaut{
+public class EtatIntersectionCliquable extends EtatDefaut{
     
     /**
      * Constructeur de EtatPlanCliquable
      */
-    public EtatPlanCliquable() {
+    public EtatIntersectionCliquable() {
     }
     
     /**
@@ -28,16 +30,16 @@ public class EtatPlanCliquable extends EtatDefaut{
      * @param longitude
      */
     @Override
-    public void clicGauche(modele.outils.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
-        modele.outils.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
+    public void clicGauche(modele.GestionLivraison gestionLivraison, deliverif.Deliverif fenetre, double latitude, double longitude) {
+        modele.Intersection pointClique = gestionLivraison.intersectionPlusProche(latitude, longitude);
         fenetre.estIntersectionSelectionnee(pointClique.getLatitude(), pointClique.getLongitude());
         Controleur.ETAT_INTERSECTION_SELECTIONNEE.actionEntree(pointClique);
         Controleur.etatCourant = Controleur.ETAT_INTERSECTION_SELECTIONNEE;
     }
     
     @Override
-    public void annuler(deliverif.Deliverif fenetre){
+    public void annuler(deliverif.Deliverif fenetre, ListeCommandes listeCdes){
         Controleur.etatCourant = Controleur.ETAT_TOURNEES_CALCULEES;
-        fenetre.estAjoutLivraisonFini();
+        fenetre.estAjoutLivraisonFini(false, -1, -1);
     } 
 }
