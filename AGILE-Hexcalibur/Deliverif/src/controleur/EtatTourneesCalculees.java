@@ -109,7 +109,7 @@ public class EtatTourneesCalculees extends EtatDefaut{
     @Override
     public void boutonSupprimerLivraison (Controleur controleur, Deliverif fenetre) {
         controleur.setEtatCourant(Controleur.ETAT_SUPPRIMER_LIVRAISON);
-        fenetre.ajouterSuppression();
+        fenetre.estSupprimerLivraisonDemande();
     }
     
     public void boutonReorgTournees(Controleur controleur, Deliverif fenetre){

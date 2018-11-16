@@ -46,7 +46,7 @@ import modele.GestionLivraison;
 
 /**
  * Classe principale/point d'entrée de l'application. Il s'agit de la fenetre principale de l'application.
- * @author Romain
+ * @author Hex'Calibur
  * @see Application
  */
 public class Deliverif extends Application implements Observer{
@@ -76,7 +76,6 @@ public class Deliverif extends Application implements Observer{
     public final static String CALCUL_TERMINE = "";
     public final static String SYSTEM = "System";
     public final static String MESSAGE = "Message";
-    public final static String SUPPRESSION_LIVRAISON = "Supprimer la livraison";
     public final static String PLAN_NON_CHARGE = "Le plan n'a pas pu être chargé.";
     public final static String FONT_INFORMATION = "Arial";
     public final static String STYLE_INFORMATION = "-fx-font-style:italic; -fx-font-weight:bold; -fx-text-fill:red;";
@@ -90,9 +89,15 @@ public class Deliverif extends Application implements Observer{
     public final static int PADDING = 15;
     public final static int PADDING_PANEL_DROIT = 25;
     public final static int SPACING_PANEL_DROIT = 25;
+    public final static int SPACING_BOX_PANEL_DROIT = 15;
     public final static int SPACING = 5;
     public final static int LARGEUR_BOUTON = 100;
     public final static int HAUTEUR_BOUTON = 65;
+    public final static int LARGEUR_BOUTON_STOP = 75;
+    public final static int HAUTEUR_BOUTON_STOP = 50;
+    public final static int SIZE_FONT_LIVREURS = 20;
+    public final static int SPINNER_LARGEUR = 60;
+    public final static int SPINNER_HAUTEUR = 25;
     
     private GestionLivraison gestionLivraison;
     private Ecouteur ecouteurBoutons;
@@ -120,11 +125,11 @@ public class Deliverif extends Application implements Observer{
     private Button boutonCalculerTournees;
     private Button boutonArreterCalcul;
     private Button boutonRetourAuMenu;
+    private Button boutonSuppressionRetourAuMenu;
     private Button boutonValiderSelection;
     private Button boutonValiderAjout;
     private Button boutonRetourSelection;
     private Button boutonValiderSuppression;
-    private Button boutonAnnulerSuppression;
     private Button boutonValiderReorg;
     private Spinner nbLivreurs;
     private Spinner choixDuree;
@@ -132,6 +137,10 @@ public class Deliverif extends Application implements Observer{
     private ComboBox choixTournee;
     private Label information;
     
+    /**
+     * Initialise les objets utilisés par la classe.
+     * @throws Exception 
+     */
     @Override
     public void init() throws Exception{
         super.init();
@@ -143,6 +152,11 @@ public class Deliverif extends Application implements Observer{
         gestionLivraison.addObserver(this);
     }
     
+    /**
+     * Création de l'IHM.
+     * @param stage - l'objet dans lequel est défini l'IHM
+     * @throws Exception 
+     */
     @Override
     public void start(Stage stage) throws Exception {
                 
@@ -160,7 +174,7 @@ public class Deliverif extends Application implements Observer{
         boutonsAjoutLivraison = templateBoiteBouton();
         
         boutonsSuppressionLivraison = templateBoiteBouton();
-        boutonsSuppressionLivraison.getChildren().addAll(boutonAnnulerSuppression, boutonValiderSuppression);
+        boutonsSuppressionLivraison.getChildren().addAll(boutonSuppressionRetourAuMenu, boutonValiderSuppression);
         
         boutonsReorgLivraison = templateBoiteBouton();
         
@@ -221,6 +235,10 @@ public class Deliverif extends Application implements Observer{
         creerBoxAjoutLivraison();
     }
     
+    /**
+     * Template utilisé pour les HBox dans lequel sont stockés les boutons correspondant au même contexte d'exécution.
+     * @return  
+     */
     private HBox templateBoiteBouton(){
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(PADDING,PADDING,PADDING,PADDING));
@@ -228,19 +246,38 @@ public class Deliverif extends Application implements Observer{
         return hbox;
     }
     
+    /**
+     * Template utilisé pour créer les boutons des actions les plus fréquentes.
+     * @param titre - texte inscrit dans le bouton
+     * @param isDisable - true si le bouton est activé
+     * @return 
+     */
     private Button templateBoutonAction(String titre, Boolean isDisable){
+        Button bouton = templateBouton(titre, isDisable, LARGEUR_BOUTON, HAUTEUR_BOUTON);
+        return bouton;
+    }
+    
+    /**
+     * Template utilisé pour créer des boutons ayant les mêmes propriétés.
+     * @param titre - texte inscrit dans le bouton
+     * @param isDisable - true si le bouton est activé
+     * @param hauteur - hauteur du bouton
+     * @param largeur - largeur du bouton
+     * @return 
+     */
+    private Button templateBouton(String titre, Boolean isDisable, int hauteur, int largeur){
         Button bouton = new Button(titre);
-        bouton.setPrefSize(LARGEUR_BOUTON,HAUTEUR_BOUTON);
+        bouton.setPrefSize(hauteur, largeur);
         bouton.setWrapText(true);
         bouton.setTextAlignment(TextAlignment.CENTER);
         bouton.setDisable(isDisable);
         return bouton;
     }
+    
     /**
-     * Création des boutons de la fenetre
+     * Création des boutons correspondant aux actions principales (chargement et modification).
      */
     private void creerBoutonsActionsPrincipales(){
-        
         boutonChargerPlan = templateBoutonAction(CHARGER_PLAN, false);
         boutonChargerPlan.setOnAction(e->{
             try {
@@ -275,30 +312,16 @@ public class Deliverif extends Application implements Observer{
         });
         
         boutonReorganiserTournee = templateBoutonAction(REORGANISER_TOURNEE, true);
-        
+        boutonReorganiserTournee.setOnAction(e -> {
+            ecouteurBoutons.boutonReorgLivraisons(e);
+        });
     }
     
+    /**
+     * Création des boutons correspondant aux actions de modifications.
+     */
     private void creerBoutonsActionsModifications(){
         boutonValiderSelection = templateBoutonAction(VALIDER_SELECTION, true);
-        boutonSupprimerLivraison = new Button(SUPPRIMER_LIVRAISON);
-        boutonSupprimerLivraison.setPrefSize(100,65);
-        boutonSupprimerLivraison.setWrapText(true);
-        boutonSupprimerLivraison.setDisable(true);
-        boutonSupprimerLivraison.setTextAlignment(TextAlignment.CENTER);
-        boutonSupprimerLivraison.setOnAction(e -> ecouteurBoutons.boutonSupprimer(e));
-        
-        boutonReorganiserTournee = new Button(REORGANISER_TOURNEE);
-        boutonReorganiserTournee.setPrefSize(100,65);
-        boutonReorganiserTournee.setWrapText(true);
-        boutonReorganiserTournee.setDisable(true);
-        boutonReorganiserTournee.setTextAlignment(TextAlignment.CENTER);
-        boutonReorganiserTournee.setOnAction(e -> ecouteurBoutons.boutonReorgLivraisons(e));
-
-        boutonValiderSelection = new Button("Valider la sélection");
-        boutonValiderSelection.setPrefSize(100,65);
-        boutonValiderSelection.setWrapText(true);
-        boutonValiderSelection.setDisable(true);
-        boutonValiderSelection.setTextAlignment(TextAlignment.CENTER);
         boutonValiderSelection.setTranslateX(400);
         boutonValiderSelection.setOnAction(e -> {
             try {
@@ -308,9 +331,17 @@ public class Deliverif extends Application implements Observer{
             }
         }); 
         
-
         boutonRetourAuMenu = templateBoutonAction(RETOUR_MENU, true);
         boutonRetourAuMenu.setOnAction(e -> {
+            try {
+                ecouteurBoutons.boutonRetourAuMenu(e);
+            } catch (Exception ex) {
+                Logger.getLogger(Deliverif.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }); 
+        
+        boutonSuppressionRetourAuMenu = templateBoutonAction(RETOUR_MENU, true);
+        boutonSuppressionRetourAuMenu.setOnAction(e -> {
             try {
                 ecouteurBoutons.boutonRetourAuMenu(e);
             } catch (Exception ex) {
@@ -329,37 +360,17 @@ public class Deliverif extends Application implements Observer{
             }
         }); 
         
-        //A supprimer
-        boutonValiderSuppression = new Button(SUPPRIMER_LIVRAISON);
-        boutonValiderSuppression.setPrefSize(300,50);
-        boutonValiderSuppression.setMinHeight(50);
-        boutonValiderSuppression.setWrapText(true);
-        boutonValiderSuppression.setDisable(true);
-        boutonValiderSuppression.setTextAlignment(TextAlignment.CENTER);
+        boutonValiderSuppression = templateBoutonAction(VALIDER_SELECTION, true);
+        boutonValiderSuppression.setTranslateX(400);
         boutonValiderSuppression.setOnAction(e -> ecouteurBoutons.boutonSupprimerLivraison(e));
-        
-        boutonAnnulerSuppression = new Button(RETOUR_MENU);
-        boutonAnnulerSuppression.setPrefSize(300,50);
-        boutonAnnulerSuppression.setMinHeight(50);
-        boutonAnnulerSuppression.setWrapText(true);
-        boutonAnnulerSuppression.setDisable(true);
-        boutonAnnulerSuppression.setTextAlignment(TextAlignment.CENTER);
-
-        boutonAnnulerSuppression.setOnAction(e -> ecouteurBoutons.boutonRetourAuMenu(e)); 
       
-        boutonValiderReorg = new Button(VALIDER_MODIF);
-        boutonValiderReorg.setPrefSize(110,65);
-        boutonValiderReorg.setMinHeight(50);
+        boutonValiderReorg = templateBoutonAction(VALIDER_MODIF, false);
         boutonValiderReorg.setTranslateX(400);
-        boutonValiderReorg.setWrapText(true);
-        boutonValiderReorg.setDisable(false);
-        boutonValiderReorg.setTextAlignment(TextAlignment.CENTER);
         boutonValiderReorg.setOnAction(e -> ecouteurBoutons.boutonValiderReorg(e));
-
     }
     
     /**
-     * Création du panel droit de la fenetre principal.
+     * Création du panneau droit de la fenetre principale. Utilisé pour les actions concernant le calcul des tournées et la validation de l'ajout.
      */
     private void creerPanelDroit() {
         panelDroit = new VBox();
@@ -369,28 +380,23 @@ public class Deliverif extends Application implements Observer{
         panelDroit.setSpacing(SPACING_PANEL_DROIT);
         
         boxCalculTournees = new VBox();
-        boxCalculTournees.setSpacing(15);
+        boxCalculTournees.setSpacing(SPACING_BOX_PANEL_DROIT);
         
         HBox boxLivreurs = new HBox();
-        boxLivreurs.setSpacing(25);
+        boxLivreurs.setSpacing(SPACING_PANEL_DROIT);
         
         Label livreurs = new Label(LIVREURS);
-        livreurs.setFont(new Font(SYSTEM,20));
+        livreurs.setFont(new Font(SYSTEM,SIZE_FONT_LIVREURS));
         
         nbLivreurs = new Spinner();
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1);
         nbLivreurs.setValueFactory(valueFactory);
-        nbLivreurs.setPrefSize(60,25);
+        nbLivreurs.setPrefSize(SPINNER_LARGEUR,SPINNER_HAUTEUR);
         boxLivreurs.getChildren().addAll(livreurs, nbLivreurs);
         HBox boxBoutons = new HBox();
-        boxBoutons.setSpacing(15);
+        boxBoutons.setSpacing(SPACING_BOX_PANEL_DROIT);
         
-        boutonCalculerTournees = new Button(CALCULER_TOURNEES);
-        boutonCalculerTournees.setPrefSize(LARGEUR-HAUTEUR-90-50,50);
-        boutonCalculerTournees.setMinHeight(50);
-        boutonCalculerTournees.setWrapText(true);
-        boutonCalculerTournees.setDisable(true);
-        boutonCalculerTournees.setTextAlignment(TextAlignment.CENTER);
+        boutonCalculerTournees = templateBouton(CALCULER_TOURNEES, true, LARGEUR-HAUTEUR-90-50,50);
         boutonCalculerTournees.setOnAction(e -> {
             try {
                 ecouteurBoutons.calculerTournees(e);
@@ -399,12 +405,7 @@ public class Deliverif extends Application implements Observer{
             }
         }); 
         
-        boutonArreterCalcul = new Button(ARRETER_CALCUL_TOURNEES);
-        boutonArreterCalcul.setPrefSize(75,50);
-        boutonArreterCalcul.setMinHeight(50);
-        boutonArreterCalcul.setWrapText(true);
-        boutonArreterCalcul.setDisable(true);
-        boutonArreterCalcul.setTextAlignment(TextAlignment.CENTER);
+        boutonArreterCalcul = templateBouton(ARRETER_CALCUL_TOURNEES, true, LARGEUR_BOUTON_STOP, HAUTEUR_BOUTON_STOP);
         boutonArreterCalcul.setOnAction(e -> ecouteurBoutons.arreterCalculTournees());
         
         boxBoutons.getChildren().addAll(boutonCalculerTournees, boutonArreterCalcul);
@@ -427,20 +428,18 @@ public class Deliverif extends Application implements Observer{
         this.information.setAlignment(Pos.CENTER_RIGHT);
         this.information.setFont(new Font(FONT_INFORMATION, 10));
         this.information.setStyle(STYLE_INFORMATION);
-        //this.information.setText("Test");
-        //this.information.setStyle("-fx-background-color:red;");
-        
-        //panelDroit.getChildren().addAll(boxLivreurs, boxBoutons, sh, vueTextuelle, information);
-
         panelDroit.getChildren().addAll(boxCalculTournees, sh, vueTextuelle, information);
     }
     
+    /**
+     * Boite utilisé lors de l'ajout.
+     */
     protected void creerBoxAjoutLivraison(){
         boxAjoutLivraison = new VBox();
-        boxAjoutLivraison.setSpacing(15);
+        boxAjoutLivraison.setSpacing(SPACING_BOX_PANEL_DROIT);
         
         HBox boxDuree = new HBox();
-        boxDuree.setSpacing(25);
+        boxDuree.setSpacing(SPACING_PANEL_DROIT);
         
         Label duree = new Label(DUREE);
         duree.setFont(new Font(SYSTEM,20));
@@ -448,21 +447,21 @@ public class Deliverif extends Application implements Observer{
         choixDuree = new Spinner();
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10, 1);
         choixDuree.setValueFactory(valueFactory);
-        choixDuree.setPrefSize(60,25);
+        choixDuree.setPrefSize(SPINNER_LARGEUR,SPINNER_HAUTEUR);
         
         boxDuree.getChildren().addAll(duree, choixDuree);
         
-        boutonValiderAjout = new Button(AJOUTER);
-        boutonValiderAjout.setPrefSize(300,50);
-        boutonValiderAjout.setMinHeight(50);
-        boutonValiderAjout.setWrapText(true);
-        boutonValiderAjout.setDisable(true);
-        boutonValiderAjout.setTextAlignment(TextAlignment.CENTER);
+        boutonValiderAjout = templateBouton(AJOUTER, true, 300, 50);
         boutonValiderAjout.setOnAction(e -> ecouteurBoutons.boutonValiderAjout(e));
         
         boxAjoutLivraison.getChildren().addAll(boxDuree, boutonValiderAjout);
     }
     
+    /**
+     * Méthode appelé par le pattern Observeur pour mettre à jour l'IHM.
+     * @param o - observable
+     * @param arg - argument
+     */
     @Override
     public void update(Observable o, Object arg){
         if (o instanceof GestionLivraison){
@@ -594,23 +593,39 @@ public class Deliverif extends Application implements Observer{
         popUp.show();
     }
 
-    /**n
-     * @param args the command line arguments
+    /**
+     * Main de l'application
+     * @param args - les arguments 
      */
     public static void main(String[] args) {
         launch(args);
     }
     
+    /**
+     * Gère l'affichage des marqueurs lorsqu'un point de passage est sélectionné.
+     * @param latitude - latitude du point de passage
+     * @param longitude - longitude du point de passage
+     */
     public void estPointPassageSelectionne(double latitude, double longitude) {
         getVueGraphique().effacerMarqueur();
         getVueGraphique().ajouterMarqueur(latitude, longitude);
     }
     
+    /**
+     * Gère l'affichage lorsqu'un point de passage est sélectionné dans le cas de la suppression.
+     * @param latitude - latitude du point de passage
+     * @param longitude - longitude du point de passage
+     */
     public void estPointPassageASupprimerSelectionne(double latitude, double longitude){
         vueGraphique.effacerMarqueurModif();
         vueGraphique.ajouterMarqueurModif(latitude, longitude);
     }
     
+    /**
+     * Gère la liaison entre le point de passage sélectionné sur la vue graphique et la vue textuelle.
+     * @param tournee - la tournée du point sélectionné
+     * @param position - la position du point sélectionné dans la tournée
+     */
     public void estSelectionne(int tournee, int position){
         DescriptifLivraison dc = getVueTextuelle().getDescriptifChemin(tournee, position);
         getVueTextuelle().majVueTextuelle(dc);
@@ -676,6 +691,9 @@ public class Deliverif extends Application implements Observer{
         }
     }
     
+    /**
+     * Gère l'IHM lorsque l'on entre dans un contexte d'ajout de livraison.
+     */
     public void estPlanCliquable(){
         this.vueTextuelle.majVueTextuelle(null);
         this.vueGraphique.effacerMarqueur();
@@ -693,12 +711,20 @@ public class Deliverif extends Application implements Observer{
         boutonValiderSelection.setDisable(true);
     }
     
+    /**
+     * Gère l'affichage des marqueurs lors d'une action de modification.
+     * @param latitude - latitude de l'intersection sélectionnée
+     * @param longitude  - longitude de l'intersection sélectionnée
+     */
     public void estIntersectionSelectionnee(double latitude,double longitude){
         boutonValiderSelection.setDisable(false);
         vueGraphique.effacerMarqueurModif();
         vueGraphique.ajouterMarqueurModif(latitude, longitude);
     }
     
+    /**
+     * Gère l'affichage lorsque le point d'ajout de la livraison est choisi.
+     */
     public void estIntersectionValidee(){
         boxAjoutLivraison.setDisable(false);
         boutonValiderSelection.setVisible(false);
@@ -706,6 +732,9 @@ public class Deliverif extends Application implements Observer{
         this.getVueTextuelle().ajouterBoutonAjout();
     }
     
+    /**
+     * Permets de retourner dans le contexte où l'on peut choisir une intersection pour ajouter une livraison.
+     */
     public void estRetourSelection(){
         boutonValiderSelection.setVisible(true);
         boutonRetourSelection.setVisible(false);
@@ -714,12 +743,16 @@ public class Deliverif extends Application implements Observer{
         boutonValiderSelection.setDisable(false);
     }
     
+    /**
+     * Gère l'affichage de la vue textuelle lorsqu'une boîte plus est cliquée
+     * @param indexPlus - index de la boîte plus cliquée
+     * @param indexTournee  - index de la tournée à laquelle appartient cette boîte plus
+     */
     public void estPlusClique(int indexPlus, int indexTournee){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 boutonValiderAjout.setDisable(false);
-                //vueTextuelle.entourerPlusClique(indexPlus, indexTournee);
                 vueTextuelle.ajouterBoutonAjout();
                 vueTextuelle.desactiverPlus(indexPlus, indexTournee);
                 vueTextuelle.changerDescription_Ter(indexTournee);
@@ -727,19 +760,29 @@ public class Deliverif extends Application implements Observer{
         });
     }
     
+    /**
+     * Mets à jour la vue textuelle lorsqu'on clique sur une autre boîte plus.
+     * @param indexPlusPreced - index boîte plus précedemment sélectionnée
+     * @param indexTourneePreced - index tournée à laquelle appartenait cette boîte plus
+     * @param indexPlus - index boîte plus cliquée
+     * @param indexTournee  - index tournée à laquelle appartient cette boîte plus
+     */
     public void changePlusClique(int indexPlusPreced,int indexTourneePreced, int indexPlus, int indexTournee){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                //vueTextuelle.entourerPlusClique(indexPlus-2, indexTournee);
                 vueTextuelle.ajouterBoutonAjout();
                 vueTextuelle.desactiverPlus(indexPlus, indexTournee);
-                vueTextuelle.changerDescription_Ter(indexTournee);
-                //vueTextuelle.changerPlusEntoure(indexPlusPreced, indexTourneePreced, indexPlus, indexTournee);
-            }
+                vueTextuelle.changerDescription_Ter(indexTournee);    }
         });
     }
     
+    /**
+     * Mets à jour l'affichage 
+     * @param supprimerBoutons
+     * @param indexTournee
+     * @param indexPlus 
+     */
     public void estAjoutLivraisonFini(boolean supprimerBoutons, int indexTournee, int indexPlus){
         bord.setTop(boutonsActionsPrincipales);
         
@@ -752,17 +795,21 @@ public class Deliverif extends Application implements Observer{
         
         vueGraphique.effacerMarqueurModif();
         
-        /*if(indexTournee!=-1)
-            vueTextuelle.changerPlusEntoure(indexPlus, indexTournee);*/
-        
         estTourneesCalculees(SUCCES);
     }
     
+    /**
+     * Bouton permettant de stopper le calcul losrqu'il est trop long
+     * @param activation - si true, active l'arrêt du calcul
+     */
     public void activerBoutonArreterCalcul(boolean activation){
         this.boutonArreterCalcul.setDisable(activation);
         this.boutonCalculerTournees.setDisable(!activation);
     }
 
+    /**
+     * Gère l'affichage des marqueurs losrque la suppression est terminée.
+     */
     public void estSuppressionFinie(){
         bord.setTop(boutonsActionsPrincipales);
         
@@ -773,17 +820,23 @@ public class Deliverif extends Application implements Observer{
         estTourneesCalculees(SUCCES);
     }
       
+    /**
+     * Mets à jour la réorganisation des tournées lorsqu'on entre dans le contexte de réorganisation des tournées.
+     */
     public void estReorgTourneesDemandee(){
         boutonsReorgLivraison.getChildren().clear();
         boutonsReorgLivraison.getChildren().addAll(boutonRetourAuMenu, boutonValiderReorg);
         bord.setTop(boutonsReorgLivraison);
-        //panelDroit.getChildren().remove(boxCalculTournees);
         boxCalculTournees.setDisable(true);
         vueTextuelle.ajouterMenuChangerTournee();
         vueTextuelle.ajouterBoutonsReorg();
         vueTextuelle.changerDescription_Ter(0);
     }
     
+    /**
+     * Mets à jour l'affichage de la vue textuelle lorsqu'on change de tournée à visualiser.
+     * @param indexTournee 
+     */
     public void changerVueTextuelle(int indexTournee){
         Platform.runLater(new Runnable(){
             @Override
@@ -795,6 +848,9 @@ public class Deliverif extends Application implements Observer{
         });
     }
     
+    /**
+     * Gère l'affichage de l'IHM lorsque la réorganisation est finie
+     */
     public void estReorgFinie(){
         bord.setTop(boutonsActionsPrincipales);
         boxCalculTournees.setDisable(false);
@@ -802,14 +858,15 @@ public class Deliverif extends Application implements Observer{
         
     }
 
-    public void ajouterSuppression(){
+    /**
+     * Gère l'affichage de l'IHM lorsqu'on entre dans le contexte de suppresion de livraison.
+     */
+    public void estSupprimerLivraisonDemande(){
         this.vueTextuelle.majVueTextuelle(null);
         this.vueGraphique.effacerMarqueur();
-        
         bord.setTop(boutonsSuppressionLivraison);
         boutonValiderSuppression.setDisable(false);
-        boutonAnnulerSuppression.setDisable(false);
-        
+        boutonSuppressionRetourAuMenu.setDisable(false);
         boxCalculTournees.setDisable(true);
     }
 }

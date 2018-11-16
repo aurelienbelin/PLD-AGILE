@@ -20,17 +20,12 @@ import javafx.util.Pair;
 /**
  *
  * @version 1.0 23/10/2018
- * @author Louis Ohl
- * @author Romain Fournier
+ * @author Hex'calibur
  */
 public class PlanVille {
     
     private List<Intersection> intersections;
-    private List<Troncon> troncons;
-    
-    
-
-    
+    private List<Troncon> troncons; 
     
     /**
      * Réalise l'algorithme de Dijkstra au départ d'un point donné.
